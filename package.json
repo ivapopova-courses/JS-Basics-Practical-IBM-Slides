@@ -1,0 +1,19 @@
+{
+  "name": "js-basics-practical-ibm-slides",
+  "private": true,
+  "type": "module",
+  "description": "JS & TS Basics - lectures and course site",
+  "scripts": {
+    "dev": "vitepress dev site",
+    "dev:trainer": "TRAINER=1 vitepress dev site",
+    "build": "vitepress build site",
+    "build:trainer": "TRAINER=1 vitepress build site",
+    "preview": "vitepress preview site"
+  },
+  "dependencies": {
+    "@sciscend/course-kit": "github:SciScend/course-kit#v0.2.0"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

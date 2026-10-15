@@ -1,0 +1,43 @@
+{
+  "_note": "MADE-UP sample for the course. All names, ids and values are invented; only the shape is typical of a device report.",
+  "status": {
+    "device_alias": "D7F3A9C21E40B815",
+    "epoch": "1791770402"
+  },
+  "overview": {
+    "model": "XR-220",
+    "serial_number": "SN4X7Q92",
+    "version": "4.2.1.7"
+  },
+  "external_alert_info": {
+    "CHK-0132": {
+      "raised": "yes"
+    }
+  },
+  "inventory": {
+    "device_alias": "D7F3A9C21E40B815",
+    "details": {
+      "auth_service_cert_set": "no",
+      "auth_service_configured": "yes",
+      "auth_service_enabled": "yes",
+      "auth_service_pwd_set": "no",
+      "auth_service_type": "ldap",
+      "bandwidth": "",
+      "power_saving": "on",
+      "locale": "en_US",
+      "ntp_ip_address": "10.0.0.1",
+      "device_id": "D7F3A9C21E40B815",
+      "device_alias": "D7F3A9C21E40B815",
+      "firmware_level": "4.2.1.7 (build 412.17.2607151200)"
+    },
+    "extended_info": {
+      "json": {
+        "data": {
+          "system": {
+            "name": "LAB-DEV-01"
+          }
+        }
+      }
+    }
+  }
+}
