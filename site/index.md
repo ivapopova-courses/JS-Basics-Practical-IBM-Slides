@@ -2,9 +2,8 @@
 layout: home
 
 hero:
-  name: JS & TS Basics
-  text: JavaScript for monitoring rules on JSON data
-  tagline: 10 sessions of 4 academic hours - JavaScript and TypeScript on real-world JSON data
+  name: Practical JavaScript Basics
+  tagline: 10 sessions of 4 academic hours - JavaScript on real-world JSON data
   image:
     src: /hero.svg
     alt: A monitoring rule in JavaScript
@@ -34,13 +33,13 @@ features:
 |---------|-------|
 | 1 | [Getting started](/lectures/01-getting-started) |
 | 2 | [Variables, types and operators](/lectures/02-variables-and-types) |
-| 3 | Comparisons, logic, conditions and loops |
-| 4 | Arrays |
-| 5 | Functions |
-| 6 | Objects and deep property access |
-| 7 | Array methods, functional style, built-in objects |
-| 8 | JSON, Node.js, modules, errors; project kickoff |
-| 9 | Tests and types |
+| 3 | [Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops) |
+| 4 | Arrays and lists of records |
+| 5 | Functions, and reading older code |
+| 6 | Objects: deep paths, dictionaries, different data shapes |
+| 7 | Array methods: transforming and grouping data; project kickoff |
+| 8 | Strings, regular expressions, dates and numbers |
+| 9 | JSON, Node.js, modules, errors, tests, JSDoc types |
 | 10 | Project review, Git workflow, wrap-up |
 
 <style>

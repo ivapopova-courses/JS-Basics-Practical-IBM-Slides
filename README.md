@@ -1,7 +1,7 @@
-# JS & TS Basics - Slides (course site)
+# Practical JavaScript Basics - Slides (course site)
 
-The lectures of the course "JS & TS Basics": 10 sessions of 4 academic hours,
-JavaScript and TypeScript on real-world JSON data (a sample device report and a
+The lectures of the course "Practical JavaScript Basics": 10 sessions of 4 academic hours,
+JavaScript on real-world JSON data (a sample device report and a
 check rule over it).
 
 Live site: https://ivapopova-courses.github.io/JS-Basics-Practical-IBM-Slides/
