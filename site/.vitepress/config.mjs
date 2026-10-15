@@ -1,8 +1,8 @@
 import { defineCourse } from '@sciscend/course-kit/config'
 
 export default defineCourse({
-  title: 'JS & TS Basics',
-  description: 'JavaScript and TypeScript basics for beginners',
+  title: 'Practical JavaScript Basics',
+  description: 'JavaScript basics for beginners, on real-world JSON data',
   lang: 'en',
   // path relative to the course root (the directory vitepress is run from)
   data: 'data/sample-asset.json',
@@ -10,7 +10,7 @@ export default defineCourse({
   trainerDir: '../trainer',
   nav: [
     { text: 'Agenda', link: '/agenda' },
-    { text: 'Lectures', link: '/lectures/02-variables-and-types' },
+    { text: 'Lectures', link: '/lectures/03-conditions-and-loops' },
     { text: 'Project', link: '/project' }
   ],
   sidebar: [
@@ -27,9 +27,10 @@ export default defineCourse({
       text: 'Lectures',
       items: [
         { text: '1. Getting started', link: '/lectures/01-getting-started' },
-        { text: '2. Variables, types, operators', link: '/lectures/02-variables-and-types' }
+        { text: '2. Variables, types, operators', link: '/lectures/02-variables-and-types' },
+        { text: '3. Conditions and loops', link: '/lectures/03-conditions-and-loops' }
       ]
     }
   ],
-  footerMessage: 'JS & TS Basics'
+  footerMessage: 'Practical JavaScript Basics'
 })

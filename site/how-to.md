@@ -12,7 +12,7 @@ Most code examples have a bar under them:
 Try it:
 
 ```js run
-const course = "JS & TS Basics";
+const course = "Practical JavaScript Basics";
 console.log("Welcome to", course);
 ```
 

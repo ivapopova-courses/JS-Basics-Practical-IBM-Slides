@@ -12,10 +12,10 @@ should make the next products easy to add.
 | Session | What we add |
 |---------|-------------|
 | 5. Functions | `versionBelow(a, b)` - compare version strings |
-| 6. Objects | `get(doc, "a.b.c", fallback)` - safe access to deep paths |
-| 7. Array methods | helpers for lists inside the document |
-| 8. Kickoff | your own repository, a chosen product, sample documents |
-| 9. Tests and types | tests with `node:test`, JSDoc, TypeScript types |
+| 6. Objects | `get(doc, path, fallback)` - safe access to deep paths; the path as a string or an array (for keys with dots) |
+| 7. Array methods | group a list of records into an object, build an index; **kickoff**: your own repository, a chosen product, sample documents |
+| 8. Strings, regex, dates | normalise versions in any format; parse dates and keys |
+| 9. JSON, modules, tests | a local runner with a fake `emit`; tests with `node:test`; JSDoc types for the product's JSON |
 | 10. Review | presentation and code review |
 
 ## Deliverables
@@ -24,7 +24,7 @@ should make the next products easy to add.
 2. Tests with `node:test` on anonymised sample documents.
 3. Two or three existing rules rewritten with the library.
 4. A README with examples for other users.
-5. Optional: TypeScript types for the product's JSON schema.
+5. JSDoc types (`@typedef`) for the product's JSON, checked with `// @ts-check`.
 
 ::: info Choices to make
 Which product comes first, and which helpers are needed most. Collect

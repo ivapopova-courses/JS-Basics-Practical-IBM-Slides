@@ -2,7 +2,7 @@
   "name": "js-basics-practical-ibm-slides",
   "private": true,
   "type": "module",
-  "description": "JS & TS Basics - lectures and course site",
+  "description": "Practical JavaScript Basics - lectures and course site",
   "scripts": {
     "dev": "vitepress dev site",
     "dev:trainer": "TRAINER=1 vitepress dev site",
