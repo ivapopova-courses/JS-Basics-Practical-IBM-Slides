@@ -161,10 +161,16 @@ const isDone = e => e.msgstr !== '' && !isFuzzy(e)
 // ---------------------------------------------------------------------------
 // Segmenting an English page
 
+// VitePress keeps ONE markdown renderer per process, and whoever creates it first sets
+// its options. withLocales() runs before the site build, so the renderer must be created
+// with the site's own markdown options and base - otherwise the build reuses a renderer
+// without them (no runnable `js run` blocks, no trainer notes).
 let mdPromise
+let mdOptions = {}
+let mdBase = '/'
 function markdown() {
   const quiet = { info() {}, warn() {}, error: console.error }
-  mdPromise ??= createMarkdownRenderer(SITE, {}, '/', quiet)
+  mdPromise ??= createMarkdownRenderer(SITE, mdOptions, mdBase, quiet)
   return mdPromise
 }
 
@@ -592,6 +598,8 @@ function translateItems(items, tr, lang) {
 export async function withLocales(config, { footerMessage = '' } = {}) {
   config.footerMessage = footerMessage // read by `update` for the site strings
   if (process.env.I18N_CLI === '1') return config
+  mdOptions = config.markdown || {}
+  mdBase = config.base || '/'
   config.locales = { root: { label: 'English', lang: config.lang || 'en' } }
   const searchLocales = {}
   for (const [lang, L] of Object.entries(LANGS)) {

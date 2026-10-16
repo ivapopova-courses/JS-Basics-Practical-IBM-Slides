@@ -28,7 +28,9 @@
       "ntp_ip_address": "10.0.0.1",
       "device_id": "D7F3A9C21E40B815",
       "device_alias": "D7F3A9C21E40B815",
-      "firmware_level": "4.2.1.7 (build 412.17.2607151200)"
+      "firmware_level": "4.2.1.7 (build 412.17.2607151200)",
+      "consoles": "CON-01;CON-02",
+      "settings": "SA=2,SG=1,SN=2"
     },
     "extended_info": {
       "json": {
@@ -38,6 +40,37 @@
           }
         }
       }
-    }
+    },
+    "features": [
+      "dedup",
+      "compression",
+      "encryption"
+    ],
+    "enclosures": [
+      {
+        "id": "ENC-01",
+        "type": "SSD-24",
+        "firmware": "2.14",
+        "state": "normal"
+      },
+      {
+        "id": "ENC-02",
+        "type": "SSD-24",
+        "firmware": "2.10",
+        "state": "normal"
+      },
+      {
+        "id": "ENC-03",
+        "type": "HDD-12",
+        "firmware": "2.14",
+        "state": "degraded"
+      },
+      {
+        "id": "ENC-04",
+        "type": "HDD-12",
+        "firmware": "2.10",
+        "state": "normal"
+      }
+    ]
   }
 }

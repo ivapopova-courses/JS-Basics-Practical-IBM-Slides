@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Методи на масивите</title>
+<!--
+    Step-by-step animation: array methods (slice, at, splice, indexOf, includes), strings and
+    arrays (split, join, packed values), a list of records, and splice inside a loop.
+    Built on the engine of arrayAlgorithms.html.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: arrayMethods.html#3 (scenario 3), #3.5 (scenario 3, step 5),
+    ?theme=dark forces the dark palette, #selftest walks every step and reports problems.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --free-bg: #efe9dc;
+    --free-border: #cfc4af;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --heap-bg: #fff3cf;
+    --heap-border: #c99a2e;
+    --chip-ink: #ffffff;
+
+    --ptr-i: #7b48c4;
+    --ptr-j: #0f7f86;
+    --true: #2f7d32;
+    --true-bg: #d5efcf;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --free-bg: #262830; --free-border: #3d404c;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+        --chip-ink: #111111;
+        --ptr-i: #b38cff; --ptr-j: #4fd1c5; --true: #7bd88f; --true-bg: #1f3a24;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --free-bg: #262830; --free-border: #3d404c;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+    --chip-ink: #111111;
+    --ptr-i: #b38cff; --ptr-j: #4fd1c5; --true: #7bd88f; --true-bg: #1f3a24;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 41fr) minmax(0, 59fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: flex; flex-direction: column; gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .92rem; }
+.code li {
+    display: flex; align-items: center; gap: .8rem;
+    padding: .13rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code li.patched > span:nth-child(2) { text-decoration: underline wavy #ff6b63; text-underline-offset: .25em; text-decoration-thickness: 1px; }
+.code li.patched.variant > span:nth-child(2) { text-decoration-color: #82aaff; }
+.code .ptag {
+    margin-left: auto; padding: 0 .4rem; border-radius: .25rem;
+    background: #ff6b63; color: #1b1b1b;
+    font-family: var(--sans); font-size: .62rem; font-weight: 700;
+}
+.code li.variant .ptag { background: #82aaff; }
+.code li.patched { animation: fadein .4s both; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+.code .p { color: #89ddff; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); white-space: pre; }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); white-space: normal; }
+.cline.warn { color: var(--write); background: var(--write-bg); font-weight: 700; }
+.cline .ctip { float: right; font-family: var(--sans); font-size: .62rem; font-weight: 700; letter-spacing: .04em; opacity: .85; }
+.console-empty { font-size: .8rem; color: var(--muted); font-style: italic; }
+
+/* ---------- array / matrix ---------- */
+.viz-panel { flex: none; }
+.ahead { display: flex; align-items: center; gap: .55rem; }
+.aname { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; }
+.kw {
+    padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: .62rem; color: var(--muted);
+}
+.len {
+    padding: .05rem .45rem; border: 1px solid var(--heap-border); border-radius: .3rem;
+    background: var(--heap-bg);
+    font-family: var(--mono); font-size: .85rem;
+}
+.viz-empty { min-height: 8rem; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-style: italic; color: var(--muted); }
+.arr-box { position: relative; display: flex; flex-direction: column; align-items: center; }
+.track { display: flex; gap: .4rem; padding-top: 1.5rem; }
+.slot { position: relative; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+.acell, .mcell, .rcell {
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--heap-border); border-radius: .5rem;
+    background: var(--heap-bg);
+    font-family: var(--mono); font-weight: 700;
+    white-space: nowrap;
+    transition: box-shadow .25s, opacity .3s;
+}
+.acell { min-width: 4.4rem; height: 3.2rem; padding: 0 .65rem; font-size: 1.25rem; }
+.idx { font-family: var(--mono); font-size: .85rem; color: var(--muted); }
+.slot.out { visibility: hidden; }
+.slot.out.show { visibility: visible; }
+.slot.out .acell, .mcell.out { background: none; border-style: dashed; border-color: var(--free-border); color: var(--muted); }
+.none { font-family: var(--sans); font-size: .72rem; font-weight: 500; font-style: italic; }
+.undef { font-family: var(--mono); font-size: .95rem; font-style: italic; color: var(--err); }
+.slot.seen .acell, .mcell.seen { opacity: .5; }
+.slot.skip .acell { opacity: .4; border-style: dashed; }
+.slot.skip .idx::after { content: "не е проверен"; display: block; font-family: var(--sans); font-size: .62rem; }
+.cur { transform: translateY(-.45rem); }
+.cur.lifting { animation: lift .4s both; }
+.hl-read { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.hl-hit { box-shadow: 0 0 0 3px var(--true), 0 0 0 7px var(--true-bg); }
+.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.hl-error { box-shadow: 0 0 0 3px var(--err), 0 0 0 7px var(--err-bg); animation: shake .5s both; }
+.ctag {
+    position: absolute; top: 0; z-index: 2;
+    padding: .02rem .45rem; border-radius: .3rem;
+    background: var(--write); color: var(--chip-ink);
+    font-size: .68rem; font-weight: 700; white-space: nowrap;
+    animation: pop .4s both;
+}
+.ptr-row { position: relative; align-self: stretch; height: 3.2rem; }
+.pointer {
+    position: absolute; z-index: 3;
+    display: flex; align-items: center; gap: .1rem;
+    font-family: var(--mono); font-size: 1rem; font-weight: 700;
+    white-space: nowrap;
+    color: var(--ptr-i);
+}
+.pointer.p-j, .pointer.p-end { color: var(--ptr-j); }
+.pointer svg { flex: none; width: 1.25rem; height: 1.35rem; fill: currentColor; }
+.pointer span { padding: 0 .3rem; border-radius: .3rem; background: var(--panel); }
+.pointer.up { top: .1rem; flex-direction: column; transform: translateX(-50%); }
+.pointer.down { top: 0; flex-direction: column-reverse; transform: translateX(-50%); }
+.pointer.down svg { transform: rotate(180deg); }
+.pointer.right { left: 0; flex-direction: row; transform: translateY(-50%); }
+.pointer.right svg { transform: rotate(90deg); }
+.pointer.appear { animation: fadein .4s both; }
+
+/* matrix */
+.mx-box { position: relative; display: flex; justify-content: center; }
+.mx-wrap { position: relative; padding: 2.9rem 0 0 6.2rem; }
+.mx { display: grid; gap: .35rem; align-items: center; }
+.mlab-c { text-align: center; font-family: var(--mono); font-size: .85rem; color: var(--muted); }
+.mlab-r { padding-right: .5rem; text-align: right; font-family: var(--mono); font-size: .92rem; color: var(--muted); white-space: nowrap; }
+.mlab-r.on { color: var(--ptr-i); font-weight: 700; }
+.mlab-c.on { color: var(--ptr-j); font-weight: 700; }
+.mlab-c.out, .mlab-r.out, .mcell.out { visibility: hidden; }
+.mlab-c.out.show, .mlab-r.out.show, .mcell.out.show { visibility: visible; }
+.mcell { position: relative; width: 3.8rem; height: 3rem; font-size: 1.25rem; }
+.mcell.rowon { border-color: var(--ptr-i); }
+.mcell.span { width: auto; }
+.mcell .ctag { top: .12rem; right: .12rem; padding: 0 .25rem; font-size: .58rem; }
+.slot .ctag { top: -1.45rem; }
+
+/* records: a list of objects as a table */
+.rec-wrap { padding: 1.3rem 0 0 5.2rem; }
+.mcell.wide { width: auto; height: 2.3rem; min-width: 5.4rem; padding: 0 .7rem; font-size: 1.05rem; }
+.mlab-c.key { padding: 0 .4rem; font-weight: 700; }
+.str-empty { min-height: 3.2rem; display: flex; align-items: center; font-family: var(--mono); color: var(--muted); }
+
+/* ---------- variables ---------- */
+.vars-panel { flex: none; }
+.vars { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .5rem 1.1rem; min-height: 3.9rem; }
+.vbox { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.vname { display: flex; align-items: center; gap: .3rem; font-family: var(--mono); font-size: 1rem; font-weight: 700; }
+.vcell {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 4.4rem; height: 2.5rem; padding: 0 .6rem;
+    border: 2px solid var(--var-border); border-radius: .5rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.15rem; font-weight: 700;
+    white-space: nowrap;
+    transition: box-shadow .25s;
+}
+.vbox.p-i .vname { color: var(--ptr-i); }
+.vbox.p-j .vname { color: var(--ptr-j); }
+.vbox.p-i .vcell { border-color: var(--ptr-i); }
+.vbox.p-j .vcell { border-color: var(--ptr-j); }
+.vbox.appear { animation: appear .45s both; }
+.vcell .val.t-undef { font-style: italic; font-weight: 500; opacity: .85; }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+.vcell.changed .val { display: inline-block; animation: pop .45s .2s both; }
+.vars-empty { font-size: .8rem; color: var(--muted); font-style: italic; align-self: center; }
+
+/* ---------- lower row: tests + result arrays ---------- */
+.lower { display: grid; grid-template-columns: minmax(0, 1fr); gap: .7rem; flex: 1; min-height: 0; }
+.lower.with-res { grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); }
+.tests { display: flex; flex-direction: column; gap: .45rem; }
+.test {
+    padding: .35rem .6rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper);
+}
+.t-kind { flex: none; width: 5.6rem; font-family: var(--sans); font-size: .6rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.t-line { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .45rem; font-family: var(--mono); font-size: 1.05rem; }
+.t-expr { font-weight: 600; white-space: pre; }
+.t-sub { padding: .02rem .4rem; border-radius: .3rem; background: var(--read-bg); white-space: pre; }
+.t-res { padding: .02rem .5rem; border-radius: .3rem; font-weight: 700; white-space: pre; }
+.t-res.is-true { background: var(--true-bg); color: var(--true); box-shadow: inset 0 0 0 2px var(--true); }
+.t-res.is-false { background: var(--err-bg); color: var(--err); box-shadow: inset 0 0 0 2px var(--err); }
+.t-res.is-val { background: var(--write-bg); }
+.t-res.is-err { background: var(--err); color: #fff; }
+.t-arr { flex: none; width: 1rem; height: .7rem; color: var(--muted); }
+.tests-empty { font-size: .8rem; color: var(--muted); font-style: italic; }
+
+.rarr + .rarr { margin-top: .55rem; }
+.rhead { display: flex; align-items: center; gap: .5rem; }
+.rhead .aname { font-size: 1rem; }
+.rtrack { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .2rem; min-height: 2.9rem; align-items: flex-start; }
+.rslot { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
+.rcell { min-width: 3rem; height: 2.3rem; padding: 0 .45rem; font-size: 1.05rem; }
+.rslot.appear .rcell { animation: pop .45s both; }
+.rempty { align-self: center; font-family: var(--mono); font-size: .9rem; color: var(--muted); }
+.rempty i { font-family: var(--sans); font-size: .78rem; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.1rem * 1.42 * 3); font-size: 1.1rem; line-height: 1.42; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+
+.await, .vcell.await .val { visibility: hidden; }
+.land { animation: land .45s both; }
+
+@keyframes appear { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { scale: 1; } 40% { scale: 1.12; } 100% { scale: 1; } }
+@keyframes lift { from { transform: none; } to { transform: translateY(-.45rem); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes shake { 0%, 100% { translate: 0; } 20%, 60% { translate: -6px; } 40%, 80% { translate: 6px; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+@keyframes cellin { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
+.slot.appear .acell, .mcell.appear { animation: cellin .4s both; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .lower.with-res { grid-template-columns: 1fr; }
+    .track { flex-wrap: wrap; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Методи на масивите <small>slice, splice, indexOf, split, join, записи - стъпка по стъпка</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../arrayMethods.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel" id="codePanel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="panel viz-panel" id="vizPanel">
+                <div class="panel-title"><span id="vizTitle"></span><span class="note" id="vizNote"></span></div>
+                <div id="viz"></div>
+            </div>
+            <div class="panel vars-panel" id="varsPanel">
+                <div class="panel-title"><span>Променливи</span><span class="note" id="varsNote"></span></div>
+                <div class="vars" id="vars"></div>
+            </div>
+            <div class="lower" id="lower">
+                <div class="panel" id="testsPanel">
+                    <div class="panel-title"><span>Проверка и изчисление</span></div>
+                    <div class="tests" id="tests"></div>
+                </div>
+                <div class="panel" id="resPanel">
+                    <div class="panel-title"><span>Нови масиви</span><span class="note" id="resNote"></span></div>
+                    <div id="res"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Texts of the user interface (the scenario texts are below, in SCENARIOS)
+// ---------------------------------------------------------------------------
+const T = {
+    arrayTitle: 'Масивът',
+    arrayNote: 'индекс = номер на клетката, започва от 0',
+    noArray: 'Масивът още не е създаден.',
+    none: 'няма',
+    length: 'length',
+    recTitle: 'Списък от записи',
+    recNote: 'един ред = един обект; стойностите са низове',
+    strTitle: 'Низът',
+    strNote: 'и низът има дължина и индекси',
+    emptyStr: '- празен низ, дължина 0',
+    varsNote: 'стрелката под масива е текущата позиция',
+    noVars: 'Още няма променливи.',
+    testsEmpty: 'Тук ще виждаме проверяваните условия (true / false) и изчисленията.',
+    condition: 'условие',
+    calculation: 'изчисление',
+    resNote: 'върнати от метода или напълнени с push()',
+    resEmpty: 'Тук ще се появят новите масиви.',
+    emptyArr: '- празен масив',
+    conEmpty: 'Конзолата е празна.',
+    bug: 'бъг',
+    change: 'промяна',
+    line: n => `изпълнява се ред ${n}`,
+    lines: ns => `изпълняват се редове ${ns}`,
+    step: (k, n) => `Стъпка ${k} от ${n}`,
+    stepN: k => `Стъпка ${k}`,
+    play: 'Пусни',
+    pause: 'Пауза',
+    advanced: 'advanced',
+};
+
+// ---------------------------------------------------------------------------
+// State helpers used by the scenario steps. Each one mutates the state `s`.
+// ---------------------------------------------------------------------------
+function arr(s, name, items, kind = 'let') { s.arr = { name, items, kind }; }
+function recs(s, name, cols, rows, kind = 'const') { s.recs = { name, cols, rows, kind }; }
+function setv(s, name, value, kind = 'let') {
+    const v = s.vars.find(x => x.name === name);
+    if (v) v.value = String(value);
+    else s.vars.push({ name, value: String(value), kind });
+    s.hl[name] = 'write';
+}
+function drop(s, ...names) {
+    s.vars = s.vars.filter(v => !names.includes(v.name));
+    names.forEach(n => { delete s.ptr[n]; delete s.plab[n]; });
+}
+function rd(s, ...names) { names.forEach(n => s.hl[n] = 'read'); }
+// a pointer under the array (or next to a row of the records); label is optional
+function go(s, name, idx, label) {
+    s.ptr[name] = idx;
+    if (label) s.plab[name] = label; else delete s.plab[name];
+}
+function noptr(s) { s.ptr = {}; s.plab = {}; }
+// the element being read: a number for the array, "row.col" for the records
+function look(s, key, hl = 'read') {
+    s.cur = key; s.curHl = hl;
+    if (!s.seen.includes(key)) s.seen.push(key);
+}
+// highlight other cells in this step: kind is 'write', 'hit' or 'error'
+function mark(s, keys, kind) { [].concat(keys).forEach(k => s.marks[k] = kind); }
+function test(s, expr, sub, res) { s.tests.push({ kind: 'test', expr, sub: [].concat(sub), res: String(res) }); }
+function calc(s, expr, sub, res) { s.tests.push({ kind: 'calc', expr, sub: [].concat(sub), res: String(res) }); }
+function out(s, text, cls = '') { s.console.push({ text, cls }); }
+function newres(s, name, kind = 'let') { s.res.push({ name, items: [], kind }); }
+function push(s, name, lit) {
+    const r = s.res.find(x => x.name === name);
+    r.items.push(lit);
+    s.rhl[name + ':' + (r.items.length - 1)] = 'write';
+}
+// a whole new array at once (returned by slice, splice, split)
+function resset(s, name, items, kind = 'const') {
+    let r = s.res.find(x => x.name === name);
+    if (!r) { r = { name, items: [], kind }; s.res.push(r); }
+    r.items = items.slice();
+    items.forEach((_, i) => s.rhl[name + ':' + i] = 'write');
+}
+function tag(s, key, text, only = false) { if (only) s.tags = {}; s.tags[key] = text; }
+function patch(s, line, text, kind = 'bug') { s.patch[line] = { text, kind }; }
+// start the same program again (used for the "what if" variants)
+function restart(s) {
+    s.console = []; s.seen = []; s.skip = []; s.tags = {}; s.ptr = {}; s.plab = {}; s.vars = [];
+    s.res.forEach(r => r.items = []);
+}
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line   - active code line(s) (0-based, -1 = none)
+//   step.do     - changes to the state
+//   step.fly    - values that fly on screen: [from, to, text, extraDelayMs]
+//                 keys: a:idx (array cell), m:row.col (record cell), len (length badge),
+//                 v:name (variable), r:name:idx (new array cell),
+//                 t:k / tr:k (test row k: values / result), con (last console line)
+// ---------------------------------------------------------------------------
+const PARTS = ['"4"', '"2"', '"1"', '"7"'];
+const MOD4 = ['"XR-100"', '"XR-210"', '"XR-220"', '"XR-300"'];
+const ALLOW = ['"XR-210"', '"XR-220"', '"XR-230"'];
+const CHARS = ['4', '.', '2', '.', '1', '.', '7'];
+const PAIRS = ['"SA=2"', '"SG=1"', '"SN=2"'];
+const ENC_COLS = ['id', 'fw', 'state'];
+const ENC = [
+    ['"ENC-01"', '"2.14"', '"normal"'],
+    ['"ENC-02"', '"2.10"', '"normal"'],
+    ['"ENC-03"', '"2.14"', '"degraded"'],
+    ['"ENC-04"', '"2.10"', '"normal"'],
+];
+const DRIVES = ['"ok"', '"failed"', '"failed"', '"ok"'];
+// one round of the for...of loop over the pairs
+function pairRound(s, i) {
+    drop(s, 'pair'); go(s, 'pair', i, 'pair'); look(s, i);
+    setv(s, 'pair', PAIRS[i], 'const');
+    const [k, v] = PAIRS[i].replace(/"/g, '').split('=');
+    resset(s, 'kv', [`"${k}"`, `"${v}"`]);
+}
+// one round of the for...of loop over the records
+function encRound(s, r) {
+    drop(s, 'enc'); go(s, 'enc', r, 'enc');
+    setv(s, 'enc', `enclosures[${r}]`, 'const');
+}
+
+const SCENARIOS = [
+{
+    tab: 'slice и at',
+    res: true, noVars: true,
+    code: [
+        'const parts = ["4", "2", "1", "7"];',
+        'const firstTwo = parts.slice(0, 2);',
+        'const lastTwo = parts.slice(-2);',
+        'const copy = parts.slice();',
+        'console.log(firstTwo, lastTwo);',
+        'console.log(parts.at(-1), parts[parts.length - 1]);',
+    ],
+    steps: [
+        { line: -1, text: `<code>slice(start, end)</code> копира <b>част</b> от масива в <b>нов</b> масив. Оригиналният масив не се променя. Като филия хляб: взимате парче, а хлябът си остава.` },
+        { line: 0, text: `parts съдържа 4-те части на версията "4.2.1.7" - като низове, както ги дава <code>split</code> (сценарий 4). length е 4.`,
+          do: s => arr(s, 'parts', PARTS, 'const') },
+        { line: 1, text: `<code>parts.slice(0, 2)</code>: <b>start</b> = 0 се включва, <b>end</b> = 2 <b>не</b> се включва. Получаваме индексите 0 и 1: end - start = 2 елемента.`,
+          do: s => { go(s, 'start', 0); go(s, 'end', 2); calc(s, 'end - start', '2 - 0', 2); } },
+        { line: 1, text: `Двата елемента се <b>копират</b> в нов масив и новият масив отива във firstTwo. Елементът с индекс 2 ("1") е там, където сочи end - той не се взима.`,
+          do: s => { look(s, 0); look(s, 1); resset(s, 'firstTwo', PARTS.slice(0, 2)); },
+          fly: [['a:0', 'r:firstTwo:0', PARTS[0]], ['a:1', 'r:firstTwo:1', PARTS[1]]] },
+        { line: 2, text: `<b>Отрицателен</b> индекс се брои от края: -2 означава length - 2, т.е. 4 - 2 = 2. Без end slice стига до края на масива. lastTwo получава "1" и "7".`,
+          do: s => { noptr(s); go(s, 'start', 2, 'start = -2'); look(s, 3); calc(s, 'parts.length + (-2)', '4 - 2', 2); resset(s, 'lastTwo', PARTS.slice(2)); },
+          fly: [['len', 't:0', '4'], ['a:2', 'r:lastTwo:0', PARTS[2], 500], ['a:3', 'r:lastTwo:1', PARTS[3], 500]] },
+        { line: 3, text: `<code>slice()</code> без аргументи копира <b>целия</b> масив. copy има същите елементи, но е <b>друг</b> масив: <code>copy === parts</code> е false. Промяна в copy не променя parts.`,
+          do: s => { noptr(s); resset(s, 'copy', PARTS); test(s, 'copy === parts', 'два различни масива', false); } },
+        { line: 4, text: `Отпечатваме двете части. А самият parts? Пак 4 елемента: slice <b>никога</b> не променя масива, върху който е извикан.`,
+          do: s => out(s, "[ '4', '2' ] [ '1', '7' ]") },
+        { line: 5, text: `<code>parts.at(-1)</code> е <b>последният</b> елемент, "7": at() приема отрицателни индекси. По-старият начин е <code>parts[parts.length - 1]</code>. Внимание: <code>parts[-1]</code> е undefined - в квадратни скоби -1 не се брои от края. (at() е ES2022 - проверете дали двигателят на правилата го поддържа.)`,
+          do: s => { go(s, 'at', 3, 'at(-1)'); look(s, 3, 'hit'); calc(s, 'parts.length - 1', '4 - 1', 3); out(s, '7 7'); },
+          fly: [['a:3', 'con', '7', 300]] },
+        { line: -1, text: `<b>Обобщение:</b> <code>slice(start, end)</code> - копие на елементите от start до end, <b>без</b> end. Отрицателните индекси се броят от края. <code>slice()</code> копира целия масив. <code>at(-1)</code> е последният елемент.`,
+          do: s => noptr(s) },
+    ],
+},
+{
+    tab: 'splice',
+    res: true, outRight: 0,
+    code: [
+        'const models = ["XR-100", "XR-210", "XR-220", "XR-300"];',
+        'const removed = models.splice(1, 2);',
+        'console.log(removed, models);',
+        'models.splice(1, 0, "XR-250");',
+        'console.log(models);',
+        'models.splice(0, 1, "XR-110", "XR-120");',
+        'console.log(models);',
+    ],
+    steps: [
+        { line: -1, text: `<code>splice(start, deleteCount, ...items)</code> променя <b>самия</b> масив: от индекс start премахва deleteCount елемента и слага новите items на тяхно място. Връща премахнатите елементи в нов масив. slice копира, splice изрязва.` },
+        { line: 0, text: `models е <code>const</code>, но const масив все пак може да се променя. const означава само, че models винаги сочи <b>същия</b> масив.`,
+          do: s => arr(s, 'models', MOD4, 'const') },
+        { line: 1, text: `<code>models.splice(1, 2)</code>: от индекс 1 премахни 2 елемента - "XR-210" и "XR-220".`,
+          do: s => { go(s, 'start', 1); mark(s, [1, 2], 'error'); tag(s, 1, 'изтрива се'); tag(s, 2, 'изтрива се'); } },
+        { line: 1, text: `Те се изрязват и се връщат в нов масив, който отива в removed. Елементите след тях се преместват наляво: "XR-300" вече има индекс <b>1</b>. length е 2.`,
+          do: s => { noptr(s); s.tags = {}; arr(s, 'models', [MOD4[0], MOD4[3]], 'const'); mark(s, 1, 'write'); tag(s, 1, 'преместен'); resset(s, 'removed', MOD4.slice(1, 3)); } },
+        { line: 2, text: `Отпечатваме двата масива. Оригиналният масив models е <b>променен</b> - това е голямата разлика със slice.`,
+          do: s => { s.tags = {}; out(s, "[ 'XR-210', 'XR-220' ] [ 'XR-100', 'XR-300' ]"); } },
+        { line: 3, text: `<code>splice(1, 0, "XR-250")</code>: deleteCount е 0 - нищо не се премахва. "XR-250" се <b>вмъква</b> на индекс 1, а "XR-300" се премества надясно, на индекс 2.`,
+          do: s => { arr(s, 'models', [MOD4[0], '"XR-250"', MOD4[3]], 'const'); mark(s, 1, 'hit'); tag(s, 1, 'нов'); mark(s, 2, 'write'); tag(s, 2, 'преместен'); } },
+        { line: 4, text: `Сега length е 3.`,
+          do: s => { s.tags = {}; out(s, "[ 'XR-100', 'XR-250', 'XR-300' ]"); } },
+        { line: 5, text: `<code>splice(0, 1, "XR-110", "XR-120")</code>: премахни 1 елемент на индекс 0 ("XR-100") и вмъкни два на негово място - <b>замяна</b>. length расте от 3 на 4.`,
+          do: s => { arr(s, 'models', ['"XR-110"', '"XR-120"', '"XR-250"', MOD4[3]], 'const'); mark(s, [0, 1], 'hit'); tag(s, 0, 'нов'); tag(s, 1, 'нов'); } },
+        { line: 6, text: `Крайният масив.`,
+          do: s => { s.tags = {}; out(s, "[ 'XR-110', 'XR-120', 'XR-250', 'XR-300' ]"); } },
+        { line: -1, text: `<b>Обобщение:</b> splice променя оригиналния масив и връща това, което е премахнал. Използвайте го за масиви, които вашият код създава. <b>Не</b> правете splice на масивите от отчета (doc): останалата част от правилото ще види променени данни. За променено копие - slice (или <code>toSpliced()</code>, ES2023).` },
+    ],
+},
+{
+    tab: 'indexOf и includes',
+    code: [
+        'const MODELS = ["XR-210", "XR-220", "XR-230"];',
+        'const model = "XR-220";',
+        'console.log(MODELS.indexOf(model));',
+        'console.log(MODELS.includes(model));',
+        'console.log(MODELS.indexOf("XR-100"));',
+        'if (MODELS.indexOf(model) !== -1) {',
+        '    console.log("checked");',
+        '}',
+    ],
+    steps: [
+        { line: -1, text: `<b>Allow-list</b> (списък на разрешените): правилото проверява само някои модели. Вместо <code>model === "XR-210" || model === "XR-220" || ...</code> пазим моделите в масив и задаваме един въпрос: има ли model в списъка?` },
+        { line: 0, text: `Списъкът с модели. Списък, който никога не се променя, често се пише с главни букви: MODELS.`,
+          do: s => arr(s, 'MODELS', ALLOW, 'const') },
+        { line: 1, text: `Моделът от отчета.`,
+          do: s => setv(s, 'model', '"XR-220"', 'const') },
+        { line: 2, text: `<code>indexOf(model)</code> търси от индекс 0 и сравнява всеки елемент с <b>===</b>. "XR-210" === "XR-220" е false - продължаваме. (Стрелката показва докъде е стигнало търсенето.)`,
+          do: s => { go(s, 'i', 0); look(s, 0); rd(s, 'model'); test(s, 'MODELS[i] === model', '"XR-210" === "XR-220"', false); },
+          fly: [['a:0', 't:0', ALLOW[0]], ['v:model', 't:0', '"XR-220"']] },
+        { line: 2, text: `Индекс 1: "XR-220" === "XR-220" е true - намерен. indexOf спира и връща <b>индекса</b>, 1. Елементът с индекс 2 не се проверява.`,
+          do: s => { go(s, 'i', 1); look(s, 1, 'hit'); test(s, 'MODELS[i] === model', '"XR-220" === "XR-220"', true); tag(s, 1, 'намерен'); s.skip = [2]; out(s, '1'); },
+          fly: [['a:1', 't:0', ALLOW[1]], ['tr:0', 'con', '1', 500]] },
+        { line: 3, text: `<code>includes(model)</code> прави същото търсене, но връща <b>true</b> или <b>false</b>. В условие се чете по-добре: <code>if (MODELS.includes(model))</code>.`,
+          do: s => { noptr(s); s.skip = []; s.tags = {}; look(s, 1, 'hit'); calc(s, 'MODELS.includes(model)', 'намерен на индекс 1', 'true'); out(s, 'true'); } },
+        { line: 4, text: `"XR-100" го няма в списъка. И трите сравнения са false и indexOf връща <b>-1</b>. -1 означава "не е намерен": никой елемент не може да има индекс -1.`,
+          do: s => { go(s, 'i', 3); [0, 1, 2].forEach(i => look(s, i)); s.cur = null; test(s, 'MODELS[i] === "XR-100"', ['"XR-210" === "XR-100"', '...', '"XR-230" === "XR-100"'], false); out(s, '-1'); } },
+        { line: [5, 6], text: `По-старите правила пишат <code>indexOf(model) !== -1</code> за "има го в списъка" и <code>=== -1</code> за "няма го в списъка". Работи по същия начин; <code>includes</code> (ES2016) го казва направо.`,
+          do: s => { noptr(s); look(s, 1, 'hit'); calc(s, 'MODELS.indexOf(model)', 'MODELS.indexOf("XR-220")', 1); test(s, 'MODELS.indexOf(model) !== -1', '1 !== -1', true); out(s, 'checked'); } },
+        { line: 1, text: `Ами ако отчетът пише модела с малки букви, "xr-220"? Какво ще отпечата програмата сега? Помислете, преди да продължите.`,
+          do: s => { restart(s); patch(s, 1, 'const model = "xr-220";', 'variant'); setv(s, 'model', '"xr-220"', 'const'); } },
+        { line: 3, text: `-1, после <b>false</b>: === сравнява точно, а "xr-220" !== "XR-220". Нищо не е намерено и "checked" не се отпечатва. Първо нормализирайте: <code>MODELS.includes(model.toUpperCase())</code>.`,
+          do: s => { [0, 1, 2].forEach(i => look(s, i)); s.cur = null; test(s, 'MODELS[i] === model', ['"XR-210" === "xr-220"', '"XR-220" === "xr-220"', '"XR-230" === "xr-220"'], false); out(s, '-1'); out(s, 'false', 'warn'); out(s, '-1'); } },
+        { line: -1, text: `<b>Обобщение:</b> <code>indexOf(x)</code> - индексът на първото x или -1. <code>includes(x)</code> - true или false. И двата сравняват с ===. <code>lastIndexOf(x)</code> търси от края. Всяко търсене обхожда масива, затова не търсете в дълъг списък отново и отново в цикъл.`,
+          do: s => { s.patch = {}; } },
+    ],
+},
+{
+    tab: 'split и join',
+    res: true, outRight: 0, str: true,
+    code: [
+        'const version = "4.2.1.7";',
+        'const parts = version.split(".");',
+        'console.log(parts);',
+        'const numbers = [];',
+        'for (const part of parts) {',
+        '    numbers.push(Number(part));',
+        '}',
+        'console.log(numbers);',
+        'console.log(numbers.join("-"));',
+    ],
+    steps: [
+        { line: -1, text: `<code>split(separator)</code> разрязва низ при всеки разделител и връща <b>масив</b> от парчетата. Разделителите изчезват. Да надникнем в split - вие само го извиквате, но е полезно да знаете какво прави.` },
+        { line: 0, text: `Низът не е масив, но има дължина (7) и всеки символ има индекс: <code>version[1]</code> е ".".`,
+          do: s => arr(s, 'version', CHARS, 'const') },
+        { line: 1, text: `split обхожда низа от индекс 0 и събира символите в парче. "4" не е ".", значи парчето е "4".`,
+          do: s => { newres(s, 'parts', 'const'); go(s, 'i', 0); look(s, 0); setv(s, 'piece', '"4"'); },
+          fly: [['a:0', 'v:piece', '4']] },
+        { line: 1, text: `Индекс 1 е "." - разделителят. Парчето "4" е готово и отива в масива; самата "." изчезва. Следващото парче започва празно.`,
+          do: s => { go(s, 'i', 1); look(s, 1, 'hit'); push(s, 'parts', PARTS[0]); setv(s, 'piece', '""'); },
+          fly: [['v:piece', 'r:parts:0', '"4"']] },
+        { line: 1, text: `"2", после "." - парчето "2" отива в масива. Същото за "1".`,
+          do: s => { go(s, 'i', 5); [2, 3, 4].forEach(i => look(s, i)); look(s, 5, 'hit'); push(s, 'parts', PARTS[1]); push(s, 'parts', PARTS[2]); setv(s, 'piece', '""'); } },
+        { line: 1, text: `"7" - и низът свършва. След последното парче няма ".", но split добавя и него. parts има 4 елемента: с един повече от разделителите.`,
+          do: s => { go(s, 'i', 6); look(s, 6); push(s, 'parts', PARTS[3]); },
+          fly: [['a:6', 'r:parts:3', '"7"']] },
+        { line: 2, text: `Парчетата са <b>низове</b>: "4", а не 4. Сравнени като низове, "10" &lt; "9" е true (лекция 3). За да сравнявате версии, превърнете частите в числа.`,
+          do: s => { noptr(s); drop(s, 'piece'); s.cur = null; out(s, "[ '4', '2', '1', '7' ]"); } },
+        { line: [3, 4, 5], text: `numbers започва празен. for...of дава частите една по една: part е "4". <code>Number("4")</code> е числото 4 и push го добавя в numbers.`,
+          do: s => { newres(s, 'numbers', 'const'); setv(s, 'part', '"4"', 'const'); calc(s, 'Number(part)', 'Number("4")', 4); push(s, 'numbers', '4'); },
+          fly: [['r:parts:0', 'v:part', '"4"'], ['tr:0', 'r:numbers:0', '4', 400]] },
+        { line: [4, 5], text: `Същото за останалите части - нова константа part при всяко завъртане.`,
+          do: s => { setv(s, 'part', '"7"', 'const'); calc(s, 'Number(part)', ['Number("2")', 'Number("1")', 'Number("7")'], '2, 1, 7'); push(s, 'numbers', '2'); push(s, 'numbers', '1'); push(s, 'numbers', '7'); } },
+        { line: 7, text: `Сега елементите са числа - без кавички.`,
+          do: s => { drop(s, 'part'); out(s, '[ 4, 2, 1, 7 ]'); } },
+        { line: 8, text: `<code>join(separator)</code> е обратното на split: слепва елементите в <b>един низ</b>, с разделителя между тях. join() без аргумент използва ",".`,
+          do: s => { calc(s, 'numbers.join("-")', '4 + "-" + 2 + "-" + 1 + "-" + 7', '"4-2-1-7"'); out(s, '4-2-1-7'); },
+          fly: [['tr:0', 'con', '4-2-1-7']] },
+        { line: 0, text: `Ами ако отчетът има <b>празна</b> версия, ""? Какво ще отпечата програмата сега? Помислете, преди да продължите.`,
+          do: s => { restart(s); patch(s, 0, 'const version = "";', 'variant'); arr(s, 'version', [], 'const'); } },
+        { line: 7, text: `split дава <b>[""]</b> - масив с един празен низ, а не празен масив! Дължината му е 1. <code>Number("")</code> е 0, значи numbers е [0] и правилото ще види версия "0". Проверявайте за "" <b>преди</b> split.`,
+          do: s => { push(s, 'parts', '""'); push(s, 'numbers', '0'); calc(s, '"".split(".")', 'няма "."', '[""]'); calc(s, 'Number("")', 'Number("")', 0); out(s, "[ '' ]"); out(s, '[ 0 ]', 'warn'); out(s, '0'); } },
+        { line: -1, text: `<b>Обобщение:</b> <code>split(sep)</code> - от низ към масив от низове; разделителите изчезват. <code>join(sep)</code> - от масив към низ. Ако разделителят не е намерен, получавате масив с целия низ; "" дава [""]. <code>split("")</code> разрязва на отделни символи.`,
+          do: s => { s.patch = {}; } },
+    ],
+},
+{
+    tab: 'Пакетирани стойности',
+    res: true, outRight: 0,
+    code: [
+        'const settings = "SA=2,SG=1,SN=2";',
+        'const pairs = settings.split(",");',
+        'let sg = "";',
+        'for (const pair of pairs) {',
+        '    const kv = pair.split("=");',
+        '    if (kv[0] === "SG") {',
+        '        sg = kv[1];',
+        '        break;',
+        '    }',
+        '}',
+        'console.log(sg);',
+    ],
+    steps: [
+        { line: -1, text: `Отчетите често пакетират няколко стойности в <b>един низ</b>: "SA=2,SG=1,SN=2" - двойки key=value, разделени със запетаи. Два split-а го разпакетират: първо при ",", после всяка двойка при "=". Търсим стойността на SG.` },
+        { line: 0, text: `За JavaScript това е само текст. Още не може да отговори "колко е SG?".`,
+          do: s => setv(s, 'settings', '"SA=2,SG=1,SN=2"', 'const') },
+        { line: 1, text: `<code>split(",")</code> дава масив от 3 двойки.`,
+          do: s => { rd(s, 'settings'); arr(s, 'pairs', PAIRS, 'const'); } },
+        { line: 2, text: `<code>sg = ""</code> означава "още не е намерен".`,
+          do: s => setv(s, 'sg', '""') },
+        { line: [3, 4], text: `for...of дава елементите един по един: pair е "SA=2". <code>pair.split("=")</code> дава kv = ["SA", "2"]: <code>kv[0]</code> е ключът, <code>kv[1]</code> - стойността.`,
+          do: s => pairRound(s, 0),
+          fly: [['a:0', 'v:pair', PAIRS[0]], ['v:pair', 'r:kv:0', '"SA"', 600], ['v:pair', 'r:kv:1', '"2"', 600]] },
+        { line: 5, text: `"SA" === "SG" е false - продължаваме със следващата двойка.`,
+          do: s => { look(s, 0); test(s, 'kv[0] === "SG"', '"SA" === "SG"', false); },
+          fly: [['r:kv:0', 't:0', '"SA"']] },
+        { line: [3, 4, 5], text: `pair е "SG=1" (нова константа pair и нов kv при всяко завъртане). kv = ["SG", "1"] и "SG" === "SG" е <b>true</b>.`,
+          do: s => { pairRound(s, 1); look(s, 1, 'hit'); test(s, 'kv[0] === "SG"', '"SG" === "SG"', true); },
+          fly: [['a:1', 'v:pair', PAIRS[1]]] },
+        { line: 6, text: `<code>sg = kv[1]</code> - стойността "1" отива в sg.`,
+          do: s => { look(s, 1, 'hit'); setv(s, 'sg', '"1"'); },
+          fly: [['r:kv:1', 'v:sg', '"1"']] },
+        { line: 7, text: `<code>break</code> - имаме каквото ни трябва. "SN=2" не се проверява.`,
+          do: s => { s.skip = [2]; } },
+        { line: 10, text: `Отпечатваме 1. Внимание: стойността е <b>низът</b> "1". Използвайте <code>Number(sg)</code>, когато ви трябва число.`,
+          do: s => { noptr(s); drop(s, 'pair'); rd(s, 'sg'); out(s, '1'); },
+          fly: [['v:sg', 'con', '1']] },
+        { line: 5, text: `Ами ако търсим ключ, който го няма в низа, "KC"? Какво ще отпечата програмата? Помислете, преди да продължите.`,
+          do: s => { restart(s); patch(s, 5, '    if (kv[0] === "KC") {', 'variant'); setv(s, 'settings', '"SA=2,SG=1,SN=2"', 'const'); setv(s, 'sg', '""'); } },
+        { line: 10, text: `И трите двойки се проверяват, условието никога не е true и break не се изпълнява. sg остава "", а конзолата показва <b>празен</b> ред. Проверявайте за това: <code>if (sg === "")</code> означава "не е докладвано".`,
+          do: s => { [0, 1, 2].forEach(i => look(s, i)); s.cur = null; resset(s, 'kv', ['"SN"', '"2"']); test(s, 'kv[0] === "KC"', ['"SA" === "KC"', '"SG" === "KC"', '"SN" === "KC"'], false); out(s, '', 'warn'); } },
+        { line: -1, text: `<b>Обобщение:</b> пакетиран низ се разпакетира с два split-а: първо разделителят на списъка (","), после разделителят ключ / стойност ("="). kv[0] е ключът, kv[1] е стойността - и двете са низове. В сесия 6 превръщаме такъв низ в обект, за да пишем settings.SG.`,
+          do: s => { s.patch = {}; } },
+    ],
+},
+{
+    tab: 'Списък от записи',
+    res: true, records: true,
+    code: [
+        'const enclosures = [',
+        '    { id: "ENC-01", fw: "2.14", state: "normal" },',
+        '    { id: "ENC-02", fw: "2.10", state: "normal" },',
+        '    { id: "ENC-03", fw: "2.14", state: "degraded" },',
+        '    { id: "ENC-04", fw: "2.10", state: "normal" },',
+        '];',
+        'let oldCount = 0;',
+        'const notNormal = [];',
+        'for (const enc of enclosures) {',
+        '    if (enc.fw !== "2.14") oldCount++;',
+        '    if (enc.state !== "normal") notNormal.push(enc.id);',
+        '}',
+        'console.log(oldCount, notNormal);',
+    ],
+    steps: [
+        { line: -1, text: `<b>Списък от записи</b> е масив, чиито елементи са обекти с едни и същи ключове - по един обект за всяко шаси, диск или възел. Това е най-честата форма в отчетите. Един цикъл може едновременно да брои и да събира.` },
+        { line: [0, 1, 2, 3, 4, 5], text: `Всеки ред е един елемент на масива - обект. Всяка колона е ключ. <code>enclosures[1]</code> е вторият обект, а <code>enclosures[1].fw</code> е "2.10": първо индексът, после ключът.`,
+          do: s => { recs(s, 'enclosures', ENC_COLS, ENC); look(s, '1.1'); calc(s, 'enclosures[1].fw', 'ред 1, ключ fw', '"2.10"'); } },
+        { line: [6, 7], text: `Два резултата: брояч, който започва от 0, и масив за събраните id-та, който започва празен.`,
+          do: s => { setv(s, 'oldCount', 0); newres(s, 'notNormal', 'const'); } },
+        { line: [8, 9], text: `for...of дава елементите един по един: enc е първият обект. Не е копие - enc сочи същия обект в масива. <code>enc.fw</code> е "2.14", а "2.14" !== "2.14" е false - не се брои.`,
+          do: s => { encRound(s, 0); look(s, '0.1'); test(s, 'enc.fw !== "2.14"', '"2.14" !== "2.14"', false); },
+          fly: [['m:0.1', 't:0', '"2.14"']] },
+        { line: 10, text: `<code>enc.state</code> е "normal" - няма какво да събираме.`,
+          do: s => { look(s, '0.2'); test(s, 'enc.state !== "normal"', '"normal" !== "normal"', false); },
+          fly: [['m:0.2', 't:0', '"normal"']] },
+        { line: [8, 9], text: `Вторият обект: "2.10" !== "2.14" е true, значи <code>oldCount++</code> - 1.`,
+          do: s => { encRound(s, 1); look(s, '1.1', 'hit'); test(s, 'enc.fw !== "2.14"', '"2.10" !== "2.14"', true); setv(s, 'oldCount', 1); tag(s, '1.1', '+1'); },
+          fly: [['m:1.1', 't:0', '"2.10"']] },
+        { line: 10, text: `Състоянието му е "normal" - няма какво да събираме.`,
+          do: s => { look(s, '1.2'); test(s, 'enc.state !== "normal"', '"normal" !== "normal"', false); } },
+        { line: [8, 9, 10], text: `Третият обект: фърмуерът е "2.14" - не се брои. Но състоянието е "degraded", затова id-то му отива в notNormal.`,
+          do: s => { encRound(s, 2); look(s, '2.1'); look(s, '2.2', 'hit'); test(s, 'enc.fw !== "2.14"', '"2.14" !== "2.14"', false); test(s, 'enc.state !== "normal"', '"degraded" !== "normal"', true); push(s, 'notNormal', '"ENC-03"'); },
+          fly: [['m:2.0', 'r:notNormal:0', '"ENC-03"']] },
+        { line: [8, 9, 10], text: `Четвъртият обект: "2.10" - oldCount става 2. Състоянието е "normal".`,
+          do: s => { encRound(s, 3); look(s, '3.2'); look(s, '3.1', 'hit'); test(s, 'enc.fw !== "2.14"', '"2.10" !== "2.14"', true); test(s, 'enc.state !== "normal"', '"normal" !== "normal"', false); setv(s, 'oldCount', 2); tag(s, '3.1', '+1'); } },
+        { line: 8, text: `Няма повече елементи - цикълът свършва. Всеки обект е посетен <b>веднъж</b> и на двата въпроса е отговорено в едно и също обхождане.`,
+          do: s => { drop(s, 'enc'); noptr(s); } },
+        { line: 12, text: `Отпечатваме броя и събраните id-та.`,
+          do: s => { rd(s, 'oldCount'); out(s, "2 [ 'ENC-03' ]"); },
+          fly: [['v:oldCount', 'con', '2']] },
+        { line: -1, text: `<b>Обобщение:</b> списъкът от записи е масив от обекти. Обходете го веднъж и отговорете на всички въпроси в този цикъл: бройте с брояч, събирайте с push. При хиляди записи избягвайте търсене в цикъла (цикъл в цикъл) - в сесия 7 строим индекс веднъж.` },
+    ],
+},
+{
+    tab: 'splice в цикъл',
+    advanced: true,
+    code: [
+        'const drives = ["ok", "failed", "failed", "ok"];',
+        'for (let i = 0; i < drives.length; i++) {',
+        '    if (drives[i] === "failed") {',
+        '        drives.splice(i, 1);',
+        '    }',
+        '}',
+        'console.log(drives);',
+    ],
+    steps: [
+        { line: -1, text: `Искаме да премахнем всеки "failed" от масива, на място, със splice. Кодът изглежда правилен. Следете индекса i и елементите.` },
+        { line: 0, text: `Два диска "failed", един след друг.`,
+          do: s => arr(s, 'drives', DRIVES, 'const') },
+        { line: [1, 2], text: `i = 0: 0 &lt; 4 е true. "ok" === "failed" е false.`,
+          do: s => { setv(s, 'i', 0); go(s, 'i', 0); look(s, 0); test(s, 'i < drives.length', '0 < 4', true); test(s, 'drives[i] === "failed"', '"ok" === "failed"', false); } },
+        { line: [1, 2], text: `i = 1: "failed" === "failed" е true.`,
+          do: s => { setv(s, 'i', 1); go(s, 'i', 1); look(s, 1, 'hit'); test(s, 'i < drives.length', '1 < 4', true); test(s, 'drives[i] === "failed"', '"failed" === "failed"', true); } },
+        { line: 3, text: `<code>drives.splice(i, 1)</code> премахва елемента с индекс 1.`,
+          do: s => { rd(s, 'i'); mark(s, 1, 'error'); tag(s, 1, 'изтрива се'); } },
+        { line: 3, text: `Всичко след него се премества с едно място наляво. <b>Вторият</b> "failed" вече има индекс 1 - индекса, който току-що проверихме. length е 3.`,
+          do: s => { s.tags = {}; arr(s, 'drives', ['"ok"', '"failed"', '"ok"'], 'const'); mark(s, 1, 'write'); tag(s, 1, 'преместен'); } },
+        { line: [1, 2], text: `<code>i++</code> - i = 2: 2 &lt; 3 е true, а drives[2] е "ok". "failed" на индекс 1 е <b>прескочен</b> - никой не го проверява.`,
+          do: s => { s.tags = {}; setv(s, 'i', 2); go(s, 'i', 2); look(s, 2); s.skip = [1]; test(s, 'i < drives.length', '2 < 3', true); test(s, 'drives[i] === "failed"', '"ok" === "failed"', false); } },
+        { line: 1, text: `<code>i++</code> - i = 3: 3 &lt; 3 е false - цикълът свършва.`,
+          do: s => { setv(s, 'i', 3); go(s, 'i', 3); test(s, 'i < drives.length', '3 < 3', false); } },
+        { line: 6, text: `Един "failed" остана! След всяко премахване следващият елемент се плъзга под индекс, който цикълът вече е подминал.`,
+          do: s => { drop(s, 'i'); out(s, "[ 'ok', 'failed', 'ok' ]", 'warn'); } },
+        { line: 1, text: `Поправката: обхождайте <b>отзад напред</b>. Премахването мести само елементите <b>след</b> i - а те вече са проверени. Какво ще отпечата сега? Помислете, преди да продължите.`,
+          do: s => { restart(s); patch(s, 1, 'for (let i = drives.length - 1; i >= 0; i--) {', 'variant'); arr(s, 'drives', DRIVES, 'const'); } },
+        { line: [1, 2, 3], text: `i = 3: "ok". i = 2: "failed" - премахнат. "ok" от индекс 3 се мести на индекс 2, но той вече е проверен.`,
+          do: s => { look(s, 3); arr(s, 'drives', ['"ok"', '"failed"', '"ok"'], 'const'); setv(s, 'i', 2); go(s, 'i', 2); test(s, 'drives[i] === "failed"', ['"ok" === "failed"', '"failed" === "failed"'], 'false, true'); mark(s, 2, 'write'); tag(s, 2, 'преместен'); } },
+        { line: [1, 2, 3], text: `i = 1: "failed" - премахнат. i = 0: "ok". После i = -1, а -1 >= 0 е false - край.`,
+          do: s => { s.tags = {}; arr(s, 'drives', ['"ok"', '"ok"'], 'const'); setv(s, 'i', 0); go(s, 'i', 0); look(s, 0); test(s, 'drives[i] === "failed"', ['"failed" === "failed"', '"ok" === "failed"'], 'true, false'); } },
+        { line: 6, text: `И двата диска "failed" ги няма.`,
+          do: s => { drop(s, 'i'); out(s, "[ 'ok', 'ok' ]"); } },
+        { line: -1, text: `<b>Обобщение:</b> не премахвайте елементи, докато обхождате напред с i++. Обхождайте отзад напред - или, по-просто и по-сигурно, създайте <b>нов</b> масив и добавяйте с push само елементите, които искате да запазите ("Алгоритми с масиви", сценарий 5; в сесия 7: <code>filter</code>).`,
+          do: s => { s.patch = {}; } },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: state[i] is the state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, patch: {}, arr: null, recs: null, ptr: {}, plab: {}, cur: null, curHl: 'read', seen: [], skip: [],
+              tags: {}, marks: {}, vars: [], res: [], tests: [], console: [], hl: {}, rhl: {}, err: false };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.rhl = {}; s.marks = {}; s.err = false; s.cur = null; s.curHl = 'read'; s.tests = [];
+        s.line = step.line;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 820, STAGGER = 200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_PTR = '<svg viewBox="0 0 20 22"><path d="M10 1 L19 11 H13.5 V21 H6.5 V11 H1 Z"/></svg>';
+const ICON_ARR = '<svg class="t-arr" viewBox="0 0 16 10"><path d="M0 5H14M10 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+const ICON_PLAY = `<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>${T.play}`;
+const ICON_PAUSE = `<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>${T.pause}`;
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\b(let|const|var|for|of|if|else|break|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console|Number)\b|(\.(?:length|push|slice|splice|indexOf|includes|split|join|at)\b)/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, p, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : o ? 'o' : 'p';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+const lines = s => [].concat(s.line).filter(l => l >= 0);
+
+function renderCode(sc, s) {
+    const act = lines(s);
+    $('#code').innerHTML = sc.code.map((l, i) => {
+        const p = s.patch[i];
+        const cls = [act.includes(i) ? 'active' : '', act.includes(i) && s.err ? 'error' : '', p ? 'patched ' + p.kind : ''].join(' ');
+        const tagHtml = p ? `<span class="ptag">${p.kind === 'bug' ? T.bug : T.change}</span>` : '';
+        return `<li class="${cls}"><span class="ln">${i + 1}</span><span>${highlight(p ? p.text : l)}</span>${tagHtml}</li>`;
+    }).join('');
+    $('#lineNote').textContent = !act.length ? ''
+        : act.length === 1 ? T.line(act[0] + 1)
+        : T.lines(act.map(l => l + 1).join(', '));
+}
+
+function flightTargets(step, animate) {
+    // key -> ms after which the flying value lands there
+    const m = new Map();
+    if (animate && step.fly) step.fly.forEach((f, i) => m.set(f[1], FLY_MS + i * STAGGER + (f[3] || 0)));
+    return m;
+}
+
+const ptrLabel = (s, name, i) => s.plab[name] || `${name} = ${i}`;
+
+function renderArray(sc, s, prev, animate) {
+    $('#vizTitle').textContent = sc.str ? T.strTitle || T.arrayTitle : T.arrayTitle;
+    $('#vizNote').textContent = sc.str ? T.strNote || T.arrayNote : T.arrayNote;
+    const a = s.arr;
+    if (!a) return `<div class="viz-empty">${T.noArray}</div>`;
+    const n = a.items.length;
+    const to = n - 1 + (sc.outRight === undefined ? 1 : sc.outRight);
+    const fresh = animate && prev && !prev.arr;
+    const ptrIdx = Object.values(s.ptr);
+    let slots = '';
+    for (let i = 0; i <= to; i++) {
+        const inR = i < n;
+        const sl = ['slot'];
+        if (!inR) { sl.push('out'); if (ptrIdx.includes(i)) sl.push('show'); }
+        if (inR && s.seen.includes(i) && s.cur !== i && !s.marks[i]) sl.push('seen');
+        if (s.skip.includes(i)) sl.push('skip');
+        if (fresh && inR) sl.push('appear');
+        const cc = ['acell'];
+        if (s.cur === i) { cc.push('cur', 'hl-' + s.curHl); if (animate && (!prev || prev.cur !== i)) cc.push('lifting'); }
+        else if (s.marks[i]) cc.push('hl-' + s.marks[i]);
+        const content = inR ? esc(a.items[i]) : `<span class="none">${T.none}</span>`;
+        const tg = s.tags[i] ? `<span class="ctag">${esc(s.tags[i])}</span>` : '';
+        const delay = fresh && inR ? ` style="animation-delay:${i * 70}ms"` : '';
+        slots += `<div class="${sl.join(' ')}" data-i="${i}">${tg}<div class="${cc.join(' ')}"${delay}>${content}</div><span class="idx">${i}</span></div>`;
+    }
+    if (!n && sc.str) slots = `<div class="str-empty">"" ${T.emptyStr || ''}</div>`;
+    const ptrs = Object.entries(s.ptr).map(([name, i]) =>
+        `<div class="pointer up p-${name}" data-p="arr:${name}" data-axis="x" data-target='.slot[data-i="${i}"]'>${ICON_PTR}<span>${esc(ptrLabel(s, name, i))}</span></div>`).join('');
+    return `<div class="ahead"><span class="aname">${esc(a.name)}</span><span class="kw">${a.kind}</span><span class="len" data-k="len">${T.length}: ${n}</span></div>
+        <div class="arr-box ptr-base"><div class="track">${slots}</div><div class="ptr-row">${ptrs}</div></div>`;
+}
+
+function renderRecords(sc, s, prev, animate) {
+    $('#vizTitle').textContent = T.recTitle;
+    $('#vizNote').textContent = T.recNote;
+    const m = s.recs;
+    if (!m) return `<div class="viz-empty">${T.noArray}</div>`;
+    const R = m.rows.length, C = m.cols.length;
+    const pe = Object.entries(s.ptr)[0];
+    const pi = pe ? pe[1] : undefined;
+    const fresh = animate && prev && !prev.recs;
+    let g = '<div></div>';
+    m.cols.forEach((c, j) => { g += `<div class="mlab-c key" data-c="${j}">${esc(c)}</div>`; });
+    for (let r = 0; r < R; r++) {
+        g += `<div class="mlab-r ${pi === r ? 'on' : ''}" data-r="${r}">${esc(m.name)}[${r}]</div>`;
+        for (let c = 0; c < C; c++) {
+            const key = r + '.' + c;
+            const cc = ['mcell', 'wide'];
+            if (pi === r) cc.push('rowon');
+            if (s.cur === key) { cc.push('cur', 'hl-' + s.curHl); if (animate && (!prev || prev.cur !== key)) cc.push('lifting'); }
+            else if (s.marks[key]) cc.push('hl-' + s.marks[key]);
+            else if (s.seen.includes(key)) cc.push('seen');
+            if (fresh) cc.push('appear');
+            const tg = s.tags[key] ? `<span class="ctag">${esc(s.tags[key])}</span>` : '';
+            const delay = fresh ? ` style="animation-delay:${(r * C + c) * 50}ms"` : '';
+            g += `<div class="${cc.join(' ')}" data-r="${r}" data-c="${c}"${delay}>${tg}${esc(m.rows[r][c])}</div>`;
+        }
+    }
+    const ptrs = pe ? `<div class="pointer right p-i" data-p="rec:${pe[0]}" data-axis="y" data-target='.mlab-r[data-r="${pi}"]'><span>${esc(ptrLabel(s, pe[0], pi))}</span>${ICON_PTR}</div>` : '';
+    return `<div class="ahead"><span class="aname">${esc(m.name)}</span><span class="kw">${m.kind}</span><span class="len" data-k="len">${T.length}: ${R}</span></div>
+        <div class="mx-box"><div class="mx-wrap rec-wrap ptr-base">${ptrs}<div class="mx" style="grid-template-columns: auto repeat(${C}, auto)">${g}</div></div></div>`;
+}
+
+// pointers are positioned in pixels next to their target; when they move, they glide (FLIP)
+let ptrPos = {};
+function placePointers(animate) {
+    document.querySelectorAll('#viz .pointer').forEach(p => {
+        const base = p.closest('.ptr-base');
+        const target = base.querySelector(p.dataset.target);
+        if (!target) return;
+        const tr = target.getBoundingClientRect(), br = base.getBoundingClientRect();
+        const x = p.dataset.axis === 'x';
+        const pos = x ? tr.left + tr.width / 2 - br.left : tr.top + tr.height / 2 - br.top;
+        p.style[x ? 'left' : 'top'] = pos + 'px';
+        const old = ptrPos[p.dataset.p];
+        if (animate && !reduceMotion) {
+            const fix = x ? 'translateX(-50%)' : 'translateY(-50%)';
+            if (old === undefined) p.classList.add('appear');
+            else if (Math.abs(old - pos) > 1) {
+                const d = old - pos;
+                p.animate([
+                    { transform: `${x ? 'translateX' : 'translateY'}(${d}px) ${fix}` },
+                    { transform: `${x ? 'translateX' : 'translateY'}(0px) ${fix}` },
+                ], { duration: 520, easing: 'cubic-bezier(.45,.05,.35,1)' });
+            }
+        }
+        ptrPos[p.dataset.p] = pos;
+    });
+}
+
+function renderVars(s, prev, targets) {
+    const box = $('#vars');
+    if (!s.vars.length) { box.innerHTML = `<span class="vars-empty">${T.noVars}</span>`; return; }
+    box.innerHTML = s.vars.map(v => {
+        const pv = prev && prev.vars.find(x => x.name === v.name);
+        const bc = ['vbox'];
+        if (v.name === 'i') bc.push('p-i');
+        if (prev && !pv) bc.push('appear');
+        const cc = ['vcell'];
+        if (s.hl[v.name]) cc.push('hl-' + s.hl[v.name]);
+        let ghost = '';
+        if (pv && pv.value !== v.value) {
+            const delay = targets.get('v:' + v.name) || 0;
+            ghost = `<span class="ghost" style="animation-delay:${delay}ms">${esc(pv.value)}</span>`;
+            if (!delay) cc.push('changed');
+        }
+        const vc = v.value === 'undefined' || v.value === 'NaN' ? 'val t-undef' : 'val';
+        return `<div class="${bc.join(' ')}" data-var="${esc(v.name)}">
+            <span class="vname">${esc(v.name)}<span class="kw">${v.kind}</span></span>
+            <div class="${cc.join(' ')}">${ghost}<span class="${vc}">${esc(v.value)}</span></div>
+        </div>`;
+    }).join('');
+}
+
+function renderTests(s) {
+    const box = $('#tests');
+    if (!s.tests.length) { box.innerHTML = `<div class="tests-empty">${T.testsEmpty}</div>`; return; }
+    box.innerHTML = s.tests.map((t, k) => {
+        const rc = t.res === 'true' ? 'is-true' : t.res === 'false' ? 'is-false' : t.res === 'TypeError' ? 'is-err' : 'is-val';
+        const subs = t.sub.map((x, m) => `${ICON_ARR}<code class="t-sub"${m === 0 ? ` data-t="${k}"` : ''}>${esc(x)}</code>`).join('');
+        return `<div class="test"><div class="t-line"><span class="t-kind">${t.kind === 'test' ? T.condition : T.calculation}</span><code class="t-expr">${esc(t.expr)}</code>${subs}${ICON_ARR}<code class="t-res ${rc}" data-tr="${k}">${esc(t.res)}</code></div></div>`;
+    }).join('');
+}
+
+function renderRes(sc, s, prev) {
+    $('#resPanel').style.display = sc.res ? '' : 'none';
+    $('#lower').classList.toggle('with-res', !!sc.res);
+    if (!sc.res) return;
+    const box = $('#res');
+    if (!s.res.length) { box.innerHTML = `<div class="tests-empty">${T.resEmpty}</div>`; return; }
+    box.innerHTML = s.res.map(r => {
+        const pr = prev && prev.res.find(x => x.name === r.name);
+        const cells = r.items.map((x, i) => {
+            const isNew = prev && (!pr || i >= pr.items.length || pr.items[i] !== x);
+            const hl = s.rhl[r.name + ':' + i] ? ' hl-write' : '';
+            return `<div class="rslot ${isNew ? 'appear' : ''}"><div class="rcell${hl}" data-i="${i}">${esc(x)}</div><span class="idx">${i}</span></div>`;
+        }).join('');
+        return `<div class="rarr" data-r="${r.name}">
+            <div class="rhead"><span class="aname">${esc(r.name)}</span><span class="kw">${r.kind}</span><span class="len">${T.length}: ${r.items.length}</span></div>
+            <div class="rtrack">${cells || `<span class="rempty">[] <i>${T.emptyArr}</i></span>`}</div></div>`;
+    }).join('');
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.length
+        ? s.console.map(l => `<div class="cline ${l.cls}"><span class="prompt">&gt;</span>${esc(l.text)}${l.cls === 'warn' ? `<span class="ctip">${T.bug}</span>` : ''}</div>`).join('')
+        : `<div class="console-empty">${T.conEmpty}</div>`;
+    box.scrollTop = box.scrollHeight;
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    if (key === 'len') return $('#viz [data-k="len"]');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'a') return $(`#viz .slot[data-i="${rest}"] .acell`);
+    if (kind === 'm') { const [r, c] = rest.split('.'); return $(`#viz .mcell[data-r="${r}"][data-c="${c}"]`); }
+    if (kind === 'v') return $(`#vars .vbox[data-var="${rest}"] .vcell`);
+    if (kind === 'r') { const [name, idx] = rest.split(':'); return $(`#res .rarr[data-r="${name}"] .rcell[data-i="${idx}"]`); }
+    if (kind === 't') return $(`#tests [data-t="${rest}"]`);
+    if (kind === 'tr') return $(`#tests [data-tr="${rest}"]`);
+    return null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (!flights.length || reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    // values that fly into the "test" box: the results there wait for them
+    const toTests = flights.filter(f => f[1].startsWith('t:'));
+    const revealEls = toTests.length ? [...document.querySelectorAll('#tests .t-res')] : [];
+    revealEls.forEach(el => el.classList.add('await'));
+    let preLeft = toTests.length;
+
+    const plan = flights.map(([from, to, text, extra], i) => {
+        const src = resolve(from), dst = resolve(to);
+        if (dst) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, to, text, delay: i * STAGGER + (extra || 0) };
+    });
+
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.dst) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            }
+            if (p.to.startsWith('t:') && --preLeft === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (/^(v|r):/.test(p.to) ? 'write' : 'read');
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const startFlight = () => {
+            if (tk !== token) return;
+            // positions are read at take-off, so a value can leave a box that was just revealed
+            const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+            const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+            const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+            const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+            chip.style.left = x0 + 'px';
+            chip.style.top = y0 + 'px';
+            chip.animate([
+                { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+                { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+                { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+                { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+            ], { duration: FLY_MS, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' })
+                .onfinish = () => { chip.remove(); finish(); };
+        };
+        chip.style.visibility = 'hidden';
+        setTimeout(() => { chip.style.visibility = ''; startFlight(); }, p.delay);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+    const targets = flightTargets(step, !!prev && !reduceMotion);
+
+    renderCode(sc, s);
+    $('#viz').innerHTML = sc.records ? renderRecords(sc, s, prev, !!prev) : renderArray(sc, s, prev, !!prev);
+    $('#varsPanel').style.display = sc.noVars ? 'none' : '';
+    $('#varsNote').textContent = sc.records ? '' : T.varsNote;
+    $('#resNote').textContent = T.resNote;
+    renderVars(s, prev, targets);
+    renderTests(s);
+    renderRes(sc, s, prev);
+    renderConsole(s);
+    placePointers(!!prev);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = T.step(stepIdx + 1, N);
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="${T.stepN(i + 1)}" aria-label="${T.stepN(i + 1)}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+
+    if (prev) requestAnimationFrame(() => { if (tk === token) playFlights(step, tk); });
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i, step = 0, updateHash = true) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    ptrPos = {};
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    if (updateHash) { try { history.replaceState(null, '', '#' + (scIdx + 1)); } catch (e) { /* file:// in some browsers */ } }
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? `<span class="adv">${T.advanced}</span>` : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('arrayMethodsTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('arrayMethodsTheme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+// pointers are positioned in pixels, so place them again when the layout changes
+new ResizeObserver(() => placePointers(false)).observe($('#stage'));
+
+// self-test: #selftest renders every step of every scenario and reports
+// missing flight targets and panels whose content does not fit
+function selfTest() {
+    const problems = [];
+    let count = 0;
+    SCENARIOS.forEach((sc, si) => {
+        selectScenario(si, 0, false);
+        sc.steps.forEach((step, k) => {
+            const where = `#${si + 1}.${k + 1}`;
+            try { goto(k); } catch (e) { problems.push(`${where} render error: ${e.message}`); return; }
+            count++;
+            (step.fly || []).forEach(([from, to]) => {
+                if (!resolve(from)) problems.push(`${where} fly source missing: ${from}`);
+                if (!resolve(to)) problems.push(`${where} fly target missing: ${to}`);
+            });
+            document.querySelectorAll('#viz .pointer').forEach(p => {
+                if (!p.closest('.ptr-base').querySelector(p.dataset.target)) problems.push(`${where} pointer target missing: ${p.dataset.target}`);
+            });
+            ['#codePanel', '#vizPanel', '#varsPanel', '#testsPanel', '#resPanel', '.bottom', '.app'].forEach(sel => {
+                const el = $(sel);
+                if (el.offsetParent !== null && el.scrollHeight > el.clientHeight + 2) problems.push(`${where} overflow ${sel}: ${el.scrollHeight} > ${el.clientHeight}`);
+                if (el.offsetParent !== null && el.scrollWidth > el.clientWidth + 2) problems.push(`${where} h-overflow ${sel}: ${el.scrollWidth} > ${el.clientWidth}`);
+            });
+        });
+    });
+    const outEl = document.createElement('pre');
+    outEl.id = 'selftest';
+    outEl.textContent = `SELFTEST ${problems.length ? 'FAIL' : 'OK'} (${count} steps)\n` + problems.join('\n');
+    document.body.appendChild(outEl);
+}
+
+function fromHash() {
+    const h = location.hash.slice(1);
+    if (h === 'selftest') { selfTest(); return; }
+    const [sc, st] = h.split('.').map(x => parseInt(x, 10));
+    selectScenario((sc || 1) - 1, (st || 1) - 1, false);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

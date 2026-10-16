@@ -1,0 +1,1534 @@
+# Translation of site/lectures/04-arrays-and-records.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: \n"
+"PO-Revision-Date: \n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/lectures/04-arrays-and-records.md\n"
+
+#. front matter: title
+#: site/lectures/04-arrays-and-records.md:2 site/lectures/04-arrays-and-records.md:5
+msgid "4. Arrays and lists of records"
+msgstr ""
+
+#. html
+#: site/lectures/04-arrays-and-records.md:8
+msgid "<span>Session 4</span><span>practice: <code>04-arrays-and-records/</code> in the homework repository</span>"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:11
+msgid "**Today you will learn to:**"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:13
+msgid "create an array, read and change its elements by index, and use `length`;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:14
+msgid "know why an array is an object, and which bugs come from that;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:15
+msgid "add and remove elements with `push`, `pop`, `unshift`, `shift` and `splice`; copy a part with `slice`; read from the end with `at`;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:17
+msgid "search with `indexOf`, `includes` and `lastIndexOf`, and replace a chain of `===` with an allow-list;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:19
+msgid "cut a string into an array with `split` and glue an array into a string with `join` - for versions and for values packed into one string (`\"a;b\"`, `\"key=value,key=value\"`);"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:22
+msgid "loop over an array with `for` and `for...of`, forwards and backwards;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:23
+msgid "sum, count, find the largest element and collect elements into new arrays;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:24
+msgid "work with arrays of arrays (tables);"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:25
+msgid "find, count and collect records in a list of objects;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:26
+msgid "check that a value really is an array, with `Array.isArray`;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:27
+msgid "read the array code in existing rules."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:29
+msgid "Where this fits in the sample check rule - today's rule checks a **list**: the enclosures of the device. The number in each comment is the section of this lecture:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:72
+msgid "`versionBelow(a, b)` is still the ready-made helper from lecture 3; we write our own in session 5."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:74
+msgid "The sample report now has two lists: `doc.inventory.features` (strings) and `doc.inventory.enclosures` (objects). In [section 11](#_11-reading-existing-rules) you run this rule, and read the same rule in the older style."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:79
+msgid "Real reports are full of lists: drives, nodes, enclosures, pools, and long lists of key / value records. Rules walk through them, search in them and build new lists for the alert text."
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:83
+msgid "1. What is an array?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:85
+msgid "The types so far - number, string, boolean, `null`, `undefined` - are **primitive** (simple) types: one value each. An **array** is a **composite** type: an **ordered** list of values, kept together under one name."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:89
+msgid "The values in an array are its **elements**."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:90
+msgid "The position of an element is its **index**. Like in most programming languages, counting starts at **0**."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:92
+msgid "The **order** of the elements matters: `[\"a\", \"b\"]` and `[\"b\", \"a\"]` are different arrays."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:94
+msgid "An element can be a value of **any** type - also another array or an object."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:111
+msgid "The elements are written in square brackets `[` `]`, separated by commas. A comma after the last element (a *trailing comma*) is allowed - it makes long, one-element-per-line lists easier to edit:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:127
+msgid "In memory, the variable does not hold the elements themselves. It holds a **reference** - an arrow - to the array, which lives in a separate area of memory (the *heap*). This matters in [section 4](#_4-an-array-is-an-object-advanced)."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:131 site/lectures/04-arrays-and-records.md:247 site/lectures/04-arrays-and-records.md:338 site/lectures/04-arrays-and-records.md:514 site/lectures/04-arrays-and-records.md:923 site/lectures/04-arrays-and-records.md:945 site/lectures/04-arrays-and-records.md:1082 site/lectures/04-arrays-and-records.md:1162 site/lectures/04-arrays-and-records.md:1193 site/lectures/04-arrays-and-records.md:1319 site/lectures/04-arrays-and-records.md:1498
+msgid "Animation"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:132
+msgid "**Arrays in memory:** [1. Indexes](../animations/arraysInMemory.html#1){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:135
+msgid "Creating an array: `[]` and the older `new Array()`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:137
+msgid "Always create arrays with `[...]`. In older code you also see the `Array` constructor. It has a trap: with **one number**, it does not create an array with that number, but an empty array of that **length**:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:151
+msgid "`Array.from` (ES2015) builds an array from something that looks like a list - for example, a string:"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:159
+msgid "2. Accessing the elements"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:161
+msgid "An element is read or changed with the name of the array, then the index in square brackets: `arrayName[i]`. `arrayName[i]` is an expression - it always gives a value: the element."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:179
+msgid "With the report:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:190
+msgid "An index is a whole number from `0` up. A variable or an expression works too:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:199
+msgid "Reading an index that does not exist"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:201
+msgid "There is **no error**. You get `undefined`:"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:209
+msgid "A silent `undefined`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:210
+msgid "A wrong index is not an error, so the bug shows up later - for example as `\"undefined\"` inside an alert text. When you read an element by index, ask: can the array be shorter than I think?"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:215
+msgid "Writing to an index that does not exist"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:217
+msgid "The element is written there, and the places in between become **empty** (*holes*):"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:228
+msgid "(This page shows a hole as an empty place between two commas. Node.js writes `<1 empty item>`.)"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:231
+msgid "The last element"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:233
+msgid "The index of the last element is `length - 1`:"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:242
+msgid "ES2022+"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:243
+msgid "`at()` is ES2022 - check that your rule engine supports it. The form `arr[arr.length - 1]` works everywhere."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:248
+msgid "**Arrays in memory:** [1. Indexes](../animations/arraysInMemory.html#1){target=\"_blank\"}, [2. Out of range](../animations/arraysInMemory.html#2){target=\"_blank\"}"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:252
+msgid "3. The `length` property"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:254
+msgid "`arrayName.length` is the number of elements. It is **dynamic**: it changes when the array changes - and **writing** to it changes the array:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:274
+msgid "`length` is always **one more than the last index**. An empty array has `length` 0."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:283
+msgid "Common bugs"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:285
+msgid "**`=` instead of `===` in an emptiness check:**"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:295
+msgid "`arr.length = 0` is an assignment. It deletes the elements and gives `0`, which is falsy, so the `if` does not even run. The correct code:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:306
+msgid "**A typo in `length`:**"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:317
+msgid "`arr.lenght` is not an error: an array has no property `lenght`, so the value is `undefined` - falsy. The correct check `if (arr.length)` prints `Non-empty array`. (Why there is no error - section 4 and session 6.) Your editor helps here: VSCode underlines unknown properties when the file starts with `// @ts-check` (session 9)."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:323
+msgid "Empty or not?"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:325
+msgid "Check"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:325
+msgid "Means"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:327
+msgid "the array is empty"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:328
+msgid "it has at least one element"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:329
+msgid "the same, short form (0 is falsy)"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:330
+msgid "**not** a check for emptiness - `[]` is truthy!"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:339
+msgid "**Arrays in memory:** [2. Out of range](../animations/arraysInMemory.html#2){target=\"_blank\"} (writing to `length`, and the `=` bug)"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:343
+msgid "4. An array is an object (advanced)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:345
+msgid "In JavaScript, arrays are implemented as **objects**:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:355
+msgid "The indexes are the keys `\"0\"`, `\"1\"`, `\"2\"` of that object. Because of this, a wrong \"index\" gives **no error** - it simply becomes an ordinary **property** of the object, and it is not counted in `length`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:370
+msgid "Arrays also come with built-in properties and **methods** (functions attached to the array) for the common operations: `length`, `push`, `pop`, `slice` and many more. You do not need to learn them by heart - they are well documented in [MDN: Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array). Today you meet the ones rules use most; the rest (`map`, `filter`, `sort`, ...) come in session 7."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:377
+msgid "Is it an array? `Array.isArray`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:379
+msgid "JSON data does not always have the shape you expect. A list can be missing, can be `null`, or can be one object instead of a list with one object. `typeof` cannot tell an array from an object - `Array.isArray` can:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:390
+msgid "References: two names, one array"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:392
+msgid "A variable holds a **reference** to the array, not the array itself. Copying the variable copies the reference - both names point to the **same** array:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:404
+msgid "`===` compares arrays **by reference**: \"is it the same array?\", not \"are the elements the same?\"."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:406
+msgid "`const` protects the **variable** (the arrow), not the array: `fruits.push(...)` and `fruits[0] = ...` are allowed, `fruits = [...]` is an error."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:416
+msgid "A **copy** is a new array with the same elements: `arr.slice()` or `[...arr]` (section 5)."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:426
+msgid "Do not change the report"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:427
+msgid "In a rule, `doc` belongs to the engine. If one part of a rule changes a list of `doc` (with `push`, `splice`, `sort`, `length = 0` ...), every later line sees the changed data. Work on a copy, or build a new array."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:432
+msgid "Comparing two arrays"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:433
+msgid "To check if two short arrays of strings or numbers have the same elements, compare their text: `a.join(\",\") === b.join(\",\")` (section 7). The homework checks in this course do the same with `JSON.stringify` (session 9)."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:438 site/lectures/04-arrays-and-records.md:583 site/lectures/04-arrays-and-records.md:741 site/lectures/04-arrays-and-records.md:899 site/lectures/04-arrays-and-records.md:1266
+msgid "Animations"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:439
+msgid "**Arrays in memory:** [3. An array is an object](../animations/arraysInMemory.html#3){target=\"_blank\"}, [5. References](../animations/arraysInMemory.html#5){target=\"_blank\"}"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:443
+msgid "5. Adding and removing elements"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:445
+msgid "At the end and at the start: `push`, `pop`, `unshift`, `shift`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:447 site/lectures/04-arrays-and-records.md:645
+msgid "Method"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:447
+msgid "Does"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:447 site/lectures/04-arrays-and-records.md:645
+msgid "Returns"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:449
+msgid "adds at the **end**"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:449 site/lectures/04-arrays-and-records.md:451
+msgid "the new length"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:450
+msgid "removes the **last** element"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:450 site/lectures/04-arrays-and-records.md:452
+msgid "the removed element"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:451
+msgid "adds at the **start**"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:452
+msgid "removes the **first** element"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:477
+msgid "The returned values are useful too - an older example with the rainbow:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:500
+msgid "`push` is the method you will write most: it builds a new list, one element at a time. This is how a rule collects the lines of an alert:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:515
+msgid "**Arrays in memory:** [4. `push` / `pop` / `unshift` / `shift`](../animations/arraysInMemory.html#4){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:518
+msgid "`slice` - copy a part"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:520
+msgid "`arr.slice(start, end)` returns a **new** array with the elements from `start` up to, **but not including**, `end`. The original array does not change."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:533
+msgid "`end - start` is the number of elements you get. The first three parts of a version:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:542
+msgid "`splice` - remove, insert or replace, in place"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:544
+msgid "`arr.splice(start, deleteCount, item1, item2, ...)` changes the array **itself**: from index `start` it removes `deleteCount` elements, and puts the new items in their place. It returns the removed elements in a new array."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:562
+msgid "Remove **one** element when you know its value - find its index first (section 6):"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:573
+msgid "`splice(-1, 1)` when the element is not found"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:574
+msgid "Without the `if`, `indexOf` gives `-1`, and `splice(-1, 1)` removes the **last** element - a negative start counts from the end."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:578
+msgid "`slice` copies, `splice` cuts"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:579
+msgid "The names are almost the same, the effect is not. A way to remember: s**p**lice has an extra letter, and it does extra things - it changes the array."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:584
+msgid "**Array methods:** [1. `slice` and `at`](../animations/arrayMethods.html#1){target=\"_blank\"}, [2. `splice`](../animations/arrayMethods.html#2){target=\"_blank\"}, [7. `splice` in a loop (advanced)](../animations/arrayMethods.html#7){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:589
+msgid "Joining arrays: `concat` and spread"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:601
+msgid "`...arr` (*spread*) \"pours out\" the elements of the array into the new `[ ]`. More about spread in session 6."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:604
+msgid "Which methods change the array?"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:606
+msgid "Change the array (*mutating*)"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:606
+msgid "Return a new array or value"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:610
+msgid "`reverse`, `sort` (session 7)"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:610
+msgid "`toReversed`, `toSorted`, `toSpliced` (ES2023)"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:623
+msgid "ES2023+"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:624
+msgid "`toReversed()`, `toSorted()`, `toSpliced()` and `with()` are ES2023 - check that your rule engine supports them. `arr.slice().reverse()` gives a reversed copy everywhere."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:629
+msgid "`delete arr[i]` in old code"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:631
+msgid "`delete arr[i]` does **not** remove the element - it leaves a hole, and `length` does not change. Use `splice(i, 1)`:"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:643
+msgid "6. Searching: `indexOf`, `includes`, `lastIndexOf`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:647
+msgid "the index of the **first** `x`, or `-1` if there is none"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:648
+msgid "the index of the **last** `x`, or `-1`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:649
+msgid "`true` or `false` (ES2016)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:651
+msgid "All three compare with `===`. A second argument tells where to start: `arr.indexOf(x, 3)` searches from index 3."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:664
+msgid "Allow-lists"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:666
+msgid "In lecture 3 the rule checked the model with `&&`: `if (model !== \"XR-210\" && model !== \"XR-220\") return;`. With five models this line becomes hard to read. An **allow-list** keeps the models in an array:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:681
+msgid "Adding a model is now a change in **data**, not in logic. A list of models that must be skipped is a *deny-list* - the same code without the `!`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:684
+msgid "The same works for any fixed set of values:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:694
+msgid "Old style: `indexOf(...) !== -1`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:696
+msgid "`includes` arrived in ES2016. Older rules write the same with `indexOf`:"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:698
+msgid "Older rules"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:698
+msgid "Modern"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:703
+msgid "**a bug**: misses index 0"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:712
+msgid "`indexOf` and `includes` differ only for `NaN`: `[NaN].indexOf(NaN)` is `-1`, `[NaN].includes(NaN)` is `true`."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:715
+msgid "Searching is exact - normalise first"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:725
+msgid "`trim()` removes the spaces at both ends, `toUpperCase()` makes capital letters (more in session 8)."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:728
+msgid "`indexOf` on objects"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:729
+msgid "`indexOf` and `includes` compare with `===`, so for objects they look for **the same object**, not \"an object with the same keys\": `doc.inventory.enclosures.includes({ id: \"ENC-01\" })` is `false`. To find a record by one of its keys, use a loop (section 10) - or `find` (session 7)."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:735
+msgid "Strings have `indexOf` and `includes` too"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:736
+msgid "`\"4.2.1.7-B00\".includes(\"-\")`, `\"XR-220\".indexOf(\"-\")` (gives 2), `\"4.2.1.7\".at(-1)` and `\"4.2.1.7\".slice(0, 3)` work on strings the same way. More in session 8."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:742
+msgid "**Array methods:** [3. `indexOf` and `includes`](../animations/arrayMethods.html#3){target=\"_blank\"}; **Algorithms with arrays:** [6. Search with `break` (advanced)](../animations/arrayAlgorithms.html#6){target=\"_blank\"} - what `indexOf` does inside"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:747
+msgid "7. Strings and arrays: `split` and `join`"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:749
+msgid "`split` - from a string to an array"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:751
+msgid "`str.split(separator)` cuts the string at every separator and returns an array of the pieces. The separators are dropped. The pieces are always **strings**."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:762
+msgid "Three uses you will see in every rule:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:779
+msgid "Versions: from strings to numbers"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:781
+msgid "`split` gives strings, and strings are compared character by character - `\"10\" < \"9\"` is `true` (lecture 3). Convert every part with `Number` before you compare:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:797
+msgid "This is the first step of `versionBelow` - you write the whole function in session 5. (In session 7 the loop shrinks to `parts.map(Number)`.)"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:800
+msgid "Packed values: `\"key=value,key=value\"`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:802
+msgid "Reports often pack several values into one string. Two splits unpack it: first the list separator, then the key / value separator:"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:821
+msgid "A value that contains the separator"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:822
+msgid "`\"note=a=b\".split(\"=\")` gives `[ 'note', 'a', 'b' ]` - the value is cut too. Split only at the **first** `=` with `indexOf` and the string `slice`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:832
+msgid "(`split` has a second argument, a limit: `\"note=a=b\".split(\"=\", 2)` gives `[ 'note', 'a' ]` - it drops the rest, so it does not help here.)"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:836
+msgid "The traps of `split`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:845
+msgid "Check the string **before** you split, and clean the pieces:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:861
+msgid "`join` - from an array to a string"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:863
+msgid "`arr.join(separator)` is the opposite of `split`: it glues the elements into one string, with the separator between them. Without an argument the separator is `\",\"`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:876
+msgid "`join` builds alert texts. Collect the parts with `push`, glue them once at the end:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:896
+msgid "This avoids the classic `text = text + \", \" + item` loop that leaves a stray `\", \"` at the start or the end."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:900
+msgid "**Array methods:** [4. `split` and `join`](../animations/arrayMethods.html#4){target=\"_blank\"}, [5. Packed values](../animations/arrayMethods.html#5){target=\"_blank\"}"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:904
+msgid "8. Looping over an array"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:906
+msgid "We often need to do the same thing with **every** element. The classic way is a `for` loop over the indexes, from `0` to `length - 1`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:920
+msgid "Write `i < arr.length`, not `i <= arr.length`: the last index is `length - 1`, and `arr[length]` is `undefined`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:924
+msgid "**Algorithms with arrays:** [1. Traversal with `for`](../animations/arrayAlgorithms.html#1){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:927
+msgid "In reverse order"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:929
+msgid "Start at the last index, go on while `i >= 0`, step with `i--`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:942
+msgid "The newest entry of a history list is often the last one - walk backwards and `break` at the first match."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:946
+msgid "**Algorithms with arrays:** [2. Reverse order](../animations/arrayAlgorithms.html#2){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:949
+msgid "`for...of` - the elements, without the index"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:951
+msgid "`for...of` (ES2015) gives the elements one by one. Use it when you do not need the index - this is most of the time:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:965
+msgid "`const` is fine here: every round gets a **new** variable `feature`. (`[i, feature]` is *destructuring* - more in session 6.)"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:968
+msgid "Use"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:968
+msgid "When"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:970
+msgid "you need only the elements - the default"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:971
+msgid "you need the index, a step other than 1, or two arrays with the same index"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:972
+msgid "backwards, or you remove elements while you loop"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:974
+msgid "`for...in` is not for arrays"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:975
+msgid "`for (const i in arr)` loops over the **keys**: they are strings (`\"0\"`, `\"1\"`, ...), and extra properties (`arr.a` from section 4) come too. Older rules use it on arrays - it works for plain arrays, but `i + 1` gives `\"01\"`, not `1`! Use `for...in` for objects (session 6), `for...of` or `for` for arrays."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:988
+msgid "`arr.forEach(function (x) { ... })` - another loop you see in rules - takes a function, so it comes in session 5 and 7."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:991
+msgid "Example: every element, its square, the sum"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:993
+msgid "An old example, with a bug. Run it - which line is wrong?"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:1016 site/lectures/04-arrays-and-records.md:1050 site/lectures/04-arrays-and-records.md:1340 site/lectures/04-arrays-and-records.md:1422 site/lectures/04-arrays-and-records.md:1727
+msgid "Answer"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1017
+msgid "`sum += i` adds the **index**, not the element: 0 + 1 + 2 + 3 + 4 = 10. It must be `sum += numbers[i]`. With `for...of` this bug cannot happen: `for (const n of numbers) { sum += n; }`."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1022
+msgid "The accumulator: sum and count"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1024
+msgid "One variable *collects* the result while the loop runs. Give it the right start value **before** the loop: `0` for a sum or a count, `\"\"` for text, `[]` for a list."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1047
+msgid "**Check yourself:** print the sum of all **positive even** numbers in `[-2, 3, 7, 8, -1, 4, 2]`. (Expected: 14.)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1063
+msgid "The same for a range of numbers, without an array (old loop homework): the sum from 1 to 100, and the odd numbers below 100 that divide by 11:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1083
+msgid "**Algorithms with arrays:** [3. Sum of the elements](../animations/arrayAlgorithms.html#3){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1086
+msgid "Find elements by a condition"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1088
+msgid "The even numbers in an array:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1099
+msgid "The negative odd numbers:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1111
+msgid "The old homework, both tasks at once: the odd numbers, and the odd **positive** numbers:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1126
+msgid "Collect into new arrays"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1128
+msgid "Instead of printing, collect the matching elements into a new array with `push`. The task *separateArrayElementsInNewArrays*: the positive even numbers go into one array, the negative odd numbers into another (zero is neither positive nor negative):"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1149
+msgid "With the report - the ids of the enclosures that are not on firmware `\"2.14\"`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1163
+msgid "**Algorithms with arrays:** [5. Filtering into new arrays](../animations/arrayAlgorithms.html#5){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1166
+msgid "The largest (and the smallest) element"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1168
+msgid "Take the **first element** as the largest so far, then compare it with every next one:"
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:1184
+msgid "Do not start with 0"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1185
+msgid "`let max = 0;` looks harmless, but with only negative numbers the result is `0` - a value that is not in the array. Start from `arr[0]`. And check first that the array is not empty: `[][0]` is `undefined`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1190
+msgid "`Math.max(...temps)` gives the same maximum in one line (spread passes the elements as separate arguments; `Math` in session 8) - but not the index."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1194
+msgid "**Algorithms with arrays:** [4. Largest element](../animations/arrayAlgorithms.html#4){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1197
+msgid "Search with `break`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1199
+msgid "When you need **one** element, stop at the first match:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1213
+msgid "For a plain value this is just `ids.indexOf(\"ENC-03\")`. You write the loop when the condition is more than `===` - for example, \"the first enclosure that is not normal\" (section 10)."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1217
+msgid "Going round in a circle: `%`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1219
+msgid "An old browser example changed a box colour on every click, going round the list of colours. Without the browser, the idea is the index with `% length`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1231
+msgid "The same spreads checks over a list of consoles, one after the other (*round robin*)."
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:1234
+msgid "9. Arrays of arrays (two-dimensional)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1236
+msgid "JavaScript has no real two-dimensional (or multi-dimensional) arrays. But an element can be of any type - also an array - so a table is an **array of arrays**: every element is a row, and every row is an array."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1249
+msgid "Access: first the row, then the column"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1263
+msgid "`matrix[1][1]` is read in two steps: `matrix[1]` gives the row `[\"d\", \"e\", \"f\"]`, and `[1]` of that row gives `\"e\"`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1267
+msgid "**Arrays in memory:** [6. Two-dimensional (advanced)](../animations/arraysInMemory.html#6){target=\"_blank\"}, [7. Shared row (advanced)](../animations/arraysInMemory.html#7){target=\"_blank\"} - why `[row, row]` is a trap"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1272
+msgid "Loop over rows and columns"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1274
+msgid "Two nested loops: the outer one over the rows (`i`), the inner one over the columns of the current row (`j`):"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1294
+msgid "With `for...of` the same is shorter - and works when the rows have different lengths:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1304
+msgid "The sum of the main diagonal (`m[0][0] + m[1][1] + m[2][2]`) needs only one loop:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1320
+msgid "**Algorithms with arrays:** [7. Two-dimensional array (advanced)](../animations/arrayAlgorithms.html#7){target=\"_blank\"}"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1323
+msgid "**Check yourself** (old lab task): `fruitsData` keeps the names in row 0 and the prices in row 1. Print `apple = 1.2`, `orange = 2`, `cherry = 3.5` with a loop."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1341
+msgid "The name and the price of one fruit are in the same **column** `j`, so loop over the columns:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1350
+msgid "`2.0` is printed as `2`: for JavaScript `2.0` and `2` are the same number."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1353
+msgid "A table in the report"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1355
+msgid "Reports sometimes send a table as rows of values, with the column names in a separate list - the first row of a CSV file, for example:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1373
+msgid "`header.indexOf(...)` instead of a fixed `row[1]`: the code keeps working if the export adds a column in front."
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:1376
+msgid "10. Lists of records"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1378
+msgid "A **record** is a group of values about one thing - one enclosure, one drive, one setting. In JSON a record is an **object** `{ key: value, ... }` (objects in detail: session 6). A **list of records** is an array of such objects, all with the same keys:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1394
+msgid "Records as arrays, or as objects?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1396
+msgid "Older code (and the old course examples) keep a record as an array:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1417
+msgid "It works, but what is `student[1]`? You must remember that index 1 is the age. An object says it: `student.age`. That is why JSON reports use objects for records."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1420
+msgid "**Check yourself:** find the **oldest** student. (Expected: Ivan Ivanov, 24.)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1423
+msgid "The same loop with `>` instead of `<`: `if (student[1] > oldest[1]) { oldest = student; }`, starting with `let oldest = students[0];`. Note: the old version of this example started with `minAge = students[0][1]` but left `youngestStudent` undefined - if the first student had been the youngest, the program would have crashed. Starting with the whole first record avoids this."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1431
+msgid "An old homework in the same shape - rulers and the years of their rule. The names are in mixed case, so a small helper fixes them:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1459
+msgid "Find, count, collect"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1461
+msgid "Three questions you ask a list of records again and again:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1495
+msgid "`startsWith` checks the beginning of a string - session 8. In session 7 these three loops become `find`, `filter(...).length` and `filter` + `map`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1499
+msgid "**Array methods:** [6. A list of records](../animations/arrayMethods.html#6){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1502
+msgid "A long list of key / value records"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1504
+msgid "Some exports do not send a nested object at all. Every value is one small record, and the list has thousands of them:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1538
+msgid "The homework folder has a whole export in this shape: `Homework/data/report-records.json` (79 records). The practice tasks use it."
+msgstr ""
+
+#. box title
+#: site/lectures/04-arrays-and-records.md:1541
+msgid "Thousands of records: do not search inside a loop"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1542
+msgid "To find one value, a loop walks the list - fine once. But \"for every enclosure, find its state\" written as a loop **inside** a loop walks the whole list again for every enclosure: with 9,500 records and 100 enclosures that is almost a million comparisons. Walk the list **once** and collect what you need. In session 7 we build an *index* (an object or a `Map` keyed by item) once, and then every lookup is instant."
+msgstr ""
+
+#. heading 3
+#: site/lectures/04-arrays-and-records.md:1550
+msgid "One record, or a list?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1552
+msgid "The same data can come as a list in one report and as a single object in another (for example, when there is only one enclosure). Normalise it to an array first, then the rest of the code has one shape to handle:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1568
+msgid "(`function` with `return` is session 5 - read it as \"give back this value\".)"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:1570
+msgid "11. Reading existing rules"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1572
+msgid "First, run the rule from the start of the lecture. `emit` is a fake here: it only prints the alert."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1640
+msgid "Change the state of `ENC-01` in the second document to `\"failed\"` and run again. Then change `enclosures` to one object instead of a list (remove the `[` `]`). What happens, and why?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1644
+msgid "Here is **the same rule** in the older style. Read it with ease, and decide what to modernise:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1712
+msgid "**Check yourself:**"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1714
+msgid "List the differences between the two versions. Which ones change only the style, and which could change the result?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1716
+msgid "`new Array(\"XR-210\", \"XR-220\")` creates the same list as `[\"XR-210\", \"XR-220\"]`. What would `new Array(2)` create? Why is `[...]` safer?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1719
+msgid "Run the old rule: the second document sends `enclosures` as a **string**. What does the old rule do with it, and what would the modern rule do?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1721
+msgid "`if (!enclosures || !enclosures.length) return;` and `if (!Array.isArray(enclosures)) return;` - do they behave the same for `[]`? For `undefined`? For one object `{ id: \"ENC-01\", ... }`?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1724
+msgid "A report has `firmware_level: \"4.2.1.7\"` - with no `(build ...)` part. What is `version` in both rules?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1728
+msgid "Style only: `var` -> `const` / `let`; `new Array(...)` -> `[...]`; `indexOf(model) == -1` -> `!includes(model)` (the same for strings); `==` / `!=` -> `===` / `!==`; the `for` with an index -> `for...of`; `== true` -> nothing; `+` -> template strings; the `&&` chain -> `?.`; `new Object()` + `details[\"...\"]` -> an object literal. Could change the result: the guard for `enclosures` (questions 3 and 4) and `String(... || \"\")` vs `?? \"\"`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1735
+msgid "An empty array of length 2 (two holes), not `[2]`. `[...]` always means \"these elements\"."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1737
+msgid "A string has `length` (6), so the old guard lets it through, and the loop walks the **characters**: `enc` is `\"E\"`, `\"N\"`, ... `enc.state` and `enc.firmware` are `undefined`, so every character gives two \"problems\" (`versionBelow(undefined, \"2.14\")` is true too: `parseInt` gives `NaN`, and `|| 0` makes it 0). Twelve problems like `\"undefined is undefined\"` - a nonsense alert. The modern rule stops: a string is not an array."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1743
+msgid "`[]`: the old rule stops at the guard (`![].length` is true); the modern one loops zero times and stops at `problems.length === 0` - the same result. `undefined`: both stop. One object: the object has no `length`, so the old rule stops; `Array.isArray` is false, so the modern rule stops too - both **miss** the enclosure. Fix: `const enclosures = asList(doc.inventory.enclosures);` (section 10)."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1749
+msgid "`\"4.2.1.7\"` in both: when there is no space, `split(\" \")` gives an array with the whole string, and `[0]` is that string."
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:1753
+msgid "12. Practice"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1755
+msgid "In your copy of the Homework repository, first get the new tasks:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1762
+msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1765
+msgid "Task"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1765
+msgid "File"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1765
+msgid "What you do"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1767
+msgid "Predict 20 results of array operations, then check yourself"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1768
+msgid "An allow-list of models: check, add without duplicates, remove"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1769
+msgid "`split` and `join`: version parts as numbers, the last part of an id, packed lists and `key=value` strings"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1770
+msgid "A list of 79 key / value records: find a value, count, collect"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1771
+msgid "Sum, maximum and filtering on plain arrays and on a table"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:1773
+msgid "Summary"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1775
+msgid "Topic"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1775
+msgid "Remember"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1777
+msgid "Array"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1777
+msgid "An ordered list; index from 0; `[...]` to create; any type of element"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1778
+msgid "Access"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1778
+msgid "`arr[i]`; a missing index gives `undefined`, no error; last: `arr[arr.length - 1]` or `arr.at(-1)`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1779
+msgid "Number of elements, one more than the last index; writing to it changes the array; `[]` is truthy - check `length === 0`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1780
+msgid "An object"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1780
+msgid "`typeof` is `\"object\"`; use `Array.isArray`; `===` compares references; `const` does not freeze the array"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1781
+msgid "Add / remove"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1781
+msgid "`push` / `pop` at the end, `unshift` / `shift` at the start, `splice` anywhere - they change the array"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1782
+msgid "Copy"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1782
+msgid "`slice(start, end)` (end not included), `[...arr]`, `concat` - new arrays"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1783
+msgid "Search"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1783
+msgid "`indexOf` (index or -1), `includes` (true / false), `lastIndexOf`; exact `===` - normalise first"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1784
+msgid "Strings"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1784
+msgid "`split(sep)` -> array of strings; `join(sep)` -> string; `\"\".split(\",\")` is `[\"\"]`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1785
+msgid "Loops"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1785
+msgid "`for...of` for elements, `for` with `i` for indexes and backwards; not `for...in`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1786
+msgid "Patterns"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1786
+msgid "Accumulator (sum, count), max from `arr[0]`, collect with `push`, search with `break`"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1787
+msgid "Tables"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1787
+msgid "`matrix[row][col]`; nested loops"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1788
+msgid "Records"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1788
+msgid "An array of objects; find, count, collect in one pass; no search inside a loop"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1789
+msgid "Old style"
+msgstr ""
+
+#. table cell
+#: site/lectures/04-arrays-and-records.md:1789
+msgid "`new Array(...)`, `indexOf(x) !== -1`, `for (var i ...)`, `!arr.length` - read it, write the modern form"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:1791
+msgid "Homework"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1793
+msgid "Finish the five practice tasks - every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1794
+msgid "`04-arrays-and-records/homework.js` (in the homework repository): the names in a packed firmware string, alert lines from three lists, and the empty pools in the records export."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1797
+msgid "Optional: take one of your own rules and find every array in it. Where does each one come from (the report, `split`, the rule itself)? Is there an `indexOf(...) !== -1` or a `for...in` over an array you would modernise? Does the rule change an array of `doc`?"
+msgstr ""
+
+#. heading 2
+#: site/lectures/04-arrays-and-records.md:1802
+msgid "Read more"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1804
+msgid "MDN: [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [Indexed collections](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections), [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split), [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1809
+msgid "javascript.info: [Arrays](https://javascript.info/array), [Array methods](https://javascript.info/array-methods) (the first part; the rest is session 7)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1812
+msgid "Eloquent JavaScript (4th edition): [Data Structures: Objects and Arrays](https://eloquentjavascript.net/04_data.html)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1814
+msgid "**Next session:** functions. The helpers you used ready-made - `versionBelow`, `asList`, `capitalize` - you write yourself, and you learn to read the older `function (x) { ... }` code in existing rules."
+msgstr ""
