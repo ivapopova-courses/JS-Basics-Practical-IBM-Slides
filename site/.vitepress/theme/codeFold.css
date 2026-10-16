@@ -1,0 +1,49 @@
+/* Folding of long code blocks - see codeFold.js */
+.vp-doc div[class*='language-'][data-fold='folded'] {
+  /* VitePress code lines are 1.7em high; 20px top padding */
+  max-height: calc(var(--fold-lines, 16) * 1.7em + 20px);
+  overflow: hidden;
+}
+.vp-doc div[class*='language-'][data-fold='folded']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4.5em;
+  background: linear-gradient(to bottom, transparent, var(--vp-code-block-bg));
+  pointer-events: none;
+  z-index: 2;
+}
+.vp-doc div[class*='language-'][data-fold='folded'] pre {
+  overflow-y: hidden;
+}
+
+.code-fold-toggle {
+  display: block;
+  margin: -12px 0 16px auto;
+  padding: 2px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 999px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 24px;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+}
+.code-fold-toggle:hover {
+  border-color: var(--vp-c-brand-1);
+}
+/* inside a runnable block the toggle sits right above the Run / Edit bar */
+.run-code .code-fold-toggle {
+  margin: -4px 8px 8px auto;
+}
+
+@media print {
+  .vp-doc div[class*='language-'][data-fold='folded'] { max-height: none; }
+  .vp-doc div[class*='language-'][data-fold='folded']::after,
+  .code-fold-toggle { display: none; }
+}

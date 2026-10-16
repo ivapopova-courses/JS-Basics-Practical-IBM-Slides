@@ -71,6 +71,25 @@
         "firmware": "2.10",
         "state": "normal"
       }
-    ]
+    ],
+    "modules": {
+      "12_4.20": {
+        "status": "OK",
+        "installed": "2025-11-20"
+      },
+      "12_4.08": {
+        "status": "OK",
+        "installed": "2025-11-21"
+      },
+      "47_1.07": {
+        "status": "FAILED",
+        "installed": "2025-11-20"
+      }
+    },
+    "labels": {
+      "Firmware Version": "4.2.1.7",
+      "Last Check": "12-10-2026 18:25:23",
+      "Site": "Demo Lab"
+    }
   }
 }

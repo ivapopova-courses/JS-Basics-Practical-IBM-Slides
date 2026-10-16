@@ -75,7 +75,9 @@ msgstr "[Функции и четене на по-стар код](/lectures/05-
 
 #. table cell
 #: site/agenda.md:26
-msgid "Objects: deep paths, dictionaries, different data shapes"
+#, fuzzy
+#| msgid "Objects: deep paths, dictionaries, different data shapes"
+msgid "[Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects)"
 msgstr "Обекти: дълбоки пътища, dictionaries, различни форми на данните"
 
 #. table cell
@@ -437,6 +439,9 @@ msgstr "Курсов проект"
 #: site/agenda.md:151
 msgid "See [Course project](/project)."
 msgstr "Вижте [Курсов проект](/project)."
+
+#~ msgid "Objects: deep paths, dictionaries, different data shapes"
+#~ msgstr "Обекти: дълбоки пътища, dictionaries, различни форми на данните"
 
 #~ msgid "Functions, and reading older code"
 #~ msgstr "Функции и четене на по-стар код"

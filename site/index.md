@@ -36,7 +36,7 @@ features:
 | 3 | [Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops) |
 | 4 | [Arrays and lists of records](/lectures/04-arrays-and-records) |
 | 5 | [Functions, and reading older code](/lectures/05-functions) |
-| 6 | Objects: deep paths, dictionaries, different data shapes |
+| 6 | [Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects) |
 | 7 | Array methods: transforming and grouping data; project kickoff |
 | 8 | Strings, regular expressions, dates and numbers |
 | 9 | JSON, Node.js, modules, errors, tests, JSDoc types |

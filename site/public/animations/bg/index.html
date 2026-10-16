@@ -92,6 +92,9 @@ body {
 .t-basic { --tc: var(--read); --tc-bg: var(--read-bg); }
 .t-arrays { --tc: var(--write); --tc-bg: var(--write-bg); }
 .t-functions { --tc: var(--ref); --tc-bg: var(--ref-bg); }
+.t-objects { --tc: #2f7d4a; --tc-bg: #dcefe1; }
+:root[data-theme="dark"] .t-objects { --tc: #71c08a; --tc-bg: #1f3a29; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .t-objects { --tc: #71c08a; --tc-bg: #1f3a29; } }
 .pill.topic-pill { background: var(--tc-bg); color: var(--tc); border: 1px solid var(--tc); }
 
 /* ---------- cards ---------- */
@@ -167,6 +170,7 @@ body {
             <span class="pill topic-pill t-basic">Основен синтаксис</span>
             <span class="pill topic-pill t-arrays">Масиви</span>
             <span class="pill topic-pill t-functions">Функции</span>
+            <span class="pill topic-pill t-objects">Обекти</span>
         </div>
         <a class="btn lang-btn" id="langBtn" href="../index.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
         <button class="btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
@@ -191,6 +195,7 @@ const TOPICS = [
     { id: 'basic', name: 'Основен синтаксис', en: 'JS Basic Syntax' },
     { id: 'arrays', name: 'Масиви', en: 'JS Arrays' },
     { id: 'functions', name: 'Функции', en: 'JS Functions' },
+    { id: 'objects', name: 'Обекти', en: 'JS Objects' },
 ];
 
 // adv: 1-based numbers of the "advanced" scenarios
@@ -278,6 +283,12 @@ const ANIMATIONS = [
         title: 'Функциите и данните',
         desc: 'Какво получава функцията: копие на примитив или референция към масив или обект; чисти функции, callback-и, helper функции в rule, плитки копия.',
         scenarios: ['Копие на стойността', 'Същият масив', 'Промяна или замяна', 'Промяна на отчета', 'Callback, извикване по извикване', 'Helper функция в rule', 'Плитко копие'], adv: [7],
+    },
+    {
+        topic: 'objects', file: 'objectsInMemory.html',
+        title: 'Обектите в паметта',
+        desc: 'Точка и скоби, дълги пътища, ?. и ??, речници, helper за пътища, копия и this в метод.',
+        scenarios: ['Точка или скоби', 'Дълъг път', 'Безопасен достъп: ?. и ??', 'Речник', 'Helper за пътища: get', 'Копия', 'this в метод'], adv: [7],
     },
 ];
 

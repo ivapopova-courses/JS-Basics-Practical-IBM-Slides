@@ -185,6 +185,17 @@ an object; pure functions, callbacks, helpers inside `rule`.
 
 ## Session 6 - Objects
 
-[Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target="_blank"}
+**[Objects in memory](animations/objectsInMemory.html){target="_blank"}** -
+dot and brackets, deep paths, `?.` and `??`, dictionaries, a path helper, copies,
+`this` in a method.
+[1. Dot or brackets](animations/objectsInMemory.html#1){target="_blank"},
+[2. A deep path](animations/objectsInMemory.html#2){target="_blank"},
+[3. Safe access: `?.` and `??`](animations/objectsInMemory.html#3){target="_blank"},
+[4. A dictionary](animations/objectsInMemory.html#4){target="_blank"},
+[5. A path helper: `get`](animations/objectsInMemory.html#5){target="_blank"},
+[6. Copies](animations/objectsInMemory.html#6){target="_blank"},
+[7. `this` in a method (advanced)](animations/objectsInMemory.html#7){target="_blank"}
+
+Also: [Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target="_blank"}
 and [Arrays in memory - 5. References](animations/arraysInMemory.html#5){target="_blank"}:
 two variables can point to the same object.

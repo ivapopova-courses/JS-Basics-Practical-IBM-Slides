@@ -87,3 +87,8 @@ msgstr "4. Arrays и списъци от записи"
 #: site/.vitepress/config.mjs
 msgid "5. Functions, older code"
 msgstr "5. Функции, по-стар код"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "6. Objects and data shapes"
+msgstr ""
