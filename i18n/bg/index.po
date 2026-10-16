@@ -115,10 +115,8 @@ msgstr "[Функции и четене на по-стар код](/lectures/05-
 
 #. table cell
 #: site/index.md:39
-#, fuzzy
-#| msgid "Objects: deep paths, dictionaries, different data shapes"
 msgid "[Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects)"
-msgstr "Обекти: дълбоки пътища, dictionaries, различни форми на данните"
+msgstr "[Обекти: дълбоки пътища, dictionaries, различни форми на данните](/lectures/06-objects)"
 
 #. table cell
 #: site/index.md:40
