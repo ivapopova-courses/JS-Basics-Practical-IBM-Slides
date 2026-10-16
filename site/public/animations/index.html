@@ -77,11 +77,11 @@ body {
 .topic h2 .en { text-transform: none; letter-spacing: 0; font-weight: 500; }
 .topic h2::after { content: ""; flex: 1; height: 1px; background: var(--line); align-self: center; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19.5rem, 1fr)); gap: .8rem; }
-/* wide screens: one row for the 6 basic-syntax cards, one row for arrays (2) + functions (4) */
+/* wide screens: one row of six columns per topic */
 @media (min-width: 1400px) {
     #topics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: .8rem; }
-    .topic { grid-column: span var(--n); }
-    .topic .grid { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+    .topic { grid-column: span 6; }
+    .topic .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 
 .pill {
@@ -242,6 +242,12 @@ const ANIMATIONS = [
         title: 'Algorithms with arrays',
         desc: 'Traversal, sum, largest element, filtering, search with break and a two-dimensional array.',
         scenarios: ['Traversal with for', 'Reverse order', 'Sum of the elements', 'Largest element', 'Filtering into new arrays', 'Search with break', 'Two-dimensional array'], adv: [6, 7],
+    },
+    {
+        topic: 'arrays', file: 'arrayMethods.html',
+        title: 'Array methods',
+        desc: 'slice, splice, indexOf / includes, split / join, values packed into a string and a list of records.',
+        scenarios: ['slice and at', 'splice', 'indexOf and includes', 'split and join', 'Packed values', 'A list of records', 'splice in a loop'], adv: [7],
     },
     {
         topic: 'functions', file: 'callStack.html',

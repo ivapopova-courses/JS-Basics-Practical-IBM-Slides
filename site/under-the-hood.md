@@ -119,6 +119,17 @@ walking through an array, sum, maximum, filtering, searching, with the common bu
 [6. Search with `break` (advanced)](animations/arrayAlgorithms.html#6){target="_blank"},
 [7. Two-dimensional array (advanced)](animations/arrayAlgorithms.html#7){target="_blank"}
 
+**[Array methods](animations/arrayMethods.html){target="_blank"}** -
+copying and cutting arrays, searching, splitting strings, values packed into one
+string, and a list of records.
+[1. `slice` and `at`](animations/arrayMethods.html#1){target="_blank"},
+[2. `splice`](animations/arrayMethods.html#2){target="_blank"},
+[3. `indexOf` and `includes`](animations/arrayMethods.html#3){target="_blank"},
+[4. `split` and `join`](animations/arrayMethods.html#4){target="_blank"},
+[5. Packed values](animations/arrayMethods.html#5){target="_blank"},
+[6. A list of records](animations/arrayMethods.html#6){target="_blank"},
+[7. `splice` in a loop (advanced)](animations/arrayMethods.html#7){target="_blank"}
+
 ## Session 5 - Functions, and reading older code
 
 **[The call stack](animations/callStack.html){target="_blank"}** -

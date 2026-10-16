@@ -65,7 +65,9 @@ msgstr "[Сравнения, логика, условия и loops](/lectures/03
 
 #. table cell
 #: site/agenda.md:24
-msgid "Arrays and lists of records"
+#, fuzzy
+#| msgid "Arrays and lists of records"
+msgid "[Arrays and lists of records](/lectures/04-arrays-and-records)"
 msgstr "Arrays и списъци от записи"
 
 #. table cell
@@ -437,3 +439,6 @@ msgstr "Курсов проект"
 #: site/agenda.md:151
 msgid "See [Course project](/project)."
 msgstr "Вижте [Курсов проект](/project)."
+
+#~ msgid "Arrays and lists of records"
+#~ msgstr "Arrays и списъци от записи"

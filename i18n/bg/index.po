@@ -105,7 +105,9 @@ msgstr "[Сравнения, логика, условия и loops](/lectures/03
 
 #. table cell
 #: site/index.md:37
-msgid "Arrays and lists of records"
+#, fuzzy
+#| msgid "Arrays and lists of records"
+msgid "[Arrays and lists of records](/lectures/04-arrays-and-records)"
 msgstr "Arrays и списъци от записи"
 
 #. table cell
@@ -137,3 +139,6 @@ msgstr "JSON, Node.js, модули, грешки, тестове, JSDoc тип�
 #: site/index.md:43
 msgid "Project review, Git workflow, wrap-up"
 msgstr "Преглед на проектите, работа с Git, обобщение"
+
+#~ msgid "Arrays and lists of records"
+#~ msgstr "Arrays и списъци от записи"
