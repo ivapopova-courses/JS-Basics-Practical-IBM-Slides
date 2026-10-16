@@ -172,6 +172,17 @@ functions in variables, arrays and objects; callbacks; arrow functions; closures
 [6. Closure (advanced)](animations/functionsAsValues.html#6){target="_blank"},
 [7. A forgotten `;` (advanced)](animations/functionsAsValues.html#7){target="_blank"}
 
+**[Functions and data](animations/functionsAndData.html){target="_blank"}** -
+what a function gets: a copy of a number or a string, a reference to an array or
+an object; pure functions, callbacks, helpers inside `rule`.
+[1. A copy of the value](animations/functionsAndData.html#1){target="_blank"},
+[2. The same array](animations/functionsAndData.html#2){target="_blank"},
+[3. Change or replace](animations/functionsAndData.html#3){target="_blank"},
+[4. Changing the report](animations/functionsAndData.html#4){target="_blank"},
+[5. A callback, call by call](animations/functionsAndData.html#5){target="_blank"},
+[6. A helper inside `rule`](animations/functionsAndData.html#6){target="_blank"},
+[7. A shallow copy (advanced)](animations/functionsAndData.html#7){target="_blank"}
+
 ## Session 6 - Objects
 
 [Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target="_blank"}

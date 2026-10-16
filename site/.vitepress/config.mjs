@@ -15,7 +15,7 @@ export default await withLocales(defineCourse({
   trainerDir: '../trainer',
   nav: [
     { text: 'Agenda', link: '/agenda' },
-    { text: 'Lectures', link: '/lectures/04-arrays-and-records' },
+    { text: 'Lectures', link: '/lectures/05-functions' },
     { text: 'Project', link: '/project' }
   ],
   sidebar: [
@@ -35,7 +35,8 @@ export default await withLocales(defineCourse({
         { text: '1. Getting started', link: '/lectures/01-getting-started' },
         { text: '2. Variables, types, operators', link: '/lectures/02-variables-and-types' },
         { text: '3. Conditions and loops', link: '/lectures/03-conditions-and-loops' },
-        { text: '4. Arrays and lists of records', link: '/lectures/04-arrays-and-records' }
+        { text: '4. Arrays and lists of records', link: '/lectures/04-arrays-and-records' },
+        { text: '5. Functions, older code', link: '/lectures/05-functions' }
       ]
     }
   ],

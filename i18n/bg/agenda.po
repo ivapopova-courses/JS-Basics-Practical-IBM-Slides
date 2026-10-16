@@ -65,15 +65,13 @@ msgstr "[Сравнения, логика, условия и loops](/lectures/03
 
 #. table cell
 #: site/agenda.md:24
-#, fuzzy
-#| msgid "Arrays and lists of records"
 msgid "[Arrays and lists of records](/lectures/04-arrays-and-records)"
-msgstr "Arrays и списъци от записи"
+msgstr "[Arrays и списъци от записи](/lectures/04-arrays-and-records)"
 
 #. table cell
 #: site/agenda.md:25
-msgid "Functions, and reading older code"
-msgstr "Функции и четене на по-стар код"
+msgid "[Functions, and reading older code](/lectures/05-functions)"
+msgstr "[Функции и четене на по-стар код](/lectures/05-functions)"
 
 #. table cell
 #: site/agenda.md:26
@@ -439,6 +437,9 @@ msgstr "Курсов проект"
 #: site/agenda.md:151
 msgid "See [Course project](/project)."
 msgstr "Вижте [Курсов проект](/project)."
+
+#~ msgid "Functions, and reading older code"
+#~ msgstr "Функции и четене на по-стар код"
 
 #~ msgid "Arrays and lists of records"
 #~ msgstr "Arrays и списъци от записи"

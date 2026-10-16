@@ -81,4 +81,9 @@ msgstr "3. Условия и loops"
 #. side menu
 #: site/.vitepress/config.mjs
 msgid "4. Arrays and lists of records"
-msgstr ""
+msgstr "4. Arrays и списъци от записи"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "5. Functions, older code"
+msgstr "5. Функции, по-стар код"
