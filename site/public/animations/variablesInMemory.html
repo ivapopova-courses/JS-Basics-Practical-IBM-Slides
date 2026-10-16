@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Variables in memory</title>
+<!--
+    Step-by-step animation: how JavaScript variables live in memory.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep link to a scenario with a hash: variablesInMemory.html#3
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --foreign-bg: #efb1ac;
+    --foreign-bg2: #f6c9c5;
+    --foreign-border: #b55b55;
+    --foreign-ink: #6e2420;
+    --free-bg: #efe9dc;
+    --free-border: #cfc4af;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --heap-bg: #fff3cf;
+    --heap-border: #c99a2e;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --row-h: 2.9rem;
+    --cols: 5.8rem 14.5rem 9.5rem;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --foreign-bg: #5a2b2a; --foreign-bg2: #4a2423; --foreign-border: #c46e67; --foreign-ink: #f3c2be;
+        --free-bg: #262830; --free-border: #3d404c;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --foreign-bg: #5a2b2a; --foreign-bg2: #4a2423; --foreign-border: #c46e67; --foreign-ink: #f3c2be;
+    --free-bg: #262830; --free-border: #3d404c;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: flex; flex-direction: column; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 1.02rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .2rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+
+/* expression evaluation */
+.eval { display: grid; grid-template-columns: auto 1fr; gap: .3rem .8rem; align-items: center; }
+.ev-k { font-size: .72rem; color: var(--muted); }
+.ev-v {
+    justify-self: start;
+    min-width: 2rem; min-height: 1.7rem;
+    padding: .1rem .5rem;
+    border-radius: .3rem;
+    font-family: var(--mono); font-size: 1.1rem;
+    white-space: pre;
+}
+.ev-sub:not(:empty) { background: var(--read-bg); }
+.ev-res:not(:empty) { background: var(--write-bg); font-weight: 700; }
+.eval-empty { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); font-style: italic; min-height: 5.6rem; display: flex; align-items: center; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+
+/* ---------- memory ---------- */
+.mem-wrap { display: flex; justify-content: center; align-items: flex-start; gap: 1.4rem; }
+.ram-panel { flex: none; }
+.mem-head {
+    display: grid; grid-template-columns: var(--cols);
+    height: 1.2rem; margin-bottom: .2rem;
+    font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+}
+.mem-head span:first-child { text-align: right; padding-right: .7rem; }
+.mem-head span:last-child { padding-left: .6rem; }
+.slot { display: grid; grid-template-columns: var(--cols); align-items: center; height: var(--row-h); }
+.addr { padding-right: .7rem; text-align: right; font-family: var(--mono); font-size: .88rem; color: var(--muted); }
+.cell {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: calc(var(--row-h) - .35rem);
+    padding-top: .55rem;
+    border: 2px solid; border-radius: .55rem;
+    font-family: var(--mono); font-size: 1.15rem; font-weight: 700;
+    overflow: hidden;
+    transition: box-shadow .25s;
+}
+.free .cell { background: var(--free-bg); border-color: var(--free-border); border-style: dashed; }
+.foreign .cell {
+    background: repeating-linear-gradient(135deg, var(--foreign-bg) 0 .45rem, var(--foreign-bg2) .45rem .9rem);
+    border-color: var(--foreign-border);
+}
+.foreign .cell, .free .cell, .dots .cell { padding-top: 0; }
+.foreign .val { font-family: var(--sans); font-size: .7rem; font-weight: 600; color: var(--foreign-ink); }
+.var .cell { background: var(--var-bg); border-color: var(--var-border); color: var(--var-ink); }
+.dots .cell { border: 0; background: none; color: var(--muted); }
+.type {
+    position: absolute; top: .1rem; right: .4rem;
+    font-family: var(--sans); font-size: .58rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined, .val.t-null { font-style: italic; font-weight: 500; opacity: .85; }
+.val.t-ref { color: var(--ref); }
+.uninit { font-family: var(--sans); font-size: .72rem; font-style: italic; font-weight: 500; opacity: .7; }
+.cell.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.cell.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.cell.hl-new   { box-shadow: 0 0 0 3px var(--var-border); }
+.cell.hl-error { box-shadow: 0 0 0 3px var(--err), 0 0 0 7px var(--err-bg); animation: shake .5s both; }
+.label { position: relative; z-index: 2; display: flex; align-items: center; gap: .35rem; padding-left: .5rem; }
+.ptr { flex: none; width: 1.6rem; height: 1rem; color: var(--muted); }
+.name {
+    padding: 0 .25rem; border-radius: .25rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: 1.15rem; font-weight: 700;
+}
+.kw {
+    padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: .62rem; color: var(--muted);
+}
+.lock { width: .95rem; height: .95rem; color: var(--muted); background: var(--panel); }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding-top: .55rem;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+.cell.changed .val { animation: pop .45s .2s both; }
+.slot.appear .cell, .slot.appear .label { animation: appear .5s both; }
+.slot.appear .label { animation-delay: .15s; }
+
+/* heap */
+.heap-panel { flex: none; width: 17rem; }
+.heap { position: relative; height: calc(var(--row-h) * 9); }
+.hobj {
+    position: absolute; left: .4rem; right: .4rem; z-index: 2;
+    padding: .4rem .7rem;
+    border: 2px solid var(--heap-border); border-radius: .6rem;
+    background: var(--heap-bg);
+    font-family: var(--mono);
+    transition: box-shadow .25s;
+}
+.hobj.new { animation: appear .5s both; }
+.hobj.visit { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.haddr { margin-bottom: .2rem; font-family: var(--sans); font-size: .7rem; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+.haddr b { font-family: var(--mono); color: var(--ref); font-size: .85rem; }
+.hbody { font-size: 1.05rem; }
+.prop { padding-left: 1rem; }
+.pv { display: inline-block; padding: 0 .2rem; border-radius: .25rem; }
+.pv.hl-write { background: var(--write-bg); outline: 2px solid var(--write); }
+.hobj.garbage { opacity: .55; filter: grayscale(1); border-style: dashed; }
+.hobj .tag {
+    position: absolute; top: -.7rem; right: .6rem;
+    padding: .05rem .45rem; border-radius: .3rem;
+    background: var(--err); color: #fff;
+    font-family: var(--sans); font-size: .62rem; font-weight: 700;
+}
+.hobj.collected { animation: collect .9s both; }
+
+/* reference arrows */
+.arrows { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; overflow: visible; pointer-events: none; color: var(--ref); }
+.refpath { fill: none; stroke: currentColor; stroke-width: 2.5; }
+.refpath.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .6s both; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.1rem;
+    margin-top: .7rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.foreign { background: var(--foreign-bg); border-color: var(--foreign-border); }
+.sw.free { background: var(--free-bg); border-color: var(--free-border); border-style: dashed; }
+.sw.var { background: var(--var-bg); border-color: var(--var-border); }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+.sw.ref { height: 0; border-width: 1.5px 0 0; border-radius: 0; border-color: var(--ref); width: 1.4rem; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.rejected { background: var(--err); }
+
+.cell.await .val, .cell.await .type { visibility: hidden; }
+.ev-v.await, .cline.await, .pv.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes collect { 0% { opacity: .55; transform: none; } 100% { opacity: 0; transform: scale(.6) rotate(-6deg); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .mem-wrap { flex-wrap: wrap; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+    :root { --cols: 5rem 11rem 8rem; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Variables in memory <small>how JavaScript stores data, step by step</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="bg/variablesInMemory.html" hreflang="bg" lang="bg" title="Bulgarian version" aria-label="Bulgarian version">BG</a>
+        <button class="btn icon-btn" id="themeBtn" title="Light / dark theme" aria-label="Light / dark theme">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Code</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><span>Evaluating the expression</span></div>
+                <div class="eval" id="eval"></div>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Console</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="mem-wrap">
+                <div class="panel ram-panel">
+                    <div class="panel-title"><span id="ramTitle">RAM</span><span class="note">the addresses are examples</span></div>
+                    <div class="mem-head"><span>address</span><span>value</span><span>name</span></div>
+                    <div id="ram"></div>
+                </div>
+                <div class="panel heap-panel" id="heapPanel">
+                    <div class="panel-title"><span>Heap - the objects</span></div>
+                    <div class="mem-head"><span></span></div>
+                    <div class="heap" id="heap"></div>
+                </div>
+            </div>
+            <div class="legend" id="legend"></div>
+        </section>
+        <svg class="arrows" id="arrows" aria-hidden="true"></svg>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="To the start (Home)" aria-label="To the start">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Back (Left arrow)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Back
+                </button>
+                <button class="btn" id="playBtn" title="Auto-play (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Next (Right arrow or Space)">
+                    Next<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Keys: Left / Right arrows, Space, Home, P, 1-6</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Memory model
+// ---------------------------------------------------------------------------
+const ADDR0 = 128000;   // address of the first row shown
+const ADDR_STEP = 8;    // each cell is drawn as 8 bytes (64 bits)
+const FOREIGN = 2;      // rows already used by other programs
+const ROWS = 8;         // memory rows shown (plus a "..." row)
+
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'null') return 'null';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit.startsWith('"')) return 'string';
+    return 'number';
+}
+
+// Helpers used by the scenario steps. Each one mutates the state `s`.
+function decl(s, name, kind = 'let') {
+    s.vars[name] = { slot: FOREIGN + s.order.length, value: null, type: null, kind, ref: null };
+    s.order.push(name);
+    s.hl[name] = 'new';
+}
+function set(s, name, lit) {
+    Object.assign(s.vars[name], { value: lit, type: typeOf(lit), ref: null });
+    s.hl[name] = 'write';
+}
+function setRef(s, name, addr) {
+    Object.assign(s.vars[name], { value: String(addr), type: 'ref', ref: addr });
+    s.hl[name] = 'write';
+}
+function read(s, ...names) { names.forEach(n => s.hl[n] = 'read'); }
+function ev(s, src, sub = '', res = '') { s.eval = { src, sub, res }; }
+function noev(s) { s.eval = null; }
+function log(s, text, err = false) { s.console.push({ text, err }); }
+function hnew(s, addr, props, slot) { s.heap[addr] = { props, slot, garbage: false }; s.hhl[addr] = 'new'; }
+function hset(s, addr, prop, lit) { s.heap[addr].props[prop] = lit; s.hhl[addr + '.' + prop] = 'write'; }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line   - active code line (0-based, -1 = none)
+//   step.do     - changes to the memory state
+//   step.fly    - values that fly on screen: [from, to, text, option]
+//                 keys: v:name (variable cell), ev (values row), res (result row),
+//                 con (last console line), ha:addr (heap object), h:addr.prop
+//   step.reveal - elements to keep hidden until all flights land
+// ---------------------------------------------------------------------------
+const SCENARIOS = [
+{
+    tab: 'Declaring and assigning',
+    code: [
+        'let x = 1;',
+        'let y = 2;',
+        'let z;',
+        'z = x + y;',
+        'x = 10;',
+        'console.log(x, y, z); // 10 2 3',
+    ],
+    steps: [
+        { line: -1, text: `We can picture memory (RAM) as a long row of numbered cells. The number of each cell is called its <b>address</b>. The red cells are already taken by the browser and other programs. Let us run the program line by line - press <kbd>Next</kbd> or the Right arrow.` },
+        { line: 0, text: `<code>let x</code> - JavaScript finds a free cell in memory and gives it the name <b>x</b>. The name is like a label on a box: we use it to reach the cell, and we do not care about its address. The cell has no value yet.`,
+          do: s => decl(s, 'x') },
+        { line: 0, text: `<code>= 1</code> - the number 1 is <span class="w">written</span> into the cell named x. Now the variable is <b>defined</b> (initialised). The type of the value is number.`,
+          do: s => { ev(s, '1', '', '1'); set(s, 'x', '1'); }, fly: [['res', 'v:x', '1']] },
+        { line: 1, text: `<code>let y = 2;</code> - the same way: a new cell named y, and 2 is written into it. Every variable gets its own cell, with its own address.`,
+          do: s => { ev(s, '2', '', '2'); decl(s, 'y'); set(s, 'y', '2'); }, fly: [['res', 'v:y', '2']] },
+        { line: 2, text: `<code>let z;</code> - we declare z without giving it a value. But the cell does not stay empty - JavaScript automatically writes the special value <b>undefined</b> into it.`,
+          do: s => { noev(s); decl(s, 'z'); set(s, 'z', 'undefined'); } },
+        { line: 3, text: `<code>z = x + y;</code> - first the <b>right-hand side</b> (RHS) is calculated. For this, JavaScript <span class="r">reads</span> the values from the cells x and y. Reading does not change x and y - it takes a copy of their values.`,
+          do: s => { read(s, 'x', 'y'); ev(s, 'x + y', '1 + 2'); }, fly: [['v:x', 'ev', '1'], ['v:y', 'ev', '2']] },
+        { line: 3, text: `The expression is calculated: 1 + 2 = 3.`,
+          do: s => ev(s, 'x + y', '1 + 2', '3') },
+        { line: 3, text: `The result 3 is <span class="w">written</span> into the <b>left-hand side</b> (LHS) - the cell z. The old value undefined is gone: a cell can hold only one value.`,
+          do: s => set(s, 'z', '3'), fly: [['res', 'v:z', '3']] },
+        { line: 4, text: `<code>x = 10;</code> - we <span class="w">write</span> a new value into x. The old value 1 is overwritten and lost. That is why it is called a <b>variable</b> - its value can change. Note that z stays 3: z does not "remember" that it came from x.`,
+          do: s => { ev(s, '10', '', '10'); set(s, 'x', '10'); }, fly: [['res', 'v:x', '10']] },
+        { line: 5, text: `<code>console.log(x, y, z)</code> <span class="r">reads</span> the three cells and prints their values to the console.`,
+          do: s => { noev(s); read(s, 'x', 'y', 'z'); log(s, '10 2 3'); },
+          fly: [['v:x', 'con', '10'], ['v:y', 'con', '2'], ['v:z', 'con', '3']] },
+        { line: -1, text: `<b>Summary:</b> a variable is a <b>name</b> for a cell in memory. <code>let</code> reserves the cell, <code>=</code> <span class="w">writes</span> a value into it, and when we use the name in an expression, the value is <span class="r">read</span>. We do not need the addresses - JavaScript takes care of them for us.` },
+    ],
+},
+{
+    tab: 'Copying a value',
+    code: [
+        'let a = 5;',
+        'let b = a;',
+        'a = 7;',
+        'console.log(a, b); // 7 5',
+    ],
+    steps: [
+        { line: -1, text: `What happens when we assign one variable to another? Do the two variables stay "connected"? Let us check.` },
+        { line: 0, text: `<code>let a = 5;</code> - a cell named a with the value 5.`,
+          do: s => { ev(s, '5', '', '5'); decl(s, 'a'); set(s, 'a', '5'); }, fly: [['res', 'v:a', '5']] },
+        { line: 1, text: `<code>let b = a;</code> - a cell is created for b. The right-hand side is just <code>a</code>, so JavaScript <span class="r">reads</span> the value from the cell a - the number 5.`,
+          do: s => { decl(s, 'b'); read(s, 'a'); ev(s, 'a', '', '5'); }, fly: [['v:a', 'res', '5']] },
+        { line: 1, text: `A <b>copy</b> of the number 5 is <span class="w">written</span> into b. Now we have two independent cells that (for now) hold the same value.`,
+          do: s => set(s, 'b', '5'), fly: [['res', 'v:b', '5']] },
+        { line: 2, text: `<code>a = 7;</code> - we <span class="w">write</span> a new value into a. What will happen to b?`,
+          do: s => { ev(s, '7', '', '7'); set(s, 'a', '7'); }, fly: [['res', 'v:a', '7']] },
+        { line: 3, text: `b is still 5! The assignment <code>b = a</code> copies the value <b>at the moment it runs</b>. After that, a and b have nothing to do with each other. All simple (primitive) types behave like this. Objects are different - see scenario 6.`,
+          do: s => { noev(s); read(s, 'a', 'b'); log(s, '7 5'); }, fly: [['v:a', 'con', '7'], ['v:b', 'con', '5']] },
+    ],
+},
+{
+    tab: 'x = x ** 2',
+    code: [
+        'let x = 3;',
+        'x = x ** 2;',
+        'x += 1;     // x = x + 1',
+        'x++;        // x = x + 1',
+    ],
+    steps: [
+        { line: -1, text: `How can x be on both sides of <code>=</code>? In math, <code>x = x ** 2</code> is an equation. In programming, <code>=</code> does not mean "equals" - it is a command: "calculate the right-hand side and <span class="w">write</span> the result into the left-hand side".` },
+        { line: 0, text: `<code>let x = 3;</code> - a cell named x with the value 3.`,
+          do: s => { ev(s, '3', '', '3'); decl(s, 'x'); set(s, 'x', '3'); }, fly: [['res', 'v:x', '3']] },
+        { line: 1, text: `First the RHS is calculated - <code>x ** 2</code>. JavaScript <span class="r">reads</span> the current value of x - it is 3.`,
+          do: s => { read(s, 'x'); ev(s, 'x ** 2', '3 ** 2'); }, fly: [['v:x', 'ev', '3']] },
+        { line: 1, text: `3 ** 2 = 9 (3 to the power of 2).`,
+          do: s => ev(s, 'x ** 2', '3 ** 2', '9') },
+        { line: 1, text: `Only now is the result <span class="w">written</span> into the LHS - again the cell x. The old value 3 is overwritten.`,
+          do: s => set(s, 'x', '9'), fly: [['res', 'v:x', '9']] },
+        { line: 2, text: `<code>x += 1</code> is short for <code>x = x + 1</code>. Again: <span class="r">read</span> x (9) and calculate: 9 + 1 = 10.`,
+          do: s => { read(s, 'x'); ev(s, 'x + 1', '9 + 1', '10'); }, fly: [['v:x', 'ev', '9']] },
+        { line: 2, text: `The result 10 is <span class="w">written</span> into x.`,
+          do: s => set(s, 'x', '10'), fly: [['res', 'v:x', '10']] },
+        { line: 3, text: `<code>x++</code> (increment) also adds 1 to x. The same again: <span class="r">read</span> (10) and calculate: 10 + 1 = 11...`,
+          do: s => { read(s, 'x'); ev(s, 'x + 1', '10 + 1', '11'); }, fly: [['v:x', 'ev', '10']] },
+        { line: 3, text: `...and <span class="w">write</span>. x is now 11.`,
+          do: s => set(s, 'x', '11'), fly: [['res', 'v:x', '11']] },
+        { line: -1, text: `<b>Rule:</b> in an assignment, the whole right-hand side (RHS) is always calculated <b>first</b>, and <b>then</b> the result is written into the variable on the left (LHS). That is why <code>x = x ** 2</code> makes perfect sense.`,
+          do: noev },
+    ],
+},
+{
+    tab: 'Types of values',
+    code: [
+        'let age = 25;',
+        'let userName = "Ada";',
+        'let isAdmin = false;',
+        'let car = null;',
+        'let bonus;',
+        'age = "twenty-five";',
+        'console.log(typeof age); // string',
+    ],
+    steps: [
+        { line: -1, text: `A cell can hold a value of any type. The small label in the corner of the cell shows the type of the value written in it.` },
+        { line: 0, text: `<code>let age = 25;</code> - a number. In JavaScript, whole numbers and decimals are the same type - number.`,
+          do: s => { decl(s, 'age'); set(s, 'age', '25'); } },
+        { line: 1, text: `<code>let userName = "Ada";</code> - a string, i.e. text. The quotes are not part of the value - they only show JavaScript where the text starts and ends.`,
+          do: s => { decl(s, 'userName'); set(s, 'userName', '"Ada"'); } },
+        { line: 2, text: `<code>let isAdmin = false;</code> - a boolean value. There are only two possible values: true and false.`,
+          do: s => { decl(s, 'isAdmin'); set(s, 'isAdmin', 'false'); } },
+        { line: 3, text: `<code>let car = null;</code> - with <b>null</b> the programmer says on purpose "there is no value here (for now)". A curious fact: <code>typeof null</code> returns "object" - this is an old bug in the language.`,
+          do: s => { decl(s, 'car'); set(s, 'car', 'null'); } },
+        { line: 4, text: `<code>let bonus;</code> - we did not give a value, so JavaScript automatically writes <b>undefined</b>.`,
+          do: s => { decl(s, 'bonus'); set(s, 'bonus', 'undefined'); } },
+        { line: 5, text: `JavaScript is a <b>dynamically typed</b> language: a variable has no fixed type. The type belongs to the <b>value</b>, not to the variable. We wrote a string into age, and now it holds a string. (This is possible, but it is not good practice - the code becomes confusing.)`,
+          do: s => { ev(s, '"twenty-five"', '', '"twenty-five"'); set(s, 'age', '"twenty-five"'); }, fly: [['res', 'v:age', '"twenty-five"']] },
+        { line: 6, text: `<code>typeof age</code> <span class="r">reads</span> the value of age and returns a string with the name of its type - "string".`,
+          do: s => { read(s, 'age'); ev(s, 'typeof age', 'typeof "twenty-five"', '"string"'); log(s, 'string'); },
+          fly: [['v:age', 'ev', '"twenty-five"']], reveal: ['res', 'con'] },
+        { line: -1, text: `<b>Summary:</b> the simple (primitive) types we will use most often are number, string, boolean, null and undefined (there are also bigint and symbol). The type is a property of the value - one variable can hold values of different types over time.`,
+          do: noev },
+    ],
+},
+{
+    tab: 'const',
+    code: [
+        'const PI = 3.14;',
+        'let radius = 2;',
+        'let area = PI * radius ** 2;',
+        'PI = 3; // TypeError!',
+    ],
+    steps: [
+        { line: -1, text: `<code>const</code> (from constant) creates a variable whose value is written <b>only once</b> - when it is created. After that the value cannot be changed.` },
+        { line: 0, text: `<code>const PI = 3.14;</code> - a cell named PI with the value 3.14. The padlock shows that the cell is "locked" against new assignments. With const the value must be given at once - <code>const PI;</code> is a syntax error.`,
+          do: s => { ev(s, '3.14', '', '3.14'); decl(s, 'PI', 'const'); set(s, 'PI', '3.14'); }, fly: [['res', 'v:PI', '3.14']] },
+        { line: 1, text: `<code>let radius = 2;</code> - an ordinary variable with let.`,
+          do: s => { ev(s, '2', '', '2'); decl(s, 'radius'); set(s, 'radius', '2'); }, fly: [['res', 'v:radius', '2']] },
+        { line: 2, text: `Reading a const works exactly like reading a let: JavaScript <span class="r">reads</span> 3.14 and 2. Note that <code>**</code> runs before <code>*</code>.`,
+          do: s => { decl(s, 'area'); read(s, 'PI', 'radius'); ev(s, 'PI * radius ** 2', '3.14 * 2 ** 2'); },
+          fly: [['v:PI', 'ev', '3.14'], ['v:radius', 'ev', '2']] },
+        { line: 2, text: `3.14 * 2 ** 2 = 3.14 * 4 = 12.56`,
+          do: s => ev(s, 'PI * radius ** 2', '3.14 * 2 ** 2', '12.56') },
+        { line: 2, text: `The result is <span class="w">written</span> into area.`,
+          do: s => set(s, 'area', '12.56'), fly: [['res', 'v:area', '12.56']] },
+        { line: 3, text: `<code>PI = 3;</code> - an attempt to <span class="w">write</span> a new value into a const variable. The result is an error (TypeError) and the program stops. The cell PI still holds 3.14.`,
+          do: s => { ev(s, '3', '', '3'); s.hl.PI = 'error'; s.err = true; log(s, 'Uncaught TypeError: Assignment to constant variable.', true); },
+          fly: [['res', 'v:PI', '3', 'reject']], reveal: ['con'] },
+        { line: -1, text: `<b>Good practice:</b> use <code>const</code> by default, and <code>let</code> only for variables whose value will really change. The code is easier to understand, and you are protected from accidental mistakes. <code>var</code> is the old way of declaring and is not recommended.`,
+          do: noev },
+    ],
+},
+{
+    tab: 'Objects and references',
+    advanced: true,
+    heap: true,
+    code: [
+        'let n = 1;',
+        'let user = { name: "Ada" };',
+        'let admin = user;',
+        'admin.name = "Bob";',
+        'console.log(user.name); // Bob',
+        'user = null;',
+        'admin = null;',
+    ],
+    steps: [
+        { line: -1, text: `<b>Advanced.</b> Objects (and arrays) are compound types and are stored differently. We use a simplified model with two areas of memory: the <b>stack</b> - for the variables, and the <b>heap</b> - for the objects.` },
+        { line: 0, text: `<code>let n = 1;</code> - the simple value 1 is written directly into the cell of n.`,
+          do: s => { decl(s, 'n'); set(s, 'n', '1'); } },
+        { line: 1, text: `The RHS is calculated: <code>{ name: "Ada" }</code> creates a new object. Objects can be big and can grow, so they are created in a separate area - the <b>heap</b>. The new object gets an address - 5000.`,
+          do: s => { decl(s, 'user'); hnew(s, 5000, { name: '"Ada"' }, s.vars.user.slot); } },
+        { line: 1, text: `The cell of user does <b>not</b> get the object itself, but its <b>address</b> - 5000. We say that user holds a <b>reference</b> to the object (the arrow).`,
+          do: s => setRef(s, 'user', 5000), fly: [['ha:5000', 'v:user', '5000']] },
+        { line: 2, text: `<code>let admin = user;</code> - as in scenario 2, JavaScript <span class="r">reads</span> the value of user and writes a <b>copy</b> into admin. But this value is the address 5000! Now both variables point to <b>the same</b> object.`,
+          do: s => { decl(s, 'admin'); read(s, 'user'); setRef(s, 'admin', 5000); s.hl.admin = 'write'; }, fly: [['v:user', 'v:admin', '5000']] },
+        { line: 3, text: `<code>admin.name = "Bob";</code> - JavaScript <span class="r">reads</span> the address from admin (5000) and goes to the object at that address...`,
+          do: s => { read(s, 'admin'); s.hhl[5000] = 'visit'; ev(s, '"Bob"', '', '"Bob"'); }, fly: [['v:admin', 'ha:5000', '5000']] },
+        { line: 3, text: `...and <span class="w">writes</span> "Bob" into the name property of the object. The variables admin and user themselves do not change - they still hold the address 5000.`,
+          do: s => hset(s, 5000, 'name', '"Bob"'), fly: [['res', 'h:5000.name', '"Bob"']] },
+        { line: 4, text: `<code>console.log(user.name)</code> prints "Bob"! We changed the object through admin, but user sees the change, because both variables point to the same object. When you assign an object, the <b>address</b> is copied, not the object itself.`,
+          do: s => { noev(s); read(s, 'user'); s.hhl[5000] = 'visit'; log(s, 'Bob'); }, fly: [['v:user', 'ha:5000', '5000']], reveal: ['con'] },
+        { line: 5, text: `<code>user = null;</code> - user no longer holds an address and the arrow disappears. The object still exists, because admin still points to it.`,
+          do: s => { ev(s, 'null', '', 'null'); set(s, 'user', 'null'); }, fly: [['res', 'v:user', 'null']] },
+        { line: 6, text: `<code>admin = null;</code> - now no variable points to the object at address 5000. It is <b>unreachable</b>: the program can no longer use it.`,
+          do: s => { ev(s, 'null', '', 'null'); set(s, 'admin', 'null'); s.heap[5000].garbage = true; }, fly: [['res', 'v:admin', 'null']] },
+        { line: -1, text: `The JavaScript <b>garbage collector</b> automatically finds unreachable objects and frees the memory they use. In JavaScript we do not need to free memory by hand.`,
+          do: s => { noev(s); delete s.heap[5000]; } },
+        { line: -1, text: `<b>Important:</b> this is a simplified model that explains how the code <b>behaves</b>. Real JavaScript engines (e.g. V8 in Chrome) manage memory in a more complex way - for example, strings are also kept in the heap, and the addresses here are made up. But the rule is true: for simple types the value is copied, for objects the reference (the address) is copied.` },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: state[i] is the memory after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, vars: {}, order: [], heap: {}, eval: null, console: [], hl: {}, hhl: {}, err: false };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.hhl = {}; s.err = false;
+        s.line = step.line;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 820, STAGGER = 200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_PTR = '<svg class="ptr" viewBox="0 0 24 14"><path d="M1 7 L8 1 V4.5 H23 V9.5 H8 V13 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const ICON_LOCK = '<svg class="lock" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="8" rx="1.5" fill="currentColor"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Play';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Pause';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(let|const|var|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+function renderCode(sc, s) {
+    $('#code').innerHTML = sc.code.map((l, i) =>
+        `<li class="${i === s.line ? 'active' : ''} ${i === s.line && s.err ? 'error' : ''}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`
+    ).join('');
+    $('#lineNote').textContent = s.line >= 0 ? `running line ${s.line + 1}` : '';
+}
+
+function renderRam(sc, s, prev, step) {
+    $('#ramTitle').textContent = sc.heap ? 'Stack - the variables' : 'RAM - the main memory';
+    const bySlot = {};
+    s.order.forEach(n => bySlot[s.vars[n].slot] = n);
+    const targets = new Set(prev && step.fly ? step.fly.map(f => f[1]) : []);
+    let html = '';
+    for (let i = 0; i < ROWS; i++) {
+        const addr = ADDR0 + i * ADDR_STEP;
+        const name = bySlot[i];
+        if (i < FOREIGN) {
+            html += `<div class="slot foreign"><span class="addr">${addr}</span><div class="cell"><span class="val">taken</span></div><div></div></div>`;
+            continue;
+        }
+        if (!name) {
+            html += `<div class="slot free"><span class="addr">${addr}</span><div class="cell"></div><div></div></div>`;
+            continue;
+        }
+        const v = s.vars[name];
+        const pv = prev && prev.vars[name];
+        const rowCls = ['slot', 'var'];
+        const cellCls = ['cell'];
+        if (s.hl[name]) cellCls.push('hl-' + s.hl[name]);
+        let ghost = '';
+        if (prev) {
+            if (!pv) rowCls.push('appear');
+            else if (pv.value !== null && pv.value !== v.value) {
+                const delay = targets.has('v:' + name) ? FLY_MS : 0;
+                ghost = `<span class="ghost" style="animation-delay:${delay}ms">${esc(pv.value)}</span>`;
+                if (!delay) cellCls.push('changed');
+            } else if (pv.value === null && v.value !== null && !targets.has('v:' + name)) cellCls.push('changed');
+        }
+        let errDelay = '';
+        if (s.hl[name] === 'error' && targets.has('v:' + name)) errDelay = ` style="animation-delay:${FLY_MS}ms"`;
+        const val = v.value === null
+            ? '<span class="val uninit">uninitialised</span>'
+            : `<span class="val t-${v.type}">${esc(v.value)}</span><span class="type">${v.type === 'ref' ? 'reference' : v.type}</span>`;
+        html += `<div class="${rowCls.join(' ')}" data-var="${name}">
+            <span class="addr">${addr}</span>
+            <div class="${cellCls.join(' ')}"${errDelay}>${ghost}${val}</div>
+            <div class="label">${ICON_PTR}<span class="name">${esc(name)}</span>${v.kind === 'const' ? ICON_LOCK : ''}<span class="kw">${v.kind}</span></div>
+        </div>`;
+    }
+    html += `<div class="slot dots"><span class="addr">...</span><div class="cell">...</div><div></div></div>`;
+    $('#ram').innerHTML = html;
+}
+
+function renderHeap(sc, s, prev) {
+    $('#heapPanel').style.display = sc.heap ? '' : 'none';
+    if (!sc.heap) return;
+    const card = (addr, o, extra) => {
+        const props = Object.entries(o.props).map(([k, v]) => {
+            const hl = s.hhl[addr + '.' + k] ? ' hl-' + s.hhl[addr + '.' + k] : '';
+            return `<div class="prop" data-prop="${k}">${esc(k)}: <span class="pv${hl}">${esc(v)}</span></div>`;
+        }).join('');
+        return `<div class="hobj ${extra}" data-addr="${addr}" style="top:calc(var(--row-h) * ${o.slot})">
+            ${o.garbage ? '<span class="tag">unreachable</span>' : ''}
+            <div class="haddr">address <b>${addr}</b></div>
+            <div class="hbody">{${props}}</div>
+        </div>`;
+    };
+    let html = '';
+    for (const [addr, o] of Object.entries(s.heap)) {
+        const cls = [];
+        if (o.garbage) cls.push('garbage');
+        if (s.hhl[addr]) cls.push(s.hhl[addr]);
+        html += card(addr, o, cls.join(' '));
+    }
+    if (prev) {
+        for (const [addr, o] of Object.entries(prev.heap)) {
+            if (!s.heap[addr]) html += card(addr, o, 'garbage collected');
+        }
+    }
+    $('#heap').innerHTML = html;
+}
+
+function renderEval(s) {
+    const e = s.eval;
+    $('#eval').innerHTML = e
+        ? `<span class="ev-k">expression</span><code class="ev-v ev-src">${esc(e.src)}</code>
+           <span class="ev-k">values</span><code class="ev-v ev-sub">${esc(e.sub)}</code>
+           <span class="ev-k">result</span><code class="ev-v ev-res">${esc(e.res)}</code>`
+        : `<div class="eval-empty">Here we will see how the right-hand side (RHS) of the expression is calculated.</div>`;
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.map(l =>
+        `<div class="cline ${l.err ? 'err' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderLegend(sc) {
+    $('#legend').innerHTML = [
+        '<span><i class="sw foreign"></i>taken by other programs</span>',
+        '<span><i class="sw free"></i>free</span>',
+        '<span><i class="sw var"></i>variable</span>',
+        '<span><i class="sw read"></i>read (RHS)</span>',
+        '<span><i class="sw write"></i>write (LHS)</span>',
+        sc.heap ? '<span><i class="sw ref"></i>reference</span>' : '',
+    ].join('');
+}
+
+function drawArrows(s, step, animate) {
+    const svg = $('#arrows');
+    const base = $('#stage').getBoundingClientRect();
+    const targets = new Set(animate && step.fly ? step.fly.map(f => f[1]) : []);
+    let html = '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>';
+    for (const name of s.order) {
+        const v = s.vars[name];
+        if (v.ref === null || !s.heap[v.ref]) continue;
+        const cell = $(`#ram .slot[data-var="${name}"] .cell`);
+        const obj = $(`#heap .hobj[data-addr="${v.ref}"]`);
+        if (!cell || !obj) continue;
+        const a = cell.getBoundingClientRect(), b = obj.getBoundingClientRect();
+        const x1 = a.right - base.left - 14, y1 = a.top + a.height / 2 - base.top;
+        const x2 = b.left - base.left - 2, y2 = b.top + Math.min(b.height / 2, 28) - base.top;
+        const dx = Math.max(60, (x2 - x1) / 2);
+        const fresh = targets.has('v:' + name);
+        const delay = fresh ? `style="animation-delay:${FLY_MS}ms"` : '';
+        html += `<circle cx="${x1}" cy="${y1}" r="4" fill="currentColor"/>
+                 <path class="refpath ${fresh ? 'draw' : ''}" ${delay} pathLength="1" marker-end="url(#ah)"
+                       d="M${x1} ${y1} C${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}"/>`;
+    }
+    svg.innerHTML = html;
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'ev') return $('#eval .ev-sub');
+    if (key === 'res') return $('#eval .ev-res');
+    if (key === 'con') return $('#console .cline:last-child');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'v') return $(`#ram .slot[data-var="${rest}"] .cell`);
+    if (kind === 'ha') return $(`#heap .hobj[data-addr="${rest}"] .haddr`);
+    if (kind === 'h') {
+        const [addr, prop] = rest.split('.');
+        return $(`#heap .hobj[data-addr="${addr}"] .prop[data-prop="${prop}"] .pv`);
+    }
+    return null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (!flights.length || reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    const revealKeys = step.reveal || (flights.some(f => f[1] === 'ev') ? ['res'] : []);
+    const revealEls = revealKeys.map(resolve).filter(Boolean);
+    revealEls.forEach(el => el.classList.add('await'));
+
+    const plan = flights.map(([from, to, text, opt], i) => {
+        const src = resolve(from), dst = resolve(to);
+        const awaits = !!dst && opt !== 'reject' && !to.startsWith('ha:');
+        if (awaits) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, to, text, opt, i, awaits };
+    });
+
+    let left = plan.length;
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            }
+            if (--left === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (/^(v|h):/.test(p.to) ? 'write' : 'read');
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+        const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.style.left = x0 + 'px';
+        chip.style.top = y0 + 'px';
+        const anim = chip.animate([
+            { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+            { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: p.i * STAGGER, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+        anim.onfinish = () => {
+            if (p.opt !== 'reject') { chip.remove(); finish(); return; }
+            // the value bounces off a const cell
+            chip.classList.add('rejected');
+            chip.animate([
+                { transform: `translate(${dx}px,${dy}px)` },
+                { transform: `translate(${dx + 8}px,${dy}px)` },
+                { transform: `translate(${dx - 8}px,${dy}px)` },
+                { transform: `translate(${dx}px,${dy + 40}px)`, opacity: 0 },
+            ], { duration: 700, fill: 'both' }).onfinish = () => { chip.remove(); finish(); };
+        };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderRam(sc, s, prev, step);
+    renderHeap(sc, s, prev);
+    renderEval(s);
+    renderConsole(s);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Step ${stepIdx + 1} of ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Step ${i + 1}" aria-label="Step ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+
+    requestAnimationFrame(() => {
+        if (tk !== token) return;
+        drawArrows(s, step, !!prev);
+        if (prev) playFlights(step, tk);
+    });
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    renderLegend(SCENARIOS[scIdx]);
+    try { history.replaceState(null, '', '#' + (scIdx + 1)); } catch (e) { /* file:// in some browsers */ }
+    playing = false;
+    goto(0);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('varsInMemoryTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = localStorage.getItem('varsInMemoryTheme');
+    if (t) document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+// arrows are positioned in pixels, so redraw them when the layout changes
+new ResizeObserver(() => drawArrows(states[stepIdx], SCENARIOS[scIdx].steps[stepIdx], false)).observe($('#stage'));
+
+const scenarioFromHash = () => selectScenario((parseInt(location.hash.slice(1), 10) || 1) - 1);
+window.addEventListener('hashchange', scenarioFromHash);
+scenarioFromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

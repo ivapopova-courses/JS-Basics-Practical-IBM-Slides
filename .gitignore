@@ -1,3 +1,5 @@
 node_modules/
 site/.vitepress/cache/
 site/.vitepress/dist/
+site/bg/
+i18n/out/

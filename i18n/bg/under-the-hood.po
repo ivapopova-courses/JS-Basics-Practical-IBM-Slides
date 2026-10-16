@@ -1,0 +1,169 @@
+# Translation of site/under-the-hood.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: Claude (claude-opus-5-5)\n"
+"PO-Revision-Date: 2026-10-16\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/under-the-hood.md\n"
+
+#. heading 1
+#: site/under-the-hood.md:1
+msgid "Animations"
+msgstr "Анимации"
+
+#. paragraph
+#: site/under-the-hood.md:3
+msgid "Step-by-step animations that show what JavaScript does **under the hood**: how the engine reads the code, where values live in memory, how an expression is calculated, how a loop or a function call runs."
+msgstr "Анимации стъпка по стъпка, които показват какво прави JavaScript **\"под капака\"**: как engine-ът чете кода, къде живеят стойностите в паметта, как се изчислява един израз, как се изпълнява loop или извикване на функция."
+
+#. paragraph
+#: site/under-the-hood.md:7
+msgid "Each animation has several **scenarios** (tabs at the top). A link below opens one scenario in a new tab."
+msgstr "Всяка анимация има няколко **сценария** (табовете горе). Линковете по-долу отварят един сценарий в нов таб."
+
+#. paragraph
+#: site/under-the-hood.md:10
+msgid "**Next step:** Right arrow or `Space`. **Back:** Left arrow. **Start:** `Home`. **Auto-play:** `P`."
+msgstr "**Следваща стъпка:** стрелка надясно или `Space`. **Назад:** стрелка наляво. **Начало:** `Home`. **Автоматично:** `P`."
+
+#. paragraph
+#: site/under-the-hood.md:12
+msgid "`file.html#3` opens scenario 3, `file.html#3.5` opens scenario 3 at step 5."
+msgstr "`file.html#3` отваря сценарий 3, `file.html#3.5` отваря сценарий 3 на стъпка 5."
+
+#. paragraph
+#: site/under-the-hood.md:13
+msgid "Scenarios marked **(advanced)** go deeper."
+msgstr "Сценариите, отбелязани с **(advanced)**, навлизат по-дълбоко."
+
+#. box title
+#: site/under-the-hood.md:15
+msgid "The animations are in Bulgarian"
+msgstr "Анимациите са на български"
+
+#. paragraph
+#: site/under-the-hood.md:16
+msgid "The code is in English, the explanations are in Bulgarian."
+msgstr "Кодът е на английски, обясненията са на български."
+
+#. paragraph
+#: site/under-the-hood.md:19
+msgid "[All animations on one page](animations/index.html){target=\"_blank\"}"
+msgstr "[Всички анимации на една страница](animations/index.html){target=\"_blank\"}"
+
+#. heading 2
+#: site/under-the-hood.md:21
+msgid "Session 1 - Getting started"
+msgstr "Занятие 1 - Първи стъпки"
+
+#. paragraph
+#: site/under-the-hood.md:23
+msgid "**[How JavaScript runs your code](animations/jsEngine.html){target=\"_blank\"}** - from the text in the file to the result: tokens, the syntax tree (AST), bytecode and \"hot\" code in V8. [1. Translators](animations/jsEngine.html#1){target=\"_blank\"}, [2. Tokens](animations/jsEngine.html#2){target=\"_blank\"}, [3. AST](animations/jsEngine.html#3){target=\"_blank\"}, [4. Two phases](animations/jsEngine.html#4){target=\"_blank\"}, [5. Engine and environment](animations/jsEngine.html#5){target=\"_blank\"}, [6. Bytecode (advanced)](animations/jsEngine.html#6){target=\"_blank\"}, [7. Hot code (advanced)](animations/jsEngine.html#7){target=\"_blank\"}"
+msgstr "**[Как JavaScript изпълнява кода ви](animations/jsEngine.html){target=\"_blank\"}** - от текста във файла до резултата: tokens, синтактичното дърво (AST), bytecode и \"горещ\" код във V8. [1. Преводачи](animations/jsEngine.html#1){target=\"_blank\"}, [2. Tokens](animations/jsEngine.html#2){target=\"_blank\"}, [3. AST](animations/jsEngine.html#3){target=\"_blank\"}, [4. Двете фази](animations/jsEngine.html#4){target=\"_blank\"}, [5. Engine и среда](animations/jsEngine.html#5){target=\"_blank\"}, [6. Bytecode (advanced)](animations/jsEngine.html#6){target=\"_blank\"}, [7. Горещ код (advanced)](animations/jsEngine.html#7){target=\"_blank\"}"
+
+#. heading 2
+#: site/under-the-hood.md:34
+msgid "Session 2 - Variables, types and operators"
+msgstr "Занятие 2 - Variables, типове и оператори"
+
+#. paragraph
+#: site/under-the-hood.md:36
+msgid "**[Variables in memory](animations/variablesInMemory.html){target=\"_blank\"}** - declaring, assigning and copying values. [1. Declaring and assigning](animations/variablesInMemory.html#1){target=\"_blank\"}, [2. Copying a value](animations/variablesInMemory.html#2){target=\"_blank\"}, [3. `x = x ** 2`](animations/variablesInMemory.html#3){target=\"_blank\"}, [4. Types of values](animations/variablesInMemory.html#4){target=\"_blank\"}, [5. `const`](animations/variablesInMemory.html#5){target=\"_blank\"}, [6. Objects and references (advanced)](animations/variablesInMemory.html#6){target=\"_blank\"}"
+msgstr "**[Variables в паметта](animations/variablesInMemory.html){target=\"_blank\"}** - деклариране, присвояване и копиране на стойности. [1. Деклариране и присвояване](animations/variablesInMemory.html#1){target=\"_blank\"}, [2. Копиране на стойност](animations/variablesInMemory.html#2){target=\"_blank\"}, [3. `x = x ** 2`](animations/variablesInMemory.html#3){target=\"_blank\"}, [4. Типове стойности](animations/variablesInMemory.html#4){target=\"_blank\"}, [5. `const`](animations/variablesInMemory.html#5){target=\"_blank\"}, [6. Обекти и референции (advanced)](animations/variablesInMemory.html#6){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:45
+msgid "**[Numbers in memory](animations/numbersInMemory.html){target=\"_blank\"}** - bits, why `0.1 + 0.2` is not `0.3`, big integers, `NaN` and `Infinity`. [1. Bits and integers](animations/numbersInMemory.html#1){target=\"_blank\"}, [2. Fractions and 0.1](animations/numbersInMemory.html#2){target=\"_blank\"}, [3. 64 bits (advanced)](animations/numbersInMemory.html#3){target=\"_blank\"}, [4. 0.1 + 0.2](animations/numbersInMemory.html#4){target=\"_blank\"}, [5. Big integers (advanced)](animations/numbersInMemory.html#5){target=\"_blank\"}, [6. NaN and Infinity](animations/numbersInMemory.html#6){target=\"_blank\"}, [7. Lab](animations/numbersInMemory.html#7){target=\"_blank\"}"
+msgstr "**[Числата в паметта](animations/numbersInMemory.html){target=\"_blank\"}** - битове, защо `0.1 + 0.2` не е `0.3`, големи цели числа, `NaN` и `Infinity`. [1. Битове и цели числа](animations/numbersInMemory.html#1){target=\"_blank\"}, [2. Дроби и 0.1](animations/numbersInMemory.html#2){target=\"_blank\"}, [3. 64 бита (advanced)](animations/numbersInMemory.html#3){target=\"_blank\"}, [4. 0.1 + 0.2](animations/numbersInMemory.html#4){target=\"_blank\"}, [5. Големи цели числа (advanced)](animations/numbersInMemory.html#5){target=\"_blank\"}, [6. NaN и Infinity](animations/numbersInMemory.html#6){target=\"_blank\"}, [7. Лаборатория](animations/numbersInMemory.html#7){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:55
+msgid "**[How an expression is evaluated](animations/expressionEvaluation.html){target=\"_blank\"}** - precedence, associativity, `i++` and `++i`, as a tree. [1. Precedence](animations/expressionEvaluation.html#1){target=\"_blank\"}, [2. Associativity](animations/expressionEvaluation.html#2){target=\"_blank\"}, [3. Assignment is an expression](animations/expressionEvaluation.html#3){target=\"_blank\"}, [4. `i++` and `++i`](animations/expressionEvaluation.html#4){target=\"_blank\"}, [5. Evaluation order (advanced)](animations/expressionEvaluation.html#5){target=\"_blank\"}, [6. Statement vs expression (advanced)](animations/expressionEvaluation.html#6){target=\"_blank\"}"
+msgstr "**[Как се изчислява един израз](animations/expressionEvaluation.html){target=\"_blank\"}** - приоритет, асоциативност, `i++` и `++i`, нарисувани като дърво. [1. Приоритет](animations/expressionEvaluation.html#1){target=\"_blank\"}, [2. Асоциативност](animations/expressionEvaluation.html#2){target=\"_blank\"}, [3. Присвояването е израз](animations/expressionEvaluation.html#3){target=\"_blank\"}, [4. `i++` и `++i`](animations/expressionEvaluation.html#4){target=\"_blank\"}, [5. Ред на изчисляване (advanced)](animations/expressionEvaluation.html#5){target=\"_blank\"}, [6. Statement срещу expression (advanced)](animations/expressionEvaluation.html#6){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:64
+msgid "**[Types, comparisons and logic](animations/coercionAndLogic.html){target=\"_blank\"}** - scenarios 1 and 2 (session 3 uses the rest). [1. The `+` operator](animations/coercionAndLogic.html#1){target=\"_blank\"}, [2. String to number](animations/coercionAndLogic.html#2){target=\"_blank\"}"
+msgstr "**[Типове, сравнения и логика](animations/coercionAndLogic.html){target=\"_blank\"}** - сценарии 1 и 2 (занятие 3 използва останалите). [1. Операторът `+`](animations/coercionAndLogic.html#1){target=\"_blank\"}, [2. От string към number](animations/coercionAndLogic.html#2){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:69
+msgid "**[Variable scope](animations/scopeChain.html){target=\"_blank\"}** - scenario 4 only (session 5 uses the rest). [4. No declaration and `\"use strict\"`](animations/scopeChain.html#4){target=\"_blank\"}"
+msgstr "**[Scope на variables](animations/scopeChain.html){target=\"_blank\"}** - само сценарий 4 (занятие 5 използва останалите). [4. Без деклариране и `\"use strict\"`](animations/scopeChain.html#4){target=\"_blank\"}"
+
+#. heading 2
+#: site/under-the-hood.md:73
+msgid "Session 3 - Comparisons, logic, conditions and loops"
+msgstr "Занятие 3 - Сравнения, логика, условия и loops"
+
+#. paragraph
+#: site/under-the-hood.md:75
+msgid "**[Types, comparisons and logic](animations/coercionAndLogic.html){target=\"_blank\"}** - how JavaScript converts types when it compares, and how `&&` / `||` work. [3. `==` and `===`](animations/coercionAndLogic.html#3){target=\"_blank\"}, [4. Comparing strings](animations/coercionAndLogic.html#4){target=\"_blank\"}, [5. Truthy and falsy](animations/coercionAndLogic.html#5){target=\"_blank\"}, [6. Short-circuit: `&&` and `||`](animations/coercionAndLogic.html#6){target=\"_blank\"}, [7. Ternary operator (advanced)](animations/coercionAndLogic.html#7){target=\"_blank\"}"
+msgstr "**[Типове, сравнения и логика](animations/coercionAndLogic.html){target=\"_blank\"}** - как JavaScript преобразува типовете при сравнение и как работят `&&` / `||`. [3. `==` и `===`](animations/coercionAndLogic.html#3){target=\"_blank\"}, [4. Сравняване на strings](animations/coercionAndLogic.html#4){target=\"_blank\"}, [5. Truthy и falsy](animations/coercionAndLogic.html#5){target=\"_blank\"}, [6. Short-circuit: `&&` и `||`](animations/coercionAndLogic.html#6){target=\"_blank\"}, [7. Тернарен оператор (advanced)](animations/coercionAndLogic.html#7){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:83
+msgid "**[Loops step by step](animations/loopsStepByStep.html){target=\"_blank\"}** - a flowchart with a moving token for `if`, `for`, `while`, `do...while`, `break`, `continue` and `switch`. [1. `if` / `else if`](animations/loopsStepByStep.html#1){target=\"_blank\"}, [2. The `for` loop](animations/loopsStepByStep.html#2){target=\"_blank\"}, [3. `while` and the endless loop](animations/loopsStepByStep.html#3){target=\"_blank\"}, [4. `do...while`](animations/loopsStepByStep.html#4){target=\"_blank\"}, [5. `break` and `continue`](animations/loopsStepByStep.html#5){target=\"_blank\"}, [6. Nested loops (advanced)](animations/loopsStepByStep.html#6){target=\"_blank\"}, [7. `switch` without `break` (advanced)](animations/loopsStepByStep.html#7){target=\"_blank\"}"
+msgstr "**[Loops стъпка по стъпка](animations/loopsStepByStep.html){target=\"_blank\"}** - блок-схема с движещ се маркер за `if`, `for`, `while`, `do...while`, `break`, `continue` и `switch`. [1. `if` / `else if`](animations/loopsStepByStep.html#1){target=\"_blank\"}, [2. Loop-ът `for`](animations/loopsStepByStep.html#2){target=\"_blank\"}, [3. `while` и безкрайният loop](animations/loopsStepByStep.html#3){target=\"_blank\"}, [4. `do...while`](animations/loopsStepByStep.html#4){target=\"_blank\"}, [5. `break` и `continue`](animations/loopsStepByStep.html#5){target=\"_blank\"}, [6. Вложени loops (advanced)](animations/loopsStepByStep.html#6){target=\"_blank\"}, [7. `switch` без `break` (advanced)](animations/loopsStepByStep.html#7){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:94
+msgid "Also: [Numbers in memory - 4. 0.1 + 0.2](animations/numbersInMemory.html#4){target=\"_blank\"} and [6. NaN and Infinity](animations/numbersInMemory.html#6){target=\"_blank\"}; [How an expression is evaluated - 6. Statement vs expression](animations/expressionEvaluation.html#6){target=\"_blank\"}."
+msgstr "Още: [Числата в паметта - 4. 0.1 + 0.2](animations/numbersInMemory.html#4){target=\"_blank\"} и [6. NaN и Infinity](animations/numbersInMemory.html#6){target=\"_blank\"}; [Как се изчислява един израз - 6. Statement срещу expression](animations/expressionEvaluation.html#6){target=\"_blank\"}."
+
+#. heading 2
+#: site/under-the-hood.md:98
+msgid "Session 4 - Arrays and lists of records"
+msgstr "Занятие 4 - Arrays и списъци от записи"
+
+#. paragraph
+#: site/under-the-hood.md:100
+msgid "**[Arrays in memory](animations/arraysInMemory.html){target=\"_blank\"}** - indexes, `length`, adding and removing elements, references, arrays of arrays. [1. Indexes](animations/arraysInMemory.html#1){target=\"_blank\"}, [2. Out of range](animations/arraysInMemory.html#2){target=\"_blank\"}, [3. An array is an object](animations/arraysInMemory.html#3){target=\"_blank\"}, [4. `push` / `pop` / `unshift` / `shift`](animations/arraysInMemory.html#4){target=\"_blank\"}, [5. References](animations/arraysInMemory.html#5){target=\"_blank\"}, [6. Two-dimensional (advanced)](animations/arraysInMemory.html#6){target=\"_blank\"}, [7. Shared row (advanced)](animations/arraysInMemory.html#7){target=\"_blank\"}"
+msgstr "**[Arrays в паметта](animations/arraysInMemory.html){target=\"_blank\"}** - индекси, `length`, добавяне и премахване на елементи, референции, arrays от arrays. [1. Индекси](animations/arraysInMemory.html#1){target=\"_blank\"}, [2. Извън границите](animations/arraysInMemory.html#2){target=\"_blank\"}, [3. Array-ят е обект](animations/arraysInMemory.html#3){target=\"_blank\"}, [4. `push` / `pop` / `unshift` / `shift`](animations/arraysInMemory.html#4){target=\"_blank\"}, [5. Референции](animations/arraysInMemory.html#5){target=\"_blank\"}, [6. Двумерен array (advanced)](animations/arraysInMemory.html#6){target=\"_blank\"}, [7. Общ ред (advanced)](animations/arraysInMemory.html#7){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:110
+msgid "**[Algorithms with arrays](animations/arrayAlgorithms.html){target=\"_blank\"}** - walking through an array, sum, maximum, filtering, searching, with the common bugs. [1. Traversal with `for`](animations/arrayAlgorithms.html#1){target=\"_blank\"}, [2. Reverse order](animations/arrayAlgorithms.html#2){target=\"_blank\"}, [3. Sum of the elements](animations/arrayAlgorithms.html#3){target=\"_blank\"}, [4. Largest element](animations/arrayAlgorithms.html#4){target=\"_blank\"}, [5. Filtering into new arrays](animations/arrayAlgorithms.html#5){target=\"_blank\"}, [6. Search with `break` (advanced)](animations/arrayAlgorithms.html#6){target=\"_blank\"}, [7. Two-dimensional array (advanced)](animations/arrayAlgorithms.html#7){target=\"_blank\"}"
+msgstr "**[Алгоритми с arrays](animations/arrayAlgorithms.html){target=\"_blank\"}** - обхождане на array, сума, максимум, филтриране, търсене, заедно с честите бъгове. [1. Обхождане с `for`](animations/arrayAlgorithms.html#1){target=\"_blank\"}, [2. Обратен ред](animations/arrayAlgorithms.html#2){target=\"_blank\"}, [3. Сума на елементите](animations/arrayAlgorithms.html#3){target=\"_blank\"}, [4. Най-голям елемент](animations/arrayAlgorithms.html#4){target=\"_blank\"}, [5. Филтриране в нови arrays](animations/arrayAlgorithms.html#5){target=\"_blank\"}, [6. Търсене с `break` (advanced)](animations/arrayAlgorithms.html#6){target=\"_blank\"}, [7. Двумерен array (advanced)](animations/arrayAlgorithms.html#7){target=\"_blank\"}"
+
+#. heading 2
+#: site/under-the-hood.md:120
+msgid "Session 5 - Functions, and reading older code"
+msgstr "Занятие 5 - Функции и четене на по-стар код"
+
+#. paragraph
+#: site/under-the-hood.md:122
+msgid "**[The call stack](animations/callStack.html){target=\"_blank\"}** - what happens when a function is called and when it returns. [1. Calling a function](animations/callStack.html#1){target=\"_blank\"}, [2. Arguments](animations/callStack.html#2){target=\"_blank\"}, [3. `return`](animations/callStack.html#3){target=\"_blank\"}, [4. Nested calls](animations/callStack.html#4){target=\"_blank\"}, [5. Default values](animations/callStack.html#5){target=\"_blank\"}, [6. Recursion (advanced)](animations/callStack.html#6){target=\"_blank\"}, [7. Stack overflow (advanced)](animations/callStack.html#7){target=\"_blank\"}"
+msgstr "**[Стекът на извикванията (call stack)](animations/callStack.html){target=\"_blank\"}** - какво става, когато една функция бъде извикана и когато върне резултат. [1. Извикване на функция](animations/callStack.html#1){target=\"_blank\"}, [2. Аргументи](animations/callStack.html#2){target=\"_blank\"}, [3. `return`](animations/callStack.html#3){target=\"_blank\"}, [4. Вложени извиквания](animations/callStack.html#4){target=\"_blank\"}, [5. Стойности по подразбиране](animations/callStack.html#5){target=\"_blank\"}, [6. Рекурсия (advanced)](animations/callStack.html#6){target=\"_blank\"}, [7. Препълване на стека (advanced)](animations/callStack.html#7){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:132
+msgid "**[Variable scope](animations/scopeChain.html){target=\"_blank\"}** - where a name is looked up: local, outer, global; `let` vs `var` in a block. [1. Global and local](animations/scopeChain.html#1){target=\"_blank\"}, [2. The scope chain](animations/scopeChain.html#2){target=\"_blank\"}, [3. Shadowing](animations/scopeChain.html#3){target=\"_blank\"}, [4. No declaration](animations/scopeChain.html#4){target=\"_blank\"}, [5. Block scope: `let` and `var`](animations/scopeChain.html#5){target=\"_blank\"}, [6. IIFE (advanced)](animations/scopeChain.html#6){target=\"_blank\"}, [7. Lexical scope (advanced)](animations/scopeChain.html#7){target=\"_blank\"}"
+msgstr "**[Scope на variables](animations/scopeChain.html){target=\"_blank\"}** - къде се търси едно име: локално, във външния scope, глобално; `let` срещу `var` в блок. [1. Глобален и локален](animations/scopeChain.html#1){target=\"_blank\"}, [2. Веригата от scopes (scope chain)](animations/scopeChain.html#2){target=\"_blank\"}, [3. Засенчване (shadowing)](animations/scopeChain.html#3){target=\"_blank\"}, [4. Без деклариране](animations/scopeChain.html#4){target=\"_blank\"}, [5. Block scope: `let` и `var`](animations/scopeChain.html#5){target=\"_blank\"}, [6. IIFE (advanced)](animations/scopeChain.html#6){target=\"_blank\"}, [7. Лексикален scope (advanced)](animations/scopeChain.html#7){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:142
+msgid "**[Hoisting: the two phases of execution](animations/hoisting.html){target=\"_blank\"}** - why a `var` is `undefined` before its line, and what the TDZ of `let` / `const` is. [1. `var` and `undefined`](animations/hoisting.html#1){target=\"_blank\"}, [2. Function declaration](animations/hoisting.html#2){target=\"_blank\"}, [3. Function expression](animations/hoisting.html#3){target=\"_blank\"}, [4. `let` / `const` and the TDZ](animations/hoisting.html#4){target=\"_blank\"}, [5. Hoisting in a function](animations/hoisting.html#5){target=\"_blank\"}, [6. `let` in a block (advanced)](animations/hoisting.html#6){target=\"_blank\"}, [7. TDZ: time, not place (advanced)](animations/hoisting.html#7){target=\"_blank\"}"
+msgstr "**[Hoisting: двете фази на изпълнение](animations/hoisting.html){target=\"_blank\"}** - защо един `var` е `undefined` преди своя ред и какво е TDZ на `let` / `const`. [1. `var` и `undefined`](animations/hoisting.html#1){target=\"_blank\"}, [2. Function declaration](animations/hoisting.html#2){target=\"_blank\"}, [3. Function expression](animations/hoisting.html#3){target=\"_blank\"}, [4. `let` / `const` и TDZ](animations/hoisting.html#4){target=\"_blank\"}, [5. Hoisting във функция](animations/hoisting.html#5){target=\"_blank\"}, [6. `let` в блок (advanced)](animations/hoisting.html#6){target=\"_blank\"}, [7. TDZ: време, не място (advanced)](animations/hoisting.html#7){target=\"_blank\"}"
+
+#. paragraph
+#: site/under-the-hood.md:152
+msgid "**[Functions are values](animations/functionsAsValues.html){target=\"_blank\"}** - functions in variables, arrays and objects; callbacks; arrow functions; closures. [1. A function is a value](animations/functionsAsValues.html#1){target=\"_blank\"}, [2. In arrays and objects](animations/functionsAsValues.html#2){target=\"_blank\"}, [3. Callbacks](animations/functionsAsValues.html#3){target=\"_blank\"}, [4. A function returns a function](animations/functionsAsValues.html#4){target=\"_blank\"}, [5. Arrow functions](animations/functionsAsValues.html#5){target=\"_blank\"}, [6. Closure (advanced)](animations/functionsAsValues.html#6){target=\"_blank\"}, [7. A forgotten `;` (advanced)](animations/functionsAsValues.html#7){target=\"_blank\"}"
+msgstr "**[Функциите са стойности](animations/functionsAsValues.html){target=\"_blank\"}** - функции във variables, arrays и обекти; callbacks; arrow functions; closures. [1. Функцията е стойност](animations/functionsAsValues.html#1){target=\"_blank\"}, [2. В arrays и обекти](animations/functionsAsValues.html#2){target=\"_blank\"}, [3. Callbacks](animations/functionsAsValues.html#3){target=\"_blank\"}, [4. Функция, която връща функция](animations/functionsAsValues.html#4){target=\"_blank\"}, [5. Arrow functions](animations/functionsAsValues.html#5){target=\"_blank\"}, [6. Closure (advanced)](animations/functionsAsValues.html#6){target=\"_blank\"}, [7. Забравена `;` (advanced)](animations/functionsAsValues.html#7){target=\"_blank\"}"
+
+#. heading 2
+#: site/under-the-hood.md:162
+msgid "Session 6 - Objects"
+msgstr "Занятие 6 - Обекти"
+
+#. paragraph
+#: site/under-the-hood.md:164
+msgid "[Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target=\"_blank\"} and [Arrays in memory - 5. References](animations/arraysInMemory.html#5){target=\"_blank\"}: two variables can point to the same object."
+msgstr "[Variables в паметта - 6. Обекти и референции](animations/variablesInMemory.html#6){target=\"_blank\"} и [Arrays в паметта - 5. Референции](animations/arraysInMemory.html#5){target=\"_blank\"}: две variables могат да сочат към един и същ обект."

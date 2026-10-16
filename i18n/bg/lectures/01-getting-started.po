@@ -1,0 +1,149 @@
+# Translation of site/lectures/01-getting-started.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: Claude (claude-opus-5-5)\n"
+"PO-Revision-Date: 2026-10-16\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/lectures/01-getting-started.md\n"
+
+#. front matter: title
+#: site/lectures/01-getting-started.md:2 site/lectures/01-getting-started.md:5
+msgid "1. Getting started"
+msgstr "1. Първи стъпки"
+
+#. html
+#: site/lectures/01-getting-started.md:8
+msgid "<span>Session 1</span>"
+msgstr "<span>Занятие 1</span>"
+
+#. heading 2
+#: site/lectures/01-getting-started.md:11
+msgid "What we covered"
+msgstr "Какво разгледахме"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:13
+msgid "The course: materials on GitHub, the program, the course project."
+msgstr "Курсът: материалите в GitHub, програмата, курсовият проект."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:14
+msgid "VSCode: text editor vs IDE, the command palette (`Ctrl+Shift+P`), DevTools."
+msgstr "VSCode: текстов редактор срещу IDE, command palette (`Ctrl+Shift+P`), DevTools."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:15
+msgid "Git and GitHub: `git init`, `git status`, `git add`, `git commit -m`, `git config`, `git remote`, `git push`; Source Control in VSCode."
+msgstr "Git и GitHub: `git init`, `git status`, `git add`, `git commit -m`, `git config`, `git remote`, `git push`; Source Control във VSCode."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:17
+msgid "JavaScript: what it is, its history (ECMAScript, JSON), JavaScript engines, the DevTools console, Node.js."
+msgstr "JavaScript: какво е, историята му (ECMAScript, JSON), JavaScript engines, конзолата на DevTools, Node.js."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:19
+msgid "Running JavaScript in the browser (`<script>`) and with Node.js in the terminal."
+msgstr "Изпълнение на JavaScript в браузъра (`<script>`) и с Node.js в терминала."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:20
+msgid "How a program runs: machine code, compiler vs interpreter, V8."
+msgstr "Как се изпълнява една програма: машинен код, компилатор срещу интерпретатор, V8."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:21
+msgid "Program structure; variables, values and memory."
+msgstr "Структура на програмата; variables, стойности и памет."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:23
+msgid "We stopped at **declaring and defining variables**, so the [next lecture](/lectures/02-variables-and-types) starts there."
+msgstr "Спряхме при **декларирането и дефинирането на variables**, затова [следващата лекция](/lectures/02-variables-and-types) започва оттам."
+
+#. box title
+#: site/lectures/01-getting-started.md:26
+msgid "Animations"
+msgstr "Анимации"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:27
+msgid "**How JavaScript runs your code:** [1. Translators](../animations/jsEngine.html#1){target=\"_blank\"}, [2. Tokens](../animations/jsEngine.html#2){target=\"_blank\"}, [3. AST](../animations/jsEngine.html#3){target=\"_blank\"}, [4. Two phases](../animations/jsEngine.html#4){target=\"_blank\"}, [5. Engine and environment](../animations/jsEngine.html#5){target=\"_blank\"}"
+msgstr "**Как JavaScript изпълнява кода ви:** [1. Преводачи](../animations/jsEngine.html#1){target=\"_blank\"}, [2. Tokens](../animations/jsEngine.html#2){target=\"_blank\"}, [3. AST](../animations/jsEngine.html#3){target=\"_blank\"}, [4. Двете фази](../animations/jsEngine.html#4){target=\"_blank\"}, [5. Engine и среда](../animations/jsEngine.html#5){target=\"_blank\"}"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:29
+msgid "**Variables in memory:** [1. Declaring and assigning](../animations/variablesInMemory.html#1){target=\"_blank\"}"
+msgstr "**Variables в паметта:** [1. Деклариране и присвояване](../animations/variablesInMemory.html#1){target=\"_blank\"}"
+
+#. heading 2
+#: site/lectures/01-getting-started.md:32
+msgid "Slides"
+msgstr "Слайдове"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:34
+msgid "The first session used the standard course slides:"
+msgstr "На първото занятие използвахме стандартните слайдове на курса:"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:36
+msgid "[Course welcome](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/CourseWelcome/CourseWelcome.html)"
+msgstr "[Добре дошли в курса](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/CourseWelcome/CourseWelcome.html)"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:37
+msgid "[Setting up the course environment](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/SetupCourseEnvironment/SetupCourseEnvironment.html)"
+msgstr "[Настройка на средата за курса](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/SetupCourseEnvironment/SetupCourseEnvironment.html)"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:38
+msgid "[Introduction to JavaScript](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/JS_Intro/JS_Intro.html)"
+msgstr "[Въведение в JavaScript](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/JS_Intro/JS_Intro.html)"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:39
+msgid "[Git and GitHub](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/GitAndGitHub_Overview/GitAndGitHub_Overview.html)"
+msgstr "[Git и GitHub](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/GitAndGitHub_Overview/GitAndGitHub_Overview.html)"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:40
+msgid "[JavaScript basic syntax](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/JS_BasicSyntax/JS_BasicSyntax.html)"
+msgstr "[Основен синтаксис на JavaScript](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/JS_BasicSyntax/JS_BasicSyntax.html)"
+
+#. heading 2
+#: site/lectures/01-getting-started.md:42
+msgid "Homework from session 1"
+msgstr "Домашно от занятие 1"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:44
+msgid "Follow the [setup instructions](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/SetupCourseEnvironment/SetupCourseEnvironment.html#/)."
+msgstr "Следвайте [инструкциите за настройка](https://ivapopova-courses.github.io/JS-TS-Basics-Slides/pages/themes/SetupCourseEnvironment/SetupCourseEnvironment.html#/)."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:45
+msgid "Create a GitHub account for the course (if you do not have one)."
+msgstr "Създайте GitHub акаунт за курса (ако нямате)."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:46
+msgid "Create a local git repository for your homework, with a `script.js` (`console.log('Hello')`), and push it to GitHub."
+msgstr "Създайте локално git repository за домашните, с файл `script.js` (`console.log('Hello')`), и го качете в GitHub с push."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:48
+msgid "Get to know VSCode."
+msgstr "Запознайте се с VSCode."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:49
+msgid "Think about the course project."
+msgstr "Помислете за курсовия проект."

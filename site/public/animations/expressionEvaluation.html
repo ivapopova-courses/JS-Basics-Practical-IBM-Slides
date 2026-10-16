@@ -1,0 +1,1520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How an expression is evaluated</title>
+<!--
+    Step-by-step animation: how JavaScript turns an expression into a tree
+    (precedence + associativity) and evaluates it bottom-up, left to right.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: expressionEvaluation.html#3 (scenario 3), #3.5 (scenario 3, step 5),
+    ?theme=dark, #selftest (walks every step and reports problems).
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --free-bg: #efe9dc;
+    --free-border: #cfc4af;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --ref-bg: #ece2fb;
+    --flow: #2f7f6b;
+    --flow-bg: #d3eee5;
+    --hot: #e0a100;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --free-bg: #262830; --free-border: #3d404c;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a;
+        --flow: #5cc7a8; --flow-bg: #1d3d35; --hot: #ffd166;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --free-bg: #262830; --free-border: #3d404c;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a;
+    --flow: #5cc7a8; --flow-bg: #1d3d35; --hot: #ffd166;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.panel-title .note code { font-family: var(--mono); font-size: .95em; padding: 0 .25rem; border-radius: .2rem; background: var(--inline-code); color: var(--ink); }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .98rem; }
+.code li {
+    display: flex; gap: .7rem;
+    padding: .18rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+
+/* variables */
+.vars { display: grid; grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr)); gap: .5rem .6rem; min-height: 3.6rem; }
+.vars-empty { grid-column: 1 / -1; align-self: center; font-size: .8rem; font-style: italic; color: var(--muted); }
+.vcard { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+.vlabel { display: flex; align-items: center; gap: .3rem; }
+.name { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; }
+.kw {
+    padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem;
+    font-family: var(--mono); font-size: .62rem; color: var(--muted);
+}
+.cell {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: 2.5rem;
+    padding-top: .5rem;
+    border: 2px solid var(--var-border); border-radius: .55rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    overflow: hidden;
+    transition: box-shadow .25s;
+}
+.type {
+    position: absolute; top: .08rem; right: .35rem;
+    font-family: var(--sans); font-size: .55rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined { font-style: italic; font-weight: 500; opacity: .85; }
+.val.t-function { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--ref); }
+.cell.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.cell.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.vcard.appear { animation: appear .5s both; }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding-top: .5rem;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+.cell.changed .val { animation: pop .45s .2s both; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; min-height: 0; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+
+/* ---------- expression tree ---------- */
+.right { display: flex; flex-direction: column; min-height: 0; }
+.right > .panel-title { flex: none; }
+.tree-wrap { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 15.5rem; gap: .8rem; }
+.tree-box { position: relative; min-height: 0; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; padding-top: .9rem; }
+.tree-inner { position: relative; flex: none; transform-origin: top center; }
+.tree-hint { margin: auto; max-width: 26rem; text-align: center; font-size: .9rem; font-style: italic; color: var(--muted); }
+.tokbar {
+    position: absolute; left: 0; top: 0; height: 2.5rem;
+    border-radius: .5rem; background: var(--code-bg);
+}
+.tok {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    padding: .05rem .3rem; border-radius: .25rem;
+    font-family: var(--mono); font-size: 1.25rem; font-weight: 600; white-space: pre;
+    color: var(--code-ink);
+    transition: background .25s;
+}
+.tok.t-num { color: #f7b267; }
+.tok.t-op, .tok.t-paren { color: #82aaff; }
+.tok.t-call { color: #c792ea; }
+.tok.hot { background: var(--code-active); box-shadow: inset 0 -3px 0 var(--code-marker); }
+.tokbar.fresh .tok { animation: fadein-plain .5s both; }
+.tree-later { position: absolute; left: 0; right: 0; top: 4.6rem; text-align: center; font-size: .85rem; font-style: italic; color: var(--muted); }
+
+.edges { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.edge { stroke: var(--muted); stroke-width: .09; transition: opacity .5s; }
+.edge.to-target { stroke: var(--write); stroke-dasharray: .25 .18; }
+.edge.consumed { opacity: .25; }
+.edges.grow .edge { animation: fadein-plain .5s .55s both; }
+
+.node {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex; align-items: center; justify-content: center;
+    min-width: 2.7rem; height: 2.7rem;
+    padding: 0 .6rem;
+    border: 2px solid var(--muted); border-radius: .7rem;
+    background: var(--panel); color: var(--ink);
+    font-family: var(--mono); font-size: 1.2rem; font-weight: 700; white-space: nowrap;
+    transition: opacity .5s, box-shadow .25s;
+}
+.node .na, .node .ntag, .node .ord { display: none; }
+.node.done .nb { display: none; }
+.node.done .na { display: inline; }
+.node.done .ntag, .node.done .ord { display: block; }
+.node.opn:not(.done) { width: 2.7rem; padding: 0; border-radius: 50%; border-color: var(--ink); background: var(--panel); color: var(--ink); font-size: 1.15rem; }
+.node.n-id:not(.done) { background: var(--var-bg); border-color: var(--var-border); color: var(--var-ink); }
+.node.n-call:not(.done) { background: var(--ref-bg); border-color: var(--ref); color: var(--ref); }
+.node.done { background: var(--flow-bg); border-color: var(--flow); color: var(--ink); }
+.node.target { border-style: dashed; border-color: var(--write); }
+.node.target:not(.done) { background: var(--write-bg); color: var(--ink); }
+.node.consumed { opacity: .4; }
+.node.hot { box-shadow: 0 0 0 3px var(--hot); }
+.node.hot.wrote { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.node.hot.n-id.done { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.ntag {
+    position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -.12rem);
+    padding: 0 .2rem; border-radius: .2rem; background: var(--panel);
+    font-size: .72rem; font-weight: 600; color: var(--muted);
+}
+.ltag {
+    position: absolute; left: 50%; top: 100%; transform: translate(-50%, .15rem);
+    padding: 0 .3rem; border-radius: .25rem;
+    font-family: var(--sans); font-size: .58rem; font-weight: 700; letter-spacing: .04em;
+    color: var(--write); white-space: nowrap;
+}
+.ord {
+    position: absolute; top: -.55rem; right: -.6rem;
+    width: 1.15rem; height: 1.15rem; border-radius: 50%;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--sans); font-size: .62rem; font-weight: 700; line-height: 1.15rem; text-align: center;
+}
+.node.hot.done .na, .node.bumped .na { animation: pop .45s both; }
+
+/* reductions */
+.reduce-panel { display: flex; flex-direction: column; min-height: 0; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .55rem; }
+.reduce { flex: 1; min-height: 0; overflow: hidden; font-family: var(--mono); font-size: .98rem; }
+.rline { padding: .22rem .35rem; border-radius: .3rem; color: var(--muted); white-space: pre; }
+.rline + .rline::before { content: "= "; color: var(--muted); }
+.rline:first-child { padding-left: 1.6ch; }
+.rline.cur { color: var(--ink); font-weight: 700; background: var(--flow-bg); }
+.rline.new { animation: fadein .35s both; }
+.reduce-empty { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--muted); }
+
+/* statements vs expressions */
+.stmt-area { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: .35rem; padding: .3rem .4rem; }
+.sline { display: flex; align-items: flex-start; gap: 1rem; padding: .3rem .6rem; border-left: 3px solid transparent; border-radius: .35rem; transition: opacity .3s; }
+.sline.future { opacity: .35; }
+.sline.cur { background: var(--inline-code); border-left-color: var(--hot); }
+.sbody { position: relative; font-family: var(--mono); font-size: 1.2rem; }
+.scode { white-space: pre; line-height: 1.8rem; }
+.scode .k { color: var(--ref); font-weight: 700; }
+.scode .n { color: #b5651d; }
+.scode .o { color: var(--read); }
+.scode .s { color: #3f8a2f; }
+.marks { position: relative; }
+.mark { position: absolute; height: 1.95rem; }
+.mark .br { height: .45rem; border: 2px solid var(--flow); border-top: 0; border-radius: 0 0 .3rem .3rem; }
+.mark .badge {
+    position: absolute; left: 50%; top: .55rem; transform: translateX(-50%);
+    padding: 0 .4rem; border-radius: .35rem;
+    background: var(--flow); color: var(--chip-ink);
+    font-size: .8rem; font-weight: 700; line-height: 1.25rem; white-space: nowrap;
+}
+.mark .badge.t-undefined { font-style: italic; font-weight: 500; }
+.sline.cur .mark { animation: fadein .45s both; }
+.stag {
+    flex: none; align-self: center; margin-left: auto;
+    padding: .15rem .55rem; border-radius: 999px;
+    font-size: .72rem; font-weight: 700; white-space: nowrap;
+}
+.stag.st { border: 1.5px dashed var(--muted); color: var(--muted); }
+.stag.ex { border: 1.5px solid var(--flow); color: var(--flow); }
+
+/* legend */
+.legend {
+    flex: none;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem 1.1rem;
+    margin-top: .5rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.op { border-radius: 50%; border-color: var(--ink); background: var(--panel); }
+.sw.value { background: var(--flow-bg); border-color: var(--flow); }
+.sw.var { background: var(--var-bg); border-color: var(--var-border); }
+.sw.target { background: var(--write-bg); border-color: var(--write); border-style: dashed; }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+.sw.call { background: var(--ref-bg); border-color: var(--ref); }
+.sw.order { border: 0; border-radius: 50%; background: var(--ink); }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em; white-space: nowrap;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .e { color: var(--err); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.val { background: var(--flow); }
+
+.cell.await .val, .cell.await .type { visibility: hidden; }
+.cline.await, .rline.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+#selftest { position: fixed; left: 0; bottom: 0; z-index: 99; max-height: 40vh; overflow: auto; margin: 0; padding: .5rem; background: #000; color: #0f0; font-size: 12px; }
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+@keyframes fadein-plain { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .tree-wrap { grid-template-columns: 1fr; }
+    .tree-box { min-height: 22rem; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>How an expression is evaluated <small>from text, through a tree, to one value - step by step</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="bg/expressionEvaluation.html" hreflang="bg" lang="bg" title="Bulgarian version" aria-label="Bulgarian version">BG</a>
+        <button class="btn icon-btn" id="themeBtn" title="Light / dark theme" aria-label="Light / dark theme">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Code</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><span>Variables in memory</span><span class="note">read / write</span></div>
+                <div class="vars" id="vars"></div>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Console</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="panel right">
+            <div class="panel-title"><span id="rightTitle">Expression tree</span><span class="note" id="treeNote"></span></div>
+            <div class="tree-wrap" id="treeWrap">
+                <div class="tree-box" id="treeBox"></div>
+                <div class="reduce-panel">
+                    <div class="panel-title"><span>Evaluation steps</span></div>
+                    <div class="reduce" id="reduce"></div>
+                </div>
+            </div>
+            <div class="stmt-area" id="stmtArea"></div>
+            <div class="legend" id="legend"></div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="To the start (Home)" aria-label="To the start">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Back (Left arrow)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Back
+                </button>
+                <button class="btn" id="playBtn" title="Auto-play (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Next (Right arrow or Space)">
+                    Next<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Keys: Left / Right arrows, Space, Home, P, 1-6</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// @engine-start
+// A tiny expression engine: lexer -> Pratt parser (tree) -> evaluator that
+// records every event (read, call, operator, write) in the order JavaScript
+// performs it. Only the operators used in the scenarios are supported.
+// ---------------------------------------------------------------------------
+const PREC = {                      // higher number = binds tighter
+    '=': 2, '+=': 2, '-=': 2, '*=': 2, '/=': 2, '%=': 2, '**=': 2,
+    '<': 9, '>': 9,
+    '+': 11, '-': 11,
+    '*': 12, '/': 12, '%': 12,
+    '**': 13,
+};
+const RIGHT_ASSOC = new Set(['=', '+=', '-=', '*=', '/=', '%=', '**=', '**']);
+const OPS = {
+    '+': (a, b) => a + b, '-': (a, b) => a - b, '*': (a, b) => a * b, '/': (a, b) => a / b,
+    '%': (a, b) => a % b, '**': (a, b) => a ** b, '<': (a, b) => a < b, '>': (a, b) => a > b,
+};
+const LEX = /\s*(\d+(?:\.\d+)?|[A-Za-z_$][\w$]*(?:\(\))?|\*\*=|\*\*|\+\+|--|[-+*/%]=|[-+*/%=()<>])/y;
+
+function lex(src) {
+    const toks = [];
+    LEX.lastIndex = 0;
+    let m;
+    while (LEX.lastIndex < src.length && (m = LEX.exec(src))) {
+        const v = m[1];
+        const t = /^\d/.test(v) ? 'num' : /\(\)$/.test(v) ? 'call' : /^[A-Za-z_$]/.test(v) ? 'id'
+            : v === '(' || v === ')' ? 'paren' : 'op';
+        toks.push({ t, v });
+    }
+    if (LEX.lastIndex < src.length) throw new SyntaxError('Unexpected character in: ' + src);
+    return toks;
+}
+
+function parse(src) {
+    const toks = lex(src), nodes = [];
+    let p = 0;
+    const mk = (type, tok, extra) => {
+        const n = Object.assign({ id: nodes.length, type, tok, kids: [], paren: 0 }, extra);
+        nodes.push(n);
+        return n;
+    };
+    function primary() {
+        const t = toks[p], at = p;
+        if (!t) throw new SyntaxError('Unexpected end of input');
+        p++;
+        if (t.t === 'num') return mk('num', at, { value: Number(t.v) });
+        if (t.t === 'id') return mk('id', at, { name: t.v });
+        if (t.t === 'call') return mk('call', at, { name: t.v.slice(0, -2) });
+        if (t.v === '(') {
+            const e = expr(0);
+            if (!toks[p] || toks[p].v !== ')') throw new SyntaxError('missing )');
+            p++;
+            e.paren++;
+            return e;
+        }
+        if (t.v === '++' || t.v === '--') {
+            const a = primary();
+            if (a.type !== 'id') throw new SyntaxError('Invalid left-hand side expression in prefix operation');
+            return mk('pre', at, { op: t.v, name: a.name, kids: [a.id] });
+        }
+        throw new SyntaxError(`Unexpected token '${t.v}'`);
+    }
+    function postfix() {
+        const a = primary(), t = toks[p];
+        if (t && (t.v === '++' || t.v === '--')) {
+            if (a.type !== 'id' || a.paren) throw new SyntaxError('Invalid left-hand side expression in postfix operation');
+            p++;
+            return mk('post', p - 1, { op: t.v, name: a.name, kids: [a.id] });
+        }
+        return a;
+    }
+    function expr(minBp) {
+        let left = postfix();
+        for (;;) {
+            const t = toks[p];
+            if (!t || t.t !== 'op' || !(t.v in PREC) || PREC[t.v] <= minBp) break;
+            const at = p++, bp = PREC[t.v];
+            const right = expr(RIGHT_ASSOC.has(t.v) ? bp - 1 : bp);
+            if (bp === 2) {
+                if (left.type !== 'id') throw new SyntaxError('Invalid left-hand side in assignment');
+                left.target = true;
+                left = mk('assign', at, { op: t.v, name: left.name, kids: [left.id, right.id] });
+            } else {
+                left = mk('bin', at, { op: t.v, kids: [left.id, right.id] });
+            }
+        }
+        return left;
+    }
+    const root = expr(0);
+    if (p < toks.length) throw new SyntaxError(`Unexpected token '${toks[p].v}'`);
+    return { src, toks, nodes, root: root.id };
+}
+
+const fmt = v => String(v);
+
+// Evaluates the tree like JavaScript does: operands left to right, then the operator.
+function trace(T, env0, fns) {
+    const N = T.nodes, env = Object.assign({}, env0), events = [], val = {};
+    function E(n) {
+        let v;
+        if (n.type === 'num') v = n.value;
+        else if (n.type === 'id') { v = env[n.name]; events.push({ k: 'read', id: n.id, name: n.name, v }); }
+        else if (n.type === 'call') {
+            const f = fns[n.name];
+            v = f.ret;
+            events.push({ k: 'call', id: n.id, name: n.name, v, log: f.log });
+        } else if (n.type === 'bin') {
+            const a = E(N[n.kids[0]]), b = E(N[n.kids[1]]);
+            v = OPS[n.op](a, b);
+            events.push({ k: 'op', id: n.id, v });
+        } else if (n.type === 'assign') {
+            if (n.op === '=') v = E(N[n.kids[1]]);
+            else {
+                // compound assignment: the old value of the LHS is read first, then the RHS
+                const old = env[n.name];
+                val[n.kids[0]] = old;
+                events.push({ k: 'read', id: n.kids[0], name: n.name, v: old });
+                v = OPS[n.op.slice(0, -1)](old, E(N[n.kids[1]]));
+            }
+            env[n.name] = v;
+            events.push({ k: 'assign', id: n.id, name: n.name, v });
+        } else if (n.type === 'post' || n.type === 'pre') {
+            const old = E(N[n.kids[0]]);
+            const nv = n.op === '++' ? old + 1 : old - 1;
+            env[n.name] = nv;
+            v = n.type === 'post' ? old : nv;
+            events.push({ k: n.type, id: n.id, name: n.name, v, nv });
+        }
+        val[n.id] = v;
+        return v;
+    }
+    const result = E(N[T.root]);
+    return { events, val, env, result };
+}
+
+// The expression as text after the first k events (the "Steps" column).
+function reducedText(T, R, k) {
+    const done = new Set(R.events.slice(0, k).map(e => e.id));
+    const show = n => {
+        if (n.type === 'num') return fmt(n.value);
+        if (done.has(n.id) && !n.target) return fmt(R.val[n.id]);
+        const K = n.kids.map(i => T.nodes[i]);
+        let t;
+        if (n.type === 'id') t = n.name;
+        else if (n.type === 'call') t = n.name + '()';
+        else if (n.type === 'bin') t = `${show(K[0])} ${n.op} ${show(K[1])}`;
+        else if (n.type === 'assign') t = `${n.name} ${n.op} ${show(K[1])}`;
+        else if (n.type === 'post') t = n.name + n.op;
+        else t = n.op + n.name;
+        return n.paren ? `(${t})` : t;
+    };
+    return show(T.nodes[T.root]);
+}
+// @engine-end
+
+// ---------------------------------------------------------------------------
+// Compiled trees (parse + trace + layout), cached by source and environment
+// ---------------------------------------------------------------------------
+const TREE_TOP = 4.4, ROW_H = 4.4, NODE_H = 2.7;   // rem
+const treeCache = new Map();
+
+function compile(t) {
+    const key = JSON.stringify([t.src, t.env, t.fns]);
+    if (treeCache.has(key)) return treeCache.get(key);
+    const T = parse(t.src);
+    const R = trace(T, t.env, t.fns || {});
+    // layout: every node sits under its own token, rows by depth
+    let x = 1;
+    const tokX = T.toks.map(tk => {
+        const w = tk.t === 'paren' ? 1.3 : Math.max(3.7, tk.v.length * .8 + 1.9);
+        const c = x + w / 2;
+        x += w;
+        return c;
+    });
+    const depth = [];
+    const walk = (id, d) => { depth[id] = d; T.nodes[id].kids.forEach(k => walk(k, d + 1)); };
+    walk(T.root, 0);
+    const maxD = Math.max(...depth);
+    const lines = [];
+    for (let k = 0; k <= R.events.length; k++) {
+        const txt = reducedText(T, R, k);
+        if (!lines.length || lines[lines.length - 1].t !== txt) lines.push({ k, t: txt });
+    }
+    const C = { T, R, tokX, depth, lines, W: x + 1, H: TREE_TOP + maxD * ROW_H + NODE_H + 1.2 };
+    treeCache.set(key, C);
+    return C;
+}
+
+// ---------------------------------------------------------------------------
+// State helpers used by the scenario steps. Each one mutates the state `s`.
+// ---------------------------------------------------------------------------
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit === 'function') return 'function';
+    return 'number';
+}
+function decl(s, name, kind = 'let') {
+    s.vars[name] = { value: null, type: null, kind };
+    s.order.push(name);
+}
+function set(s, name, lit) {
+    if (!s.vars[name]) decl(s, name);
+    Object.assign(s.vars[name], { value: lit, type: typeOf(lit) });
+    s.hl[name] = 'write';
+}
+function read(s, ...names) { names.forEach(n => s.hl[n] = 'read'); }
+function log(s, text, err = false) { s.console.push({ text, err }); return s.console.length - 1; }
+function flight(s, from, to, text, kind) { s.flights.push({ from, to, text, kind, ph: s.ph }); }
+function revealAt(s, key) { s.reveals.push({ key, ph: s.ph }); }
+
+// let name = <literal> on the active line
+function init(s, name, lit, kind = 'let') {
+    decl(s, name, kind);
+    set(s, name, lit);
+    flight(s, 'line', 'v:' + name, lit, 'write');
+}
+// show a new expression tree; built=false shows only the tokens
+function tree(s, src, opts = {}) {
+    const env = {};
+    s.order.forEach(n => { const v = s.vars[n]; if (v.type === 'number') env[n] = Number(v.value); });
+    s.tree = { src, env, fns: opts.fns || null, k: 0, built: opts.built !== false, label: opts.label || '' };
+}
+function build(s) { s.tree.built = true; }
+// perform the next n events of the evaluation
+function go(s, n = 1) {
+    const C = compile(s.tree);
+    for (let c = 0; c < n; c++) {
+        const e = C.R.events[s.tree.k++];
+        const node = C.T.nodes[e.id];
+        s.hot.push(e.id);
+        if (e.k === 'read') {
+            s.hl[e.name] = 'read';
+            flight(s, 'v:' + e.name, 'n:' + e.id, fmt(e.v), 'read');
+            s.ph++;
+        } else if (e.k === 'call') {
+            const i = log(s, e.log);
+            flight(s, 'n:' + e.id, 'con:' + i, e.log, 'val');
+            revealAt(s, 'n:' + e.id);
+            s.ph++;
+        } else if (e.k === 'op') {
+            node.kids.forEach(k => flight(s, 'n:' + k, 'n:' + e.id, fmt(C.R.val[k]), 'val'));
+            s.ph++;
+        } else if (e.k === 'assign') {
+            const kids = node.op === '=' ? [node.kids[1]] : node.kids;
+            kids.forEach(k => flight(s, 'n:' + k, 'n:' + e.id, fmt(C.R.val[k]), 'val'));
+            s.ph++;
+            set(s, e.name, fmt(e.v));
+            flight(s, 'n:' + e.id, 'v:' + e.name, fmt(e.v), 'write');
+            s.ph++;
+        } else if (e.k === 'post') {
+            flight(s, 'n:' + node.kids[0], 'n:' + e.id, fmt(e.v), 'val');
+            s.ph++;
+            set(s, e.name, fmt(e.nv));
+            flight(s, 'n:' + e.id, 'v:' + e.name, fmt(e.nv), 'write');
+            s.ph++;
+        } else if (e.k === 'pre') {
+            set(s, e.name, fmt(e.nv));
+            flight(s, 'n:' + node.kids[0], 'v:' + e.name, fmt(e.nv), 'write');
+            revealAt(s, 'n:' + e.id);
+            s.ph++;
+        }
+    }
+}
+// write the value of the whole tree into a variable (let name = <tree>)
+function out(s, name, kind = 'let') {
+    const C = compile(s.tree);
+    const v = fmt(C.R.result);
+    if (!s.vars[name]) decl(s, name, kind);
+    set(s, name, v);
+    flight(s, 'n:' + C.T.root, 'v:' + name, v, 'write');
+    s.ph++;
+}
+// console.log(<tree>)
+function print(s) {
+    const C = compile(s.tree);
+    const v = fmt(C.R.result);
+    flight(s, 'n:' + C.T.root, 'con:' + log(s, v), v, 'val');
+    s.ph++;
+}
+// console.log(a, b, ...)
+function logVars(s, ...names) {
+    read(s, ...names);
+    const i = log(s, names.map(n => s.vars[n].value).join(' '));
+    names.forEach(n => flight(s, 'v:' + n, 'con:' + i, s.vars[n].value, 'read'));
+    s.ph++;
+}
+function noTree(s) { s.tree = null; }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line - active code line (0-based, -1 = none, or an array of lines)
+//   step.do   - changes to the state (tree, memory, console)
+// ---------------------------------------------------------------------------
+const FNS = { a: { ret: 2, log: 'a' }, b: { ret: 3, log: 'b' }, c: { ret: 4, log: 'c' } };
+
+const SCENARIOS = [
+{
+    tab: 'Precedence',
+    code: [
+        'let a = 2 + 3 * 4;',
+        'let b = (2 + 3) * 4;',
+        'console.log(a, b); // 14 20',
+    ],
+    steps: [
+        { line: -1, text: `How does JavaScript calculate an expression like <code>2 + 3 * 4</code>? Before it calculates anything, it turns the text into a <b>tree</b>. Then it calculates the tree from the bottom up, until <b>one value</b> is left. Press <kbd>Next</kbd> or the Right arrow.` },
+        { line: 0, text: `First JavaScript reads the text of the expression and splits it into separate parts - <b>tokens</b>: numbers, operators, names, brackets. For now this is just a row of characters, and nothing is calculated.`,
+          do: s => tree(s, '2 + 3 * 4', { built: false, label: 'the right-hand side of <code>let a =</code>' }) },
+        { line: 0, text: `The <b>parser</b> arranges the tokens into an <b>expression tree</b>: the operators become <b>nodes</b> (circles), and the numbers become <b>leaves</b>. Each operator holds its two operands below it. <code>*</code> has a higher <b>precedence</b> than <code>+</code>, so it &quot;grabs&quot; 3 and 4 and sits lower.`,
+          do: build },
+        { line: 0, text: `Which operator runs first? The rule is simple: an operator can run only when <b>both</b> of its operands are ready values (the green boxes). <code>+</code> waits for the result of <code>*</code>. Think before you go on.` },
+        { line: 0, text: `<code>3 * 4</code> = 12. The subtree <b>shrinks</b> to one value - 12. The number in the black circle shows the order of evaluation. On the right, in &quot;Steps&quot;, we see the same as text: <code>2 + 12</code>.`,
+          do: s => go(s) },
+        { line: 0, text: `Now <code>+</code> has both of its operands: <code>2 + 12</code> = 14. The root of the tree gives the value of the <b>whole</b> expression.`,
+          do: s => go(s) },
+        { line: 0, text: `The value 14 is <span class="w">written</span> into the new variable a.`,
+          do: s => out(s, 'a') },
+        { line: 1, text: `<code>(2 + 3) * 4</code> - with brackets we change <b>the shape of the tree</b>: <code>(2 + 3)</code> becomes one operand of <code>*</code>. Now <code>+</code> is lower. The brackets themselves are not nodes in the tree - they only tell the parser how to group.`,
+          do: s => tree(s, '(2 + 3) * 4', { label: 'the right-hand side of <code>let b =</code>' }) },
+        { line: 1, text: `Again from the bottom up: first <code>2 + 3</code> = 5.`,
+          do: s => go(s) },
+        { line: 1, text: `Then <code>5 * 4</code> = 20.`,
+          do: s => go(s) },
+        { line: 1, text: `20 is <span class="w">written</span> into b.`,
+          do: s => out(s, 'b') },
+        { line: 2, text: `<code>console.log(a, b)</code> <span class="r">reads</span> the two variables and prints 14 20. The same numbers and operators, but a different tree - a different result.`,
+          do: s => logVars(s, 'a', 'b') },
+        { line: -1, text: `<b>Summary:</b> the precedence of the operators (and the brackets) sets <b>the shape of the tree</b> - which operator works with which operands. Evaluation goes <b>from the bottom up</b>: each operator waits for the values of its operands. That is why <code>2 + 3 * 4</code> is 14, and <code>(2 + 3) * 4</code> is 20.` },
+    ],
+},
+{
+    tab: 'Associativity',
+    code: [
+        'console.log(10 - 3 - 2);           // 5',
+        'console.log(3 + 2 ** 2 ** 3 / 2);  // 131',
+    ],
+    steps: [
+        { line: -1, text: `What happens when an expression has several operators with the <b>same</b> precedence, for example <code>-</code> twice? Then <b>associativity</b> decides: whether the operators are grouped from left to right or from right to left.` },
+        { line: 0, text: `<code>10 - 3 - 2</code>: what will it print - <code>(10 - 3) - 2</code> = 5 or <code>10 - (3 - 2)</code> = 9? Think before you go on.`,
+          do: s => tree(s, '10 - 3 - 2', { built: false, label: 'the argument of <code>console.log</code>' }) },
+        { line: 0, text: `<code>-</code> is <b>left-associative</b> - it groups from left to right: <code>(10 - 3) - 2</code>. That is why the left <code>-</code> is lower in the tree, and its result is the left operand of the right <code>-</code>.`,
+          do: build },
+        { line: 0, text: `<code>10 - 3</code> = 7.`,
+          do: s => go(s) },
+        { line: 0, text: `<code>7 - 2</code> = 5.`,
+          do: s => go(s) },
+        { line: 0, text: `5 is printed. If the grouping were from right to left, we would get 9 - a completely different result.`,
+          do: print },
+        { line: 1, text: `The example from the slides. There are three different precedences here: the highest is <code>**</code>, then <code>/</code>, and the lowest is <code>+</code>. Also, <code>**</code> is <b>right-associative</b>. What will it print? Think before you go on.`,
+          do: s => tree(s, '3 + 2 ** 2 ** 3 / 2', { built: false, label: 'the argument of <code>console.log</code>' }) },
+        { line: 1, text: `The tree: <code>2 ** 2 ** 3</code> is grouped from right to left, i.e. <code>2 ** (2 ** 3)</code> - the right <code>**</code> is at the very bottom. The result of <code>**</code> is the left operand of <code>/</code>, and <code>/</code> is the right operand of <code>+</code>. The weakest operator, <code>+</code>, is at the root.`,
+          do: build },
+        { line: 1, text: `The lowest operator goes first: <code>2 ** 3</code> = 8.`,
+          do: s => go(s) },
+        { line: 1, text: `<code>2 ** 8</code> = 256. (If <code>**</code> were left-associative, we would have <code>(2 ** 2) ** 3</code> = 64.)`,
+          do: s => go(s) },
+        { line: 1, text: `<code>256 / 2</code> = 128.`,
+          do: s => go(s) },
+        { line: 1, text: `<code>3 + 128</code> = 131. The &quot;Steps&quot; column on the right is the same working as in the slides.`,
+          do: s => go(s) },
+        { line: 1, text: `131 is printed.`,
+          do: print },
+        { line: -1, text: `<b>Summary:</b> precedence decides which operator is lower in the tree, and with the same precedence, associativity decides. Almost all operators are left-associative. Right-associative are <code>**</code> and the assignment operators (<code>=</code>, <code>+=</code> and so on). The full table: Operator precedence @MDN. When you are not sure - add brackets.` },
+    ],
+},
+{
+    tab: 'Assignment is an expression',
+    code: [
+        'let x = 3;',
+        'x = x ** 2;',
+        'let y;',
+        'y = x = 1;',
+        'x += 3;            // x = x + 3',
+        'console.log(x, y); // 4 1',
+    ],
+    steps: [
+        { line: -1, text: `The sign <code>=</code> is also an <b>operator</b>, and <code>x = x ** 2</code> is an expression with its own tree. We will see in what order the <span class="r">reading</span> and the <span class="w">writing</span> happen, and why <code>y = x = 1</code> works.` },
+        { line: 0, text: `<code>let x = 3;</code> - a variable x with the value 3 is created in memory.`,
+          do: s => init(s, 'x', '3') },
+        { line: 1, text: `The tree of <code>x = x ** 2</code>: <code>=</code> has the <b>lowest</b> precedence, so it is at the root. Its left operand (LHS) is <b>the place to write to</b> (the orange dashed frame) - this x is <b>not read</b>. The right one (RHS) is the expression <code>x ** 2</code>.`,
+          do: s => tree(s, 'x = x ** 2') },
+        { line: 1, text: `The RHS is calculated. For the leaf x, JavaScript <span class="r">reads</span> the current value of x from memory - 3.`,
+          do: s => go(s) },
+        { line: 1, text: `<code>3 ** 2</code> = 9.`,
+          do: s => go(s) },
+        { line: 1, text: `Now <code>=</code> has a ready value on the right and <span class="w">writes</span> it into x. Also, the <code>=</code> operation <b>returns a value</b> - the written 9. Here nobody uses this value, and it is simply thrown away.`,
+          do: s => go(s) },
+        { line: 2, text: `<code>let y;</code> - y gets the value undefined.`,
+          do: s => { noTree(s); decl(s, 'y'); set(s, 'y', 'undefined'); } },
+        { line: 3, text: `<code>y = x = 1</code> - two <code>=</code> operators with the same precedence. In what order will they run? Think before you go on.`,
+          do: s => tree(s, 'y = x = 1', { built: false }) },
+        { line: 3, text: `<code>=</code> is <b>right-associative</b>: <code>y = (x = 1)</code>. The right <code>=</code> is lower - the whole <code>x = 1</code> is the RHS of the left <code>=</code>.`,
+          do: build },
+        { line: 3, text: `The inner expression <code>x = 1</code> <span class="w">writes</span> 1 into x and <b>returns</b> 1 - this is &quot;the result of the operation&quot; from the slides.`,
+          do: s => go(s) },
+        { line: 3, text: `The outer <code>=</code> gets this 1 as its RHS and <span class="w">writes</span> it into y. This is how one line assigns a value to two variables.`,
+          do: s => go(s) },
+        { line: 4, text: `<code>x += 3</code> - short for <code>x = x + 3</code>. Here x is the place to write to, but we also need its old value.`,
+          do: s => tree(s, 'x += 3') },
+        { line: 4, text: `First the current value of x is <span class="r">read</span> - 1. (With the short form, this happens <b>before</b> the right-hand side is calculated.)`,
+          do: s => go(s) },
+        { line: 4, text: `<code>1 + 3</code> = 4, and the result is <span class="w">written</span> into x right away. The expression <code>x += 3</code> also returns the written value - 4.`,
+          do: s => go(s) },
+        { line: 5, text: `<code>console.log(x, y)</code> prints 4 1.`,
+          do: s => logVars(s, 'x', 'y') },
+        { line: -1, text: `<b>A common mistake:</b> on the left of <code>=</code> there must be <b>a place to write to</b> (a variable), not a value. If we write <code>5 = x;</code> or <code>x + 1 = y;</code>, we get a <span class="e">SyntaxError</span> before the program even starts - none of it runs.`,
+          do: s => { noTree(s); log(s, 'Uncaught SyntaxError: Invalid left-hand side in assignment', true); } },
+        { line: -1, text: `<b>Summary:</b> <code>=</code> is an operator with the lowest precedence and right associativity. First the RHS is calculated, then the value is written into the LHS, and the whole expression <b>returns</b> the written value. That is why <code>x = x ** 2</code> makes sense, and <code>y = x = 1</code> works.` },
+    ],
+},
+{
+    tab: 'i++ and ++i',
+    code: [
+        'let i = 2;',
+        'let j = i++;      // j = 2, i = 3',
+        'let k = ++i;      // k = 4, i = 4',
+        'let x = 1, y = 1;',
+        'console.log(x++ + ++y); // 3',
+        'console.log(x, y);      // 2 2',
+    ],
+    steps: [
+        { line: -1, text: `<code>i++</code> and <code>++i</code> do the same thing to the variable - they add 1 to it. The difference is in <b>the value of the expression</b>: what the operation returns at the moment it is calculated. We will watch the tree (the value) and the memory (the variable) separately.` },
+        { line: 0, text: `<code>let i = 2;</code>`,
+          do: s => init(s, 'i', '2') },
+        { line: 1, text: `<code>let j = i++;</code> - what will be written into j: 2 or 3? Think before you go on.`,
+          do: s => tree(s, 'i++', { label: 'the right-hand side of <code>let j =</code>' }) },
+        { line: 1, text: `First the current value of i is <span class="r">read</span> - 2.`,
+          do: s => go(s) },
+        { line: 1, text: `The postfix <code>i++</code> <span class="w">writes</span> 3 into i, but as the value of the expression it <b>returns the old</b> value - 2. In the tree we see 2, and in memory i is already 3.`,
+          do: s => go(s) },
+        { line: 1, text: `The value of the expression - 2 - is <span class="w">written</span> into j. Result: j = 2, i = 3.`,
+          do: s => out(s, 'j') },
+        { line: 2, text: `<code>let k = ++i;</code> - i is <span class="r">read</span> again, now 3.`,
+          do: s => { tree(s, '++i', { label: 'the right-hand side of <code>let k =</code>' }); go(s); } },
+        { line: 2, text: `The prefix <code>++i</code> <span class="w">writes</span> 4 into i and returns the <b>new</b> value - 4.`,
+          do: s => go(s) },
+        { line: 2, text: `4 is written into k. Result: k = 4, i = 4.`,
+          do: s => out(s, 'k') },
+        { line: 3, text: `<code>let x = 1, y = 1;</code> - two variables in one declaration.`,
+          do: s => { noTree(s); init(s, 'x', '1'); init(s, 'y', '1'); } },
+        { line: 4, text: `The example from the slides: what will <code>x++ + ++y</code> print? In the tree, <code>++</code> is lower than <code>+</code>, because it has a higher precedence. Think before you go on.`,
+          do: s => tree(s, 'x++ + ++y', { label: 'the argument of <code>console.log</code>' }) },
+        { line: 4, text: `The left operand goes first: <code>x++</code> <span class="r">reads</span> 1, <span class="w">writes</span> 2 into x and returns the <b>old</b> value - 1.`,
+          do: s => go(s, 2) },
+        { line: 4, text: `Then the right one: <code>++y</code> <span class="r">reads</span> 1, <span class="w">writes</span> 2 into y and returns the <b>new</b> value - 2.`,
+          do: s => go(s, 2) },
+        { line: 4, text: `<code>1 + 2</code> = 3, and <code>console.log</code> prints 3.`,
+          do: s => { go(s); print(s); } },
+        { line: 5, text: `After the line both variables are 2 - the <b>side effect</b> on memory happened to both. Only the value they took part in the addition with was different.`,
+          do: s => logVars(s, 'x', 'y') },
+        { line: -1, text: `<b>Summary:</b> <code>x++</code> - &quot;use, then add 1&quot;: the expression returns the <b>old</b> value. <code>++x</code> - &quot;add 1, then use&quot;: it returns the <b>new</b> one. As a line on its own (<code>i++;</code>) there is no difference. Good practice: do not mix <code>++</code> with other operations in one expression.`,
+          do: noTree },
+    ],
+},
+{
+    tab: 'Evaluation order',
+    advanced: true,
+    calls: true,
+    code: [
+        'function a() { console.log("a"); return 2; }',
+        'function b() { console.log("b"); return 3; }',
+        'function c() { console.log("c"); return 4; }',
+        'let r = a() + b() * c();',
+        'console.log(r); // 14',
+    ],
+    steps: [
+        { line: -1, text: `<b>Advanced.</b> We often say &quot;multiplication runs before addition&quot;. That is true for the <b>operators</b>. But in what order are the <b>operands</b> calculated? Let the operands be function calls that print something - then we will see the order.` },
+        { line: [0, 1, 2], text: `The three functions are function declarations, so they exist before the first line runs. Each one prints its name and returns a number: <code>a()</code> returns 2, <code>b()</code> - 3, <code>c()</code> - 4.`,
+          do: s => ['a', 'b', 'c'].forEach(n => { decl(s, n, 'function'); set(s, n, 'function'); }) },
+        { line: 3, text: `The tree: <code>*</code> is lower, because it has a higher precedence. In what order will a, b and c be printed? Think before you go on.`,
+          do: s => tree(s, 'a() + b() * c()', { fns: FNS, label: 'the right-hand side of <code>let r =</code>' }) },
+        { line: 3, text: `JavaScript walks the tree <b>from left to right</b>. It starts with the left operand of <code>+</code> - it calls <code>a()</code>. a is printed, and the leaf gets the value 2.`,
+          do: s => go(s) },
+        { line: 3, text: `For the right operand of <code>+</code>, the subtree <code>b() * c()</code> must be calculated. Again from the left: <code>b()</code> is called - it prints b, value 3.`,
+          do: s => go(s) },
+        { line: 3, text: `<code>c()</code> is called - it prints c, value 4.`,
+          do: s => go(s) },
+        { line: 3, text: `Only now, when it has both of its operands, does <code>*</code> run: <code>3 * 4</code> = 12.`,
+          do: s => go(s) },
+        { line: 3, text: `And finally <code>+</code>: <code>2 + 12</code> = 14.`,
+          do: s => go(s) },
+        { line: 3, text: `14 is <span class="w">written</span> into r.`,
+          do: s => out(s, 'r') },
+        { line: 4, text: `<code>console.log(r)</code> prints 14.`,
+          do: s => logVars(s, 'r') },
+        { line: -1, text: `<b>Summary:</b> a, b, c were printed - the functions were called <b>from left to right</b>, even though <code>*</code> ran before <code>+</code>. Precedence sets <b>the shape of the tree</b>, not the order in which the operands are calculated - they are always calculated from left to right. The numbers in the circles show the exact order.` },
+    ],
+},
+{
+    tab: 'Statement vs expression',
+    advanced: true,
+    stmts: [
+        { tag: 'statement', marks: [] },
+        { tag: 'expression', marks: [['x = 5', '5']] },
+        { tag: 'expression', marks: [['2 + 3', '5']] },
+        { tag: 'expression', marks: [['x ** 2', '25'], ['x ** 2 - x', '20'], ['console.log(x ** 2 - x)', 'undefined']] },
+        { tag: 'statement', marks: [['x * 2', '10']] },
+        { tag: 'statement', marks: [['x > 3', 'true'], ['y = 0', '0']] },
+    ],
+    code: [
+        'let x;',
+        'x = 5;',
+        '2 + 3;',
+        'console.log(x ** 2 - x);',
+        'let y = x * 2;',
+        'if (x > 3) { y = 0; }',
+    ],
+    steps: [
+        { line: -1, text: `<b>Advanced.</b> An <b>expression</b> is any piece of code that is calculated to a <b>value</b>. A <b>statement</b> is a complete command that <b>performs an action</b>: declares a variable, checks a condition, repeats code. We will put a label with the value under each expression.`,
+          do: s => { s.stmt = { upto: -1 }; } },
+        { line: 0, text: `<code>let x;</code> - a declaration. This is a statement: it creates a variable, but there is no value we could use anywhere.`,
+          do: s => { s.stmt.upto = 0; decl(s, 'x'); set(s, 'x', 'undefined'); } },
+        { line: 1, text: `<code>x = 5</code> is an expression with the value 5 - assignment returns the written value. With <code>;</code> at the end it becomes an <b>expression statement</b> - an expression used as an instruction on its own.`,
+          do: s => { s.stmt.upto = 1; set(s, 'x', '5'); } },
+        { line: 2, text: `<code>2 + 3</code> is an expression with the value 5. As a line on its own it is useless: the value is calculated and thrown away at once. (Even just <code>5</code> or just <code>x</code> is an expression.)`,
+          do: s => { s.stmt.upto = 2; } },
+        { line: 3, text: `Expressions are nested in each other: <code>x ** 2</code> is 25, <code>x ** 2 - x</code> is 20. Even <code>console.log(...)</code> is an expression - a function call. It prints 20, but it <b>returns</b> undefined itself.`,
+          do: s => { s.stmt.upto = 3; read(s, 'x'); log(s, '20'); } },
+        { line: 4, text: `<code>let y = x * 2;</code> - the whole thing is a statement (a declaration), but inside it there is an expression: <code>x * 2</code> with the value 10, which is written into y.`,
+          do: s => { s.stmt.upto = 4; read(s, 'x'); decl(s, 'y'); set(s, 'y', '10'); } },
+        { line: 5, text: `<code>if</code> is a statement. Inside it there are expressions: the condition <code>x &gt; 3</code> (true) and <code>y = 0</code> (0).`,
+          do: s => { s.stmt.upto = 5; read(s, 'x'); set(s, 'y', '0'); } },
+        { line: -1, text: `<b>A common mistake:</b> a statement cannot stand where a value is expected. If we write <code>let r = if (x &gt; 3) { 1 };</code>, we get a <span class="e">SyntaxError</span>. On the right of <code>=</code>, in the arguments of a function and in <code>\${ }</code> there can be only expressions.`,
+          do: s => log(s, "Uncaught SyntaxError: Unexpected token 'if'", true) },
+        { line: -1, text: `<b>A curious fact:</b> in the browser console, after <code>let x;</code> you see undefined, and after <code>if (x &gt; 3) { y = 0; }</code> - 0. This is the internal &quot;result of the line&quot; (completion value) that the console shows for convenience. It is not a value we can use in code.` },
+        { line: -1, text: `<b>Summary:</b> an expression gives a <b>value</b> and can stand anywhere a value is needed. A statement <b>performs an action</b> (a declaration, <code>if</code>, a loop) and often contains expressions. An expression with <code>;</code> at the end can be a line on its own (an expression statement).` },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: states[i] is the full state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, vars: {}, order: [], tree: null, stmt: null, console: [], hl: {}, hot: [], flights: [], reveals: [], ph: 0 };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        Object.assign(s, { hl: {}, hot: [], flights: [], reveals: [], ph: 0, line: step.line });
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 760, PHASE_MS = 820;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Play';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Pause';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(let|const|var|function|return|if|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+const activeLines = s => Array.isArray(s.line) ? s.line : [s.line];
+
+function renderCode(sc, s) {
+    const act = activeLines(s);
+    $('#code').innerHTML = sc.code.map((l, i) =>
+        `<li class="${act.includes(i) ? 'active' : ''}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`
+    ).join('');
+    const shown = act.filter(i => i >= 0).map(i => i + 1);
+    $('#lineNote').textContent = shown.length === 1 ? `running line ${shown[0]}` : shown.length ? `lines ${shown.join(', ')}` : '';
+}
+
+// when each flight lands and each element may show its new content (ms)
+function timing(s) {
+    const land = {};
+    const at = (key, t) => { land[key] = Math.max(land[key] || 0, t); };
+    s.flights.forEach(f => at(f.to, f.ph * PHASE_MS + FLY_MS));
+    s.reveals.forEach(r => at(r.key, r.ph * PHASE_MS + FLY_MS * .6));
+    const end = Math.max(0, ...Object.values(land));
+    return { land, end };
+}
+
+function renderVars(s, prev, tm) {
+    if (!s.order.length) { $('#vars').innerHTML = '<div class="vars-empty">No variables yet.</div>'; return; }
+    $('#vars').innerHTML = s.order.map(name => {
+        const v = s.vars[name], pv = prev && prev.vars[name];
+        const cardCls = ['vcard'];
+        const cellCls = ['cell'];
+        if (s.hl[name]) cellCls.push('hl-' + s.hl[name]);
+        let ghost = '';
+        if (prev) {
+            const landAt = tm.land['v:' + name];
+            if (!pv) cardCls.push('appear');
+            else if (pv.value !== null && pv.value !== v.value) {
+                ghost = `<span class="ghost" style="animation-delay:${landAt || 0}ms">${esc(pv.value)}</span>`;
+                if (!landAt) cellCls.push('changed');
+            }
+        }
+        const val = v.value === null ? '' : v.type === 'function'
+            ? '<span class="val t-function">function</span>'
+            : `<span class="val t-${v.type}">${esc(v.value)}</span><span class="type">${v.type}</span>`;
+        return `<div class="${cardCls.join(' ')}" data-var="${name}">
+            <div class="vlabel"><span class="name">${esc(name)}</span><span class="kw">${v.kind}</span></div>
+            <div class="${cellCls.join(' ')}">${ghost}${val}</div>
+        </div>`;
+    }).join('');
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.map(l =>
+        `<div class="cline ${l.err ? 'err' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function nodeHtml(C, n, s, done, consumedBy, hot) {
+    const isOp = n.type === 'bin' || n.type === 'assign' || n.type === 'pre' || n.type === 'post';
+    const cls = ['node', 'n-' + n.type];
+    if (isOp) cls.push('opn');
+    if (done.has(n.id) || n.type === 'num') cls.push('done');
+    if (n.target) cls.push('target');
+    if (consumedBy[n.id] !== undefined) cls.push('consumed');
+    if (hot.has(n.id)) cls.push('hot');
+    if (n.type === 'assign' || n.type === 'pre' || n.type === 'post') cls.push('wrote');
+    const before = n.type === 'num' ? fmt(n.value) : n.type === 'id' ? n.name : n.type === 'call' ? n.name + '()' : n.op;
+    const tag = n.type === 'num' ? '' : n.type === 'id' ? n.name : n.type === 'call' ? n.name + '()'
+        : n.type === 'post' ? n.name + n.op : n.type === 'pre' ? n.op + n.name : n.op;
+    const ev = C.R.events.findIndex(e => e.id === n.id);
+    const x = C.tokX[n.tok], y = TREE_TOP + C.depth[n.id] * ROW_H;
+    const by = consumedBy[n.id] !== undefined ? ` data-by="${consumedBy[n.id]}"` : '';
+    return `<div class="${cls.join(' ')}" data-id="${n.id}" data-tok="${n.tok}"${by} style="left:${x}rem;top:${y}rem">
+        <span class="nb">${esc(before)}</span><span class="na">${esc(fmt(C.R.val[n.id]))}</span>
+        ${tag ? `<span class="ntag">${esc(tag)}</span>` : ''}
+        ${ev >= 0 ? `<span class="ord">${ev + 1}</span>` : ''}
+        ${n.target ? '<span class="ltag">LHS</span>' : ''}
+    </div>`;
+}
+
+function renderTree(sc, s, prev) {
+    const box = $('#treeBox');
+    $('#treeNote').innerHTML = s.tree && s.tree.label ? s.tree.label : '';
+    if (!s.tree) {
+        box.innerHTML = '<div class="tree-hint">Here we will see the tree of the expression calculated on the current line.</div>';
+        $('#reduce').innerHTML = '<div class="reduce-empty">The expression, written out after each step.</div>';
+        return;
+    }
+    const C = compile(s.tree), T = C.T, k = s.tree.k;
+    const sameTree = prev && prev.tree && prev.tree.src === s.tree.src && JSON.stringify(prev.tree.env) === JSON.stringify(s.tree.env);
+    const done = new Set(C.R.events.slice(0, k).map(e => e.id));
+    const consumedBy = {};
+    T.nodes.forEach(n => { if (done.has(n.id)) n.kids.forEach(c => consumedBy[c] = n.id); });
+    const hot = new Set(s.hot);
+    const hotToks = new Set(s.hot.map(id => T.nodes[id].tok));
+
+    const toks = T.toks.map((t, i) =>
+        `<span class="tok t-${t.t}${hotToks.has(i) ? ' hot' : ''}" data-tok="${i}" style="left:${C.tokX[i]}rem">${esc(t.v)}</span>`).join('');
+    let html = `<div class="tree-inner" id="treeInner" style="width:${C.W}rem;height:${s.tree.built ? C.H : 7}rem">
+        <div class="tokbar${sameTree ? '' : ' fresh'}" style="width:${C.W}rem">${toks}</div>`;
+    if (s.tree.built) {
+        let edges = '';
+        T.nodes.forEach(n => n.kids.forEach(c => {
+            const ch = T.nodes[c];
+            const x1 = C.tokX[n.tok], y1 = TREE_TOP + C.depth[n.id] * ROW_H + NODE_H;
+            const x2 = C.tokX[ch.tok], y2 = TREE_TOP + C.depth[c] * ROW_H;
+            const cls = ['edge'];
+            if (ch.target) cls.push('to-target');
+            if (consumedBy[c] !== undefined) cls.push('consumed');
+            edges += `<line class="${cls.join(' ')}" data-by="${consumedBy[c] !== undefined ? consumedBy[c] : ''}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+        }));
+        const grow = !(sameTree && prev.tree.built);
+        html += `<svg class="edges${grow && prev ? ' grow' : ''}" viewBox="0 0 ${C.W} ${C.H}" style="width:${C.W}rem;height:${C.H}rem">${edges}</svg>`;
+        html += T.nodes.map(n => nodeHtml(C, n, s, done, consumedBy, hot)).join('');
+    } else {
+        html += '<div class="tree-later">The parser has not built the tree yet.</div>';
+    }
+    box.innerHTML = html + '</div>';
+    fitTree();
+
+    // the "Steps" column: the expression text after each event
+    const lines = s.tree.built ? C.lines.filter(l => l.k <= k) : [];
+    const prevCount = sameTree && prev.tree.built ? C.lines.filter(l => l.k <= prev.tree.k).length : (prev ? 0 : lines.length);
+    $('#reduce').innerHTML = lines.length
+        ? lines.map((l, i) => `<div class="rline${i === lines.length - 1 ? ' cur' : ''}${i >= prevCount ? ' new' : ''}">${esc(l.t)}</div>`).join('')
+        : '<div class="reduce-empty">The expression, written out after each step.</div>';
+}
+
+function fitTree() {
+    const inner = $('#treeInner'), box = $('#treeBox');
+    if (!inner) return;
+    inner.style.transform = '';
+    const sx = (box.clientWidth - 8) / inner.offsetWidth;
+    const sy = (box.clientHeight - 16) / inner.offsetHeight;
+    const f = Math.min(1.3, sx, sy);
+    inner.dataset.scale = f;
+    if (f !== 1) inner.style.transform = `scale(${f})`;
+}
+
+function renderStmts(sc, s) {
+    const area = $('#stmtArea');
+    area.innerHTML = sc.code.map((code, i) => {
+        const info = sc.stmts[i];
+        const shown = i <= s.stmt.upto;
+        const act = activeLines(s).includes(i);
+        // nesting level of every mark: a mark that contains others sits lower
+        const marks = info.marks.map(([text, value]) => ({ from: code.indexOf(text), len: text.length, value }));
+        marks.forEach(m => m.level = 0);
+        [...marks].sort((a, b) => a.len - b.len).forEach(m => {
+            marks.forEach(o => { if (o !== m && o.from <= m.from && o.from + o.len >= m.from + m.len) o.level = Math.max(o.level, m.level + 1); });
+        });
+        const levels = shown && marks.length ? Math.max(...marks.map(m => m.level)) + 1 : 0;
+        const mk = shown ? marks.map(m => `<div class="mark" style="left:${m.from}ch;width:${m.len}ch;top:${m.level * 1.95}rem">
+                <div class="br"></div><span class="badge t-${typeOf(m.value)}">${esc(m.value)}</span></div>`).join('') : '';
+        const tag = !shown ? '' : info.tag === 'statement'
+            ? '<span class="stag st">statement - no value</span>'
+            : '<span class="stag ex">expression + ; (expression statement)</span>';
+        return `<div class="sline${shown ? '' : ' future'}${act ? ' cur' : ''}">
+            <div class="sbody"><div class="scode">${highlight(code)}</div><div class="marks" style="height:${levels * 1.95}rem">${mk}</div></div>
+            ${tag}
+        </div>`;
+    }).join('');
+}
+
+function renderLegend(sc) {
+    $('#legend').innerHTML = sc.stmts ? [
+        '<span><i class="sw value"></i>expression and its value</span>',
+        '<span><i class="sw read"></i>read</span>',
+        '<span><i class="sw write"></i>write</span>',
+    ].join('') : [
+        '<span><i class="sw op"></i>operator</span>',
+        '<span><i class="sw value"></i>ready value</span>',
+        '<span><i class="sw var"></i>variable name</span>',
+        sc.calls ? '<span><i class="sw call"></i>function call</span>' : '',
+        '<span><i class="sw target"></i>LHS - place to write to</span>',
+        '<span><i class="sw read"></i>read</span>',
+        '<span><i class="sw write"></i>write</span>',
+        '<span><i class="sw order"></i>order of evaluation</span>',
+    ].join('');
+}
+
+// ---------------------------------------------------------------------------
+// Animations: tree growing out of the tokens, flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'line') return $('#code li.active');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'v') return $(`#vars .vcard[data-var="${rest}"] .cell`);
+    if (kind === 'n') return $(`#treeBox .node[data-id="${rest}"]`);
+    if (kind === 'con') return $('#console').children[+rest] || null;
+    return null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function growTree() {
+    const inner = $('#treeInner');
+    if (!inner || reduceMotion) return;
+    const f = +inner.dataset.scale || 1;
+    inner.querySelectorAll('.node').forEach(node => {
+        const tok = inner.querySelector(`.tok[data-tok="${node.dataset.tok}"]`);
+        const a = tok.getBoundingClientRect(), b = node.getBoundingClientRect();
+        const dx = (a.left + a.width / 2 - b.left - b.width / 2) / f;
+        const dy = (a.top + a.height / 2 - b.top - b.height / 2) / f;
+        node.animate([
+            { transform: `translate(calc(-50% + ${dx}px), ${dy}px) scale(.7)`, opacity: 0 },
+            { transform: `translate(calc(-50% + ${dx}px), ${dy}px) scale(.9)`, opacity: 1, offset: .2 },
+            { transform: 'translate(-50%, 0) scale(1)', opacity: 1 },
+        ], { duration: 900, delay: 80 * (+node.style.top.replace('rem', '') / ROW_H), easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'backwards' });
+    });
+}
+
+// hide what is about to change; show it when its value arrives
+function hold(key, el) {
+    if (key.startsWith('n:')) {
+        const byMe = $('#treeBox').querySelectorAll(`[data-by="${key.slice(2)}"]`);
+        const wasDone = el.classList.contains('done');
+        el.classList.remove('done');
+        byMe.forEach(c => c.classList.remove('consumed'));
+        return () => {
+            if (wasDone) el.classList.add('done');
+            byMe.forEach(c => c.classList.add('consumed'));
+            el.classList.add('bumped');
+            bump(el);
+        };
+    }
+    el.classList.add('await');
+    return () => { el.classList.remove('await'); bump(el); };
+}
+
+const timers = [];
+function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+function clearTimers() { while (timers.length) clearTimeout(timers.pop()); }
+
+function playStep(s, prev, tk) {
+    const grew = s.tree && s.tree.built && !(prev.tree && prev.tree.built && prev.tree.src === s.tree.src);
+    if (grew) growTree();
+    if (reduceMotion || !s.flights.length) return;
+    const tm = timing(s);
+    const delay0 = grew ? 900 : 0;
+    // what to hide until its value arrives
+    const keys = Object.keys(tm.land);
+    keys.forEach(key => {
+        const el = resolve(key);
+        if (!el) return;
+        const show = hold(key, el);
+        later(() => { if (tk === token) show(); }, delay0 + tm.land[key]);
+    });
+    const newRed = [...document.querySelectorAll('#reduce .rline.new')];
+    newRed.forEach(el => {
+        el.classList.add('await');
+        later(() => { if (tk === token) { el.classList.remove('await'); bump(el); } }, delay0 + tm.end);
+    });
+
+    const layer = $('#flyLayer');
+    s.flights.forEach(f => {
+        const src = resolve(f.from), dst = resolve(f.to);
+        if (!src || !dst) return;
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + f.kind;
+        chip.textContent = f.text;
+        chip.style.visibility = 'hidden';
+        layer.appendChild(chip);
+        later(() => {
+            if (tk !== token) return;
+            const a = src.getBoundingClientRect(), b = dst.getBoundingClientRect();
+            const w = chip.offsetWidth, h = chip.offsetHeight;
+            const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+            const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+            const lift = Math.min(70, 20 + Math.hypot(dx, dy) * .12);
+            chip.style.left = x0 + 'px';
+            chip.style.top = y0 + 'px';
+            chip.style.visibility = '';
+            chip.animate([
+                { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+                { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+                { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.12)`, opacity: 1, offset: .55 },
+                { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+            ], { duration: FLY_MS, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' }).onfinish = () => chip.remove();
+        }, delay0 + f.ph * PHASE_MS);
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    clearTimers();
+    $('#flyLayer').innerHTML = '';
+    const tm = timing(s);
+
+    renderCode(sc, s);
+    renderVars(s, prev, tm);
+    renderConsole(s);
+    const stmtMode = !!sc.stmts;
+    $('#treeWrap').style.display = stmtMode ? 'none' : '';
+    $('#stmtArea').style.display = stmtMode ? '' : 'none';
+    $('#rightTitle').textContent = stmtMode ? 'Expressions and their values' : 'Expression tree';
+    if (stmtMode) { $('#treeNote').textContent = ''; renderStmts(sc, s); }
+    else renderTree(sc, s, prev);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Step ${stepIdx + 1} of ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Step ${i + 1}" aria-label="Step ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+
+    if (prev && !stmtMode) requestAnimationFrame(() => { if (tk === token) playStep(s, prev, tk); });
+    else if (prev) requestAnimationFrame(() => {
+        if (tk !== token || reduceMotion) return;
+        s.order.forEach(n => { if (s.hl[n]) { const el = resolve('v:' + n); if (el) bump(el); } });
+    });
+    scheduleAuto(tm);
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto(tm) {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.max(tm.end + 1500, Math.min(11000, Math.max(2800, 1200 + len * 40))));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    renderLegend(SCENARIOS[scIdx]);
+    try { history.replaceState(null, '', location.search + '#' + (scIdx + 1)); } catch (e) { /* file:// in some browsers */ }
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+const THEME_KEY = 'exprEvalTheme';
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem(THEME_KEY, root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const q = new URLSearchParams(location.search).get('theme');
+    const t = q || localStorage.getItem(THEME_KEY);
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+new ResizeObserver(() => fitTree()).observe($('#treeBox'));
+
+// #selftest: walk every step of every scenario and report errors and overflow
+function selfTest() {
+    const report = [];
+    let errors = 0;
+    SCENARIOS.forEach((sc, i) => {
+        try { selectScenario(i); } catch (e) { errors++; report.push(`#${i + 1}: ${e.message}`); return; }
+        sc.steps.forEach((_, j) => {
+            try {
+                goto(j, true);
+                const over = [];
+                if (document.documentElement.scrollHeight > innerHeight + 1) over.push('page');
+                document.querySelectorAll('.panel, .explain-text, .stmt-area').forEach(p => {
+                    if (p.offsetParent && p.scrollHeight > p.clientHeight + 2) over.push(p.id || p.className);
+                });
+                const inner = $('#treeInner');
+                if (inner && +inner.dataset.scale < .8) over.push('tree scaled ' + (+inner.dataset.scale).toFixed(2));
+                if (over.length) report.push(`#${i + 1}.${j + 1} overflow: ${over.join(', ')}`);
+            } catch (e) { errors++; report.push(`#${i + 1}.${j + 1}: ${e.message}`); }
+        });
+    });
+    const pre = document.createElement('pre');
+    pre.id = 'selftest';
+    pre.textContent = `SELFTEST ${errors ? 'FAIL' : 'OK'} (${errors} errors)\n` + report.join('\n');
+    document.body.appendChild(pre);
+}
+
+function fromHash() {
+    const h = location.hash.slice(1);
+    if (h === 'selftest') { selfTest(); return; }
+    const [a, b] = h.split('.');
+    selectScenario((parseInt(a, 10) || 1) - 1, (parseInt(b, 10) || 1) - 1);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

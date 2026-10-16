@@ -1,0 +1,1387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Types, comparisons and logic</title>
+<!--
+    Step-by-step animation: the hidden type conversions (coercion) that JavaScript
+    performs in +, -, ==, <, >, if, &&, ||, ?? and ?: - shown as "what the engine thinks".
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: coercionAndLogic.html#3 (scenario 3), #3.5 (scenario 3, step 5),
+    ?theme=dark forces the dark palette, #selftest walks every step and reports problems.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ok: #3f7d2c;
+    --ok-bg: #dcefd2;
+    --ref: #7b48c4;
+    --chip-ink: #ffffff;
+
+    /* one colour per value type */
+    --t-num: #b85a00;  --t-num-bg: #fdebd6;
+    --t-str: #3f7d2c;  --t-str-bg: #dcefd2;
+    --t-bool: #7b48c4; --t-bool-bg: #ebe0fa;
+    --t-nul: #786f61;  --t-nul-bg: #ece6da;
+    --t-obj: #a87a12;  --t-obj-bg: #fff3cf;
+    --t-expr: #786f61; --t-expr-bg: #fffcf5;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ok: #8fd27b; --ok-bg: #213a1c; --ref: #b38cff;
+        --chip-ink: #111111;
+        --t-num: #ffae5c; --t-num-bg: #43301b;
+        --t-str: #8fd27b; --t-str-bg: #213a1c;
+        --t-bool: #b38cff; --t-bool-bg: #2f2546;
+        --t-nul: #a7a397; --t-nul-bg: #2a2c33;
+        --t-obj: #e0b75a; --t-obj-bg: #3a3220;
+        --t-expr: #a7a397; --t-expr-bg: #202229;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ok: #8fd27b; --ok-bg: #213a1c; --ref: #b38cff;
+    --chip-ink: #111111;
+    --t-num: #ffae5c; --t-num-bg: #43301b;
+    --t-str: #8fd27b; --t-str-bg: #213a1c;
+    --t-bool: #b38cff; --t-bool-bg: #2f2546;
+    --t-nul: #a7a397; --t-nul-bg: #2a2c33;
+    --t-obj: #e0b75a; --t-obj-bg: #3a3220;
+    --t-expr: #a7a397; --t-expr-bg: #202229;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.panel-title .note.pass { color: var(--write); font-weight: 700; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .98rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .17rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+.console-empty { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--muted); padding: .2rem .4rem; }
+
+/* ---------- the "desk": the expression the engine works on ---------- */
+.desk { display: flex; flex-direction: column; gap: .55rem; }
+.chain { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .5rem; min-height: 2.1rem; font-family: var(--mono); font-size: 1.08rem; }
+.chain .ci { padding: .12rem .45rem; border-radius: .3rem; background: var(--inline-code); white-space: pre; color: var(--muted); }
+.chain .ci.last { color: var(--ink); font-weight: 700; background: var(--write-bg); }
+.chain .ci mark { background: none; color: inherit; border-bottom: 3px solid var(--read); padding-bottom: 1px; }
+.chain .arr { width: 1.4rem; height: .8rem; color: var(--muted); flex: none; }
+.chain-empty { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--muted); }
+.ops { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .6rem; min-height: 4.2rem; }
+.opr { font-family: var(--mono); font-size: 1.45rem; font-weight: 800; color: var(--ink); padding: 0 .1rem; white-space: pre; }
+.opr.eq { color: var(--muted); font-weight: 500; }
+.ops-empty { font-size: .8rem; font-style: italic; color: var(--muted); }
+
+/* value chips: the value on top, its type below */
+.chip {
+    position: relative;
+    display: inline-flex; flex-direction: column; align-items: center;
+    min-width: 3.2rem;
+    padding: .2rem .65rem .15rem;
+    border: 2px solid var(--tc); border-radius: .55rem;
+    background: var(--tb);
+    transition: box-shadow .25s, opacity .3s;
+}
+.chip .cv { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; white-space: pre; color: var(--ink); }
+.chip .ct { font-size: .62rem; font-weight: 700; letter-spacing: .04em; color: var(--tc); }
+.chip.sm { min-width: 2.4rem; padding: .1rem .45rem .05rem; border-radius: .45rem; }
+.chip.sm .cv { font-size: 1.05rem; }
+.chip.sm .ct { font-size: .56rem; }
+.t-number    { --tc: var(--t-num);  --tb: var(--t-num-bg); }
+.t-string    { --tc: var(--t-str);  --tb: var(--t-str-bg); }
+.t-boolean   { --tc: var(--t-bool); --tb: var(--t-bool-bg); }
+.t-null, .t-undefined { --tc: var(--t-nul); --tb: var(--t-nul-bg); }
+.t-null .cv, .t-undefined .cv { font-style: italic; font-weight: 600; }
+.t-object, .t-bigint { --tc: var(--t-obj); --tb: var(--t-obj-bg); }
+.t-expr      { --tc: var(--t-expr); --tb: var(--t-expr-bg); border-style: dashed; }
+.chip.st-conv { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.chip.st-read { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.chip.st-skip { opacity: .42; border-style: dashed; filter: grayscale(.6); }
+.chip.st-skip .cv { text-decoration: line-through; text-decoration-thickness: 2px; }
+.chip .skiptag {
+    position: absolute; top: -.75rem; left: 50%; transform: translateX(-50%);
+    padding: .03rem .4rem; border-radius: .3rem;
+    background: var(--muted); color: var(--paper);
+    font-size: .58rem; font-weight: 700; white-space: nowrap;
+}
+.chip.res { box-shadow: 0 0 0 3px var(--ink); }
+.chip.res-pending { visibility: hidden; }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center; padding-bottom: .7rem;
+    font-family: var(--mono); font-size: 1.3rem; font-weight: 700;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+
+/* ---------- lower row: algorithm + machines ---------- */
+.lower { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: .7rem; min-height: 0; }
+.rules { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .3rem; }
+.rules li {
+    display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) auto; gap: .5rem; align-items: center;
+    padding: .3rem .5rem;
+    border: 1px solid var(--line); border-radius: .45rem;
+    font-size: .86rem; line-height: 1.35;
+    transition: background .25s, opacity .25s, box-shadow .25s;
+}
+.rules .rn { font-family: var(--mono); font-weight: 700; color: var(--muted); text-align: center; }
+.rules code { padding: 0 .25rem; border-radius: .2rem; background: var(--inline-code); font-family: var(--mono); font-size: .92em; }
+.rules .ra { display: inline-block; width: 1.1rem; height: .65rem; vertical-align: middle; color: var(--muted); }
+.rules .badge { min-width: 1.9rem; text-align: center; font-size: .66rem; font-weight: 800; letter-spacing: .04em; padding: .1rem .35rem; border-radius: .3rem; }
+.rules li.r-no { opacity: .5; }
+.rules li.r-no .badge { background: var(--inline-code); color: var(--muted); }
+.rules li.r-cur { box-shadow: 0 0 0 2px var(--read); background: var(--read-bg); }
+.rules li.r-cur .badge { background: var(--read); color: var(--chip-ink); }
+.rules li.r-yes { box-shadow: 0 0 0 2px var(--write); background: var(--write-bg); }
+.rules li.r-yes .badge { background: var(--write); color: var(--chip-ink); }
+.rules li.r-done .badge { color: var(--ok); }
+.rules li.r-done .badge svg { width: .9rem; height: .9rem; vertical-align: middle; }
+.rules li.r-later { opacity: .5; font-style: italic; }
+.rules-empty, .widget-empty { font-size: .8rem; font-style: italic; color: var(--muted); }
+
+.widget { display: flex; flex-direction: column; gap: .7rem; }
+.mach { display: flex; align-items: center; flex-wrap: wrap; gap: .45rem; }
+.mach .arr { width: 1.6rem; height: .9rem; color: var(--muted); flex: none; }
+.mbox {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .35rem .6rem;
+    border: 2px solid var(--ink); border-radius: .5rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .9rem; font-weight: 800;
+}
+.mbox .gear { width: 1.25rem; height: 1.25rem; color: var(--muted); }
+.mach.new .gear { animation: spin 1.1s .35s ease-in-out both; }
+.mnote { flex-basis: 100%; font-size: .74rem; color: var(--muted); font-style: italic; padding-left: .2rem; }
+
+/* char-by-char grids (string comparison, parseInt) */
+.grid { display: grid; gap: .25rem .3rem; align-items: center; justify-content: start; }
+.grid .lbl { font-size: .7rem; font-weight: 700; color: var(--muted); padding-right: .4rem; text-transform: uppercase; letter-spacing: .05em; }
+.grid .idx { font-family: var(--mono); font-size: .65rem; color: var(--muted); text-align: center; }
+.cc {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 2.7rem; height: 3.1rem;
+    border: 2px solid var(--t-str); border-radius: .4rem;
+    background: var(--t-str-bg);
+    transition: opacity .3s, box-shadow .25s;
+}
+.cc b { font-family: var(--mono); font-size: 1.3rem; line-height: 1.1; }
+.cc i { font-style: normal; font-family: var(--mono); font-size: .66rem; color: var(--muted); }
+.cc.eq { opacity: .6; }
+.cc.cur { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.cc.win { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.cc.rest { opacity: .28; }
+.cc.end { border-style: dashed; border-color: var(--muted); background: none; }
+.cc.end b { font-family: var(--sans); font-size: .62rem; color: var(--muted); }
+.cc.ok { border-color: var(--ok); }
+.cc.stop { border-color: var(--err); background: var(--err-bg); box-shadow: 0 0 0 3px var(--err-bg); }
+.rel { font-family: var(--mono); font-size: 1.15rem; font-weight: 800; text-align: center; color: var(--muted); }
+.rel.dec { color: var(--write); }
+.verdict { font-size: .9rem; line-height: 1.4; padding: .35rem .6rem; border-left: 3px solid var(--write); background: var(--write-bg); border-radius: .3rem; }
+.verdict code { font-family: var(--mono); font-weight: 700; }
+
+/* ToBoolean sorter */
+.bins { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .6rem; }
+.bin { border: 2px dashed var(--line); border-radius: .55rem; padding: .45rem .5rem .55rem; }
+.bin h4 { margin: 0 0 .5rem; font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.bin h4 b { color: var(--ink); }
+.bin .slots { display: flex; flex-wrap: wrap; gap: .75rem .4rem; }
+.bin.falsy { border-color: var(--t-nul); }
+.bin.truthy { border-color: var(--ok); }
+.bin.falsy .chip { opacity: .55; }
+.bin.falsy .chip.hit { opacity: 1; }
+.bin .chip.last { opacity: 1; box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.bin.falsy .chip.rare .cv { font-size: .9rem; }
+.bin .more { font-size: .72rem; font-style: italic; color: var(--muted); align-self: center; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.1rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid var(--tc, var(--line)); border-radius: .25rem; background: var(--tb, none); }
+.sw.read { border-color: var(--read); background: var(--read-bg); }
+.sw.write { border-color: var(--write); background: var(--write-bg); }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.08rem * 1.42 * 3); font-size: 1.08rem; line-height: 1.42; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+    white-space: pre;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .e { color: var(--err); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+
+.await:not(.chip) { visibility: hidden; }
+.chip.await > .cv, .chip.await > .ct { visibility: hidden; }
+.land { animation: land .45s both; }
+.pop { animation: pop .45s both; }
+
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes spin { to { transform: rotate(180deg); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage, .lower { grid-template-columns: 1fr; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Types, comparisons and logic <small>what JavaScript converts "in its head", step by step</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="bg/coercionAndLogic.html" hreflang="bg" lang="bg" title="Bulgarian version" aria-label="Bulgarian version">BG</a>
+        <button class="btn icon-btn" id="themeBtn" title="Light / dark theme" aria-label="Light / dark theme">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Code</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Console</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="panel desk">
+                <div class="panel-title"><span>The expression - what the engine sees</span><span class="note">operands, operator, result</span></div>
+                <div class="chain" id="chain"></div>
+                <div class="ops" id="ops"></div>
+            </div>
+            <div class="lower">
+                <div class="panel">
+                    <div class="panel-title"><span id="rulesTitle">Algorithm</span><span class="note" id="rulesNote"></span></div>
+                    <div id="rules"></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-title"><span id="widgetTitle">The hidden conversions</span><span class="note" id="widgetNote"></span></div>
+                    <div class="widget" id="widget"></div>
+                </div>
+            </div>
+            <div class="legend" id="legend"></div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="To the start (Home)" aria-label="To the start">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Back (Left arrow)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Back
+                </button>
+                <button class="btn" id="playBtn" title="Auto-play (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Next (Right arrow or Space)">
+                    Next<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Keys: Left / Right arrows, Space, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Values and their types
+// ---------------------------------------------------------------------------
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'null') return 'null';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit.startsWith('"')) return 'string';
+    if (/^\d+n$/.test(lit)) return 'bigint';
+    if (lit === 'NaN' || /^-?\d+(\.\d+)?$/.test(lit)) return 'number';
+    if (lit.startsWith('[') || lit.startsWith('{')) return 'object';
+    return 'expr';     // an expression that has not been evaluated yet
+}
+const TYPE_LABEL = { expr: 'expression', object: 'object (array)' };
+const FALSY = ['false', '0', '-0', '0n', '""', 'null', 'undefined', 'NaN'];
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function C(t) { return `<code>${esc(t)}</code>`; }
+
+// ---------------------------------------------------------------------------
+// The algorithms of the operators (simplified from the ECMAScript spec)
+// ---------------------------------------------------------------------------
+const R_PLUS = { title: 'Algorithm of +', items: [
+    'Is one operand a <b>string</b>? -> yes: <code>ToString</code> of the other one and <b>join</b>',
+    'Otherwise: <code>ToNumber</code> of both operands and <b>add</b>',
+] };
+const R_ARITH = { title: 'Algorithm of - * / %', items: [
+    'Always: <code>ToNumber</code> of both operands',
+    'The arithmetic operation with the numbers we got',
+] };
+const R_NUMBER = { title: 'Algorithm of Number(string)', items: [
+    'Is the <b>whole</b> string (without spaces at the ends) a number? -> that number',
+    'Empty string (or only spaces) -> <b>0</b>',
+    'Otherwise -> <b>NaN</b>',
+] };
+const R_PFLOAT = { title: 'Algorithm of parseFloat(string)', items: [
+    'Skip the spaces at the start',
+    'Read from left to right while the characters still form a number',
+    'What was read -> a number; nothing was read -> <b>NaN</b>',
+] };
+const R_PINT = { title: 'Algorithm of parseInt(string)', items: [
+    'Skip the spaces at the start (and the sign + or -)',
+    'Read <b>digits</b> from left to right, up to the first character that is not a digit',
+    'The digits read -> a whole number; no digits -> <b>NaN</b>',
+] };
+const R_STRICT = { title: 'Algorithm of ===', items: [
+    'Different types? -> <b>false</b> (no conversion at all!)',
+    'Same types: compare the values (NaN is not equal to anything)',
+] };
+const R_LOOSE = { title: 'Algorithm of ==', items: [
+    'Same types? -> compare them like <code>===</code>',
+    '<code>null</code> or <code>undefined</code>? -> true only if both are null / undefined; otherwise false',
+    'number and string? -> <code>ToNumber</code>(string), then start again',
+    'boolean? -> <code>ToNumber</code>(boolean), then start again',
+    'object and primitive? -> <code>ToPrimitive</code>(object), start again (later)',
+    'Otherwise -> <b>false</b>',
+] };
+const R_REL = { title: 'Algorithm of &lt; &gt; &lt;= &gt;=', items: [
+    'Are both operands <b>strings</b>? -> yes: compare them <b>character by character</b>, by their codes',
+    'Otherwise: <code>ToNumber</code> of both and a <b>numeric</b> comparison',
+] };
+const R_BOOL = { title: 'Algorithm of ToBoolean', items: [
+    'Is it one of the 8 <b>falsy</b> values? -> <b>false</b>',
+    'Everything else is <b>truthy</b> -> <b>true</b>',
+] };
+const R_IF = { title: 'Algorithm of if (condition)', items: [
+    'Calculate the expression in the brackets',
+    '<code>ToBoolean</code>(the result): true -> the first block; false -> the <code>else</code> block',
+] };
+const R_OR = { title: 'Algorithm of ||', items: [
+    'Calculate the left operand',
+    '<code>ToBoolean</code>(left) is true? -> return the <b>left</b> one; the right one is not calculated',
+    'Otherwise -> calculate and return the <b>right</b> one',
+] };
+const R_AND = { title: 'Algorithm of &amp;&amp;', items: [
+    'Calculate the left operand',
+    '<code>ToBoolean</code>(left) is false? -> return the <b>left</b> one; the right one is not calculated',
+    'Otherwise -> calculate and return the <b>right</b> one',
+] };
+const R_NULLISH = { title: 'Algorithm of ??', items: [
+    'Calculate the left operand',
+    'Is the left one <code>null</code> or <code>undefined</code>? -> calculate and return the <b>right</b> one',
+    'Otherwise -> return the <b>left</b> one (even if it is 0 or "")',
+] };
+const R_TERN = { title: 'Algorithm of condition ? expr1 : expr2', items: [
+    'Calculate the condition',
+    '<code>ToBoolean</code>(the condition) is true? -> calculate and return <b>expr1</b>',
+    'Otherwise -> calculate and return <b>expr2</b>',
+] };
+
+// ---------------------------------------------------------------------------
+// Helpers used by the scenario steps. Each one mutates the state `s`.
+// ---------------------------------------------------------------------------
+function fresh(s) { s.chain = null; s.ops = null; s.res = null; s.mach = []; s.cmp = null; s.scan = null; }
+function E(s, ...chain) { s.chain = chain; }
+function O(s, ...toks) {
+    s.ops = toks.map(t => t.startsWith('@') ? { op: t.slice(1) } : { v: t, t: typeOf(t), st: '' });
+    s.res = null;
+}
+function OV(s, i, v) { Object.assign(s.ops[i], { v, t: typeOf(v), st: 'conv' }); }
+function OS(s, i, st) { s.ops[i].st = st; }
+function R(s, v) { s.res = { v, t: typeOf(v) }; }
+function RULES(s, def) { s.rules = { title: def.title, items: def.items.map(t => ({ t, st: '' })), pass: 1 }; }
+function RS(s, ...sts) { sts.forEach((st, i) => { if (st !== null) s.rules.items[i].st = st; }); }
+function PASS(s) { s.rules.pass++; s.rules.items.forEach(it => { if (it.st !== 'later') it.st = ''; }); }
+function M(s, name, inp, out, note = '') { s.mach.push({ name, inp, out, note }); }
+function log(s, text, err = false) { s.console.push({ text, err }); }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line - active code line (0-based, -1 = none)
+//   step.do   - changes to the state
+//   step.fly  - flying values: [from, to, text, delayMs?, flags?]
+//               keys: op:i (operand chip i), res, con (last console line),
+//               m:i:in / m:i:out (machine i), sort:in, sort:out, sort:f:i, sort:t:i
+//   step.show - [key, ms]: keep the element hidden, then pop it in at ms
+// ---------------------------------------------------------------------------
+const F = 820;   // flight duration, ms
+
+const SCENARIOS = [
+{
+    tab: 'The + operator',
+    code: [
+        'console.log(2 + 3);',
+        'console.log("2" + "3");',
+        'console.log(2 + "1");',
+        'console.log(1 + 2 + "3");',
+        'console.log("1" + 2 + 3);',
+        'console.log("6" - 1);',
+        'console.log("6" * "2");',
+        'console.log("a" * 1);',
+    ],
+    steps: [
+        { line: -1, text: `The <code>+</code> operator has two jobs: <b>adding</b> numbers and <b>joining</b> (concatenating) strings. How does it decide which one to do? We will look into the "head" of the JavaScript engine: it <span class="r">looks at the types</span> of the operands, decides by the rules on the right, <span class="w">converts</span> the operands if needed, and only then calculates.`,
+          do: s => RULES(s, R_PLUS) },
+        { line: 0, text: `<code>2 + 3</code> - both operands are of type number. Is there a string? <b>No</b> - so rule 2: ordinary <b>addition</b>. The result is the number 5.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '2 + 3', '5'); O(s, '2', '@+', '3'); RS(s, 'no', 'yes'); R(s, '5'); log(s, '5'); },
+          show: [['res', 500]], fly: [['res', 'con', '5', 900]] },
+        { line: 1, text: `<code>"2" + "3"</code> - both operands are strings, so rule 1: <b>joining</b>. The result is the string "23". Careful: <code>console.log</code> prints strings without the quotes, so in the console we see 23 - but it is a string, not a number!`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '"2" + "3"', '"23"'); O(s, '"2"', '@+', '"3"'); RS(s, 'yes'); R(s, '"23"'); log(s, '23'); },
+          show: [['res', 500]], fly: [['res', 'con', '23', 900]] },
+        { line: 2, text: `<code>2 + "1"</code> - a number and a string. The rule is clear: there is an operand of type string. <b>What will it print?</b> Think before you go on.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '2 + "1"'); O(s, '2', '@+', '"1"'); RS(s, 'cur'); } },
+        { line: 2, text: `Rule 1: the engine quietly passes the number 2 through the <b>ToString</b> machine and gets the string "2". Nobody asked for it explicitly - such a hidden type conversion is called <b>type coercion</b>.`,
+          do: s => { RS(s, 'yes'); M(s, 'ToString', '2', '"2"'); OV(s, 0, '"2"'); E(s, '2 + "1"', '"2" + "1"'); },
+          fly: [['op:0', 'm:0:in', '2', 0], ['m:0:out', 'op:0', '"2"', 1300]], show: [['m:0:out', 950]] },
+        { line: 2, text: `Now both operands are strings: <code>"2" + "1"</code> is <b>"21"</b>. That is why <code>2 + "1"</code> gives "21", not 3.`,
+          do: s => { E(s, '2 + "1"', '"2" + "1"', '"21"'); R(s, '"21"'); log(s, '21'); },
+          show: [['res', 300]], fly: [['res', 'con', '21', 700]] },
+        { line: 3, text: `<code>1 + 2 + "3"</code> - two <code>+</code> operators. They run <b>from left to right</b> (left associativity), i.e. <code>1 + 2</code> first. <b>What will be printed?</b> Think.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '[[1 + 2]] + "3"'); O(s, '1', '@+', '2'); } },
+        { line: 3, text: `The first operation is <code>1 + 2</code>: no string - addition, we get 3. Now the expression is <code>3 + "3"</code>.`,
+          do: s => { RS(s, 'no', 'yes'); R(s, '3'); E(s, '[[1 + 2]] + "3"', '3 + "3"'); },
+          show: [['res', 300]] },
+        { line: 3, text: `<code>3 + "3"</code>: now there is a string, so 3 -> <b>ToString</b> -> "3" and joining: <b>"33"</b>. If you want addition, convert the string to a number explicitly (scenario 2).`,
+          do: s => { O(s, '3', '@+', '"3"'); RULES(s, R_PLUS); RS(s, 'yes'); M(s, 'ToString', '3', '"3"'); OV(s, 0, '"3"'); R(s, '"33"'); E(s, '1 + 2 + "3"', '3 + "3"', '"3" + "3"', '"33"'); log(s, '33'); },
+          fly: [['op:0', 'm:0:in', '3', 0], ['m:0:out', 'op:0', '"3"', 1250], ['res', 'con', '33', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 4, text: `<code>"1" + 2 + 3</code> - again from left to right. Already the first operation <code>"1" + 2</code> has a string: 2 -> ToString -> "2" and joining: "12".`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '[["1" + 2]] + 3', '"12" + 3'); O(s, '"1"', '@+', '2'); RS(s, 'yes'); M(s, 'ToString', '2', '"2"'); OV(s, 2, '"2"'); R(s, '"12"'); },
+          fly: [['op:2', 'm:0:in', '2', 0], ['m:0:out', 'op:2', '"2"', 1250]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 4, text: `...and then <code>"12" + 3</code>: a string again, 3 -> "3" and <b>"123"</b>. Compare: <code>1 + 2 + "3"</code> gives "33", and <code>"1" + 2 + 3</code> gives "123". The order matters!`,
+          do: s => { O(s, '"12"', '@+', '3'); RULES(s, R_PLUS); RS(s, 'yes'); s.mach = []; M(s, 'ToString', '3', '"3"'); OV(s, 2, '"3"'); R(s, '"123"'); E(s, '"1" + 2 + 3', '"12" + 3', '"123"'); log(s, '123'); },
+          fly: [['op:2', 'm:0:in', '3', 0], ['m:0:out', 'op:2', '"3"', 1250], ['res', 'con', '123', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 5, text: `The operators <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> work <b>only with numbers</b> - "joining" does not exist for them. So they always pass their operands through the <b>ToNumber</b> machine: "6" -> 6, and 6 - 1 = 5.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); E(s, '"6" - 1', '6 - 1', '5'); O(s, '"6"', '@-', '1'); RS(s, 'yes', 'yes'); M(s, 'ToNumber', '"6"', '6'); OV(s, 0, '6'); R(s, '5'); log(s, '5'); },
+          fly: [['op:0', 'm:0:in', '"6"', 0], ['m:0:out', 'op:0', '6', 1250], ['res', 'con', '5', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 6, text: `<code>"6" * "2"</code> - both operands are strings, but <code>*</code> does not join: both go through ToNumber and the result is the number <b>12</b>.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); E(s, '"6" * "2"', '6 * 2', '12'); O(s, '"6"', '@*', '"2"'); RS(s, 'yes', 'yes'); M(s, 'ToNumber', '"6"', '6'); M(s, 'ToNumber', '"2"', '2'); OV(s, 0, '6'); OV(s, 2, '2'); R(s, '12'); log(s, '12'); },
+          fly: [['op:0', 'm:0:in', '"6"', 0], ['op:2', 'm:1:in', '"2"', 200], ['m:0:out', 'op:0', '6', 1300], ['m:1:out', 'op:2', '2', 1500], ['res', 'con', '12', 2900]],
+          show: [['m:0:out', 950], ['m:1:out', 1150], ['res', 2550]] },
+        { line: 7, text: `And if the string does not look like a number? <code>ToNumber("a")</code> gives <b>NaN</b> (Not a Number), and any arithmetic with NaN gives NaN. A curious fact: <code>typeof NaN</code> is "number" - NaN is a special value of type number.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); E(s, '"a" * 1', 'NaN * 1', 'NaN'); O(s, '"a"', '@*', '1'); RS(s, 'yes', 'yes'); M(s, 'ToNumber', '"a"', 'NaN'); OV(s, 0, 'NaN'); R(s, 'NaN'); log(s, 'NaN'); },
+          fly: [['op:0', 'm:0:in', '"a"', 0], ['m:0:out', 'op:0', 'NaN', 1250], ['res', 'con', 'NaN', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: -1, text: `<b>Summary:</b> <code>+</code> joins as soon as at least one operand is a string, otherwise it adds. <code>- * / %</code> always convert to a number. Expressions are calculated from left to right, so the position of the string matters. Do not rely on the hidden conversion - convert explicitly.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); } },
+    ],
+},
+{
+    tab: 'String -> number',
+    code: [
+        'let x = "42.5";',
+        'console.log(Number(x));',
+        'console.log(parseFloat(x));',
+        'console.log(parseInt(x));',
+        'console.log(x * 1, +x);',
+        'let w = "42px";',
+        'console.log(Number(w));',
+        'console.log(parseInt(w));',
+        'let a = "2", b = "3";',
+        'console.log(a + b);',
+        'console.log(Number(a) + Number(b));',
+    ],
+    steps: [
+        { line: -1, text: `Data that the user enters (with <code>prompt()</code>, in a field of an HTML form) always arrives as <b>strings</b> - even when it contains only digits. The same is true for most values in JSON exports. Before we calculate with them, we must convert them to numbers explicitly. We will see how the different ways "read" the string.` },
+        { line: 0, text: `x holds the string "42.5" - four <b>characters</b> (4, 2, dot, 5), not the number 42.5. For JavaScript this is text.`,
+          do: s => { fresh(s); E(s, '"42.5"'); O(s, '"42.5"'); s.scan = { fn: '', str: '42.5', ok: 0, stop: null }; } },
+        { line: 1, text: `<code>Number(x)</code> calls the <b>ToNumber</b> machine: it checks whether the <b>whole</b> string is a number. "42.5" is, so the result is the number 42.5 (type number).`,
+          do: s => { fresh(s); RULES(s, R_NUMBER); RS(s, 'yes'); E(s, 'Number(x)', 'Number("42.5")', '42.5'); O(s, '@Number(', '"42.5"', '@)'); R(s, '42.5'); s.scan = { fn: 'Number', str: '42.5', ok: 4, stop: null, note: 'The whole string is a valid number: <code>42.5</code>' }; log(s, '42.5'); },
+          show: [['res', 500]], fly: [['res', 'con', '42.5', 900]] },
+        { line: 2, text: `<code>parseFloat</code> (parse - "read and make sense of") reads character by character from left to right, while the characters form a number. Here it manages to read everything: 42.5.`,
+          do: s => { fresh(s); RULES(s, R_PFLOAT); RS(s, 'done', 'done', 'done'); E(s, 'parseFloat(x)', 'parseFloat("42.5")', '42.5'); O(s, '@parseFloat(', '"42.5"', '@)'); R(s, '42.5'); s.scan = { fn: 'parseFloat', str: '42.5', ok: 4, stop: null, note: 'Read: <code>42.5</code>' }; log(s, '42.5'); },
+          show: [['res', 500]], fly: [['res', 'con', '42.5', 900]] },
+        { line: 3, text: `<code>parseInt</code> looks for a <b>whole</b> number: it reads 4 and 2 and stops at the dot, because it is not a digit. The rest (".5") is thrown away. The result is 42 - the decimal part is not rounded, it is simply cut off.`,
+          do: s => { fresh(s); RULES(s, R_PINT); RS(s, 'done', 'done', 'done'); E(s, 'parseInt(x)', 'parseInt("42.5")', '42'); O(s, '@parseInt(', '"42.5"', '@)'); R(s, '42'); s.scan = { fn: 'parseInt', str: '42.5', ok: 2, stop: 2, note: 'Read: <code>42</code> - the dot stops the reading' }; log(s, '42'); },
+          show: [['res', 500]], fly: [['res', 'con', '42', 900]] },
+        { line: 4, text: `<code>x * 1</code> and the unary plus <code>+x</code> are "hidden" conversions: both call the same ToNumber machine inside as <code>Number(x)</code>. They work, but <code>Number(x)</code> is clearer for whoever reads the code.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); RS(s, 'yes', 'yes'); E(s, 'x * 1', '"42.5" * 1', '42.5 * 1', '42.5'); O(s, '"42.5"', '@*', '1'); M(s, 'ToNumber', '"42.5"', '42.5', 'the same machine works for +x'); OV(s, 0, '42.5'); R(s, '42.5'); log(s, '42.5 42.5'); },
+          fly: [['op:0', 'm:0:in', '"42.5"', 0], ['m:0:out', 'op:0', '42.5', 1250], ['res', 'con', '42.5', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 6, text: `Now <code>w = "42px"</code> (for example a size from CSS). <b>What will <code>Number(w)</code> return?</b> Think before you go on.`,
+          do: s => { fresh(s); RULES(s, R_NUMBER); E(s, 'Number(w)', 'Number("42px")'); O(s, '@Number(', '"42px"', '@)'); s.scan = { fn: 'Number', str: '42px', ok: 0, stop: null }; } },
+        { line: 6, text: `<code>Number</code> checks the <b>whole</b> string: "p" cannot be part of a number, so the string is not a number and the result is <b>NaN</b>. This is useful: NaN tells us that the input is not valid.`,
+          do: s => { RS(s, 'no', 'no', 'yes'); E(s, 'Number(w)', 'Number("42px")', 'NaN'); R(s, 'NaN'); s.scan = { fn: 'Number', str: '42px', ok: 2, stop: 2, whole: true, note: 'The whole string <b>is not</b> a number -> <code>NaN</code>' }; log(s, 'NaN'); },
+          show: [['res', 500]], fly: [['res', 'con', 'NaN', 900]] },
+        { line: 7, text: `<code>parseInt</code> is more "patient": it reads 4 and 2, stops at "p" and returns what it read - 42. Handy for values like "42px". But if the string does not start with a digit (e.g. "px42"), there is nothing to read and it returns NaN.`,
+          do: s => { fresh(s); RULES(s, R_PINT); RS(s, 'done', 'done', 'done'); E(s, 'parseInt(w)', 'parseInt("42px")', '42'); O(s, '@parseInt(', '"42px"', '@)'); R(s, '42'); s.scan = { fn: 'parseInt', str: '42px', ok: 2, stop: 2, note: 'Read: <code>42</code> - "p" stops the reading' }; log(s, '42'); },
+          show: [['res', 500]], fly: [['res', 'con', '42', 900]] },
+        { line: 9, text: `The classic bug: both values came from the user as strings, and <code>+</code> with strings <b>joins</b>. We get "23" instead of 5 (we saw why in scenario 1).`,
+          do: s => { fresh(s); RULES(s, R_PLUS); RS(s, 'yes'); E(s, 'a + b', '"2" + "3"', '"23"'); O(s, '"2"', '@+', '"3"'); R(s, '"23"'); log(s, '23'); },
+          show: [['res', 500]], fly: [['res', 'con', '23', 900]] },
+        { line: 10, text: `The fix: first we convert both strings <b>explicitly</b>. Now <code>+</code> sees two numbers and adds them: 5.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); RS(s, 'no', 'yes'); E(s, 'Number(a) + Number(b)', '2 + 3', '5'); O(s, '"2"', '@+', '"3"'); M(s, 'ToNumber', '"2"', '2', 'Number(a)'); M(s, 'ToNumber', '"3"', '3', 'Number(b)'); OV(s, 0, '2'); OV(s, 2, '3'); R(s, '5'); log(s, '5'); },
+          fly: [['op:0', 'm:0:in', '"2"', 0], ['op:2', 'm:1:in', '"3"', 200], ['m:0:out', 'op:0', '2', 1300], ['m:1:out', 'op:2', '3', 1500], ['res', 'con', '5', 2900]],
+          show: [['m:0:out', 950], ['m:1:out', 1150], ['res', 2550]] },
+        { line: -1, text: `<b>Summary:</b> <code>Number(x)</code> (or <code>+x</code>) - when the whole string must be a number; invalid input gives NaN. <code>parseInt</code> / <code>parseFloat</code> - when the number is at the start of a text ("42px"). To check for an invalid result: <code>Number.isNaN(n)</code>.`,
+          do: s => { fresh(s); s.rules = null; } },
+    ],
+},
+{
+    tab: '== and ===',
+    code: [
+        'console.log(2 === "2");',
+        'console.log(2 == "2");',
+        'console.log(true == 1);',
+        'console.log(null == undefined);',
+        'console.log(null == 0);',
+        'console.log(NaN == NaN);',
+    ],
+    steps: [
+        { line: -1, text: `JavaScript has two equality operators. <code>===</code> (strict equality) <b>never</b> converts the types. <code>==</code> (loose equality) converts by rules that we will see on the right - they come from the language specification (ECMAScript). Both always return true or false.`,
+          do: s => RULES(s, R_LOOSE) },
+        { line: 0, text: `<code>2 === "2"</code>: number and string - <b>different types</b>. For <code>===</code> this is enough: the result is false, with no conversion at all.`,
+          do: s => { fresh(s); RULES(s, R_STRICT); RS(s, 'yes'); E(s, '2 === "2"', 'false'); O(s, '2', '@===', '"2"'); R(s, 'false'); log(s, 'false'); },
+          show: [['res', 500]], fly: [['res', 'con', 'false', 900]] },
+        { line: 1, text: `<code>2 == "2"</code> - the same operands, but with <code>==</code>. The engine goes through the rules from top to bottom: different types, not null / undefined, but they are <b>number and string</b> - rule 3. <b>What will it print?</b>`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'no', 'cur'); E(s, '2 == "2"'); O(s, '2', '@==', '"2"'); } },
+        { line: 1, text: `Rule 3: the string goes through <b>ToNumber</b>: "2" -> 2. Now the comparison is <code>2 == 2</code> and the algorithm <b>starts again</b>.`,
+          do: s => { RS(s, null, null, 'yes'); M(s, 'ToNumber', '"2"', '2'); OV(s, 2, '2'); E(s, '2 == "2"', '2 == 2'); },
+          fly: [['op:2', 'm:0:in', '"2"', 0], ['m:0:out', 'op:2', '2', 1250]], show: [['m:0:out', 950]] },
+        { line: 1, text: `Second pass: now the types are the <b>same</b> (number and number) - rule 1, we compare like <code>===</code>: 2 and 2 are equal, the result is <b>true</b>.`,
+          do: s => { PASS(s); RS(s, 'yes'); E(s, '2 == "2"', '2 == 2', 'true'); R(s, 'true'); log(s, 'true'); },
+          show: [['res', 500]], fly: [['res', 'con', 'true', 900]] },
+        { line: 2, text: `<code>true == 1</code>: boolean and number. Rules 1, 2 and 3 do not fit; rule 4: boolean -> <b>ToNumber</b>. true becomes 1 (and false becomes 0).`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'no', 'no', 'yes'); E(s, 'true == 1', '1 == 1'); O(s, 'true', '@==', '1'); M(s, 'ToNumber', 'true', '1'); OV(s, 0, '1'); },
+          fly: [['op:0', 'm:0:in', 'true', 0], ['m:0:out', 'op:0', '1', 1250]], show: [['m:0:out', 950]] },
+        { line: 2, text: `Start again: <code>1 == 1</code> - same types, equal values: <b>true</b>. In the same way <code>false == 0</code>, <code>"" == 0</code> and even <code>"0" == false</code> are true - tricky!`,
+          do: s => { PASS(s); RS(s, 'yes'); E(s, 'true == 1', '1 == 1', 'true'); R(s, 'true'); log(s, 'true'); },
+          show: [['res', 500]], fly: [['res', 'con', 'true', 900]] },
+        { line: 3, text: `<code>null == undefined</code>: different types, but rule 2 says that null and undefined are <b>equal to each other</b> - true. There is no conversion. (And <code>null === undefined</code> is false - different types.)`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'yes'); E(s, 'null == undefined', 'true'); O(s, 'null', '@==', 'undefined'); R(s, 'true'); log(s, 'true'); },
+          show: [['res', 500]], fly: [['res', 'con', 'true', 900]] },
+        { line: 4, text: `<code>null == 0</code> - <b>what will it print?</b> If you think null becomes 0... let us look at the rules.`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'cur'); E(s, 'null == 0'); O(s, 'null', '@==', '0'); } },
+        { line: 4, text: `Rule 2: one operand is null, and the other is not null / undefined, so the result is <b>false</b>. With <code>==</code>, null is <b>not</b> converted to 0. (A curious fact: <code>null >= 0</code> is true, because <code>&lt; &gt; &lt;= &gt;=</code> use ToNumber.)`,
+          do: s => { RS(s, 'no', 'yes'); E(s, 'null == 0', 'false'); R(s, 'false'); log(s, 'false'); },
+          show: [['res', 500]], fly: [['res', 'con', 'false', 900]] },
+        { line: 5, text: `<code>NaN == NaN</code>: same types (number) - rule 1. But NaN is the only value in JavaScript that is <b>not equal even to itself</b>: false (with <code>===</code> too). To check for it, use <code>Number.isNaN(x)</code>.`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'yes'); E(s, 'NaN == NaN', 'false'); O(s, 'NaN', '@==', 'NaN'); R(s, 'false'); log(s, 'false'); },
+          show: [['res', 500]], fly: [['res', 'con', 'false', 900]] },
+        { line: -1, text: `<b>Summary:</b> <code>==</code> hides a whole algorithm of conversions with surprising exceptions. <code>===</code> is simple: different types -> false. <b>Always use <code>===</code> and <code>!==</code></b>, and when the types differ, convert explicitly (e.g. with Number).`,
+          do: s => { fresh(s); RULES(s, R_STRICT); } },
+    ],
+},
+{
+    tab: 'Comparing strings',
+    code: [
+        'console.log("2" > "19999");',
+        'console.log("1199" > "12");',
+        'console.log("a" > "A");',
+        'console.log("1" < "11");',
+        'console.log("2" > 19999);',
+    ],
+    steps: [
+        { line: -1, text: `How are two strings compared with <code>&gt;</code> or <code>&lt;</code>? Not by length and not as numbers, but <b>character by character</b>, like in a dictionary: the codes of the characters (Unicode) are compared until the first difference is found. This is called lexicographic order.`,
+          do: s => RULES(s, R_REL) },
+        { line: 0, text: `<code>"2" > "19999"</code> - both operands are strings (rule 1). <b>What will it print?</b> As numbers, 2 is much smaller than 19999... Think.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'cur'); E(s, '"2" > "19999"'); O(s, '"2"', '@>', '"19999"'); s.cmp = { a: '2', b: '19999', i: 0, dec: false }; } },
+        { line: 0, text: `The first characters: "2" (code 50) and "1" (code 49). They are <b>different</b>, so the comparison ends here - the other characters are not looked at at all. 50 > 49, the result is <b>true</b>.`,
+          do: s => { RS(s, 'yes'); E(s, '"2" > "19999"', 'true'); R(s, 'true'); s.cmp = { a: '2', b: '19999', i: 0, dec: true, verdict: `<code>50 &gt; 49</code>, so <code>"2" &gt; "19999"</code> is <b>true</b>` }; log(s, 'true'); },
+          show: [['res', 600]], fly: [['res', 'con', 'true', 1000]] },
+        { line: 1, text: `<code>"1199" > "12"</code>: position 0 - "1" and "1" are the <b>same</b>, so we go on with the next character.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'yes'); E(s, '"1199" > "12"'); O(s, '"1199"', '@>', '"12"'); s.cmp = { a: '1199', b: '12', i: 0, dec: false, verdict: '"1" (49) and "1" (49) are equal -> the next character' }; } },
+        { line: 1, text: `Position 1: "1" (49) and "2" (50) - the first difference. 49 > 50 is false, so the result is <b>false</b>. The length of the string does not matter!`,
+          do: s => { E(s, '"1199" > "12"', 'false'); R(s, 'false'); s.cmp = { a: '1199', b: '12', i: 1, dec: true, verdict: `<code>49 &gt; 50</code> is false, so <code>"1199" &gt; "12"</code> is <b>false</b>` }; log(s, 'false'); },
+          show: [['res', 600]], fly: [['res', 'con', 'false', 1000]] },
+        { line: 2, text: `<code>"a" > "A"</code>: the small "a" has code 97, and the capital "A" - 65. The result is <b>true</b>. All capital Latin letters (65-90) come before the small ones (97-122), so <code>"Z" &lt; "a"</code> is true too.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'yes'); E(s, '"a" > "A"', 'true'); O(s, '"a"', '@>', '"A"'); R(s, 'true'); s.cmp = { a: 'a', b: 'A', i: 0, dec: true, verdict: `<code>97 &gt; 65</code>, so <code>"a" &gt; "A"</code> is <b>true</b>` }; log(s, 'true'); },
+          show: [['res', 600]], fly: [['res', 'con', 'true', 1000]] },
+        { line: 3, text: `<code>"1" &lt; "11"</code>: position 0 is the same, and at position 1 the left string <b>ends</b>. The string that ends first is the smaller one: true. (Some old materials describe this as a "null character" with the smallest code - the result is the same.)`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'yes'); E(s, '"1" < "11"', 'true'); O(s, '"1"', '@<', '"11"'); R(s, 'true'); s.cmp = { a: '1', b: '11', i: 1, dec: true, verdict: `the left string ended first, so <code>"1" &lt; "11"</code> is <b>true</b>` }; log(s, 'true'); },
+          show: [['res', 600]], fly: [['res', 'con', 'true', 1000]] },
+        { line: 4, text: `And now <code>"2" > 19999</code> - on the right there is a <b>number</b>, not a string. <b>What will it print?</b> Think before you go on.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'cur'); E(s, '"2" > 19999'); O(s, '"2"', '@>', '19999'); } },
+        { line: 4, text: `They are not both strings, so rule 2: "2" goes through <b>ToNumber</b> and the comparison is numeric: <code>2 > 19999</code> is <b>false</b>. One single type changes the whole algorithm!`,
+          do: s => { RS(s, 'no', 'yes'); M(s, 'ToNumber', '"2"', '2'); OV(s, 0, '2'); E(s, '"2" > 19999', '2 > 19999', 'false'); R(s, 'false'); log(s, 'false'); },
+          fly: [['op:0', 'm:0:in', '"2"', 0], ['m:0:out', 'op:0', '2', 1250], ['res', 'con', 'false', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: -1, text: `<b>Summary:</b> two strings are compared as text - character by character, by their codes, up to the first difference. If at least one operand is a number, the comparison is numeric. Numbers that arrive as strings (from the user, from JSON) - convert them with <code>Number()</code> first, and only then compare.`,
+          do: s => { fresh(s); RULES(s, R_REL); } },
+    ],
+},
+{
+    tab: 'Truthy and falsy',
+    code: [
+        'console.log(Boolean(0));',
+        'console.log(Boolean("0"));',
+        'console.log(Boolean(""));',
+        'console.log(Boolean(" "));',
+        'console.log(Boolean([]));',
+        'let x = 5;',
+        'if (x % 2) console.log("Odd");',
+        'else console.log("Even");',
+        'let arr = [2, 4, 6];',
+        'if (arr.lenght) console.log("Non empty array");',
+        'else console.log("Empty array");',
+    ],
+    steps: [
+        { line: -1, text: `When JavaScript expects a boolean value (in <code>if</code>, in a loop, with <code>!</code>, <code>&&</code>, <code>||</code>, <code>?:</code>) but gets another type, it calls the hidden <b>ToBoolean</b> machine. The rule is short: there are exactly <b>8 falsy</b> values - they are on the left. Everything else is <b>truthy</b>.`,
+          do: s => { RULES(s, R_BOOL); s.sort = { inp: null, out: null, hits: [], truthy: [] }; } },
+        { line: 0, text: `<code>Boolean(x)</code> calls the ToBoolean machine explicitly. 0 is in the list of falsy values, so the result is <b>false</b>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'yes'); E(s, 'Boolean(0)', 'false'); O(s, '@Boolean(', '0', '@)'); R(s, 'false'); s.sort = { inp: '0', out: 'false', hits: [1], last: 'f:1', truthy: [] }; log(s, 'false'); },
+          fly: [['op:1', 'sort:in', '0', 0], ['sort:in', 'sort:f:1', '0', 1300, 'noawait'], ['res', 'con', 'false', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 1, text: `<code>Boolean("0")</code> - a string that holds the character zero. <b>What will it print?</b> Think before you go on.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); E(s, 'Boolean("0")'); O(s, '@Boolean(', '"0"', '@)'); s.sort.inp = '"0"'; s.sort.out = null; s.sort.last = null; } },
+        { line: 1, text: `<b>true!</b> ToBoolean does not look at what the string says - it only asks whether it is <b>empty</b>. "0" is not empty, so it is truthy. The same is true for <code>"false"</code>.`,
+          do: s => { RS(s, 'no', 'yes'); E(s, 'Boolean("0")', 'true'); R(s, 'true'); s.sort.out = 'true'; s.sort.truthy.push('"0"'); s.sort.last = 't:0'; log(s, 'true'); },
+          fly: [['op:1', 'sort:in', '"0"', 0], ['sort:in', 'sort:t:0', '"0"', 1300], ['res', 'con', 'true', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 2, text: `<code>""</code> - the empty string is the only falsy string. The result is <b>false</b>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'yes'); E(s, 'Boolean("")', 'false'); O(s, '@Boolean(', '""', '@)'); R(s, 'false'); s.sort.inp = '""'; s.sort.out = 'false'; s.sort.hits.push(4); s.sort.last = 'f:4'; log(s, 'false'); },
+          fly: [['op:1', 'sort:in', '""', 0], ['sort:in', 'sort:f:4', '""', 1300, 'noawait'], ['res', 'con', 'false', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 3, text: `<code>" "</code> - a string with one <b>space</b>. It looks empty, but it is not: the space is a character too. The result is <b>true</b>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'no', 'yes'); E(s, 'Boolean(" ")', 'true'); O(s, '@Boolean(', '" "', '@)'); R(s, 'true'); s.sort.inp = '" "'; s.sort.out = 'true'; s.sort.truthy.push('" "'); s.sort.last = 't:1'; log(s, 'true'); },
+          fly: [['op:1', 'sort:in', '" "', 0], ['sort:in', 'sort:t:1', '" "', 1300], ['res', 'con', 'true', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 4, text: `<code>[]</code> - an empty array. Arrays (and all objects) are <b>always truthy</b>, even when they are empty. The result is <b>true</b>. That is why the check for an empty array is done with <code>arr.length</code>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'no', 'yes'); E(s, 'Boolean([])', 'true'); O(s, '@Boolean(', '[]', '@)'); R(s, 'true'); s.sort.inp = '[]'; s.sort.out = 'true'; s.sort.truthy.push('[]'); s.sort.last = 't:2'; log(s, 'true'); },
+          fly: [['op:1', 'sort:in', '[]', 0], ['sort:in', 'sort:t:2', '[]', 1300], ['res', 'con', 'true', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 6, text: `The example from the slides: <code>if (x % 2)</code>. First the condition is calculated: 5 % 2 = 1 (the remainder of division by 2). <code>if</code> calls ToBoolean: 1 is truthy, so the first block runs.`,
+          do: s => { fresh(s); RULES(s, R_IF); RS(s, 'done', 'yes'); E(s, 'x % 2', '5 % 2', '1'); O(s, '1'); s.sort.inp = '1'; s.sort.out = 'true'; s.sort.truthy.push('1'); s.sort.last = 't:3'; },
+          fly: [['op:0', 'sort:in', '1', 0], ['sort:in', 'sort:t:3', '1', 1300]], show: [['sort:out', 900]] },
+        { line: 6, text: `<b>Odd</b> is printed. For an even x the remainder is 0 - falsy - and <code>else</code> would run: "Even". It is short, but <code>if (x % 2 !== 0)</code> says the same thing more clearly.`,
+          do: s => { log(s, 'Odd'); },
+          show: [['con', 200]] },
+        { line: 9, text: `The bug from the slides: <code>arr.lenght</code> - a spelling mistake! The array has no such property, so JavaScript gives no error, but returns <b>undefined</b>. ToBoolean(undefined) is false...`,
+          do: s => { fresh(s); RULES(s, R_IF); RS(s, 'done', 'yes'); E(s, 'arr.lenght', 'undefined'); O(s, 'undefined'); s.sort.inp = 'undefined'; s.sort.out = 'false'; s.sort.hits.push(6); s.sort.last = 'f:6'; },
+          fly: [['op:0', 'sort:in', 'undefined', 0], ['sort:in', 'sort:f:6', 'undefined', 1300, 'noawait']], show: [['sort:out', 900]] },
+        { line: 10, text: `...and <code>else</code> runs: <b>"Empty array"</b>, even though the array has 3 elements. The program does not crash, it is just quietly wrong. With the correct <code>arr.length</code> the condition is 3 - truthy - and "Non empty array" is printed.`,
+          do: s => { log(s, 'Empty array'); },
+          show: [['con', 200]] },
+        { line: -1, text: `<b>Summary:</b> only 8 values are falsy: <code>false</code>, <code>0</code>, <code>-0</code>, <code>0n</code> (BigInt zero), <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>. Everything else is truthy - including <code>"0"</code>, <code>" "</code>, <code>"false"</code> and <code>[]</code>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); s.sort = { inp: null, out: null, hits: [0, 1, 2, 3, 4, 5, 6, 7], truthy: ['"0"', '" "', '[]', '1'] }; } },
+    ],
+},
+{
+    tab: 'Short-circuit: && and ||',
+    code: [
+        'let userName;',
+        'console.log(userName || "Anonymous");',
+        'userName = "Ada";',
+        'console.log(userName || "Anonymous");',
+        'false && console.log("Hi!");',
+        'true && console.log("Hi!");',
+        'let user = null;',
+        'console.log(user && user.name);',
+        'let qty = 0;',
+        'console.log(qty || 1);',
+        'console.log(qty ?? 1);',
+    ],
+    steps: [
+        { line: -1, text: `<code>&&</code> and <code>||</code> do not necessarily return true or false. They return <b>one of the operands</b> - as it is. ToBoolean is used only to decide <b>which one</b>. And if the answer is clear already from the left operand, the right one does not run at all: <b>short-circuit evaluation</b>.`,
+          do: s => RULES(s, R_OR) },
+        { line: 1, text: `<code>userName || "Anonymous"</code>: first the left operand is calculated - userName is <b>undefined</b> (we have no value). ToBoolean(undefined) is false, so rule 2 does not apply...`,
+          do: s => { fresh(s); RULES(s, R_OR); RS(s, 'done', 'no'); E(s, 'userName || "Anonymous"', 'undefined || "Anonymous"'); O(s, 'undefined', '@||', '"Anonymous"'); M(s, 'ToBoolean', 'undefined', 'false', 'the result is needed only for the decision'); },
+          fly: [['op:0', 'm:0:in', 'undefined', 0]], show: [['m:0:out', 950]] },
+        { line: 1, text: `...and <code>||</code> returns the <b>right</b> operand: the string "Anonymous". The result is not a boolean, but a string! This is how a default value is set.`,
+          do: s => { RS(s, null, null, 'yes'); E(s, 'userName || "Anonymous"', 'undefined || "Anonymous"', '"Anonymous"'); R(s, '"Anonymous"'); log(s, 'Anonymous'); },
+          fly: [['op:2', 'res', '"Anonymous"', 0], ['res', 'con', 'Anonymous', 1100]] },
+        { line: 3, text: `After <code>userName = "Ada"</code> the left operand is "Ada" - a non-empty string, truthy. <code>||</code> returns the <b>left</b> operand "Ada" at once. The right one ("Anonymous") is not even calculated.`,
+          do: s => { fresh(s); RULES(s, R_OR); RS(s, 'done', 'yes'); E(s, 'userName || "Anonymous"', '"Ada" || "Anonymous"', '"Ada"'); O(s, '"Ada"', '@||', '"Anonymous"'); OS(s, 2, 'skip'); M(s, 'ToBoolean', '"Ada"', 'true', 'the result is needed only for the decision'); R(s, '"Ada"'); log(s, 'Ada'); },
+          fly: [['op:0', 'm:0:in', '"Ada"', 0], ['op:0', 'res', '"Ada"', 1300], ['res', 'con', 'Ada', 2400]], show: [['m:0:out', 950]] },
+        { line: 4, text: `<code>false && console.log("Hi!")</code> - on the right there is a call that prints. <b>Will Hi! be printed?</b> Think before you go on.`,
+          do: s => { fresh(s); RULES(s, R_AND); E(s, 'false && console.log("Hi!")'); O(s, 'false', '@&&', 'console.log("Hi!")'); } },
+        { line: 4, text: `<b>No.</b> The left operand is false, and for <code>&&</code> that is enough: the whole thing is false, whatever is on the right. The engine returns the left operand and <b>skips</b> the right one - <code>console.log</code> is never called, the console stays empty.`,
+          do: s => { RS(s, 'done', 'yes'); OS(s, 2, 'skip'); M(s, 'ToBoolean', 'false', 'false'); E(s, 'false && console.log("Hi!")', 'false'); R(s, 'false'); },
+          fly: [['op:0', 'm:0:in', 'false', 0], ['op:0', 'res', 'false', 1300]], show: [['m:0:out', 950]] },
+        { line: 5, text: `<code>true && console.log("Hi!")</code>: the left one is truthy, so the answer depends on the right one - and it <b>runs</b>: it prints Hi! and returns undefined. The value of the whole expression is <b>undefined</b>.`,
+          do: s => { fresh(s); RULES(s, R_AND); RS(s, 'done', 'no', 'yes'); E(s, 'true && console.log("Hi!")', 'undefined'); O(s, 'true', '@&&', 'console.log("Hi!")'); M(s, 'ToBoolean', 'true', 'true'); log(s, 'Hi!'); OV(s, 2, 'undefined'); R(s, 'undefined'); },
+          fly: [['op:0', 'm:0:in', 'true', 0], ['op:2', 'res', 'undefined', 2300]], show: [['m:0:out', 950], ['con', 1500], ['op:2', 1900]] },
+        { line: 7, text: `Protection from an error: <code>user && user.name</code>. user is null - falsy, so <code>&&</code> returns <b>null</b> and <code>user.name</code> is not calculated at all. Without the check, <code>null.name</code> would stop the program with <span class="e">TypeError: Cannot read properties of null (reading 'name')</span>.`,
+          do: s => { fresh(s); RULES(s, R_AND); RS(s, 'done', 'yes'); E(s, 'user && user.name', 'null && user.name', 'null'); O(s, 'null', '@&&', 'user.name'); OS(s, 2, 'skip'); M(s, 'ToBoolean', 'null', 'false'); R(s, 'null'); log(s, 'null'); },
+          fly: [['op:0', 'm:0:in', 'null', 0], ['op:0', 'res', 'null', 1300], ['res', 'con', 'null', 2400]], show: [['m:0:out', 950]] },
+        { line: 9, text: `<code>qty</code> is 0 - a perfectly valid quantity. <b>What will <code>qty || 1</code> print?</b> Think before you go on.`,
+          do: s => { fresh(s); RULES(s, R_OR); E(s, 'qty || 1', '0 || 1'); O(s, '0', '@||', '1'); } },
+        { line: 9, text: `<b>1!</b> 0 is falsy, so <code>||</code> returns the right operand. If 0 is a valid value, this is a <b>bug</b>: it gets "lost". The old way of giving a default value, <code>x = x || 1</code>, has exactly this problem (the same with "").`,
+          do: s => { RS(s, 'done', 'no', 'yes'); M(s, 'ToBoolean', '0', 'false'); E(s, 'qty || 1', '0 || 1', '1'); R(s, '1'); log(s, '1'); },
+          fly: [['op:0', 'm:0:in', '0', 0], ['op:2', 'res', '1', 1300], ['res', 'con', '1', 2400]], show: [['m:0:out', 950]] },
+        { line: 10, text: `The modern solution is the <code>??</code> operator (nullish coalescing, ES2020). It <b>does not call ToBoolean</b> - it only asks "is the left one null or undefined?". 0 is not, so it returns the left operand: <b>0</b>.`,
+          do: s => { fresh(s); RULES(s, R_NULLISH); RS(s, 'done', 'no', 'yes'); E(s, 'qty ?? 1', '0 ?? 1', '0'); O(s, '0', '@??', '1'); OS(s, 2, 'skip'); R(s, '0'); log(s, '0'); },
+          fly: [['op:0', 'res', '0', 300], ['res', 'con', '0', 1400]] },
+        { line: -1, text: `<b>Summary:</b> <code>a || b</code> returns a if a is truthy, otherwise b. <code>a && b</code> returns a if a is falsy, otherwise b. The right operand runs only if it is needed. For a default value where 0 and "" are valid, use <code>??</code>.`,
+          do: s => { fresh(s); RULES(s, R_OR); } },
+    ],
+},
+{
+    tab: 'Ternary operator',
+    advanced: true,
+    code: [
+        'let x = 42;',
+        'let numType = x % 2 === 0 ? "even" : "odd";',
+        'console.log(numType);',
+        'let y = 8;',
+        'console.log("y is " + y % 2 ? "odd" : "even");',
+        'console.log("y is " + (y % 2 ? "odd" : "even"));',
+        '// let t = if (y > 0) { "pos" }; // SyntaxError',
+    ],
+    steps: [
+        { line: -1, text: `<b>Advanced.</b> <code>if...else</code> is a <b>statement</b>: it says which code to run, but it has no value itself. The ternary operator <code>?:</code> is an <b>expression</b>: it is calculated to a value that we can assign, pass to a function or join with a string.`,
+          do: s => RULES(s, R_TERN) },
+        { line: 1, text: `First the condition. Precedence decides the order: <code>%</code> comes before <code>===</code>, and <code>?:</code> comes almost last. 42 % 2 = 0, then 0 === 0 is true.`,
+          do: s => { fresh(s); RULES(s, R_TERN); RS(s, 'done'); E(s, 'x % 2 === 0 ? "even" : "odd"', '0 === 0 ? "even" : "odd"', 'true ? "even" : "odd"'); O(s, 'true', '@?', '"even"', '@:', '"odd"'); } },
+        { line: 1, text: `ToBoolean(true) is true, so <b>expr1</b> - "even" - is calculated and returned. Expr2 ("odd") is not calculated at all. The value "even" is written into numType.`,
+          do: s => { RS(s, 'done', 'yes'); OS(s, 4, 'skip'); M(s, 'ToBoolean', 'true', 'true'); R(s, '"even"'); E(s, 'x % 2 === 0 ? "even" : "odd"', 'true ? "even" : "odd"', '"even"'); },
+          fly: [['op:0', 'm:0:in', 'true', 0], ['op:2', 'res', '"even"', 1300]], show: [['m:0:out', 950]] },
+        { line: 2, text: `<b>even</b> is printed. The same with if...else needs 5 lines and a numType declared in advance - compare with the example in the slides.`,
+          do: s => { log(s, 'even'); },
+          fly: [['res', 'con', 'even', 200]] },
+        { line: 4, text: `y = 8 (even). Here we want to join text with the result of the ternary operator, but without brackets. <b>What will it print?</b> Think before you go on.`,
+          do: s => { fresh(s); RULES(s, R_TERN); E(s, '"y is " + y % 2 ? "odd" : "even"'); } },
+        { line: 4, text: `<b>odd</b> - a bug! <code>?:</code> has a lower precedence than <code>+</code>, so the condition is the whole expression <code>"y is " + y % 2</code>, i.e. the string "y is 0". A non-empty string is truthy - "odd" is always chosen.`,
+          do: s => { RS(s, 'done', 'yes'); E(s, '[["y is " + 8 % 2]] ? "odd" : "even"', '"y is 0" ? "odd" : "even"', '"odd"'); O(s, '"y is 0"', '@?', '"odd"', '@:', '"even"'); OS(s, 4, 'skip'); M(s, 'ToBoolean', '"y is 0"', 'true'); R(s, '"odd"'); log(s, 'odd'); },
+          fly: [['op:0', 'm:0:in', '"y is 0"', 0], ['op:2', 'res', '"odd"', 1300], ['res', 'con', 'odd', 2400]], show: [['m:0:out', 950]] },
+        { line: 5, text: `With brackets, the ternary operator is calculated first: 8 % 2 = 0 - falsy - expr2 is returned, "even". Then <code>"y is " + "even"</code> gives <b>"y is even"</b>. When you mix <code>?:</code> with other operators, add brackets.`,
+          do: s => { fresh(s); RULES(s, R_TERN); RS(s, 'done', 'no', 'yes'); E(s, '"y is " + ([[0 ? "odd" : "even"]])', '"y is " + "even"', '"y is even"'); O(s, '0', '@?', '"odd"', '@:', '"even"'); OS(s, 2, 'skip'); M(s, 'ToBoolean', '0', 'false'); R(s, '"even"'); log(s, 'y is even'); },
+          fly: [['op:0', 'm:0:in', '0', 0], ['op:4', 'res', '"even"', 1300], ['res', 'con', 'y is even', 2400]], show: [['m:0:out', 950]] },
+        { line: 6, text: `The opposite does not work: <code>if</code> is a statement and cannot stand where a value is expected. If we remove the comment, the whole script will not start: <span class="e">SyntaxError: Unexpected token 'if'</span> - the error is found already when the code is read, before it runs.`,
+          do: s => { fresh(s); s.rules = null; s.err = true; } },
+        { line: -1, text: `<b>Summary:</b> <code>condition ? expr1 : expr2</code> is an expression - it has a value, and only one of the two branches is calculated. The condition goes through ToBoolean, as with if. Use it for a short choice between two values, and with brackets when you mix it with other operators.`,
+          do: s => { fresh(s); RULES(s, R_TERN); } },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: states[i] is the state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, err: false, console: [], chain: null, ops: null, res: null, rules: null, mach: [], cmp: null, scan: null, sort: null };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.err = false;
+        if (s.ops) s.ops.forEach(o => { if (o.st === 'conv' || o.st === 'read') o.st = ''; });
+        s.rules && s.rules.items.forEach(it => { if (it.st === 'cur') it.st = ''; });
+        s.line = step.line;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const STAGGER = 200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Play';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Pause';
+const ARROW = cls => `<svg class="${cls}" viewBox="0 0 24 12" aria-hidden="true"><path d="M1 6H19M14 1.5L20 6L14 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const ICON_CHECK = '<svg viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const GEAR = (() => {
+    let d = '';
+    const teeth = 8, cx = 12, cy = 12;
+    for (let i = 0; i < teeth * 2; i++) {
+        const a0 = (i / (teeth * 2)) * Math.PI * 2, a1 = ((i + 1) / (teeth * 2)) * Math.PI * 2;
+        const r = i % 2 ? 8.2 : 11;
+        const p = (a, rr) => `${(cx + rr * Math.cos(a)).toFixed(2)} ${(cy + rr * Math.sin(a)).toFixed(2)}`;
+        d += (i ? 'L' : 'M') + p(a0, r) + 'L' + p(a1, r);
+    }
+    d += 'Z M15.2 12a3.2 3.2 0 1 0 -6.4 0a3.2 3.2 0 1 0 6.4 0Z';
+    return `<svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><path d="${d}" fill="currentColor" fill-rule="evenodd"/></svg>`;
+})();
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|\b(let|const|var|typeof|null|undefined|true|false|if|else|NaN)\b|(\b\d+(?:\.\d+)?\b)|\b(console|Number|parseInt|parseFloat|Boolean)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+function renderCode(sc, s) {
+    $('#code').innerHTML = sc.code.map((l, i) =>
+        `<li class="${i === s.line ? 'active' : ''} ${i === s.line && s.err ? 'error' : ''}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`
+    ).join('');
+    $('#lineNote').textContent = s.line >= 0 ? `running line ${s.line + 1}` : '';
+}
+
+function chipHtml(v, t, key, extra = '', inner = '') {
+    const label = TYPE_LABEL[t] || t;
+    return `<div class="chip t-${t} ${extra}"${key ? ` data-k="${key}"` : ''}>${inner}<span class="cv">${esc(v)}</span><span class="ct">${label}</span></div>`;
+}
+
+// arrival time (ms) of the value that lands on each key in this step
+function arrivals(step) {
+    const map = {};
+    (step.fly || []).forEach(([, to], i) => { map[to] = Math.max(map[to] || 0, delayOf(step.fly[i], i) + FLY_MS); });
+    (step.show || []).forEach(([k, ms]) => { map[k] = Math.max(map[k] || 0, ms); });
+    return map;
+}
+function delayOf(f, i) { return typeof f[3] === 'number' ? f[3] : i * STAGGER; }
+
+function renderDesk(s, prev, step) {
+    const ch = s.chain;
+    $('#chain').innerHTML = ch
+        ? ch.map((c, i) => (i ? ARROW('arr') : '') +
+            `<span class="ci ${i === ch.length - 1 ? 'last' : ''}">${esc(c).replace(/\[\[/g, '<mark>').replace(/\]\]/g, '</mark>')}</span>`).join('')
+        : '<span class="chain-empty">Here we will see how the expression is simplified step by step.</span>';
+
+    const arr = prev ? arrivals(step) : {};
+    if (!s.ops) { $('#ops').innerHTML = '<span class="ops-empty">Here we will see the operands, their types and the result.</span>'; return; }
+    let html = s.ops.map((o, i) => {
+        if (o.op) return `<span class="opr">${esc(o.op)}</span>`;
+        const p = prev && prev.ops && prev.ops[i];
+        let ghost = '';
+        if (p && !p.op && p.v !== o.v && prev.ops.length === s.ops.length) {
+            const d = arr['op:' + i] || 0;
+            ghost = `<span class="ghost" style="animation-delay:${d}ms">${esc(p.v)}</span>`;
+        }
+        const tag = o.st === 'skip' ? '<span class="skiptag">not calculated</span>' : '';
+        return chipHtml(o.v, o.t, 'op:' + i, 'st-' + (o.st || 'none'), ghost + tag);
+    }).join('');
+    html += '<span class="opr eq">=</span>';
+    html += s.res ? chipHtml(s.res.v, s.res.t, 'res', 'res') : '<div class="chip t-expr res-pending" data-k="res"><span class="cv">?</span><span class="ct">-</span></div>';
+    $('#ops').innerHTML = html;
+}
+
+function renderRules(s) {
+    const r = s.rules;
+    $('#rulesTitle').innerHTML = r ? r.title : 'Algorithm';
+    const note = $('#rulesNote');
+    note.textContent = r && r.pass > 1 ? `pass ${r.pass} - start again` : 'simplified from the specification';
+    note.classList.toggle('pass', !!(r && r.pass > 1));
+    if (!r) { $('#rules').innerHTML = '<div class="rules-empty">Here we will see the rules by which the engine decides what to do.</div>'; return; }
+    const BADGE = { yes: 'yes', no: 'no', cur: '?', done: ICON_CHECK, '': '', later: '' };
+    $('#rules').innerHTML = '<ol class="rules">' + r.items.map((it, i) =>
+        `<li class="r-${it.st || 'none'}"><span class="rn">${i + 1}</span><span>${it.t.replace(/ -> /g, ' ' + ARROW('ra') + ' ')}</span><span class="badge">${BADGE[it.st] || ''}</span></li>`
+    ).join('') + '</ol>';
+}
+
+function renderWidget(s, prev) {
+    const box = $('#widget');
+    const title = $('#widgetTitle'), note = $('#widgetNote');
+    note.textContent = '';
+    if (s.sort) {
+        title.textContent = 'ToBoolean: falsy or truthy?';
+        const so = s.sort;
+        const isNew = prev && (!prev.sort || prev.sort.inp !== so.inp);
+        let html = '';
+        if (so.inp) {
+            html += `<div class="mach ${isNew ? 'new' : ''}">${chipHtml(so.inp, typeOf(so.inp), 'sort:in')}${ARROW('arr')}<span class="mbox">${GEAR}ToBoolean</span>${ARROW('arr')}${so.out ? chipHtml(so.out, 'boolean', 'sort:out') : '<span class="chip t-expr" data-k="sort:out"><span class="cv">?</span><span class="ct">-</span></span>'}</div>`;
+        } else {
+            html += `<div class="mach"><span class="mbox">${GEAR}ToBoolean</span><span class="mnote" style="flex-basis:auto">any value -> true or false</span></div>`;
+        }
+        html += '<div class="bins"><div class="bin falsy"><h4><b>falsy</b> -> false (only these 8)</h4><div class="slots">' +
+            FALSY.map((v, i) => chipHtml(v, typeOf(v), 'sort:f:' + i, 'sm ' + (so.hits.includes(i) ? 'hit ' : '') + (so.last === 'f:' + i ? 'last ' : '') + (i === 2 || i === 3 ? 'rare' : ''))).join('') +
+            '</div></div><div class="bin truthy"><h4><b>truthy</b> -> true (all others)</h4><div class="slots">' +
+            so.truthy.map((v, i) => chipHtml(v, typeOf(v), 'sort:t:' + i, 'sm' + (so.last === 't:' + i ? ' last' : ''))).join('') +
+            '<span class="more">...and all others</span></div></div></div>';
+        box.innerHTML = html;
+        return;
+    }
+    if (s.cmp) {
+        title.textContent = 'Comparing character by character';
+        note.textContent = 'under each character - its code';
+        const { a, b, i, dec } = s.cmp;
+        const n = Math.max(a.length, b.length);
+        const cell = (str, j) => {
+            const ch = str[j];
+            let cls = j < i ? 'eq' : j === i ? (dec ? 'win' : 'cur') : (dec ? 'rest' : '');
+            if (ch === undefined) return j === i ? `<div class="cc end ${cls}"><b>end</b><i>-</i></div>` : '<div class="cc end rest"><b></b><i></i></div>';
+            return `<div class="cc ${cls}"><b>${esc(ch)}</b><i>${ch.charCodeAt(0)}</i></div>`;
+        };
+        let rel = '';
+        for (let j = 0; j < n; j++) {
+            let sign = '';
+            if (j < i) sign = '=';
+            else if (j === i) {
+                if (!dec) sign = a[j] === b[j] ? '=' : '?';
+                else if (a[j] === undefined) sign = '&lt;';
+                else if (b[j] === undefined) sign = '&gt;';
+                else sign = a.charCodeAt(j) > b.charCodeAt(j) ? '&gt;' : '&lt;';
+            }
+            rel += `<div class="rel ${j === i && dec ? 'dec' : ''}">${sign}</div>`;
+        }
+        let idx = '';
+        for (let j = 0; j < n; j++) idx += `<div class="idx">${j}</div>`;
+        let html = `<div class="grid" style="grid-template-columns: auto repeat(${n}, 2.7rem)">
+            <span></span>${idx}
+            <span class="lbl">left</span>${[...Array(n)].map((_, j) => cell(a, j)).join('')}
+            <span></span>${rel}
+            <span class="lbl">right</span>${[...Array(n)].map((_, j) => cell(b, j)).join('')}
+        </div>`;
+        if (s.cmp.verdict) html += `<div class="verdict">${s.cmp.verdict}</div>`;
+        box.innerHTML = html;
+        return;
+    }
+    if (s.scan) {
+        const sc = s.scan;
+        title.textContent = sc.fn ? `How ${sc.fn} reads the string` : 'The string - character by character';
+        const n = sc.str.length;
+        const cells = [...sc.str].map((ch, j) => {
+            let cls = '';
+            if (sc.fn) {
+                if (j < sc.ok) cls = 'ok';
+                else if (j === sc.stop) cls = 'stop';
+                else if (sc.stop !== null && j > sc.stop) cls = 'rest';
+                if (sc.whole && sc.stop !== null && j < sc.ok) cls = 'ok';
+            }
+            return `<div class="cc ${cls}"><b>${esc(ch)}</b><i>${j}</i></div>`;
+        }).join('');
+        let html = `<div class="grid" style="grid-template-columns: auto repeat(${n}, 2.7rem)"><span class="lbl">string</span>${cells}</div>`;
+        if (sc.note) html += `<div class="verdict">${sc.note}</div>`;
+        else if (!sc.fn) html += `<div class="widget-empty">Under each character is its position (index), starting from 0.</div>`;
+        box.innerHTML = html;
+        return;
+    }
+    title.textContent = 'Conversion machines';
+    note.textContent = 'ToNumber, ToString, ToBoolean';
+    if (!s.mach.length) {
+        box.innerHTML = '<div class="widget-empty">The hidden machines that convert types (ToNumber, ToString, ToBoolean) will appear here. If no machine appears, there is no conversion.</div>';
+        return;
+    }
+    box.innerHTML = s.mach.map((m, i) => {
+        const p = prev && prev.mach[i];
+        const isNew = prev && (!p || p.inp !== m.inp || p.name !== m.name);
+        return `<div class="mach ${isNew ? 'new' : ''}">${chipHtml(m.inp, typeOf(m.inp), `m:${i}:in`)}${ARROW('arr')}<span class="mbox">${GEAR}${m.name}</span>${ARROW('arr')}${chipHtml(m.out, typeOf(m.out), `m:${i}:out`)}${m.note ? `<span class="mnote">${esc(m.note)}</span>` : ''}</div>`;
+    }).join('');
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.length
+        ? s.console.map(l => `<div class="cline ${l.err ? 'err' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('')
+        : '<div class="console-empty">(empty)</div>';
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderLegend() {
+    $('#legend').innerHTML = [
+        ['number', 't-number'], ['string', 't-string'], ['boolean', 't-boolean'], ['null / undefined', 't-null'], ['object', 't-object'],
+    ].map(([n, c]) => `<span><i class="sw ${c}"></i>${n}</span>`).join('') +
+        '<span><i class="sw read"></i>being checked</span><span><i class="sw write"></i>converted / chosen</span>';
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+const FLY_MS = F;
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    return $(`[data-k="${key}"]`);
+}
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+const timers = [];
+function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+function playStep(step, tk) {
+    const flights = step.fly || [];
+    const shows = step.show || [];
+    if (reduceMotion) return;
+    const layer = $('#flyLayer');
+
+    // elements that appear later in this step
+    for (const [key, ms] of shows) {
+        const el = resolve(key);
+        if (!el) continue;
+        el.classList.add('await');
+        later(() => { if (tk !== token) return; el.classList.remove('await'); bump(el); }, ms);
+    }
+    // destinations stay hidden until their value lands
+    const pending = new Map();
+    const plan = flights.map((f, i) => {
+        const [from, to, text, , flags] = f;
+        const src = resolve(from), dst = resolve(to);
+        const awaits = !!dst && flags !== 'noawait';
+        if (awaits) { dst.classList.add('await'); pending.set(dst, (pending.get(dst) || 0) + 1); }
+        return { src, dst, to, text, delay: delayOf(f, i), awaits };
+    });
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token || !p.dst) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) p.dst.classList.remove('await');
+            }
+            bump(p.dst);
+        };
+        if (!p.src || !p.dst) { later(finish, p.delay); continue; }
+        later(() => {
+            if (tk !== token) return;
+            const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+            const chip = document.createElement('div');
+            chip.className = 'fly ' + (p.to === 'con' || p.to.endsWith(':in') ? 'read' : 'write');
+            chip.textContent = p.text;
+            layer.appendChild(chip);
+            const w = chip.offsetWidth, h = chip.offsetHeight;
+            const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+            const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+            const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+            chip.style.left = x0 + 'px';
+            chip.style.top = y0 + 'px';
+            const anim = chip.animate([
+                { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+                { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+                { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+                { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+            ], { duration: FLY_MS, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+            anim.onfinish = () => { chip.remove(); finish(); };
+        }, p.delay);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    timers.splice(0).forEach(clearTimeout);
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderDesk(s, prev, step);
+    renderRules(s);
+    renderWidget(s, prev);
+    renderConsole(s);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Step ${stepIdx + 1} of ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Step ${i + 1}" aria-label="Step ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+
+    if (prev) {
+        // newly converted chips, results and console lines that nobody flies to still pop in
+        playStep(step, tk);
+    }
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(11000, Math.max(3200, 1500 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    try { history.replaceState(null, '', location.search + '#' + (scIdx + 1)); } catch (e) { /* file:// in some browsers */ }
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('coercionTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('coercionTheme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+renderLegend();
+
+// #3 = scenario 3, #3.5 = scenario 3, step 5 (both 1-based)
+function fromHash() {
+    const m = /^#(\d+)(?:\.(\d+))?/.exec(location.hash);
+    selectScenario(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] - 1 : 0);
+}
+
+// #selftest: walk every step of every scenario, report JS errors, missing
+// flight targets and panels whose content does not fit
+function selfTest() {
+    const problems = [];
+    const fits = (el, name, where) => {
+        if (el && el.scrollHeight > el.clientHeight + 2) problems.push(`${where}: ${name} overflows by ${el.scrollHeight - el.clientHeight}px`);
+    };
+    SCENARIOS.forEach((sc, si) => {
+        try { selectScenario(si); } catch (e) { problems.push(`#${si + 1}: ${e.message}`); return; }
+        sc.steps.forEach((step, i) => {
+            const where = `#${si + 1}.${i + 1}`;
+            try {
+                goto(i, i > 0);
+                for (const f of step.fly || []) {
+                    if (!resolve(f[0])) problems.push(`${where}: no fly source ${f[0]}`);
+                    if (!resolve(f[1])) problems.push(`${where}: no fly target ${f[1]}`);
+                }
+                for (const [k] of step.show || []) if (!resolve(k)) problems.push(`${where}: no show target ${k}`);
+                document.querySelectorAll('.lower .panel, .desk, .code-panel').forEach((p, j) => fits(p, 'panel ' + j, where));
+                fits($('.bottom'), 'footer', where);
+                fits(document.documentElement, 'page', where);
+                const ex = $('#explain');
+                if (ex.getBoundingClientRect().bottom > $('.bottom').getBoundingClientRect().bottom) problems.push(`${where}: explanation too long`);
+                if (/[^\x00-\x7F]/.test(step.text)) problems.push(`${where}: non-ASCII punctuation`);
+            } catch (e) { problems.push(`${where}: ${e.message}`); }
+        });
+    });
+    const out = document.createElement('pre');
+    out.id = 'selftest';
+    out.textContent = problems.length ? 'SELFTEST FAIL\n' + problems.join('\n') : 'SELFTEST OK';
+    out.style.cssText = 'position:fixed;inset:auto 0 0 0;max-height:50vh;overflow:auto;margin:0;padding:1rem;background:#000;color:#0f0;z-index:99;font-size:12px';
+    document.body.appendChild(out);
+}
+
+if (location.hash === '#selftest') { selectScenario(0); selfTest(); }
+else {
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+}
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

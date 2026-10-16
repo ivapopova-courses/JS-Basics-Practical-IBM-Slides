@@ -1,0 +1,1387 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Типове, сравнения и логика</title>
+<!--
+    Step-by-step animation: the hidden type conversions (coercion) that JavaScript
+    performs in +, -, ==, <, >, if, &&, ||, ?? and ?: - shown as "what the engine thinks".
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: coercionAndLogic.html#3 (scenario 3), #3.5 (scenario 3, step 5),
+    ?theme=dark forces the dark palette, #selftest walks every step and reports problems.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ok: #3f7d2c;
+    --ok-bg: #dcefd2;
+    --ref: #7b48c4;
+    --chip-ink: #ffffff;
+
+    /* one colour per value type */
+    --t-num: #b85a00;  --t-num-bg: #fdebd6;
+    --t-str: #3f7d2c;  --t-str-bg: #dcefd2;
+    --t-bool: #7b48c4; --t-bool-bg: #ebe0fa;
+    --t-nul: #786f61;  --t-nul-bg: #ece6da;
+    --t-obj: #a87a12;  --t-obj-bg: #fff3cf;
+    --t-expr: #786f61; --t-expr-bg: #fffcf5;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ok: #8fd27b; --ok-bg: #213a1c; --ref: #b38cff;
+        --chip-ink: #111111;
+        --t-num: #ffae5c; --t-num-bg: #43301b;
+        --t-str: #8fd27b; --t-str-bg: #213a1c;
+        --t-bool: #b38cff; --t-bool-bg: #2f2546;
+        --t-nul: #a7a397; --t-nul-bg: #2a2c33;
+        --t-obj: #e0b75a; --t-obj-bg: #3a3220;
+        --t-expr: #a7a397; --t-expr-bg: #202229;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ok: #8fd27b; --ok-bg: #213a1c; --ref: #b38cff;
+    --chip-ink: #111111;
+    --t-num: #ffae5c; --t-num-bg: #43301b;
+    --t-str: #8fd27b; --t-str-bg: #213a1c;
+    --t-bool: #b38cff; --t-bool-bg: #2f2546;
+    --t-nul: #a7a397; --t-nul-bg: #2a2c33;
+    --t-obj: #e0b75a; --t-obj-bg: #3a3220;
+    --t-expr: #a7a397; --t-expr-bg: #202229;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.panel-title .note.pass { color: var(--write); font-weight: 700; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .98rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .17rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+.console-empty { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--muted); padding: .2rem .4rem; }
+
+/* ---------- the "desk": the expression the engine works on ---------- */
+.desk { display: flex; flex-direction: column; gap: .55rem; }
+.chain { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .5rem; min-height: 2.1rem; font-family: var(--mono); font-size: 1.08rem; }
+.chain .ci { padding: .12rem .45rem; border-radius: .3rem; background: var(--inline-code); white-space: pre; color: var(--muted); }
+.chain .ci.last { color: var(--ink); font-weight: 700; background: var(--write-bg); }
+.chain .ci mark { background: none; color: inherit; border-bottom: 3px solid var(--read); padding-bottom: 1px; }
+.chain .arr { width: 1.4rem; height: .8rem; color: var(--muted); flex: none; }
+.chain-empty { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--muted); }
+.ops { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .6rem; min-height: 4.2rem; }
+.opr { font-family: var(--mono); font-size: 1.45rem; font-weight: 800; color: var(--ink); padding: 0 .1rem; white-space: pre; }
+.opr.eq { color: var(--muted); font-weight: 500; }
+.ops-empty { font-size: .8rem; font-style: italic; color: var(--muted); }
+
+/* value chips: the value on top, its type below */
+.chip {
+    position: relative;
+    display: inline-flex; flex-direction: column; align-items: center;
+    min-width: 3.2rem;
+    padding: .2rem .65rem .15rem;
+    border: 2px solid var(--tc); border-radius: .55rem;
+    background: var(--tb);
+    transition: box-shadow .25s, opacity .3s;
+}
+.chip .cv { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; white-space: pre; color: var(--ink); }
+.chip .ct { font-size: .62rem; font-weight: 700; letter-spacing: .04em; color: var(--tc); }
+.chip.sm { min-width: 2.4rem; padding: .1rem .45rem .05rem; border-radius: .45rem; }
+.chip.sm .cv { font-size: 1.05rem; }
+.chip.sm .ct { font-size: .56rem; }
+.t-number    { --tc: var(--t-num);  --tb: var(--t-num-bg); }
+.t-string    { --tc: var(--t-str);  --tb: var(--t-str-bg); }
+.t-boolean   { --tc: var(--t-bool); --tb: var(--t-bool-bg); }
+.t-null, .t-undefined { --tc: var(--t-nul); --tb: var(--t-nul-bg); }
+.t-null .cv, .t-undefined .cv { font-style: italic; font-weight: 600; }
+.t-object, .t-bigint { --tc: var(--t-obj); --tb: var(--t-obj-bg); }
+.t-expr      { --tc: var(--t-expr); --tb: var(--t-expr-bg); border-style: dashed; }
+.chip.st-conv { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.chip.st-read { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.chip.st-skip { opacity: .42; border-style: dashed; filter: grayscale(.6); }
+.chip.st-skip .cv { text-decoration: line-through; text-decoration-thickness: 2px; }
+.chip .skiptag {
+    position: absolute; top: -.75rem; left: 50%; transform: translateX(-50%);
+    padding: .03rem .4rem; border-radius: .3rem;
+    background: var(--muted); color: var(--paper);
+    font-size: .58rem; font-weight: 700; white-space: nowrap;
+}
+.chip.res { box-shadow: 0 0 0 3px var(--ink); }
+.chip.res-pending { visibility: hidden; }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center; padding-bottom: .7rem;
+    font-family: var(--mono); font-size: 1.3rem; font-weight: 700;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+
+/* ---------- lower row: algorithm + machines ---------- */
+.lower { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: .7rem; min-height: 0; }
+.rules { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .3rem; }
+.rules li {
+    display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) auto; gap: .5rem; align-items: center;
+    padding: .3rem .5rem;
+    border: 1px solid var(--line); border-radius: .45rem;
+    font-size: .86rem; line-height: 1.35;
+    transition: background .25s, opacity .25s, box-shadow .25s;
+}
+.rules .rn { font-family: var(--mono); font-weight: 700; color: var(--muted); text-align: center; }
+.rules code { padding: 0 .25rem; border-radius: .2rem; background: var(--inline-code); font-family: var(--mono); font-size: .92em; }
+.rules .ra { display: inline-block; width: 1.1rem; height: .65rem; vertical-align: middle; color: var(--muted); }
+.rules .badge { min-width: 1.9rem; text-align: center; font-size: .66rem; font-weight: 800; letter-spacing: .04em; padding: .1rem .35rem; border-radius: .3rem; }
+.rules li.r-no { opacity: .5; }
+.rules li.r-no .badge { background: var(--inline-code); color: var(--muted); }
+.rules li.r-cur { box-shadow: 0 0 0 2px var(--read); background: var(--read-bg); }
+.rules li.r-cur .badge { background: var(--read); color: var(--chip-ink); }
+.rules li.r-yes { box-shadow: 0 0 0 2px var(--write); background: var(--write-bg); }
+.rules li.r-yes .badge { background: var(--write); color: var(--chip-ink); }
+.rules li.r-done .badge { color: var(--ok); }
+.rules li.r-done .badge svg { width: .9rem; height: .9rem; vertical-align: middle; }
+.rules li.r-later { opacity: .5; font-style: italic; }
+.rules-empty, .widget-empty { font-size: .8rem; font-style: italic; color: var(--muted); }
+
+.widget { display: flex; flex-direction: column; gap: .7rem; }
+.mach { display: flex; align-items: center; flex-wrap: wrap; gap: .45rem; }
+.mach .arr { width: 1.6rem; height: .9rem; color: var(--muted); flex: none; }
+.mbox {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .35rem .6rem;
+    border: 2px solid var(--ink); border-radius: .5rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .9rem; font-weight: 800;
+}
+.mbox .gear { width: 1.25rem; height: 1.25rem; color: var(--muted); }
+.mach.new .gear { animation: spin 1.1s .35s ease-in-out both; }
+.mnote { flex-basis: 100%; font-size: .74rem; color: var(--muted); font-style: italic; padding-left: .2rem; }
+
+/* char-by-char grids (string comparison, parseInt) */
+.grid { display: grid; gap: .25rem .3rem; align-items: center; justify-content: start; }
+.grid .lbl { font-size: .7rem; font-weight: 700; color: var(--muted); padding-right: .4rem; text-transform: uppercase; letter-spacing: .05em; }
+.grid .idx { font-family: var(--mono); font-size: .65rem; color: var(--muted); text-align: center; }
+.cc {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 2.7rem; height: 3.1rem;
+    border: 2px solid var(--t-str); border-radius: .4rem;
+    background: var(--t-str-bg);
+    transition: opacity .3s, box-shadow .25s;
+}
+.cc b { font-family: var(--mono); font-size: 1.3rem; line-height: 1.1; }
+.cc i { font-style: normal; font-family: var(--mono); font-size: .66rem; color: var(--muted); }
+.cc.eq { opacity: .6; }
+.cc.cur { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.cc.win { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.cc.rest { opacity: .28; }
+.cc.end { border-style: dashed; border-color: var(--muted); background: none; }
+.cc.end b { font-family: var(--sans); font-size: .62rem; color: var(--muted); }
+.cc.ok { border-color: var(--ok); }
+.cc.stop { border-color: var(--err); background: var(--err-bg); box-shadow: 0 0 0 3px var(--err-bg); }
+.rel { font-family: var(--mono); font-size: 1.15rem; font-weight: 800; text-align: center; color: var(--muted); }
+.rel.dec { color: var(--write); }
+.verdict { font-size: .9rem; line-height: 1.4; padding: .35rem .6rem; border-left: 3px solid var(--write); background: var(--write-bg); border-radius: .3rem; }
+.verdict code { font-family: var(--mono); font-weight: 700; }
+
+/* ToBoolean sorter */
+.bins { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .6rem; }
+.bin { border: 2px dashed var(--line); border-radius: .55rem; padding: .45rem .5rem .55rem; }
+.bin h4 { margin: 0 0 .5rem; font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.bin h4 b { color: var(--ink); }
+.bin .slots { display: flex; flex-wrap: wrap; gap: .75rem .4rem; }
+.bin.falsy { border-color: var(--t-nul); }
+.bin.truthy { border-color: var(--ok); }
+.bin.falsy .chip { opacity: .55; }
+.bin.falsy .chip.hit { opacity: 1; }
+.bin .chip.last { opacity: 1; box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.bin.falsy .chip.rare .cv { font-size: .9rem; }
+.bin .more { font-size: .72rem; font-style: italic; color: var(--muted); align-self: center; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.1rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid var(--tc, var(--line)); border-radius: .25rem; background: var(--tb, none); }
+.sw.read { border-color: var(--read); background: var(--read-bg); }
+.sw.write { border-color: var(--write); background: var(--write-bg); }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.08rem * 1.42 * 3); font-size: 1.08rem; line-height: 1.42; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+    white-space: pre;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .e { color: var(--err); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+
+.await:not(.chip) { visibility: hidden; }
+.chip.await > .cv, .chip.await > .ct { visibility: hidden; }
+.land { animation: land .45s both; }
+.pop { animation: pop .45s both; }
+
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes spin { to { transform: rotate(180deg); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage, .lower { grid-template-columns: 1fr; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Типове, сравнения и логика <small>какво преобразува JavaScript "наум", стъпка по стъпка</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../coercionAndLogic.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="panel desk">
+                <div class="panel-title"><span>Изразът - какво вижда engine-ът</span><span class="note">операнди, оператор, резултат</span></div>
+                <div class="chain" id="chain"></div>
+                <div class="ops" id="ops"></div>
+            </div>
+            <div class="lower">
+                <div class="panel">
+                    <div class="panel-title"><span id="rulesTitle">Алгоритъм</span><span class="note" id="rulesNote"></span></div>
+                    <div id="rules"></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-title"><span id="widgetTitle">Скритите преобразувания</span><span class="note" id="widgetNote"></span></div>
+                    <div class="widget" id="widget"></div>
+                </div>
+            </div>
+            <div class="legend" id="legend"></div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Values and their types
+// ---------------------------------------------------------------------------
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'null') return 'null';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit.startsWith('"')) return 'string';
+    if (/^\d+n$/.test(lit)) return 'bigint';
+    if (lit === 'NaN' || /^-?\d+(\.\d+)?$/.test(lit)) return 'number';
+    if (lit.startsWith('[') || lit.startsWith('{')) return 'object';
+    return 'expr';     // an expression that has not been evaluated yet
+}
+const TYPE_LABEL = { expr: 'израз', object: 'object (масив)' };
+const FALSY = ['false', '0', '-0', '0n', '""', 'null', 'undefined', 'NaN'];
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function C(t) { return `<code>${esc(t)}</code>`; }
+
+// ---------------------------------------------------------------------------
+// The algorithms of the operators (simplified from the ECMAScript spec)
+// ---------------------------------------------------------------------------
+const R_PLUS = { title: 'Алгоритъм на +', items: [
+    'Има ли операнд от тип <b>string</b>? -> да: <code>ToString</code> на другия и <b>слепване</b>',
+    'Иначе: <code>ToNumber</code> на двата операнда и <b>събиране</b>',
+] };
+const R_ARITH = { title: 'Алгоритъм на - * / %', items: [
+    'Винаги: <code>ToNumber</code> на двата операнда',
+    'Аритметичната операция с получените числа',
+] };
+const R_NUMBER = { title: 'Алгоритъм на Number(низ)', items: [
+    '<b>Целият</b> низ (без интервалите в краищата) е запис на число? -> това число',
+    'Празен низ (или само интервали) -> <b>0</b>',
+    'Иначе -> <b>NaN</b>',
+] };
+const R_PFLOAT = { title: 'Алгоритъм на parseFloat(низ)', items: [
+    'Прескочи интервалите в началото',
+    'Чети отляво надясно, докато символите още образуват число',
+    'Прочетеното -> число; не е прочетено нищо -> <b>NaN</b>',
+] };
+const R_PINT = { title: 'Алгоритъм на parseInt(низ)', items: [
+    'Прескочи интервалите в началото (и знака + или -)',
+    'Чети <b>цифри</b> отляво надясно, до първия символ, който не е цифра',
+    'Прочетените цифри -> цяло число; няма цифри -> <b>NaN</b>',
+] };
+const R_STRICT = { title: 'Алгоритъм на ===', items: [
+    'Различни типове? -> <b>false</b> (без никакво преобразуване!)',
+    'Еднакви типове: сравни стойностите (NaN не е равно на нищо)',
+] };
+const R_LOOSE = { title: 'Алгоритъм на ==', items: [
+    'Еднакви типове? -> сравни ги като <code>===</code>',
+    '<code>null</code> или <code>undefined</code>? -> true, само ако и двата са null / undefined; иначе false',
+    'number и string? -> <code>ToNumber</code>(string), после отначало',
+    'boolean? -> <code>ToNumber</code>(boolean), после отначало',
+    'обект и примитив? -> <code>ToPrimitive</code>(обект), отначало (по-късно)',
+    'Иначе -> <b>false</b>',
+] };
+const R_REL = { title: 'Алгоритъм на &lt; &gt; &lt;= &gt;=', items: [
+    'И двата операнда ли са <b>string</b>? -> да: сравни ги <b>символ по символ</b>, по кодовете',
+    'Иначе: <code>ToNumber</code> на двата и <b>числово</b> сравнение',
+] };
+const R_BOOL = { title: 'Алгоритъм на ToBoolean', items: [
+    'Една от 8-те <b>falsy</b> стойности ли е? -> <b>false</b>',
+    'Всичко останало е <b>truthy</b> -> <b>true</b>',
+] };
+const R_IF = { title: 'Алгоритъм на if (условие)', items: [
+    'Изчисли израза в скобите',
+    '<code>ToBoolean</code>(резултата): true -> първия блок; false -> блока на <code>else</code>',
+] };
+const R_OR = { title: 'Алгоритъм на ||', items: [
+    'Изчисли левия операнд',
+    '<code>ToBoolean</code>(левия) е true? -> върни <b>левия</b>; десният не се изчислява',
+    'Иначе -> изчисли и върни <b>десния</b>',
+] };
+const R_AND = { title: 'Алгоритъм на &amp;&amp;', items: [
+    'Изчисли левия операнд',
+    '<code>ToBoolean</code>(левия) е false? -> върни <b>левия</b>; десният не се изчислява',
+    'Иначе -> изчисли и върни <b>десния</b>',
+] };
+const R_NULLISH = { title: 'Алгоритъм на ??', items: [
+    'Изчисли левия операнд',
+    'Левият е <code>null</code> или <code>undefined</code>? -> изчисли и върни <b>десния</b>',
+    'Иначе -> върни <b>левия</b> (дори да е 0 или "")',
+] };
+const R_TERN = { title: 'Алгоритъм на условие ? израз1 : израз2', items: [
+    'Изчисли условието',
+    '<code>ToBoolean</code>(условието) е true? -> изчисли и върни <b>израз1</b>',
+    'Иначе -> изчисли и върни <b>израз2</b>',
+] };
+
+// ---------------------------------------------------------------------------
+// Helpers used by the scenario steps. Each one mutates the state `s`.
+// ---------------------------------------------------------------------------
+function fresh(s) { s.chain = null; s.ops = null; s.res = null; s.mach = []; s.cmp = null; s.scan = null; }
+function E(s, ...chain) { s.chain = chain; }
+function O(s, ...toks) {
+    s.ops = toks.map(t => t.startsWith('@') ? { op: t.slice(1) } : { v: t, t: typeOf(t), st: '' });
+    s.res = null;
+}
+function OV(s, i, v) { Object.assign(s.ops[i], { v, t: typeOf(v), st: 'conv' }); }
+function OS(s, i, st) { s.ops[i].st = st; }
+function R(s, v) { s.res = { v, t: typeOf(v) }; }
+function RULES(s, def) { s.rules = { title: def.title, items: def.items.map(t => ({ t, st: '' })), pass: 1 }; }
+function RS(s, ...sts) { sts.forEach((st, i) => { if (st !== null) s.rules.items[i].st = st; }); }
+function PASS(s) { s.rules.pass++; s.rules.items.forEach(it => { if (it.st !== 'later') it.st = ''; }); }
+function M(s, name, inp, out, note = '') { s.mach.push({ name, inp, out, note }); }
+function log(s, text, err = false) { s.console.push({ text, err }); }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line - active code line (0-based, -1 = none)
+//   step.do   - changes to the state
+//   step.fly  - flying values: [from, to, text, delayMs?, flags?]
+//               keys: op:i (operand chip i), res, con (last console line),
+//               m:i:in / m:i:out (machine i), sort:in, sort:out, sort:f:i, sort:t:i
+//   step.show - [key, ms]: keep the element hidden, then pop it in at ms
+// ---------------------------------------------------------------------------
+const F = 820;   // flight duration, ms
+
+const SCENARIOS = [
+{
+    tab: 'Операторът +',
+    code: [
+        'console.log(2 + 3);',
+        'console.log("2" + "3");',
+        'console.log(2 + "1");',
+        'console.log(1 + 2 + "3");',
+        'console.log("1" + 2 + 3);',
+        'console.log("6" - 1);',
+        'console.log("6" * "2");',
+        'console.log("a" * 1);',
+    ],
+    steps: [
+        { line: -1, text: `Операторът <code>+</code> има две работи: <b>събиране</b> на числа и <b>слепване</b> (concatenation) на низове. Как решава коя да свърши? Ще надникнем в "главата" на JavaScript engine-а: той <span class="r">поглежда типовете</span> на операндите, решава по правилата вдясно, при нужда <span class="w">преобразува</span> операндите и чак тогава изчислява.`,
+          do: s => RULES(s, R_PLUS) },
+        { line: 0, text: `<code>2 + 3</code> - и двата операнда са от тип number. Има ли string? <b>Не</b> - значи правило 2: обикновено <b>събиране</b>. Резултатът е числото 5.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '2 + 3', '5'); O(s, '2', '@+', '3'); RS(s, 'no', 'yes'); R(s, '5'); log(s, '5'); },
+          show: [['res', 500]], fly: [['res', 'con', '5', 900]] },
+        { line: 1, text: `<code>"2" + "3"</code> - и двата операнда са низове, значи правило 1: <b>слепване</b>. Резултатът е низът "23". Внимание: <code>console.log</code> отпечатва низовете без кавичките, затова в конзолата виждаме 23 - но това е string, не число!`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '"2" + "3"', '"23"'); O(s, '"2"', '@+', '"3"'); RS(s, 'yes'); R(s, '"23"'); log(s, '23'); },
+          show: [['res', 500]], fly: [['res', 'con', '23', 900]] },
+        { line: 2, text: `<code>2 + "1"</code> - число и низ. Правилото е ясно: има операнд от тип string. <b>Какво ще отпечата?</b> Помислете, преди да продължите.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '2 + "1"'); O(s, '2', '@+', '"1"'); RS(s, 'cur'); } },
+        { line: 2, text: `Правило 1: engine-ът тихо пуска числото 2 през машината <b>ToString</b> и получава низа "2". Никой не го е поискал изрично - такова скрито преобразуване на типове се нарича <b>type coercion</b>.`,
+          do: s => { RS(s, 'yes'); M(s, 'ToString', '2', '"2"'); OV(s, 0, '"2"'); E(s, '2 + "1"', '"2" + "1"'); },
+          fly: [['op:0', 'm:0:in', '2', 0], ['m:0:out', 'op:0', '"2"', 1300]], show: [['m:0:out', 950]] },
+        { line: 2, text: `Сега и двата операнда са низове: <code>"2" + "1"</code> е <b>"21"</b>. Затова <code>2 + "1"</code> дава "21", а не 3.`,
+          do: s => { E(s, '2 + "1"', '"2" + "1"', '"21"'); R(s, '"21"'); log(s, '21'); },
+          show: [['res', 300]], fly: [['res', 'con', '21', 700]] },
+        { line: 3, text: `<code>1 + 2 + "3"</code> - два оператора <code>+</code>. Те се изпълняват <b>отляво надясно</b> (лява асоциативност), т.е. първо <code>1 + 2</code>. <b>Какво ще се отпечата?</b> Помислете.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '[[1 + 2]] + "3"'); O(s, '1', '@+', '2'); } },
+        { line: 3, text: `Първата операция е <code>1 + 2</code>: няма string - събиране, получаваме 3. Сега изразът е <code>3 + "3"</code>.`,
+          do: s => { RS(s, 'no', 'yes'); R(s, '3'); E(s, '[[1 + 2]] + "3"', '3 + "3"'); },
+          show: [['res', 300]] },
+        { line: 3, text: `<code>3 + "3"</code>: вече има string, значи 3 -> <b>ToString</b> -> "3" и слепване: <b>"33"</b>. Ако искате събиране, преобразувайте низа в число изрично (сценарий 2).`,
+          do: s => { O(s, '3', '@+', '"3"'); RULES(s, R_PLUS); RS(s, 'yes'); M(s, 'ToString', '3', '"3"'); OV(s, 0, '"3"'); R(s, '"33"'); E(s, '1 + 2 + "3"', '3 + "3"', '"3" + "3"', '"33"'); log(s, '33'); },
+          fly: [['op:0', 'm:0:in', '3', 0], ['m:0:out', 'op:0', '"3"', 1250], ['res', 'con', '33', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 4, text: `<code>"1" + 2 + 3</code> - пак отляво надясно. Още първата операция <code>"1" + 2</code> има string: 2 -> ToString -> "2" и слепване: "12".`,
+          do: s => { fresh(s); RULES(s, R_PLUS); E(s, '[["1" + 2]] + 3', '"12" + 3'); O(s, '"1"', '@+', '2'); RS(s, 'yes'); M(s, 'ToString', '2', '"2"'); OV(s, 2, '"2"'); R(s, '"12"'); },
+          fly: [['op:2', 'm:0:in', '2', 0], ['m:0:out', 'op:2', '"2"', 1250]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 4, text: `...а след това <code>"12" + 3</code>: отново string, 3 -> "3" и <b>"123"</b>. Сравнете: <code>1 + 2 + "3"</code> дава "33", а <code>"1" + 2 + 3</code> дава "123". Редът има значение!`,
+          do: s => { O(s, '"12"', '@+', '3'); RULES(s, R_PLUS); RS(s, 'yes'); s.mach = []; M(s, 'ToString', '3', '"3"'); OV(s, 2, '"3"'); R(s, '"123"'); E(s, '"1" + 2 + 3', '"12" + 3', '"123"'); log(s, '123'); },
+          fly: [['op:2', 'm:0:in', '3', 0], ['m:0:out', 'op:2', '"3"', 1250], ['res', 'con', '123', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 5, text: `Операторите <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> работят <b>само с числа</b> - "слепване" за тях не съществува. Затова те винаги пускат операндите си през машината <b>ToNumber</b>: "6" -> 6, и 6 - 1 = 5.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); E(s, '"6" - 1', '6 - 1', '5'); O(s, '"6"', '@-', '1'); RS(s, 'yes', 'yes'); M(s, 'ToNumber', '"6"', '6'); OV(s, 0, '6'); R(s, '5'); log(s, '5'); },
+          fly: [['op:0', 'm:0:in', '"6"', 0], ['m:0:out', 'op:0', '6', 1250], ['res', 'con', '5', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 6, text: `<code>"6" * "2"</code> - и двата операнда са низове, но <code>*</code> не прави слепване: и двата минават през ToNumber и резултатът е числото <b>12</b>.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); E(s, '"6" * "2"', '6 * 2', '12'); O(s, '"6"', '@*', '"2"'); RS(s, 'yes', 'yes'); M(s, 'ToNumber', '"6"', '6'); M(s, 'ToNumber', '"2"', '2'); OV(s, 0, '6'); OV(s, 2, '2'); R(s, '12'); log(s, '12'); },
+          fly: [['op:0', 'm:0:in', '"6"', 0], ['op:2', 'm:1:in', '"2"', 200], ['m:0:out', 'op:0', '6', 1300], ['m:1:out', 'op:2', '2', 1500], ['res', 'con', '12', 2900]],
+          show: [['m:0:out', 950], ['m:1:out', 1150], ['res', 2550]] },
+        { line: 7, text: `А ако низът не прилича на число? <code>ToNumber("a")</code> дава <b>NaN</b> (Not a Number - "не е число"), а всяка аритметика с NaN дава NaN. Любопитно: <code>typeof NaN</code> е "number" - NaN е специална стойност от тип number.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); E(s, '"a" * 1', 'NaN * 1', 'NaN'); O(s, '"a"', '@*', '1'); RS(s, 'yes', 'yes'); M(s, 'ToNumber', '"a"', 'NaN'); OV(s, 0, 'NaN'); R(s, 'NaN'); log(s, 'NaN'); },
+          fly: [['op:0', 'm:0:in', '"a"', 0], ['m:0:out', 'op:0', 'NaN', 1250], ['res', 'con', 'NaN', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: -1, text: `<b>Обобщение:</b> <code>+</code> слепва, щом поне единият операнд е string, иначе събира. <code>- * / %</code> винаги преобразуват до число. Изразите се изчисляват отляво надясно, затова позицията на низа има значение. Не разчитайте на скритото преобразуване - преобразувайте изрично.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); } },
+    ],
+},
+{
+    tab: 'Низ -> число',
+    code: [
+        'let x = "42.5";',
+        'console.log(Number(x));',
+        'console.log(parseFloat(x));',
+        'console.log(parseInt(x));',
+        'console.log(x * 1, +x);',
+        'let w = "42px";',
+        'console.log(Number(w));',
+        'console.log(parseInt(w));',
+        'let a = "2", b = "3";',
+        'console.log(a + b);',
+        'console.log(Number(a) + Number(b));',
+    ],
+    steps: [
+        { line: -1, text: `Данните, които въвежда потребителят (с <code>prompt()</code>, в поле на HTML форма), винаги пристигат като <b>низове</b> - дори когато съдържат само цифри. Преди да смятаме с тях, трябва изрично да ги преобразуваме в число. Ще видим как различните начини "четат" низа.` },
+        { line: 0, text: `x съдържа низа "42.5" - четири <b>символа</b> (4, 2, точка, 5), а не числото 42.5. За JavaScript това е текст.`,
+          do: s => { fresh(s); E(s, '"42.5"'); O(s, '"42.5"'); s.scan = { fn: '', str: '42.5', ok: 0, stop: null }; } },
+        { line: 1, text: `<code>Number(x)</code> извиква машината <b>ToNumber</b>: тя проверява дали <b>целият</b> низ е запис на число. "42.5" е, затова резултатът е числото 42.5 (тип number).`,
+          do: s => { fresh(s); RULES(s, R_NUMBER); RS(s, 'yes'); E(s, 'Number(x)', 'Number("42.5")', '42.5'); O(s, '@Number(', '"42.5"', '@)'); R(s, '42.5'); s.scan = { fn: 'Number', str: '42.5', ok: 4, stop: null, note: 'Целият низ е валидно число: <code>42.5</code>' }; log(s, '42.5'); },
+          show: [['res', 500]], fly: [['res', 'con', '42.5', 900]] },
+        { line: 2, text: `<code>parseFloat</code> (parse - "разчитам") чете символ по символ отляво надясно, докато символите образуват число. Тук успява да прочете всичко: 42.5.`,
+          do: s => { fresh(s); RULES(s, R_PFLOAT); RS(s, 'done', 'done', 'done'); E(s, 'parseFloat(x)', 'parseFloat("42.5")', '42.5'); O(s, '@parseFloat(', '"42.5"', '@)'); R(s, '42.5'); s.scan = { fn: 'parseFloat', str: '42.5', ok: 4, stop: null, note: 'Прочетено: <code>42.5</code>' }; log(s, '42.5'); },
+          show: [['res', 500]], fly: [['res', 'con', '42.5', 900]] },
+        { line: 3, text: `<code>parseInt</code> търси <b>цяло</b> число: чете 4 и 2 и спира при точката, защото тя не е цифра. Останалото (".5") се изхвърля. Резултатът е 42 - дробната част не се закръглява, а просто се отрязва.`,
+          do: s => { fresh(s); RULES(s, R_PINT); RS(s, 'done', 'done', 'done'); E(s, 'parseInt(x)', 'parseInt("42.5")', '42'); O(s, '@parseInt(', '"42.5"', '@)'); R(s, '42'); s.scan = { fn: 'parseInt', str: '42.5', ok: 2, stop: 2, note: 'Прочетено: <code>42</code> - точката спира четенето' }; log(s, '42'); },
+          show: [['res', 500]], fly: [['res', 'con', '42', 900]] },
+        { line: 4, text: `<code>x * 1</code> и унарният плюс <code>+x</code> са "скрити" преобразувания: и двата вътрешно викат същата машина ToNumber като <code>Number(x)</code>. Работят, но <code>Number(x)</code> е по-ясно за този, който чете кода.`,
+          do: s => { fresh(s); RULES(s, R_ARITH); RS(s, 'yes', 'yes'); E(s, 'x * 1', '"42.5" * 1', '42.5 * 1', '42.5'); O(s, '"42.5"', '@*', '1'); M(s, 'ToNumber', '"42.5"', '42.5', 'същата машина работи и при +x'); OV(s, 0, '42.5'); R(s, '42.5'); log(s, '42.5 42.5'); },
+          fly: [['op:0', 'm:0:in', '"42.5"', 0], ['m:0:out', 'op:0', '42.5', 1250], ['res', 'con', '42.5', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: 6, text: `Сега <code>w = "42px"</code> (например размер от CSS). <b>Какво ще върне <code>Number(w)</code>?</b> Помислете, преди да продължите.`,
+          do: s => { fresh(s); RULES(s, R_NUMBER); E(s, 'Number(w)', 'Number("42px")'); O(s, '@Number(', '"42px"', '@)'); s.scan = { fn: 'Number', str: '42px', ok: 0, stop: null }; } },
+        { line: 6, text: `<code>Number</code> проверява <b>целия</b> низ: "p" не може да е част от запис на число, значи низът не е число и резултатът е <b>NaN</b>. Това е полезно: NaN ни казва, че потребителят е въвел нещо невалидно.`,
+          do: s => { RS(s, 'no', 'no', 'yes'); E(s, 'Number(w)', 'Number("42px")', 'NaN'); R(s, 'NaN'); s.scan = { fn: 'Number', str: '42px', ok: 2, stop: 2, whole: true, note: 'Целият низ <b>не е</b> число -> <code>NaN</code>' }; log(s, 'NaN'); },
+          show: [['res', 500]], fly: [['res', 'con', 'NaN', 900]] },
+        { line: 7, text: `<code>parseInt</code> е по-"търпелив": чете 4 и 2, спира при "p" и връща прочетеното - 42. Удобно за стойности като "42px". Но ако низът не започва с цифра (напр. "px42"), няма какво да прочете и връща NaN.`,
+          do: s => { fresh(s); RULES(s, R_PINT); RS(s, 'done', 'done', 'done'); E(s, 'parseInt(w)', 'parseInt("42px")', '42'); O(s, '@parseInt(', '"42px"', '@)'); R(s, '42'); s.scan = { fn: 'parseInt', str: '42px', ok: 2, stop: 2, note: 'Прочетено: <code>42</code> - "p" спира четенето' }; log(s, '42'); },
+          show: [['res', 500]], fly: [['res', 'con', '42', 900]] },
+        { line: 9, text: `Класическият бъг: двете стойности са дошли от потребителя като низове, а <code>+</code> с низове <b>слепва</b>. Получаваме "23" вместо 5 (видяхме защо в сценарий 1).`,
+          do: s => { fresh(s); RULES(s, R_PLUS); RS(s, 'yes'); E(s, 'a + b', '"2" + "3"', '"23"'); O(s, '"2"', '@+', '"3"'); R(s, '"23"'); log(s, '23'); },
+          show: [['res', 500]], fly: [['res', 'con', '23', 900]] },
+        { line: 10, text: `Поправката: първо преобразуваме <b>изрично</b> и двата низа. Сега <code>+</code> вижда две числа и ги събира: 5.`,
+          do: s => { fresh(s); RULES(s, R_PLUS); RS(s, 'no', 'yes'); E(s, 'Number(a) + Number(b)', '2 + 3', '5'); O(s, '"2"', '@+', '"3"'); M(s, 'ToNumber', '"2"', '2', 'Number(a)'); M(s, 'ToNumber', '"3"', '3', 'Number(b)'); OV(s, 0, '2'); OV(s, 2, '3'); R(s, '5'); log(s, '5'); },
+          fly: [['op:0', 'm:0:in', '"2"', 0], ['op:2', 'm:1:in', '"3"', 200], ['m:0:out', 'op:0', '2', 1300], ['m:1:out', 'op:2', '3', 1500], ['res', 'con', '5', 2900]],
+          show: [['m:0:out', 950], ['m:1:out', 1150], ['res', 2550]] },
+        { line: -1, text: `<b>Обобщение:</b> <code>Number(x)</code> (или <code>+x</code>) - когато целият низ трябва да е число; невалиден вход дава NaN. <code>parseInt</code> / <code>parseFloat</code> - когато числото е в началото на текст ("42px"). Проверка за невалиден резултат: <code>Number.isNaN(n)</code>.`,
+          do: s => { fresh(s); s.rules = null; } },
+    ],
+},
+{
+    tab: '== и ===',
+    code: [
+        'console.log(2 === "2");',
+        'console.log(2 == "2");',
+        'console.log(true == 1);',
+        'console.log(null == undefined);',
+        'console.log(null == 0);',
+        'console.log(NaN == NaN);',
+    ],
+    steps: [
+        { line: -1, text: `JavaScript има два оператора за равенство. <code>===</code> (строго равенство) <b>никога</b> не преобразува типовете. <code>==</code> (нестрого равенство) преобразува по правила, които ще видим вдясно - те са взети от спецификацията на езика (ECMAScript). И двата винаги връщат true или false.`,
+          do: s => RULES(s, R_LOOSE) },
+        { line: 0, text: `<code>2 === "2"</code>: number и string - <b>различни типове</b>. За <code>===</code> това е достатъчно: резултатът е false, без никакво преобразуване.`,
+          do: s => { fresh(s); RULES(s, R_STRICT); RS(s, 'yes'); E(s, '2 === "2"', 'false'); O(s, '2', '@===', '"2"'); R(s, 'false'); log(s, 'false'); },
+          show: [['res', 500]], fly: [['res', 'con', 'false', 900]] },
+        { line: 1, text: `<code>2 == "2"</code> - същите операнди, но с <code>==</code>. Engine-ът минава по правилата отгоре надолу: различни типове, не са null / undefined, но са <b>number и string</b> - правило 3. <b>Какво ще отпечата?</b>`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'no', 'cur'); E(s, '2 == "2"'); O(s, '2', '@==', '"2"'); } },
+        { line: 1, text: `Правило 3: низът минава през <b>ToNumber</b>: "2" -> 2. Сега сравнението е <code>2 == 2</code> и алгоритъмът започва <b>отначало</b>.`,
+          do: s => { RS(s, null, null, 'yes'); M(s, 'ToNumber', '"2"', '2'); OV(s, 2, '2'); E(s, '2 == "2"', '2 == 2'); },
+          fly: [['op:2', 'm:0:in', '"2"', 0], ['m:0:out', 'op:2', '2', 1250]], show: [['m:0:out', 950]] },
+        { line: 1, text: `Втори проход: вече типовете са <b>еднакви</b> (number и number) - правило 1, сравняваме като <code>===</code>: 2 и 2 са равни, резултатът е <b>true</b>.`,
+          do: s => { PASS(s); RS(s, 'yes'); E(s, '2 == "2"', '2 == 2', 'true'); R(s, 'true'); log(s, 'true'); },
+          show: [['res', 500]], fly: [['res', 'con', 'true', 900]] },
+        { line: 2, text: `<code>true == 1</code>: boolean и number. Правила 1, 2 и 3 не пасват; правило 4: boolean -> <b>ToNumber</b>. true става 1 (а false става 0).`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'no', 'no', 'yes'); E(s, 'true == 1', '1 == 1'); O(s, 'true', '@==', '1'); M(s, 'ToNumber', 'true', '1'); OV(s, 0, '1'); },
+          fly: [['op:0', 'm:0:in', 'true', 0], ['m:0:out', 'op:0', '1', 1250]], show: [['m:0:out', 950]] },
+        { line: 2, text: `Отначало: <code>1 == 1</code> - еднакви типове, равни стойности: <b>true</b>. По същия начин <code>false == 0</code>, <code>"" == 0</code> и дори <code>"0" == false</code> са true - коварно!`,
+          do: s => { PASS(s); RS(s, 'yes'); E(s, 'true == 1', '1 == 1', 'true'); R(s, 'true'); log(s, 'true'); },
+          show: [['res', 500]], fly: [['res', 'con', 'true', 900]] },
+        { line: 3, text: `<code>null == undefined</code>: различни типове, но правило 2 казва, че null и undefined са <b>равни помежду си</b> - true. Преобразуване няма. (А <code>null === undefined</code> е false - различни типове.)`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'yes'); E(s, 'null == undefined', 'true'); O(s, 'null', '@==', 'undefined'); R(s, 'true'); log(s, 'true'); },
+          show: [['res', 500]], fly: [['res', 'con', 'true', 900]] },
+        { line: 4, text: `<code>null == 0</code> - <b>какво ще отпечата?</b> Ако мислите, че null става 0... нека видим правилата.`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'no', 'cur'); E(s, 'null == 0'); O(s, 'null', '@==', '0'); } },
+        { line: 4, text: `Правило 2: единият операнд е null, а другият не е null / undefined, затова резултатът е <b>false</b>. При <code>==</code> null <b>не</b> се преобразува в 0. (Любопитно: <code>null >= 0</code> е true, защото <code>&lt; &gt; &lt;= &gt;=</code> използват ToNumber.)`,
+          do: s => { RS(s, 'no', 'yes'); E(s, 'null == 0', 'false'); R(s, 'false'); log(s, 'false'); },
+          show: [['res', 500]], fly: [['res', 'con', 'false', 900]] },
+        { line: 5, text: `<code>NaN == NaN</code>: еднакви типове (number) - правило 1. Но NaN е единствената стойност в JavaScript, която <b>не е равна дори на себе си</b>: false (и с <code>===</code> също). За проверка използвайте <code>Number.isNaN(x)</code>.`,
+          do: s => { fresh(s); RULES(s, R_LOOSE); s.rules.items[4].st = 'later'; RS(s, 'yes'); E(s, 'NaN == NaN', 'false'); O(s, 'NaN', '@==', 'NaN'); R(s, 'false'); log(s, 'false'); },
+          show: [['res', 500]], fly: [['res', 'con', 'false', 900]] },
+        { line: -1, text: `<b>Обобщение:</b> <code>==</code> крие цял алгоритъм от преобразувания с изненадващи изключения. <code>===</code> е прост: различни типове -> false. <b>Използвайте винаги <code>===</code> и <code>!==</code></b>, а когато типовете се различават, преобразувайте изрично (напр. с Number).`,
+          do: s => { fresh(s); RULES(s, R_STRICT); } },
+    ],
+},
+{
+    tab: 'Сравняване на низове',
+    code: [
+        'console.log("2" > "19999");',
+        'console.log("1199" > "12");',
+        'console.log("a" > "A");',
+        'console.log("1" < "11");',
+        'console.log("2" > 19999);',
+    ],
+    steps: [
+        { line: -1, text: `Как се сравняват два низа с <code>&gt;</code> или <code>&lt;</code>? Не по дължина и не като числа, а <b>символ по символ</b>, като речник: сравняват се кодовете на символите (Unicode), докато се намери първата разлика. Това се нарича лексикографска подредба (lexicographic order).`,
+          do: s => RULES(s, R_REL) },
+        { line: 0, text: `<code>"2" > "19999"</code> - и двата операнда са низове (правило 1). <b>Какво ще отпечата?</b> Като числа 2 е много по-малко от 19999... Помислете.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'cur'); E(s, '"2" > "19999"'); O(s, '"2"', '@>', '"19999"'); s.cmp = { a: '2', b: '19999', i: 0, dec: false }; } },
+        { line: 0, text: `Първите символи: "2" (код 50) и "1" (код 49). Те са <b>различни</b>, значи сравнението свършва тук - останалите символи изобщо не се гледат. 50 > 49, резултатът е <b>true</b>.`,
+          do: s => { RS(s, 'yes'); E(s, '"2" > "19999"', 'true'); R(s, 'true'); s.cmp = { a: '2', b: '19999', i: 0, dec: true, verdict: `<code>50 &gt; 49</code>, значи <code>"2" &gt; "19999"</code> е <b>true</b>` }; log(s, 'true'); },
+          show: [['res', 600]], fly: [['res', 'con', 'true', 1000]] },
+        { line: 1, text: `<code>"1199" > "12"</code>: позиция 0 - "1" и "1" са <b>еднакви</b>, затова продължаваме със следващия символ.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'yes'); E(s, '"1199" > "12"'); O(s, '"1199"', '@>', '"12"'); s.cmp = { a: '1199', b: '12', i: 0, dec: false, verdict: '"1" (49) и "1" (49) са равни -> следващият символ' }; } },
+        { line: 1, text: `Позиция 1: "1" (49) и "2" (50) - първата разлика. 49 > 50 е невярно, затова резултатът е <b>false</b>. Дължината на низа няма значение!`,
+          do: s => { E(s, '"1199" > "12"', 'false'); R(s, 'false'); s.cmp = { a: '1199', b: '12', i: 1, dec: true, verdict: `<code>49 &gt; 50</code> е невярно, значи <code>"1199" &gt; "12"</code> е <b>false</b>` }; log(s, 'false'); },
+          show: [['res', 600]], fly: [['res', 'con', 'false', 1000]] },
+        { line: 2, text: `<code>"a" > "A"</code>: малкото "a" има код 97, а голямото "A" - 65. Резултатът е <b>true</b>. Всички главни латински букви (65-90) са преди малките (97-122), затова и <code>"Z" &lt; "a"</code> е true.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'yes'); E(s, '"a" > "A"', 'true'); O(s, '"a"', '@>', '"A"'); R(s, 'true'); s.cmp = { a: 'a', b: 'A', i: 0, dec: true, verdict: `<code>97 &gt; 65</code>, значи <code>"a" &gt; "A"</code> е <b>true</b>` }; log(s, 'true'); },
+          show: [['res', 600]], fly: [['res', 'con', 'true', 1000]] },
+        { line: 3, text: `<code>"1" &lt; "11"</code>: позиция 0 е еднаква, а на позиция 1 левият низ <b>свършва</b>. Низът, който свърши пръв, е по-малкият: true. (В слайда това е описано като "нулев символ" с най-малък код - резултатът е същият.)`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'yes'); E(s, '"1" < "11"', 'true'); O(s, '"1"', '@<', '"11"'); R(s, 'true'); s.cmp = { a: '1', b: '11', i: 1, dec: true, verdict: `левият низ свърши пръв, значи <code>"1" &lt; "11"</code> е <b>true</b>` }; log(s, 'true'); },
+          show: [['res', 600]], fly: [['res', 'con', 'true', 1000]] },
+        { line: 4, text: `А сега <code>"2" > 19999</code> - вдясно е <b>число</b>, не низ. <b>Какво ще отпечата?</b> Помислете, преди да продължите.`,
+          do: s => { fresh(s); RULES(s, R_REL); RS(s, 'cur'); E(s, '"2" > 19999'); O(s, '"2"', '@>', '19999'); } },
+        { line: 4, text: `Не са и двата string, значи правило 2: "2" минава през <b>ToNumber</b> и сравнението е числово: <code>2 > 19999</code> е <b>false</b>. Един-единствен тип променя целия алгоритъм!`,
+          do: s => { RS(s, 'no', 'yes'); M(s, 'ToNumber', '"2"', '2'); OV(s, 0, '2'); E(s, '"2" > 19999', '2 > 19999', 'false'); R(s, 'false'); log(s, 'false'); },
+          fly: [['op:0', 'm:0:in', '"2"', 0], ['m:0:out', 'op:0', '2', 1250], ['res', 'con', 'false', 2600]], show: [['m:0:out', 950], ['res', 2250]] },
+        { line: -1, text: `<b>Обобщение:</b> два низа се сравняват като текст - символ по символ, по кодовете, до първата разлика. Ако поне единият операнд е число, сравнението е числово. Числа, въведени от потребителя като низове, първо преобразувайте с <code>Number()</code> и чак тогава сравнявайте.`,
+          do: s => { fresh(s); RULES(s, R_REL); } },
+    ],
+},
+{
+    tab: 'Truthy и falsy',
+    code: [
+        'console.log(Boolean(0));',
+        'console.log(Boolean("0"));',
+        'console.log(Boolean(""));',
+        'console.log(Boolean(" "));',
+        'console.log(Boolean([]));',
+        'let x = 5;',
+        'if (x % 2) console.log("Odd");',
+        'else console.log("Even");',
+        'let arr = [2, 4, 6];',
+        'if (arr.lenght) console.log("Non empty array");',
+        'else console.log("Empty array");',
+    ],
+    steps: [
+        { line: -1, text: `Когато JavaScript очаква булева стойност (в <code>if</code>, в цикъл, при <code>!</code>, <code>&&</code>, <code>||</code>, <code>?:</code>), а получи друг тип, той вика скритата машина <b>ToBoolean</b>. Правилото е кратко: има точно <b>8 "лъжливи" (falsy)</b> стойности - те са вляво. Всичко останало е <b>"истинно" (truthy)</b>.`,
+          do: s => { RULES(s, R_BOOL); s.sort = { inp: null, out: null, hits: [], truthy: [] }; } },
+        { line: 0, text: `<code>Boolean(x)</code> вика машината ToBoolean изрично. 0 е в списъка на falsy стойностите, затова резултатът е <b>false</b>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'yes'); E(s, 'Boolean(0)', 'false'); O(s, '@Boolean(', '0', '@)'); R(s, 'false'); s.sort = { inp: '0', out: 'false', hits: [1], last: 'f:1', truthy: [] }; log(s, 'false'); },
+          fly: [['op:1', 'sort:in', '0', 0], ['sort:in', 'sort:f:1', '0', 1300, 'noawait'], ['res', 'con', 'false', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 1, text: `<code>Boolean("0")</code> - низ, който съдържа символа нула. <b>Какво ще отпечата?</b> Помислете, преди да продължите.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); E(s, 'Boolean("0")'); O(s, '@Boolean(', '"0"', '@)'); s.sort.inp = '"0"'; s.sort.out = null; s.sort.last = null; } },
+        { line: 1, text: `<b>true!</b> ToBoolean не поглежда какво пише в низа - пита само дали е <b>празен</b>. "0" не е празен, значи е truthy. Същото важи за <code>"false"</code>.`,
+          do: s => { RS(s, 'no', 'yes'); E(s, 'Boolean("0")', 'true'); R(s, 'true'); s.sort.out = 'true'; s.sort.truthy.push('"0"'); s.sort.last = 't:0'; log(s, 'true'); },
+          fly: [['op:1', 'sort:in', '"0"', 0], ['sort:in', 'sort:t:0', '"0"', 1300], ['res', 'con', 'true', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 2, text: `<code>""</code> - празният низ е единственият falsy низ. Резултатът е <b>false</b>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'yes'); E(s, 'Boolean("")', 'false'); O(s, '@Boolean(', '""', '@)'); R(s, 'false'); s.sort.inp = '""'; s.sort.out = 'false'; s.sort.hits.push(4); s.sort.last = 'f:4'; log(s, 'false'); },
+          fly: [['op:1', 'sort:in', '""', 0], ['sort:in', 'sort:f:4', '""', 1300, 'noawait'], ['res', 'con', 'false', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 3, text: `<code>" "</code> - низ с един <b>интервал</b>. Изглежда празен, но не е: интервалът също е символ. Резултатът е <b>true</b>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'no', 'yes'); E(s, 'Boolean(" ")', 'true'); O(s, '@Boolean(', '" "', '@)'); R(s, 'true'); s.sort.inp = '" "'; s.sort.out = 'true'; s.sort.truthy.push('" "'); s.sort.last = 't:1'; log(s, 'true'); },
+          fly: [['op:1', 'sort:in', '" "', 0], ['sort:in', 'sort:t:1', '" "', 1300], ['res', 'con', 'true', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 4, text: `<code>[]</code> - празен масив. Масивите (и всички обекти) са <b>винаги truthy</b>, дори когато са празни. Резултатът е <b>true</b>. Затова проверката за празен масив се прави с <code>arr.length</code>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); RS(s, 'no', 'yes'); E(s, 'Boolean([])', 'true'); O(s, '@Boolean(', '[]', '@)'); R(s, 'true'); s.sort.inp = '[]'; s.sort.out = 'true'; s.sort.truthy.push('[]'); s.sort.last = 't:2'; log(s, 'true'); },
+          fly: [['op:1', 'sort:in', '[]', 0], ['sort:in', 'sort:t:2', '[]', 1300], ['res', 'con', 'true', 2500]], show: [['sort:out', 900], ['res', 2150]] },
+        { line: 6, text: `Примерът от слайда: <code>if (x % 2)</code>. Първо се изчислява условието: 5 % 2 = 1 (остатъкът при деление на 2). <code>if</code> вика ToBoolean: 1 е truthy, значи се изпълнява първият блок.`,
+          do: s => { fresh(s); RULES(s, R_IF); RS(s, 'done', 'yes'); E(s, 'x % 2', '5 % 2', '1'); O(s, '1'); s.sort.inp = '1'; s.sort.out = 'true'; s.sort.truthy.push('1'); s.sort.last = 't:3'; },
+          fly: [['op:0', 'sort:in', '1', 0], ['sort:in', 'sort:t:3', '1', 1300]], show: [['sort:out', 900]] },
+        { line: 6, text: `Отпечатва се <b>Odd</b>. При четно x остатъкът е 0 - falsy - и щеше да се изпълни <code>else</code>: "Even". Кратко е, но <code>if (x % 2 !== 0)</code> казва същото по-ясно.`,
+          do: s => { log(s, 'Odd'); },
+          show: [['con', 200]] },
+        { line: 9, text: `Бъгът от слайда: <code>arr.lenght</code> - правописна грешка! Масивът няма такова свойство, затова JavaScript не дава грешка, а връща <b>undefined</b>. ToBoolean(undefined) е false...`,
+          do: s => { fresh(s); RULES(s, R_IF); RS(s, 'done', 'yes'); E(s, 'arr.lenght', 'undefined'); O(s, 'undefined'); s.sort.inp = 'undefined'; s.sort.out = 'false'; s.sort.hits.push(6); s.sort.last = 'f:6'; },
+          fly: [['op:0', 'sort:in', 'undefined', 0], ['sort:in', 'sort:f:6', 'undefined', 1300, 'noawait']], show: [['sort:out', 900]] },
+        { line: 10, text: `...и се изпълнява <code>else</code>: <b>"Empty array"</b>, въпреки че масивът има 3 елемента. Програмата не "гърми", просто тихо греши. С правилното <code>arr.length</code> условието е 3 - truthy - и се отпечатва "Non empty array".`,
+          do: s => { log(s, 'Empty array'); },
+          show: [['con', 200]] },
+        { line: -1, text: `<b>Обобщение:</b> falsy са само 8 стойности: <code>false</code>, <code>0</code>, <code>-0</code>, <code>0n</code> (BigInt нула), <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>. Всичко останало е truthy - включително <code>"0"</code>, <code>" "</code>, <code>"false"</code> и <code>[]</code>.`,
+          do: s => { fresh(s); RULES(s, R_BOOL); s.sort = { inp: null, out: null, hits: [0, 1, 2, 3, 4, 5, 6, 7], truthy: ['"0"', '" "', '[]', '1'] }; } },
+    ],
+},
+{
+    tab: 'Short-circuit: && и ||',
+    code: [
+        'let userName;',
+        'console.log(userName || "Anonymous");',
+        'userName = "Ada";',
+        'console.log(userName || "Anonymous");',
+        'false && console.log("Hi!");',
+        'true && console.log("Hi!");',
+        'let user = null;',
+        'console.log(user && user.name);',
+        'let qty = 0;',
+        'console.log(qty || 1);',
+        'console.log(qty ?? 1);',
+    ],
+    steps: [
+        { line: -1, text: `<code>&&</code> и <code>||</code> не връщат непременно true или false. Те връщат <b>единия от операндите</b> - такъв, какъвто е. ToBoolean се използва само за да се реши <b>кой</b>. А ако отговорът е ясен още от левия операнд, десният изобщо не се изпълнява: <b>short-circuit evaluation</b> ("късо съединение").`,
+          do: s => RULES(s, R_OR) },
+        { line: 1, text: `<code>userName || "Anonymous"</code>: първо се изчислява левият операнд - userName е <b>undefined</b> (нямаме стойност). ToBoolean(undefined) е false, затова правило 2 не важи...`,
+          do: s => { fresh(s); RULES(s, R_OR); RS(s, 'done', 'no'); E(s, 'userName || "Anonymous"', 'undefined || "Anonymous"'); O(s, 'undefined', '@||', '"Anonymous"'); M(s, 'ToBoolean', 'undefined', 'false', 'резултатът е нужен само за решението'); },
+          fly: [['op:0', 'm:0:in', 'undefined', 0]], show: [['m:0:out', 950]] },
+        { line: 1, text: `...и <code>||</code> връща <b>десния</b> операнд: низа "Anonymous". Резултатът не е boolean, а string! Така се задава стойност по подразбиране.`,
+          do: s => { RS(s, null, null, 'yes'); E(s, 'userName || "Anonymous"', 'undefined || "Anonymous"', '"Anonymous"'); R(s, '"Anonymous"'); log(s, 'Anonymous'); },
+          fly: [['op:2', 'res', '"Anonymous"', 0], ['res', 'con', 'Anonymous', 1100]] },
+        { line: 3, text: `След <code>userName = "Ada"</code> левият операнд е "Ada" - непразен низ, truthy. <code>||</code> веднага връща <b>левия</b> операнд "Ada". Десният ("Anonymous") дори не се изчислява.`,
+          do: s => { fresh(s); RULES(s, R_OR); RS(s, 'done', 'yes'); E(s, 'userName || "Anonymous"', '"Ada" || "Anonymous"', '"Ada"'); O(s, '"Ada"', '@||', '"Anonymous"'); OS(s, 2, 'skip'); M(s, 'ToBoolean', '"Ada"', 'true', 'резултатът е нужен само за решението'); R(s, '"Ada"'); log(s, 'Ada'); },
+          fly: [['op:0', 'm:0:in', '"Ada"', 0], ['op:0', 'res', '"Ada"', 1300], ['res', 'con', 'Ada', 2400]], show: [['m:0:out', 950]] },
+        { line: 4, text: `<code>false && console.log("Hi!")</code> - вдясно стои извикване, което отпечатва. <b>Ще се отпечата ли Hi!?</b> Помислете, преди да продължите.`,
+          do: s => { fresh(s); RULES(s, R_AND); E(s, 'false && console.log("Hi!")'); O(s, 'false', '@&&', 'console.log("Hi!")'); } },
+        { line: 4, text: `<b>Не.</b> Левият операнд е false, а за <code>&&</code> това е достатъчно: цялото е false, каквото и да има вдясно. Engine-ът връща левия операнд и <b>прескача</b> десния - <code>console.log</code> никога не се извиква, конзолата остава празна.`,
+          do: s => { RS(s, 'done', 'yes'); OS(s, 2, 'skip'); M(s, 'ToBoolean', 'false', 'false'); E(s, 'false && console.log("Hi!")', 'false'); R(s, 'false'); },
+          fly: [['op:0', 'm:0:in', 'false', 0], ['op:0', 'res', 'false', 1300]], show: [['m:0:out', 950]] },
+        { line: 5, text: `<code>true && console.log("Hi!")</code>: левият е truthy, значи отговорът зависи от десния - и той <b>се изпълнява</b>: отпечатва Hi! и връща undefined. Стойността на целия израз е <b>undefined</b>.`,
+          do: s => { fresh(s); RULES(s, R_AND); RS(s, 'done', 'no', 'yes'); E(s, 'true && console.log("Hi!")', 'undefined'); O(s, 'true', '@&&', 'console.log("Hi!")'); M(s, 'ToBoolean', 'true', 'true'); log(s, 'Hi!'); OV(s, 2, 'undefined'); R(s, 'undefined'); },
+          fly: [['op:0', 'm:0:in', 'true', 0], ['op:2', 'res', 'undefined', 2300]], show: [['m:0:out', 950], ['con', 1500], ['op:2', 1900]] },
+        { line: 7, text: `Защита от грешка: <code>user && user.name</code>. user е null - falsy, затова <code>&&</code> връща <b>null</b> и <code>user.name</code> изобщо не се изчислява. Без проверката <code>null.name</code> щеше да спре програмата с <span class="e">TypeError: Cannot read properties of null (reading 'name')</span>.`,
+          do: s => { fresh(s); RULES(s, R_AND); RS(s, 'done', 'yes'); E(s, 'user && user.name', 'null && user.name', 'null'); O(s, 'null', '@&&', 'user.name'); OS(s, 2, 'skip'); M(s, 'ToBoolean', 'null', 'false'); R(s, 'null'); log(s, 'null'); },
+          fly: [['op:0', 'm:0:in', 'null', 0], ['op:0', 'res', 'null', 1300], ['res', 'con', 'null', 2400]], show: [['m:0:out', 950]] },
+        { line: 9, text: `<code>qty</code> е 0 - напълно валидно количество. <b>Какво ще отпечата <code>qty || 1</code>?</b> Помислете, преди да продължите.`,
+          do: s => { fresh(s); RULES(s, R_OR); E(s, 'qty || 1', '0 || 1'); O(s, '0', '@||', '1'); } },
+        { line: 9, text: `<b>1!</b> 0 е falsy, затова <code>||</code> връща десния операнд. Ако 0 е валидна стойност, това е <b>бъг</b>: тя се "губи". Старият начин за стойност по подразбиране <code>x = x || 1</code> има точно този проблем (същото и с "").`,
+          do: s => { RS(s, 'done', 'no', 'yes'); M(s, 'ToBoolean', '0', 'false'); E(s, 'qty || 1', '0 || 1', '1'); R(s, '1'); log(s, '1'); },
+          fly: [['op:0', 'm:0:in', '0', 0], ['op:2', 'res', '1', 1300], ['res', 'con', '1', 2400]], show: [['m:0:out', 950]] },
+        { line: 10, text: `Модерното решение е операторът <code>??</code> (nullish coalescing, ES2020). Той <b>не вика ToBoolean</b> - пита само "null или undefined ли е левият?". 0 не е, затова връща левия операнд: <b>0</b>.`,
+          do: s => { fresh(s); RULES(s, R_NULLISH); RS(s, 'done', 'no', 'yes'); E(s, 'qty ?? 1', '0 ?? 1', '0'); O(s, '0', '@??', '1'); OS(s, 2, 'skip'); R(s, '0'); log(s, '0'); },
+          fly: [['op:0', 'res', '0', 300], ['res', 'con', '0', 1400]] },
+        { line: -1, text: `<b>Обобщение:</b> <code>a || b</code> връща a, ако a е truthy, иначе b. <code>a && b</code> връща a, ако a е falsy, иначе b. Десният операнд се изпълнява само ако е нужен. За стойност по подразбиране, при която 0 и "" са валидни, използвайте <code>??</code>.`,
+          do: s => { fresh(s); RULES(s, R_OR); } },
+    ],
+},
+{
+    tab: 'Тернарен оператор',
+    advanced: true,
+    code: [
+        'let x = 42;',
+        'let numType = x % 2 === 0 ? "even" : "odd";',
+        'console.log(numType);',
+        'let y = 8;',
+        'console.log("y is " + y % 2 ? "odd" : "even");',
+        'console.log("y is " + (y % 2 ? "odd" : "even"));',
+        '// let t = if (y > 0) { "pos" }; // SyntaxError',
+    ],
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> <code>if...else</code> е <b>команда</b> (statement): тя казва кой код да се изпълни, но сама няма стойност. Тернарният оператор <code>?:</code> е <b>израз</b> (expression): изчислява се до стойност, която можем да присвоим, да подадем на функция или да слепим с низ.`,
+          do: s => RULES(s, R_TERN) },
+        { line: 1, text: `Първо условието. Приоритетът решава реда: <code>%</code> е преди <code>===</code>, а <code>?:</code> е почти най-накрая. 42 % 2 = 0, после 0 === 0 е true.`,
+          do: s => { fresh(s); RULES(s, R_TERN); RS(s, 'done'); E(s, 'x % 2 === 0 ? "even" : "odd"', '0 === 0 ? "even" : "odd"', 'true ? "even" : "odd"'); O(s, 'true', '@?', '"even"', '@:', '"odd"'); } },
+        { line: 1, text: `ToBoolean(true) е true, затова се изчислява и връща <b>израз1</b> - "even". Израз2 ("odd") изобщо не се изчислява. Стойността "even" се записва в numType.`,
+          do: s => { RS(s, 'done', 'yes'); OS(s, 4, 'skip'); M(s, 'ToBoolean', 'true', 'true'); R(s, '"even"'); E(s, 'x % 2 === 0 ? "even" : "odd"', 'true ? "even" : "odd"', '"even"'); },
+          fly: [['op:0', 'm:0:in', 'true', 0], ['op:2', 'res', '"even"', 1300]], show: [['m:0:out', 950]] },
+        { line: 2, text: `Отпечатва се <b>even</b>. Същото с if...else изисква 5 реда и предварително деклариран numType - сравнете с примера в слайда.`,
+          do: s => { log(s, 'even'); },
+          fly: [['res', 'con', 'even', 200]] },
+        { line: 4, text: `y = 8 (четно). Тук искаме да слепим текст с резултата от тернарния оператор, но без скоби. <b>Какво ще отпечата?</b> Помислете, преди да продължите.`,
+          do: s => { fresh(s); RULES(s, R_TERN); E(s, '"y is " + y % 2 ? "odd" : "even"'); } },
+        { line: 4, text: `<b>odd</b> - бъг! <code>?:</code> има по-нисък приоритет от <code>+</code>, затова условието е целият израз <code>"y is " + y % 2</code>, т.е. низът "y is 0". Непразен низ е truthy - винаги се избира "odd".`,
+          do: s => { RS(s, 'done', 'yes'); E(s, '[["y is " + 8 % 2]] ? "odd" : "even"', '"y is 0" ? "odd" : "even"', '"odd"'); O(s, '"y is 0"', '@?', '"odd"', '@:', '"even"'); OS(s, 4, 'skip'); M(s, 'ToBoolean', '"y is 0"', 'true'); R(s, '"odd"'); log(s, 'odd'); },
+          fly: [['op:0', 'm:0:in', '"y is 0"', 0], ['op:2', 'res', '"odd"', 1300], ['res', 'con', 'odd', 2400]], show: [['m:0:out', 950]] },
+        { line: 5, text: `Със скоби тернарният оператор се изчислява пръв: 8 % 2 = 0 - falsy - връща се израз2, "even". После <code>"y is " + "even"</code> дава <b>"y is even"</b>. Когато смесвате <code>?:</code> с други оператори, слагайте скоби.`,
+          do: s => { fresh(s); RULES(s, R_TERN); RS(s, 'done', 'no', 'yes'); E(s, '"y is " + ([[0 ? "odd" : "even"]])', '"y is " + "even"', '"y is even"'); O(s, '0', '@?', '"odd"', '@:', '"even"'); OS(s, 2, 'skip'); M(s, 'ToBoolean', '0', 'false'); R(s, '"even"'); log(s, 'y is even'); },
+          fly: [['op:0', 'm:0:in', '0', 0], ['op:4', 'res', '"even"', 1300], ['res', 'con', 'y is even', 2400]], show: [['m:0:out', 950]] },
+        { line: 6, text: `Обратното не работи: <code>if</code> е команда и не може да стои там, където се очаква стойност. Ако махнем коментара, целият скрипт няма да тръгне: <span class="e">SyntaxError: Unexpected token 'if'</span> - грешката се открива още при прочитане на кода, преди изпълнението.`,
+          do: s => { fresh(s); s.rules = null; s.err = true; } },
+        { line: -1, text: `<b>Обобщение:</b> <code>условие ? израз1 : израз2</code> е израз - има стойност и се изчислява само единият от двата клона. Условието минава през ToBoolean, както при if. Използвайте го за кратък избор между две стойности, а при смесване с други оператори - със скоби.`,
+          do: s => { fresh(s); RULES(s, R_TERN); } },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: states[i] is the state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, err: false, console: [], chain: null, ops: null, res: null, rules: null, mach: [], cmp: null, scan: null, sort: null };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.err = false;
+        if (s.ops) s.ops.forEach(o => { if (o.st === 'conv' || o.st === 'read') o.st = ''; });
+        s.rules && s.rules.items.forEach(it => { if (it.st === 'cur') it.st = ''; });
+        s.line = step.line;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const STAGGER = 200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+const ARROW = cls => `<svg class="${cls}" viewBox="0 0 24 12" aria-hidden="true"><path d="M1 6H19M14 1.5L20 6L14 10.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const ICON_CHECK = '<svg viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const GEAR = (() => {
+    let d = '';
+    const teeth = 8, cx = 12, cy = 12;
+    for (let i = 0; i < teeth * 2; i++) {
+        const a0 = (i / (teeth * 2)) * Math.PI * 2, a1 = ((i + 1) / (teeth * 2)) * Math.PI * 2;
+        const r = i % 2 ? 8.2 : 11;
+        const p = (a, rr) => `${(cx + rr * Math.cos(a)).toFixed(2)} ${(cy + rr * Math.sin(a)).toFixed(2)}`;
+        d += (i ? 'L' : 'M') + p(a0, r) + 'L' + p(a1, r);
+    }
+    d += 'Z M15.2 12a3.2 3.2 0 1 0 -6.4 0a3.2 3.2 0 1 0 6.4 0Z';
+    return `<svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><path d="${d}" fill="currentColor" fill-rule="evenodd"/></svg>`;
+})();
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|\b(let|const|var|typeof|null|undefined|true|false|if|else|NaN)\b|(\b\d+(?:\.\d+)?\b)|\b(console|Number|parseInt|parseFloat|Boolean)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+function renderCode(sc, s) {
+    $('#code').innerHTML = sc.code.map((l, i) =>
+        `<li class="${i === s.line ? 'active' : ''} ${i === s.line && s.err ? 'error' : ''}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`
+    ).join('');
+    $('#lineNote').textContent = s.line >= 0 ? `изпълнява се ред ${s.line + 1}` : '';
+}
+
+function chipHtml(v, t, key, extra = '', inner = '') {
+    const label = TYPE_LABEL[t] || t;
+    return `<div class="chip t-${t} ${extra}"${key ? ` data-k="${key}"` : ''}>${inner}<span class="cv">${esc(v)}</span><span class="ct">${label}</span></div>`;
+}
+
+// arrival time (ms) of the value that lands on each key in this step
+function arrivals(step) {
+    const map = {};
+    (step.fly || []).forEach(([, to], i) => { map[to] = Math.max(map[to] || 0, delayOf(step.fly[i], i) + FLY_MS); });
+    (step.show || []).forEach(([k, ms]) => { map[k] = Math.max(map[k] || 0, ms); });
+    return map;
+}
+function delayOf(f, i) { return typeof f[3] === 'number' ? f[3] : i * STAGGER; }
+
+function renderDesk(s, prev, step) {
+    const ch = s.chain;
+    $('#chain').innerHTML = ch
+        ? ch.map((c, i) => (i ? ARROW('arr') : '') +
+            `<span class="ci ${i === ch.length - 1 ? 'last' : ''}">${esc(c).replace(/\[\[/g, '<mark>').replace(/\]\]/g, '</mark>')}</span>`).join('')
+        : '<span class="chain-empty">Тук ще видим как изразът се опростява стъпка по стъпка.</span>';
+
+    const arr = prev ? arrivals(step) : {};
+    if (!s.ops) { $('#ops').innerHTML = '<span class="ops-empty">Тук ще видим операндите, техните типове и резултата.</span>'; return; }
+    let html = s.ops.map((o, i) => {
+        if (o.op) return `<span class="opr">${esc(o.op)}</span>`;
+        const p = prev && prev.ops && prev.ops[i];
+        let ghost = '';
+        if (p && !p.op && p.v !== o.v && prev.ops.length === s.ops.length) {
+            const d = arr['op:' + i] || 0;
+            ghost = `<span class="ghost" style="animation-delay:${d}ms">${esc(p.v)}</span>`;
+        }
+        const tag = o.st === 'skip' ? '<span class="skiptag">не се изчислява</span>' : '';
+        return chipHtml(o.v, o.t, 'op:' + i, 'st-' + (o.st || 'none'), ghost + tag);
+    }).join('');
+    html += '<span class="opr eq">=</span>';
+    html += s.res ? chipHtml(s.res.v, s.res.t, 'res', 'res') : '<div class="chip t-expr res-pending" data-k="res"><span class="cv">?</span><span class="ct">-</span></div>';
+    $('#ops').innerHTML = html;
+}
+
+function renderRules(s) {
+    const r = s.rules;
+    $('#rulesTitle').innerHTML = r ? r.title : 'Алгоритъм';
+    const note = $('#rulesNote');
+    note.textContent = r && r.pass > 1 ? `проход ${r.pass} - отначало` : 'опростен от спецификацията';
+    note.classList.toggle('pass', !!(r && r.pass > 1));
+    if (!r) { $('#rules').innerHTML = '<div class="rules-empty">Тук ще видим правилата, по които engine-ът решава какво да прави.</div>'; return; }
+    const BADGE = { yes: 'да', no: 'не', cur: '?', done: ICON_CHECK, '': '', later: '' };
+    $('#rules').innerHTML = '<ol class="rules">' + r.items.map((it, i) =>
+        `<li class="r-${it.st || 'none'}"><span class="rn">${i + 1}</span><span>${it.t.replace(/ -> /g, ' ' + ARROW('ra') + ' ')}</span><span class="badge">${BADGE[it.st] || ''}</span></li>`
+    ).join('') + '</ol>';
+}
+
+function renderWidget(s, prev) {
+    const box = $('#widget');
+    const title = $('#widgetTitle'), note = $('#widgetNote');
+    note.textContent = '';
+    if (s.sort) {
+        title.textContent = 'ToBoolean: falsy или truthy?';
+        const so = s.sort;
+        const isNew = prev && (!prev.sort || prev.sort.inp !== so.inp);
+        let html = '';
+        if (so.inp) {
+            html += `<div class="mach ${isNew ? 'new' : ''}">${chipHtml(so.inp, typeOf(so.inp), 'sort:in')}${ARROW('arr')}<span class="mbox">${GEAR}ToBoolean</span>${ARROW('arr')}${so.out ? chipHtml(so.out, 'boolean', 'sort:out') : '<span class="chip t-expr" data-k="sort:out"><span class="cv">?</span><span class="ct">-</span></span>'}</div>`;
+        } else {
+            html += `<div class="mach"><span class="mbox">${GEAR}ToBoolean</span><span class="mnote" style="flex-basis:auto">всяка стойност -> true или false</span></div>`;
+        }
+        html += '<div class="bins"><div class="bin falsy"><h4><b>falsy</b> -> false (само тези 8)</h4><div class="slots">' +
+            FALSY.map((v, i) => chipHtml(v, typeOf(v), 'sort:f:' + i, 'sm ' + (so.hits.includes(i) ? 'hit ' : '') + (so.last === 'f:' + i ? 'last ' : '') + (i === 2 || i === 3 ? 'rare' : ''))).join('') +
+            '</div></div><div class="bin truthy"><h4><b>truthy</b> -> true (всички други)</h4><div class="slots">' +
+            so.truthy.map((v, i) => chipHtml(v, typeOf(v), 'sort:t:' + i, 'sm' + (so.last === 't:' + i ? ' last' : ''))).join('') +
+            '<span class="more">...и всички други</span></div></div></div>';
+        box.innerHTML = html;
+        return;
+    }
+    if (s.cmp) {
+        title.textContent = 'Сравнение символ по символ';
+        note.textContent = 'под всеки символ - кодът му';
+        const { a, b, i, dec } = s.cmp;
+        const n = Math.max(a.length, b.length);
+        const cell = (str, j) => {
+            const ch = str[j];
+            let cls = j < i ? 'eq' : j === i ? (dec ? 'win' : 'cur') : (dec ? 'rest' : '');
+            if (ch === undefined) return j === i ? `<div class="cc end ${cls}"><b>край</b><i>-</i></div>` : '<div class="cc end rest"><b></b><i></i></div>';
+            return `<div class="cc ${cls}"><b>${esc(ch)}</b><i>${ch.charCodeAt(0)}</i></div>`;
+        };
+        let rel = '';
+        for (let j = 0; j < n; j++) {
+            let sign = '';
+            if (j < i) sign = '=';
+            else if (j === i) {
+                if (!dec) sign = a[j] === b[j] ? '=' : '?';
+                else if (a[j] === undefined) sign = '&lt;';
+                else if (b[j] === undefined) sign = '&gt;';
+                else sign = a.charCodeAt(j) > b.charCodeAt(j) ? '&gt;' : '&lt;';
+            }
+            rel += `<div class="rel ${j === i && dec ? 'dec' : ''}">${sign}</div>`;
+        }
+        let idx = '';
+        for (let j = 0; j < n; j++) idx += `<div class="idx">${j}</div>`;
+        let html = `<div class="grid" style="grid-template-columns: auto repeat(${n}, 2.7rem)">
+            <span></span>${idx}
+            <span class="lbl">ляв</span>${[...Array(n)].map((_, j) => cell(a, j)).join('')}
+            <span></span>${rel}
+            <span class="lbl">десен</span>${[...Array(n)].map((_, j) => cell(b, j)).join('')}
+        </div>`;
+        if (s.cmp.verdict) html += `<div class="verdict">${s.cmp.verdict}</div>`;
+        box.innerHTML = html;
+        return;
+    }
+    if (s.scan) {
+        const sc = s.scan;
+        title.textContent = sc.fn ? `Как ${sc.fn} чете низа` : 'Низът - символ по символ';
+        const n = sc.str.length;
+        const cells = [...sc.str].map((ch, j) => {
+            let cls = '';
+            if (sc.fn) {
+                if (j < sc.ok) cls = 'ok';
+                else if (j === sc.stop) cls = 'stop';
+                else if (sc.stop !== null && j > sc.stop) cls = 'rest';
+                if (sc.whole && sc.stop !== null && j < sc.ok) cls = 'ok';
+            }
+            return `<div class="cc ${cls}"><b>${esc(ch)}</b><i>${j}</i></div>`;
+        }).join('');
+        let html = `<div class="grid" style="grid-template-columns: auto repeat(${n}, 2.7rem)"><span class="lbl">низ</span>${cells}</div>`;
+        if (sc.note) html += `<div class="verdict">${sc.note}</div>`;
+        else if (!sc.fn) html += `<div class="widget-empty">Под всеки символ е позицията му (индекс), започвайки от 0.</div>`;
+        box.innerHTML = html;
+        return;
+    }
+    title.textContent = 'Машини за преобразуване';
+    note.textContent = 'ToNumber, ToString, ToBoolean';
+    if (!s.mach.length) {
+        box.innerHTML = '<div class="widget-empty">Тук ще се появяват скритите машини, които преобразуват типовете (ToNumber, ToString, ToBoolean). Ако машина не се появи, значи преобразуване няма.</div>';
+        return;
+    }
+    box.innerHTML = s.mach.map((m, i) => {
+        const p = prev && prev.mach[i];
+        const isNew = prev && (!p || p.inp !== m.inp || p.name !== m.name);
+        return `<div class="mach ${isNew ? 'new' : ''}">${chipHtml(m.inp, typeOf(m.inp), `m:${i}:in`)}${ARROW('arr')}<span class="mbox">${GEAR}${m.name}</span>${ARROW('arr')}${chipHtml(m.out, typeOf(m.out), `m:${i}:out`)}${m.note ? `<span class="mnote">${esc(m.note)}</span>` : ''}</div>`;
+    }).join('');
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.length
+        ? s.console.map(l => `<div class="cline ${l.err ? 'err' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('')
+        : '<div class="console-empty">(празна)</div>';
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderLegend() {
+    $('#legend').innerHTML = [
+        ['number', 't-number'], ['string', 't-string'], ['boolean', 't-boolean'], ['null / undefined', 't-null'], ['обект', 't-object'],
+    ].map(([n, c]) => `<span><i class="sw ${c}"></i>${n}</span>`).join('') +
+        '<span><i class="sw read"></i>проверява се</span><span><i class="sw write"></i>преобразувано / избрано</span>';
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+const FLY_MS = F;
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    return $(`[data-k="${key}"]`);
+}
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+const timers = [];
+function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+function playStep(step, tk) {
+    const flights = step.fly || [];
+    const shows = step.show || [];
+    if (reduceMotion) return;
+    const layer = $('#flyLayer');
+
+    // elements that appear later in this step
+    for (const [key, ms] of shows) {
+        const el = resolve(key);
+        if (!el) continue;
+        el.classList.add('await');
+        later(() => { if (tk !== token) return; el.classList.remove('await'); bump(el); }, ms);
+    }
+    // destinations stay hidden until their value lands
+    const pending = new Map();
+    const plan = flights.map((f, i) => {
+        const [from, to, text, , flags] = f;
+        const src = resolve(from), dst = resolve(to);
+        const awaits = !!dst && flags !== 'noawait';
+        if (awaits) { dst.classList.add('await'); pending.set(dst, (pending.get(dst) || 0) + 1); }
+        return { src, dst, to, text, delay: delayOf(f, i), awaits };
+    });
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token || !p.dst) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) p.dst.classList.remove('await');
+            }
+            bump(p.dst);
+        };
+        if (!p.src || !p.dst) { later(finish, p.delay); continue; }
+        later(() => {
+            if (tk !== token) return;
+            const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+            const chip = document.createElement('div');
+            chip.className = 'fly ' + (p.to === 'con' || p.to.endsWith(':in') ? 'read' : 'write');
+            chip.textContent = p.text;
+            layer.appendChild(chip);
+            const w = chip.offsetWidth, h = chip.offsetHeight;
+            const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+            const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+            const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+            chip.style.left = x0 + 'px';
+            chip.style.top = y0 + 'px';
+            const anim = chip.animate([
+                { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+                { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+                { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+                { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+            ], { duration: FLY_MS, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+            anim.onfinish = () => { chip.remove(); finish(); };
+        }, p.delay);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    timers.splice(0).forEach(clearTimeout);
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderDesk(s, prev, step);
+    renderRules(s);
+    renderWidget(s, prev);
+    renderConsole(s);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+
+    if (prev) {
+        // newly converted chips, results and console lines that nobody flies to still pop in
+        playStep(step, tk);
+    }
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(11000, Math.max(3200, 1500 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    try { history.replaceState(null, '', location.search + '#' + (scIdx + 1)); } catch (e) { /* file:// in some browsers */ }
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('coercionTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('coercionTheme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+renderLegend();
+
+// #3 = scenario 3, #3.5 = scenario 3, step 5 (both 1-based)
+function fromHash() {
+    const m = /^#(\d+)(?:\.(\d+))?/.exec(location.hash);
+    selectScenario(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] - 1 : 0);
+}
+
+// #selftest: walk every step of every scenario, report JS errors, missing
+// flight targets and panels whose content does not fit
+function selfTest() {
+    const problems = [];
+    const fits = (el, name, where) => {
+        if (el && el.scrollHeight > el.clientHeight + 2) problems.push(`${where}: ${name} overflows by ${el.scrollHeight - el.clientHeight}px`);
+    };
+    SCENARIOS.forEach((sc, si) => {
+        try { selectScenario(si); } catch (e) { problems.push(`#${si + 1}: ${e.message}`); return; }
+        sc.steps.forEach((step, i) => {
+            const where = `#${si + 1}.${i + 1}`;
+            try {
+                goto(i, i > 0);
+                for (const f of step.fly || []) {
+                    if (!resolve(f[0])) problems.push(`${where}: no fly source ${f[0]}`);
+                    if (!resolve(f[1])) problems.push(`${where}: no fly target ${f[1]}`);
+                }
+                for (const [k] of step.show || []) if (!resolve(k)) problems.push(`${where}: no show target ${k}`);
+                document.querySelectorAll('.lower .panel, .desk, .code-panel').forEach((p, j) => fits(p, 'panel ' + j, where));
+                fits($('.bottom'), 'footer', where);
+                fits(document.documentElement, 'page', where);
+                const ex = $('#explain');
+                if (ex.getBoundingClientRect().bottom > $('.bottom').getBoundingClientRect().bottom) problems.push(`${where}: explanation too long`);
+                if (/[^\x00-\x7FЀ-ӿ]/.test(step.text)) problems.push(`${where}: non-ASCII punctuation`);
+            } catch (e) { problems.push(`${where}: ${e.message}`); }
+        });
+    });
+    const out = document.createElement('pre');
+    out.id = 'selftest';
+    out.textContent = problems.length ? 'SELFTEST FAIL\n' + problems.join('\n') : 'SELFTEST OK';
+    out.style.cssText = 'position:fixed;inset:auto 0 0 0;max-height:50vh;overflow:auto;margin:0;padding:1rem;background:#000;color:#0f0;z-index:99;font-size:12px';
+    document.body.appendChild(out);
+}
+
+if (location.hash === '#selftest') { selectScenario(0); selfTest(); }
+else {
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+}
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

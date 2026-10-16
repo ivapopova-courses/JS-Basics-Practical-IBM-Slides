@@ -1,0 +1,1441 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Функциите са стойности</title>
+<!--
+    Step-by-step animation: functions are values (objects in the heap), callbacks,
+    returning functions, arrow functions, closures and the missing ';' bug.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep link: functionsAsValues.html#3 (scenario 3) or #3.5 (scenario 3, step 5).
+    Theme: ?theme=dark or ?theme=light. Self-test of every step: #selftest
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --heap-bg: #fff3cf;
+    --heap-border: #c99a2e;
+    --run: #e0a400;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+        --run: #ffd166;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+    --run: #ffd166;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: flex; flex-direction: column; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .95rem; }
+.code li {
+    display: flex; gap: .7rem;
+    padding: .14rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.3rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code li.wait { border-left: 3px dashed var(--code-num); background: rgba(255, 255, 255, .045); }
+.code li.morph { animation: morph 1.1s both; }
+.k { color: #c792ea; }
+.s { color: #a5d986; }
+.n { color: #f7b267; }
+.c { color: #7a8299; font-style: italic; }
+.o { color: #82aaff; }
+
+/* expression */
+.eval { display: grid; grid-template-columns: auto 1fr; gap: .3rem .8rem; align-items: center; }
+.ev-k { font-size: .72rem; color: var(--muted); }
+.ev-v {
+    justify-self: start;
+    min-width: 2rem; min-height: 1.6rem;
+    padding: .1rem .5rem;
+    border-radius: .3rem;
+    font-family: var(--mono); font-size: 1rem;
+    white-space: pre;
+}
+.ev-src:not(:empty) { background: var(--read-bg); }
+.ev-res:not(:empty) { background: var(--write-bg); font-weight: 700; }
+.ev-res.t-ref { color: var(--ref); padding-right: 1.3rem; }
+.eval-empty { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); font-style: italic; min-height: 3.5rem; display: flex; align-items: center; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .95rem; }
+.cline { padding: .12rem .4rem; border-bottom: 1px solid var(--line); white-space: pre; }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+
+/* ---------- memory ---------- */
+.mem-wrap { flex: 1; min-height: 0; display: flex; gap: 1rem; }
+.stack-panel { flex: none; width: 23.5rem; display: flex; flex-direction: column; }
+.heap-panel { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+/* stack frames */
+.frames { flex: 1; min-height: 0; display: flex; flex-direction: column-reverse; gap: .45rem; }
+.frame {
+    border: 1.5px solid var(--line); border-left-width: 5px; border-radius: .5rem;
+    padding: .3rem .5rem .35rem;
+    background: var(--paper);
+}
+.frame.cur { border-left-color: var(--run); }
+.fhead { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; margin-bottom: .15rem; }
+.ftitle { font-family: var(--mono); font-size: .95rem; font-weight: 700; }
+.fnote { font-size: .64rem; color: var(--muted); }
+.frame.cur .fnote { color: var(--ink); font-weight: 700; }
+.fempty { font-size: .7rem; font-style: italic; color: var(--muted); padding: .15rem 0; }
+.frow { display: grid; grid-template-columns: minmax(0, 1fr) 8.8rem; align-items: center; gap: .4rem; height: 2.6rem; }
+.label { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+.name { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; white-space: nowrap; }
+.name.scope { font-family: var(--sans); font-size: .78rem; font-style: italic; font-weight: 600; color: var(--muted); }
+.kw {
+    padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: .6rem; color: var(--muted); white-space: nowrap;
+}
+.cell {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: 2.35rem;
+    padding-top: .7rem;
+    border: 2px solid var(--var-border); border-radius: .5rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: box-shadow .25s;
+}
+.type {
+    position: absolute; top: .05rem; right: .4rem;
+    font-family: var(--sans); font-size: .56rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined, .val.t-null { font-style: italic; font-weight: 500; opacity: .85; }
+.val.t-ref { color: var(--ref); }
+.uninit { font-family: var(--sans); font-size: .7rem; font-style: italic; font-weight: 500; opacity: .7; }
+.cell.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.cell.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.cell.hl-new   { box-shadow: 0 0 0 3px var(--var-border); }
+.cell.hl-error { box-shadow: 0 0 0 3px var(--err), 0 0 0 7px var(--err-bg); animation: shake .5s both; }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding-top: .7rem;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+.cell.changed .val { animation: pop .45s .2s both; }
+.frow.appear .cell, .frow.appear .label { animation: appear .5s both; }
+.frow.appear .label { animation-delay: .15s; }
+.frame.appear { animation: push .45s both; }
+.frame.popping { animation: popframe .7s both; overflow: hidden; }
+
+/* heap */
+.heap { position: relative; flex: 1; min-height: 0; }
+.hobj {
+    position: absolute; z-index: 2;
+    max-width: calc(100% - .4rem);
+    padding: .3rem .6rem .4rem;
+    border: 2px solid var(--heap-border); border-radius: .6rem;
+    background: var(--heap-bg);
+    font-family: var(--mono);
+    transition: box-shadow .25s;
+}
+.hobj.kind-env { background: var(--var-bg); border-color: var(--var-border); color: var(--var-ink); }
+.hobj.new { animation: appear .5s both; }
+.hobj.visit { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.hobj.running { box-shadow: 0 0 0 3px var(--run); }
+.haddr {
+    display: flex; justify-content: space-between; gap: 1rem;
+    font-family: var(--sans); font-size: .68rem; font-weight: 700; letter-spacing: .04em; color: var(--muted);
+}
+.hobj.kind-env .haddr { color: inherit; opacity: .8; }
+.haddr b { font-family: var(--mono); color: var(--ref); font-size: .82rem; }
+.hkind { font-family: var(--mono); font-weight: 600; }
+.fcode {
+    margin: .25rem 0 .15rem; padding: .3rem .55rem;
+    border-radius: .35rem;
+    background: var(--code-bg); color: var(--code-ink);
+    font-size: .74rem; line-height: 1.4;
+    white-space: pre;
+}
+.fmeta { font-family: var(--sans); font-size: .64rem; color: var(--muted); }
+.fmeta code { font-family: var(--mono); }
+.items { font-size: .92rem; line-height: 1.5; }
+.ik { color: var(--muted); }
+.hobj.kind-env .ik { color: inherit; opacity: .8; }
+.iv { display: inline-block; min-width: 1.4rem; padding: 0 .25rem; border-radius: .25rem; font-weight: 700; }
+.iv.t-ref { color: var(--ref); padding-right: 1rem; }
+.iv.t-undefined { font-style: italic; font-weight: 500; }
+.iv.hl-write { background: var(--write-bg); outline: 2px solid var(--write); }
+.iv.hl-read { background: var(--read-bg); outline: 2px solid var(--read); }
+.hobj .tag {
+    position: absolute; top: -.75rem; right: .6rem;
+    padding: .05rem .45rem; border-radius: .3rem;
+    background: var(--err); color: #fff;
+    font-family: var(--sans); font-size: .62rem; font-weight: 700;
+}
+.hobj .tag.run { background: var(--run); color: #1d1a12; }
+.hobj .tag.wait { background: var(--muted); color: var(--paper); }
+.hobj.garbage { opacity: .55; filter: grayscale(1); border-style: dashed; }
+.hobj.collected { animation: collect .9s both; }
+
+/* reference arrows */
+.arrows { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; overflow: visible; pointer-events: none; color: var(--ref); }
+.refpath { fill: none; stroke: currentColor; stroke-width: 2.5; }
+.refpath.dashed { stroke-dasharray: 6 4; stroke-width: 2; }
+.refpath.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .6s both; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.1rem;
+    margin-top: .6rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.var { background: var(--var-bg); border-color: var(--var-border); }
+.sw.heap { background: var(--heap-bg); border-color: var(--heap-border); }
+.sw.run { background: none; border-color: var(--run); border-width: 3px; }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+.sw.ref { height: 0; border-width: 1.5px 0 0; border-radius: 0; border-color: var(--ref); width: 1.4rem; }
+.sw.env { height: 0; border-width: 1.5px 0 0; border-radius: 0; border-color: var(--ref); border-style: dashed; width: 1.4rem; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+
+.cell.await .val, .cell.await .type { visibility: hidden; }
+.ev-v.await, .cline.await, .iv.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+#selftest { position: fixed; inset: 0; z-index: 100; margin: 0; padding: 1rem; overflow: auto; background: var(--panel); font: .8rem/1.4 var(--mono); white-space: pre-wrap; }
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes push { from { opacity: 0; transform: translateY(-1.2rem); } to { opacity: 1; transform: none; } }
+@keyframes popframe {
+    0% { opacity: 1; transform: none; max-height: 14rem; }
+    60% { opacity: 0; transform: translateY(-1.2rem); max-height: 14rem; }
+    100% { opacity: 0; transform: translateY(-1.2rem); max-height: 0; padding-top: 0; padding-bottom: 0; border-width: 0; }
+}
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes collect { 0% { opacity: .55; transform: none; } 100% { opacity: 0; transform: scale(.6) rotate(-6deg); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+@keyframes morph { 0% { background: rgba(255, 162, 77, .55); } 100% { background: var(--code-active); } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .mem-wrap { flex-wrap: wrap; }
+    .stack-panel { width: 100%; }
+    .heap { min-height: 32rem; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Функциите са стойности <small>функциите като обекти в паметта, стъпка по стъпка</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../functionsAsValues.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><span>Стойност на израза</span></div>
+                <div class="eval" id="eval"></div>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="mem-wrap">
+                <div class="panel stack-panel">
+                    <div class="panel-title"><span>Stack (рамки)</span><span class="note">най-горната се изпълнява</span></div>
+                    <div class="frames" id="stack"></div>
+                </div>
+                <div class="panel heap-panel">
+                    <div class="panel-title"><span>Heap - обектите</span><span class="note">адресите са примерни</span></div>
+                    <div class="heap" id="heap"></div>
+                </div>
+            </div>
+            <div class="legend" id="legend"></div>
+        </section>
+        <svg class="arrows" id="arrows" aria-hidden="true"></svg>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Memory model
+//   s.frames - the call stack: frames[0] is the global frame, the last one runs
+//   s.heap   - objects by address: functions (kind 'fn'), arrays, objects and
+//              environments (kind 'env', where the local variables of a call live)
+//   Values are literals ('2', '"Ada"', 'undefined') or references (addresses).
+// ---------------------------------------------------------------------------
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'null') return 'null';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit.startsWith('"')) return 'string';
+    return 'number';
+}
+// a value given to the helpers: a number is an address, a string is a literal
+function mkVal(v) {
+    return typeof v === 'number'
+        ? { value: String(v), type: 'ref', ref: v }
+        : { value: v, type: typeOf(v), ref: null };
+}
+
+function frameOf(s, id) { return s.frames.find(f => f.id === id); }
+function varOf(s, key) {
+    const [fid, name] = key.split('.');
+    return frameOf(s, fid).vars.find(v => v.name === name);
+}
+
+// Helpers used by the scenario steps. Each one mutates the state `s`.
+function frame(s, id, title, fn) { s.frames.push({ id, title, fn, vars: [] }); }
+function popf(s, n = 1) { while (n--) s.frames.pop(); }
+function decl(s, key, kind = 'let', label = '') {
+    const [fid, name] = key.split('.');
+    frameOf(s, fid).vars.push({ name, kind, label, value: null, type: null, ref: null });
+    s.hl[key] = 'new';
+}
+function set(s, key, v) { Object.assign(varOf(s, key), mkVal(v)); s.hl[key] = 'write'; }
+function read(s, ...keys) { keys.forEach(k => s.hl[k] = 'read'); }
+function hfn(s, addr, x, y, code, name = '', arrow = false) {
+    s.heap[addr] = { kind: 'fn', x, y, code, name, arrow, items: [], garbage: false };
+    s.hhl[addr] = 'new';
+}
+function hbox(s, kind, addr, x, y, entries, title = '') {
+    s.heap[addr] = { kind, x, y, title, items: entries.map(([k, v]) => ({ k, ...mkVal(v) })), garbage: false };
+    s.hhl[addr] = 'new';
+}
+function harr(s, addr, x, y, values) { hbox(s, 'arr', addr, x, y, values.map((v, i) => [String(i), v])); }
+function hobj(s, addr, x, y, entries) { hbox(s, 'obj', addr, x, y, entries); }
+function henv(s, addr, x, y, title, entries) { hbox(s, 'env', addr, x, y, entries, title); }
+function hput(s, addr, k, v) {
+    const o = s.heap[addr];
+    const it = o.items.find(i => i.k === k);
+    if (it) Object.assign(it, mkVal(v)); else o.items.push({ k, ...mkVal(v) });
+    s.hhl[addr + '.' + k] = 'write';
+}
+function hread(s, addr, k) { s.hhl[addr] = 'visit'; if (k !== undefined) s.hhl[addr + '.' + k] = 'read'; }
+function garbage(s, addr) { s.heap[addr].garbage = true; }
+function collect(s, addr) { delete s.heap[addr]; }
+function ev(s, src, res = '', ref = null) { s.eval = { src, res, ref }; }
+function noev(s) { s.eval = null; }
+function log(s, text, err = false) { s.console.push({ text, err }); }
+function code(s, i, text) { s.code[i] = text; }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line   - active code line (0-based), a range [from, to], or -1
+//   step.wait   - lines of calls that wait for the running function to return
+//   step.do     - changes to the state
+//   step.fly    - values that fly on screen: [from, to, text]
+//                 keys: v:frame.name (variable cell), h:addr (heap object),
+//                 h:addr.key (property / element), ev (expression), res (value),
+//                 con (last console line)
+//   step.chain  - flights go one after another instead of almost together
+//   step.reveal - elements to keep hidden until all flights land
+// ---------------------------------------------------------------------------
+const C0 = .4;   // x of the first heap column (rem)
+
+const SCENARIOS = [
+{
+    tab: 'Функцията е стойност',
+    code: [
+        'function greet() {',
+        '    console.log("Hello!");',
+        '}',
+        'let hello = greet;',
+        'console.log(typeof greet);  // function',
+        'console.log(greet);   // [Function: greet]',
+        'hello();              // Hello!',
+    ],
+    steps: [
+        { line: -1, text: `В JavaScript функциите са <b>стойности</b> (values) - също като числата и низовете. Ще използваме модела от "Обекти и референции": променливите са в <b>stack</b>, а всяка функция е <b>обект</b> в <b>heap</b>, който пази кода ѝ. Натиснете <kbd>Напред</kbd>.` },
+        { line: [0, 2], text: `Декларацията <code>function greet() {...}</code> прави две неща: създава в heap <b>обект-функция</b> (адрес 5000) и променлива <b>greet</b> с <b>референция</b> към него. Тялото <b>не</b> се изпълнява - кодът само се запазва за по-късно. (Това става още преди първия ред - hoisting.)`,
+          do: s => { hfn(s, 5000, C0, .4, ['function greet() {', '  console.log("Hello!");', '}'], 'greet'); decl(s, 'g.greet', 'function'); set(s, 'g.greet', 5000); },
+          fly: [['h:5000', 'v:g.greet', '5000']] },
+        { line: 3, text: `<code>let hello = greet;</code> - вдясно е <code>greet</code> <b>без скоби</b>. Това е обикновено <span class="r">четене</span> на променлива: стойността ѝ е адресът 5000. Функцията <b>не</b> се извиква.`,
+          do: s => { decl(s, 'g.hello'); read(s, 'g.greet'); ev(s, 'greet', '5000', 5000); },
+          fly: [['v:g.greet', 'res', '5000']] },
+        { line: 3, text: `В hello се <span class="w">записва</span> копие на адреса. Не се създава нова функция: две променливи, <b>една</b> функция - точно както при обектите. <code>hello === greet</code> е true.`,
+          do: s => set(s, 'g.hello', 5000),
+          fly: [['res', 'v:g.hello', '5000']] },
+        { line: 4, text: `<code>typeof greet</code> връща "function". Технически функцията е обект (object), но typeof я различава, защото тя може да бъде <b>извикана</b>.`,
+          do: s => { noev(s); read(s, 'g.greet'); ev(s, 'typeof greet', '"function"'); log(s, 'function'); },
+          fly: [['v:g.greet', 'ev', '5000']], reveal: ['res', 'con'] },
+        { line: 5, text: `<code>console.log(greet)</code> - отново без скоби: подаваме на console.log самата функция и тя я отпечатва. Node.js показва <code>[Function: greet]</code>, а конзолата на браузъра - кода ѝ. "Hello!" <b>не</b> се отпечатва.`,
+          do: s => { read(s, 'g.greet'); ev(s, 'greet', '5000', 5000); log(s, '[Function: greet]'); },
+          fly: [['v:g.greet', 'con', '5000']] },
+        { line: 6, text: `<code>hello()</code> - скобите <code>()</code> са <b>операторът за извикване</b> (call operator). Той означава: "<b>последвай стрелката и изпълни кода</b>". JavaScript чете адреса от hello, отива до функцията и в стека се добавя нова <b>рамка</b> (frame) за изпълнението ѝ.`,
+          do: s => { read(s, 'g.hello'); ev(s, 'hello', '5000', 5000); frame(s, 'f1', 'greet()', 5000); },
+          fly: [['v:g.hello', 'h:5000', '5000']] },
+        { line: 1, wait: [6], text: `Изпълнява се тялото на функцията - отпечатва се Hello!. Рамката се казва greet(), защото функцията се казва greet - няма значение през коя променлива сме стигнали до нея.`,
+          do: s => { noev(s); log(s, 'Hello!'); } },
+        { line: 6, text: `Функцията свърши: рамката ѝ се премахва от стека и изпълнението продължава след <code>hello()</code>. Във функцията няма return, затова стойността на израза <code>hello()</code> е undefined.`,
+          do: s => { popf(s); ev(s, 'hello()', 'undefined'); } },
+        { line: -1, text: `<b>Обобщение:</b> <code>greet</code> (без скоби) е <b>стойността</b> - референция към обекта-функция; можем да я копираме, отпечатваме, подаваме. <code>greet()</code> <b>извиква</b> функцията. Това, че функциите са стойности, се нарича "first-class functions" (функциите са first-class citizens).`,
+          do: noev },
+    ],
+},
+{
+    tab: 'В масиви и обекти',
+    code: [
+        'let foobar = [',
+        '    function () { console.log(`Foo`); },',
+        '    function () { console.log(`Bar`); }',
+        '];',
+        'let obj = {',
+        '    foo: function () { console.log(`Foo`); },',
+        '    bar: function () { console.log(`Bar`); }',
+        '};',
+        'foobar[0]();   // Foo',
+        'foobar[1]();   // Bar',
+        'obj.foo();     // Foo',
+        'foobar[2]();   // ?',
+    ],
+    steps: [
+        { line: -1, text: `Щом функциите са стойности, можем да ги слагаме навсякъде, където слагаме стойности - като елементи на масив или като свойства на обект. Такива функции обикновено нямат име - наричат се <b>анонимни функции</b> (anonymous functions).` },
+        { line: [0, 3], text: `Изчислява се литералът на масива. Всеки от двата <b>function израза</b> (function expression) създава нов обект-функция в heap. Те нямат име: <code>name</code> им е празен низ.`,
+          do: s => {
+              hfn(s, 5000, 12.5, .4, ['function () { console.log(`Foo`); }']);
+              hfn(s, 5100, 12.5, 5.6, ['function () { console.log(`Bar`); }']);
+          } },
+        { line: [0, 3], text: `Създава се масивът. В елементите му не са копирани функциите, а <b>референции</b> към тях. В foobar се <span class="w">записва</span> адресът на масива.`,
+          do: s => { harr(s, 5200, C0, .4, [5000, 5100]); decl(s, 'g.foobar'); set(s, 'g.foobar', 5200); },
+          fly: [['h:5200', 'v:g.foobar', '5200']] },
+        { line: [4, 7], text: `Същото с обекта: свойствата foo и bar сочат към два <b>нови</b> обекта-функции. Кодът им е като в масива, но всеки function израз създава отделна функция: <code>obj.foo === foobar[0]</code> е false. Функция в свойство на обект се нарича <b>метод</b> (method).`,
+          do: s => {
+              hfn(s, 5300, 12.5, 12.2, ['function () { console.log(`Foo`); }'], 'foo');
+              hfn(s, 5400, 12.5, 17.4, ['function () { console.log(`Bar`); }'], 'bar');
+              hobj(s, 5500, C0, 12.2, [['foo', 5300], ['bar', 5400]]);
+              decl(s, 'g.obj'); set(s, 'g.obj', 5500);
+          },
+          fly: [['h:5500', 'v:g.obj', '5500']] },
+        { line: 8, text: `<code>foobar[0]()</code> се изпълнява на две части. Първо <code>foobar[0]</code>: JavaScript следва референцията в foobar до масива и <span class="r">чете</span> елемента с индекс 0. Стойността му е адресът на функция - 5000.`,
+          do: s => { read(s, 'g.foobar'); hread(s, 5200, '0'); ev(s, 'foobar[0]', '5000', 5000); },
+          fly: [['v:g.foobar', 'h:5200', '5200'], ['h:5200.0', 'res', '5000']], chain: true },
+        { line: 1, wait: [8], text: `После <code>()</code> извиква тази стойност: следваме стрелката до функцията 5000, в стека се появява рамка и се изпълнява кодът ѝ - отпечатва се Foo. ((anonymous) е името, с което DevTools показват анонимните функции.)`,
+          do: s => { ev(s, 'foobar[0]', '5000', 5000); frame(s, 'a1', '(anonymous)', 5000); log(s, 'Foo'); },
+          fly: [['res', 'h:5000', '5000']], reveal: ['con'] },
+        { line: 2, wait: [9], text: `<code>foobar[1]()</code> - същото с индекс 1: намираме референцията 5100 и извикваме функцията - отпечатва се Bar. (Предишната рамка вече е премахната - функцията беше свършила.)`,
+          do: s => { popf(s); read(s, 'g.foobar'); hread(s, 5200, '1'); ev(s, 'foobar[1]', '5100', 5100); frame(s, 'a2', '(anonymous)', 5100); log(s, 'Bar'); },
+          fly: [['v:g.foobar', 'h:5200', '5200'], ['h:5200.1', 'res', '5100'], ['res', 'h:5100', '5100']], chain: true, reveal: ['con'] },
+        { line: 5, wait: [10], text: `<code>obj.foo()</code> - точката <span class="r">чете</span> свойството foo на обекта: референция към функция, а <code>()</code> я извиква. Така се извикват всички методи - дори <code>console.log()</code> е извикване на метода log на обекта console!`,
+          do: s => { popf(s); read(s, 'g.obj'); hread(s, 5500, 'foo'); ev(s, 'obj.foo', '5300', 5300); frame(s, 'a3', 'foo()', 5300); log(s, 'Foo'); },
+          fly: [['v:g.obj', 'h:5500', '5500'], ['h:5500.foo', 'res', '5300'], ['res', 'h:5300', '5300']], chain: true, reveal: ['con'] },
+        { line: 11, text: `<code>foobar[2]()</code> - в масива няма елемент с индекс 2. Какво ще се случи? Помислете, преди да продължите.`,
+          do: s => { popf(s); ev(s, 'foobar[2]'); } },
+        { line: 11, text: `<code>foobar[2]</code> е undefined - там няма референция към функция. Операторът <code>()</code> няма какво да изпълни и хвърля <b>TypeError</b>. Съобщението "... is not a function" почти винаги значи: "опитваш се да извикаш нещо, което не е функция".`,
+          do: s => { read(s, 'g.foobar'); hread(s, 5200); ev(s, 'foobar[2]', 'undefined'); s.err = true; log(s, 'Uncaught TypeError: foobar[2] is not a function', true); code(s, 11, 'foobar[2]();   // TypeError'); },
+          fly: [['v:g.foobar', 'h:5200', '5200']], reveal: ['res', 'con'] },
+        { line: -1, text: `<b>Обобщение:</b> <code>()</code> може да стои след <b>всеки израз</b>, чиято стойност е функция: <code>foobar[0]()</code>, <code>obj.foo()</code>. Първо се изчислява изразът (намира се референцията), после функцията се извиква.`,
+          do: noev },
+    ],
+},
+{
+    tab: 'Callback функции',
+    code: [
+        'function caller(f) {',
+        '    console.log("1");',
+        '    f();',
+        '}',
+        'function callback() {',
+        '    console.log("2");',
+        '}',
+        'caller( callback );     // 1 2',
+        'console.log("---");',
+        'caller( callback() );   // ?',
+    ],
+    steps: [
+        { line: -1, text: `<b>Callback функция</b> (функция за обратно извикване) е функция, която подаваме като аргумент на друга функция, за да бъде извикана <b>от нея</b>. Ще видим и честа грешка: разликата между <code>caller( callback )</code> и <code>caller( callback() )</code>.` },
+        { line: [0, 6], text: `Двете декларации създават два обекта-функции и две променливи с референции към тях (още преди изпълнението на първия ред).`,
+          do: s => {
+              hfn(s, 5000, C0, .4, ['function caller(f) {', '  console.log("1");', '  f();', '}'], 'caller');
+              hfn(s, 5100, C0, 9.2, ['function callback() {', '  console.log("2");', '}'], 'callback');
+              decl(s, 'g.caller', 'function'); set(s, 'g.caller', 5000);
+              decl(s, 'g.callback', 'function'); set(s, 'g.callback', 5100);
+          },
+          fly: [['h:5000', 'v:g.caller', '5000'], ['h:5100', 'v:g.callback', '5100']] },
+        { line: 7, text: `<code>caller( callback )</code> - преди да извика функция, JavaScript изчислява <b>аргументите</b> ѝ. Аргументът е <code>callback</code> без скоби - значи само се <span class="r">чете</span> стойността на променливата: адресът 5100.`,
+          do: s => { read(s, 'g.callback'); ev(s, 'callback', '5100', 5100); },
+          fly: [['v:g.callback', 'res', '5100']] },
+        { line: 7, text: `Извиква се caller: в стека се появява рамката ѝ, а параметърът <b>f</b> получава <span class="w">копие</span> на аргумента - адреса 5100. Сега f сочи към <b>същата</b> функция като callback.`,
+          do: s => { read(s, 'g.caller'); frame(s, 'c1', 'caller(f)', 5000); decl(s, 'c1.f', 'параметър'); set(s, 'c1.f', 5100); },
+          fly: [['v:g.caller', 'h:5000', '5000'], ['res', 'v:c1.f', '5100']], chain: true },
+        { line: 1, wait: [7], text: `caller отпечатва 1.`,
+          do: s => { noev(s); log(s, '1'); } },
+        { line: 2, wait: [7], text: `<code>f()</code> - следваме стрелката от f и извикваме функцията 5100. caller не знае как се казва тази функция - извиква това, което е получила. Новата рамка се слага <b>върху</b> рамката на caller, която чака.`,
+          do: s => { read(s, 'c1.f'); ev(s, 'f', '5100', 5100); frame(s, 'c2', 'callback()', 5100); },
+          fly: [['v:c1.f', 'h:5100', '5100']] },
+        { line: 5, wait: [2, 7], text: `Изпълнява се callback - отпечатва се 2.`,
+          do: s => { noev(s); log(s, '2'); } },
+        { line: 8, text: `callback свършва и рамката ѝ се маха, после свършва и caller. Резултат: <b>1, 2</b> - caller извика нашата функция в момента, в който тя реши. Следва <code>console.log("---")</code>.`,
+          do: s => { popf(s, 2); log(s, '---'); } },
+        { line: 9, text: `А сега <code>caller( callback() )</code> - със <b>скоби</b> след callback. Какво ще се отпечата? Помислете, преди да продължите.`,
+          do: s => ev(s, 'callback()') },
+        { line: 5, wait: [9], text: `Аргументите се изчисляват <b>преди</b> извикването на caller. А аргументът е <code>callback()</code> - извикване! Затова callback се изпълнява веднага и отпечатва <b>2</b> - преди caller изобщо да е започнала.`,
+          do: s => { read(s, 'g.callback'); frame(s, 'c3', 'callback()', 5100); log(s, '2'); },
+          fly: [['v:g.callback', 'h:5100', '5100']], reveal: ['con'] },
+        { line: 9, text: `callback няма return, затова стойността на <code>callback()</code> е <b>undefined</b>. Рамката ѝ се маха. Именно undefined ще бъде подаден на caller - а не функцията.`,
+          do: s => { popf(s); ev(s, 'callback()', 'undefined'); } },
+        { line: 1, wait: [9], text: `Извиква се caller. Параметърът f получава <span class="w">копие</span> на аргумента - undefined (няма стрелка!). caller отпечатва 1.`,
+          do: s => { read(s, 'g.caller'); frame(s, 'c4', 'caller(f)', 5000); decl(s, 'c4.f', 'параметър'); set(s, 'c4.f', 'undefined'); log(s, '1'); },
+          fly: [['res', 'v:c4.f', 'undefined']], reveal: ['con'] },
+        { line: 2, wait: [9], text: `<code>f()</code> - но в f има undefined: няма стрелка, която да последваме. Резултат: <b>TypeError: f is not a function</b> и програмата спира. Изходът е <b>2, 1</b> и грешка.`,
+          do: s => { s.hl['c4.f'] = 'error'; s.err = true; ev(s, 'f', 'undefined'); log(s, 'Uncaught TypeError: f is not a function', true); code(s, 9, 'caller( callback() );   // 2 1 TypeError'); },
+          reveal: ['con'] },
+        { line: -1, text: `<b>Обобщение:</b> <code>caller( callback )</code> подава <b>функцията</b> - caller решава кога да я извика. <code>caller( callback() )</code> я извиква <b>веднага</b> и подава <b>резултата</b> ѝ. Така един caller може да изпълнява различен код според функцията, която му подадем: <code>caller(callback1)</code>, <code>caller(callback2)</code>.`,
+          do: s => { popf(s); noev(s); } },
+    ],
+},
+{
+    tab: 'Функция връща функция',
+    code: [
+        'function foo() {',
+        '    return function () {',
+        "        console.log(`I'm the returned function`);",
+        '    };',
+        '}',
+        'foo()();',
+        'let bar = foo();',
+        'bar();',
+        '(function () {',
+        '    console.log("I am in nowhere, but I exist and work!");',
+        '})();',
+    ],
+    steps: [
+        { line: -1, text: `Функцията може да <b>върне</b> (return) друга функция - нали е стойност. Ще разгледаме <code>foo()()</code> от слайдовете и <b>IIFE</b> - функция, която се извиква веднага, щом бъде създадена.` },
+        { line: [0, 4], text: `Декларацията създава обект-функция foo (5000) и променлива foo с референция към него.`,
+          do: s => {
+              hfn(s, 5000, C0, .4, ['function foo() {', '  return function () {', "    console.log(`I'm the returned function`);", '  };', '}'], 'foo');
+              decl(s, 'g.foo', 'function'); set(s, 'g.foo', 5000);
+          },
+          fly: [['h:5000', 'v:g.foo', '5000']] },
+        { line: 5, text: `<code>foo()()</code> се чете отляво надясно. Първо <code>foo()</code>: следваме стрелката от foo и извикваме функцията - в стека се появява рамката ѝ.`,
+          do: s => { read(s, 'g.foo'); frame(s, 'f1', 'foo()', 5000); },
+          fly: [['v:g.foo', 'h:5000', '5000']] },
+        { line: [1, 3], wait: [5], text: `<code>return function () {...}</code> - function изразът създава <b>нов</b> обект-функция в heap (5100). Той не се изпълнява - само се създава.`,
+          do: s => hfn(s, 5100, C0, 10.2, ['function () {', "  console.log(`I'm the returned function`);", '}']) },
+        { line: 5, text: `foo връща <b>референция</b> към новата функция и рамката ѝ се премахва. Стойността на <code>foo()</code> е адресът 5100 - временна стойност, която не е записана в никоя променлива.`,
+          do: s => { popf(s); ev(s, 'foo()', '5100', 5100); },
+          fly: [['h:5100', 'res', '5100']] },
+        { line: 2, wait: [5], text: `Второто <code>()</code> извиква тази стойност: следваме референцията 5100 и функцията се изпълнява.`,
+          do: s => { frame(s, 'f2', '(anonymous)', 5100); log(s, "I'm the returned function"); },
+          fly: [['res', 'h:5100', '5100']], reveal: ['con'] },
+        { line: 5, text: `Функцията свърши. Към обекта 5100 вече не сочи нищо - той е <b>недостъпен</b> и garbage collector-ът ще го изтрие.`,
+          do: s => { popf(s); noev(s); garbage(s, 5100); } },
+        { line: 6, text: `<code>let bar = foo();</code> - извикваме foo отново. Тя пак изпълнява <code>return function...</code> и създава <b>още един, нов</b> обект-функция (5200). Затова <code>foo() === foo()</code> е false.`,
+          do: s => { collect(s, 5100); decl(s, 'g.bar'); read(s, 'g.foo'); hfn(s, 5200, C0, 17.6, ['function () {', "  console.log(`I'm the returned function`);", '}']); ev(s, 'foo()', '5200', 5200); },
+          fly: [['v:g.foo', 'h:5000', '5000'], ['h:5200', 'res', '5200']], chain: true },
+        { line: 6, text: `Този път <span class="w">записваме</span> върнатата референция в променливата bar.`,
+          do: s => set(s, 'g.bar', 5200),
+          fly: [['res', 'v:g.bar', '5200']] },
+        { line: 2, wait: [7], text: `<code>bar()</code> изпълнява същия код. <code>foo()()</code> прави точно това, само без да пази междинния резултат: <code>let bar = foo(); bar();</code>`,
+          do: s => { noev(s); read(s, 'g.bar'); frame(s, 'f3', '(anonymous)', 5200); log(s, "I'm the returned function"); },
+          fly: [['v:g.bar', 'h:5200', '5200']], reveal: ['con'] },
+        { line: [8, 10], text: `<b>IIFE</b> (Immediately Invoked Function Expression). Скобите около function го правят <b>израз</b>, чиято стойност е нова функция (5300). Без тях JavaScript ще го приеме за декларация и ще даде SyntaxError (декларацията изисква име).`,
+          do: s => { popf(s); hfn(s, 5300, C0, 10.2, ['function () {', '  console.log("I am in nowhere, but I exist and work!");', '}']); ev(s, '(function () {...})', '5300', 5300); },
+          fly: [['h:5300', 'res', '5300']] },
+        { line: 9, wait: [10], text: `Последните <code>()</code> веднага извикват тази стойност. IIFE създава <b>локален обхват</b> (local scope): променливите, декларирани вътре, не се виждат отвън.`,
+          do: s => { frame(s, 'f4', '(anonymous)', 5300); log(s, 'I am in nowhere, but I exist and work!'); },
+          fly: [['res', 'h:5300', '5300']], reveal: ['con'] },
+        { line: -1, text: `<b>Обобщение:</b> функция може да върне функция - връща се <b>референция</b>, която можем веднага да извикаме (<code>foo()()</code>) или да запазим (<code>let bar = foo()</code>). Всяко изпълнение на function израз създава <b>нов</b> обект-функция. IIFE не се пази никъде и вече е недостъпна.`,
+          do: s => { popf(s); noev(s); garbage(s, 5300); } },
+    ],
+},
+{
+    tab: 'Arrow функции',
+    code: [
+        'const pi = 3.14;',
+        'let circleArea = function (r) { return r*r*pi };',
+        'console.log( circleArea(2) );   // 12.56',
+        'let areaBug = r => { r*r*pi };',
+        'console.log( areaBug(2) );      // ?',
+        'let fruits = ["apple", "banana"];',
+        'fruits.forEach( fruit => console.log(fruit) );',
+    ],
+    steps: [
+        { line: -1, text: `<b>Arrow функциите</b> (arrow functions, функции-стрелки) са по-кратък запис на function израз, въведен в ES6. Нека превърнем <code>function (r) { return r*r*pi }</code> в arrow функция стъпка по стъпка.` },
+        { line: 1, text: `Стъпка 1: махаме думата <code>function</code> и слагаме <code>=></code> между параметрите и тялото. Това вече е валидна arrow функция.`,
+          do: s => code(s, 1, 'let circleArea = (r) => { return r*r*pi };') },
+        { line: 1, text: `Стъпка 2: когато има <b>точно един</b> параметър, кръглите скоби може да се изпуснат. (При нула или повече от един параметър са задължителни: <code>() => ...</code>, <code>(x, y) => ...</code>.)`,
+          do: s => code(s, 1, 'let circleArea = r => { return r*r*pi };') },
+        { line: 1, text: `Стъпка 3: когато тялото е само <code>return израз</code>, махаме <code>{ }</code> и <code>return</code>. Стойността на израза след <code>=></code> се връща автоматично (implicit return).`,
+          do: s => code(s, 1, 'let circleArea = r => r*r*pi;') },
+        { line: [0, 1], text: `Изпълнение: arrow функцията е обект-функция в heap като всяка друга. Самата тя е анонимна, но щом я запишем в променлива, JavaScript ѝ дава името на променливата: <code>circleArea.name</code> е "circleArea".`,
+          do: s => {
+              decl(s, 'g.pi', 'const'); set(s, 'g.pi', '3.14');
+              hfn(s, 5000, C0, .4, ['r => r*r*pi'], 'circleArea', true);
+              decl(s, 'g.circleArea'); set(s, 'g.circleArea', 5000);
+          },
+          fly: [['h:5000', 'v:g.circleArea', '5000']] },
+        { line: 2, text: `<code>circleArea(2)</code> - извикване: нова рамка, параметърът r получава 2. Изразът <code>r*r*pi</code> = 2 * 2 * 3.14 = 12.56 се връща автоматично.`,
+          do: s => { read(s, 'g.circleArea'); frame(s, 'r1', 'circleArea(r)', 5000); decl(s, 'r1.r', 'параметър'); set(s, 'r1.r', '2'); ev(s, 'r*r*pi', '12.56'); },
+          fly: [['v:g.circleArea', 'h:5000', '5000']] },
+        { line: 2, text: `Рамката се маха, а върнатата стойност 12.56 се подава на console.log.`,
+          do: s => { popf(s); ev(s, 'circleArea(2)', '12.56'); log(s, '12.56'); },
+          fly: [['res', 'con', '12.56']] },
+        { line: 3, text: `Още една arrow функция - но тук след <code>=></code> има <b>къдрави скоби</b>: <code>r => { r*r*pi }</code>.`,
+          do: s => { noev(s); hfn(s, 5100, C0, 5.6, ['r => { r*r*pi }'], 'areaBug', true); decl(s, 'g.areaBug'); set(s, 'g.areaBug', 5100); },
+          fly: [['h:5100', 'v:g.areaBug', '5100']] },
+        { line: 4, text: `Какво ще отпечата <code>console.log( areaBug(2) )</code>? Помислете, преди да продължите.` },
+        { line: 4, text: `Отпечатва се <b>undefined</b>! С <code>{</code> след <code>=></code> започва <b>тяло на функция</b>, а не израз. <code>r*r*pi</code> се изчислява, но резултатът се губи - няма <code>return</code>. Правило: с <code>{ }</code> трябва изрично <code>return</code>.`,
+          do: s => { read(s, 'g.areaBug'); ev(s, 'areaBug(2)', 'undefined'); log(s, 'undefined'); code(s, 4, 'console.log( areaBug(2) );      // undefined'); },
+          fly: [['v:g.areaBug', 'h:5100', '5100']], reveal: ['res', 'con'] },
+        { line: 5, text: `Най-често arrow функциите се използват като кратки <b>callback</b> функции. Да видим пример с масива fruits.`,
+          do: s => { noev(s); harr(s, 5200, C0, 11, ['"apple"', '"banana"']); decl(s, 'g.fruits'); set(s, 'g.fruits', 5200); },
+          fly: [['h:5200', 'v:g.fruits', '5200']] },
+        { line: 6, text: `Arrow изразът създава функция (5300), а <b>референцията</b> ѝ се подава на метода forEach (вграден в JavaScript). Вътре във forEach тя е параметърът callbackFn - нашата функция е callback.`,
+          do: s => {
+              read(s, 'g.fruits');
+              hfn(s, 5300, C0, 17.8, ['fruit => console.log(fruit)'], '', true);
+              frame(s, 'e1', 'forEach(callbackFn)', null); decl(s, 'e1.callbackFn', 'параметър'); set(s, 'e1.callbackFn', 5300);
+          },
+          fly: [['h:5300', 'v:e1.callbackFn', '5300']] },
+        { line: 6, text: `forEach извиква нашата функция за <b>всеки</b> елемент и ѝ подава елемента: fruit = "apple", отпечатва се apple.`,
+          do: s => { hread(s, 5200, '0'); read(s, 'e1.callbackFn'); frame(s, 'e2', '(anonymous)', 5300); decl(s, 'e2.fruit', 'параметър'); set(s, 'e2.fruit', '"apple"'); log(s, 'apple'); },
+          fly: [['h:5200.0', 'v:e2.fruit', '"apple"']], reveal: ['con'] },
+        { line: 6, text: `После fruit = "banana". Всяко извикване получава <b>нова</b> рамка със собствен параметър fruit.`,
+          do: s => { popf(s); hread(s, 5200, '1'); read(s, 'e1.callbackFn'); frame(s, 'e3', '(anonymous)', 5300); decl(s, 'e3.fruit', 'параметър'); set(s, 'e3.fruit', '"banana"'); log(s, 'banana'); },
+          fly: [['h:5200.1', 'v:e3.fruit', '"banana"']], reveal: ['con'] },
+        { line: -1, text: `<b>Обобщение:</b> <code>(x, y) => { ...; return ...; }</code> или <code>x => израз</code> (без скоби и без return). С <code>{ }</code> е нужен return! Arrow функциите са идеални за кратки callback-и. Имат и разлики от обикновените функции (напр. нямат собствено <code>this</code>) - за тях по-нататък.`,
+          do: s => popf(s, 2) },
+    ],
+},
+{
+    tab: 'Closure',
+    advanced: true,
+    env: true,
+    code: [
+        'function makeCounter() {',
+        '    let count = 0;',
+        '    return () => ++count;',
+        '}',
+        'let counter = makeCounter();',
+        'console.log( counter() );   // 1',
+        'console.log( counter() );   // 2',
+    ],
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> Какво става с локалните променливи на функция, след като тя свърши? Обикновено изчезват заедно с рамката ѝ. Но ако вътре е създадена функция, която ги използва, те <b>оцеляват</b>. Това се нарича <b>closure</b> (затваряне).` },
+        { line: [0, 3], text: `Декларацията създава обект-функция makeCounter и променлива с референция към нея.`,
+          do: s => {
+              hfn(s, 5000, C0, .4, ['function makeCounter() {', '  let count = 0;', '  return () => ++count;', '}'], 'makeCounter');
+              decl(s, 'g.makeCounter', 'function'); set(s, 'g.makeCounter', 5000);
+          },
+          fly: [['h:5000', 'v:g.makeCounter', '5000']] },
+        { line: 4, text: `<code>makeCounter()</code> - нова рамка. Всяко извикване създава и нова <b>среда</b> (environment) - мястото, където живеят локалните му променливи. Рисуваме я в heap, защото ще оцелее (V8 прави точно това с променливите, които вътрешна функция използва).`,
+          do: s => {
+              decl(s, 'g.counter');
+              read(s, 'g.makeCounter'); frame(s, 'm1', 'makeCounter()', 5000);
+              henv(s, 5100, 18.5, 15, 'среда на makeCounter()', [['count', '<uninit>']]);
+              decl(s, 'm1.env', 'scope', 'локални променливи'); set(s, 'm1.env', 5100);
+          },
+          fly: [['v:g.makeCounter', 'h:5000', '5000']] },
+        { line: 1, wait: [4], text: `<code>let count = 0;</code> - в средата на това извикване се <span class="w">записва</span> count = 0.`,
+          do: s => hput(s, 5100, 'count', '0') },
+        { line: 2, wait: [4], text: `Arrow изразът създава функция (5200). Всяка функция при създаването си запомня <b>референция към средата</b>, в която е създадена - скритото поле <code>[[Environment]]</code> (пунктирната стрелка). Това е ключът към closure.`,
+          do: s => { hfn(s, 5200, C0, 10, ['() => ++count'], '', true); s.heap[5200].items.push({ k: '[[Environment]]', ...mkVal(5100) }); } },
+        { line: 4, text: `makeCounter връща референция към новата функция и рамката ѝ изчезва. Но средата с count <b>не</b> е недостъпна: функцията все още сочи към нея, затова garbage collector-ът няма да я изтрие.`,
+          do: s => { popf(s); ev(s, 'makeCounter()', '5200', 5200); },
+          fly: [['h:5200', 'res', '5200']] },
+        { line: 4, text: `В counter се <span class="w">записва</span> референцията. Веригата е: counter -> функцията -> средата с count. Значи count е достъпен - но само чрез counter.`,
+          do: s => set(s, 'g.counter', 5200),
+          fly: [['res', 'v:g.counter', '5200']] },
+        { line: 2, wait: [5], text: `<code>counter()</code> - извикваме върнатата функция. Тя изпълнява <code>++count</code>, но count не е нейна локална променлива...`,
+          do: s => { noev(s); read(s, 'g.counter'); frame(s, 'k1', '(anonymous)', 5200); },
+          fly: [['v:g.counter', 'h:5200', '5200']] },
+        { line: 2, wait: [5], text: `...затова JavaScript я търси по <b>веригата на обхватите</b> (scope chain): следва [[Environment]] и намира count в запазената среда. <code>++count</code> <span class="w">записва</span> там 1 и връща 1.`,
+          do: s => { hread(s, 5200, '[[Environment]]'); hput(s, 5100, 'count', '1'); ev(s, '++count', '1'); } },
+        { line: 5, text: `Функцията свърши, рамката ѝ се маха и се отпечатва 1. Средата с count остава.`,
+          do: s => { popf(s); ev(s, 'counter()', '1'); log(s, '1'); },
+          fly: [['res', 'con', '1']] },
+        { line: 6, text: `Второто извикване намира <b>същата</b> среда: count става 2 и се отпечатва 2. Стойността се пази между извикванията, а отвън никой не може да я промени - тя е "скрита" в closure-а.`,
+          do: s => { read(s, 'g.counter'); hread(s, 5200, '[[Environment]]'); hput(s, 5100, 'count', '2'); ev(s, 'counter()', '2'); log(s, '2'); },
+          fly: [['v:g.counter', 'h:5200', '5200'], ['res', 'con', '2']], chain: true },
+        { line: -1, text: `<b>Обобщение:</b> функцията помни средата, в която е <b>създадена</b>, и има достъп до променливите ѝ дори след като външната функция е свършила. Всяко ново извикване на <code>makeCounter()</code> създава нова среда - нов, независим брояч.`,
+          do: noev },
+    ],
+},
+{
+    tab: "Забравена ';'",
+    advanced: true,
+    code: [
+        'let x, y;',
+        'let foo = function () {',
+        '    console.log(`Foo`);',
+        "}   // you must have ';' here",
+        '[x, y] = [1, 2];',
+        'console.log(x, y);   // ?',
+        'foo();',
+    ],
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> Слайдовете предупреждават: ако забравим <code>;</code> след function израз, в x и y ще има undefined вместо 1 и 2. Нека видим какво <b>всъщност</b> прави JavaScript с този код.` },
+        { line: [1, 4], text: `JavaScript слага автоматично <code>;</code> в края на ред само ако следващият ред <b>не може</b> да продължи израза (ASI - Automatic Semicolon Insertion). Ред 5 започва с <code>[</code>, а <code>[</code> може да продължи израз (както в <code>arr[0]</code>). Затова двата реда се четат като <b>един</b> израз.`,
+          do: s => ev(s, 'let foo = function () {...}[x, y] = [1, 2];') },
+        { line: 0, text: `<code>let x, y;</code> - две променливи със стойност undefined.`,
+          do: s => { noev(s); decl(s, 'g.x'); set(s, 'g.x', 'undefined'); decl(s, 'g.y'); set(s, 'g.y', 'undefined'); decl(s, 'g.foo'); } },
+        { line: [1, 3], text: `Изчислява се function изразът: създава се обект-функция (5000). Тя все още <b>не</b> е записана във foo - изразът продължава.`,
+          do: s => { hfn(s, 5000, C0, .4, ['function () {', '  console.log(`Foo`);', '}']); ev(s, 'function () {...}', '5000', 5000); } },
+        { line: 4, text: `<code>[x, y]</code> след функцията означава <b>достъп до свойство</b> (като <code>obj["name"]</code>). В скобите <code>x, y</code> е <b>операторът запетая</b>: връща последната стойност - y, т.е. undefined. Името на свойството става низът "undefined".`,
+          do: s => { read(s, 'g.x', 'g.y'); ev(s, 'function () {...}[x, y]', 'свойство "undefined"'); },
+          fly: [['v:g.x', 'ev', 'undefined'], ['v:g.y', 'ev', 'undefined']] },
+        { line: 4, text: `<code>= [1, 2]</code> - създава се масивът [1, 2] и се <span class="w">записва</span> в свойството "undefined" на <b>функцията</b> (функциите са обекти и могат да имат свойства). x и y изобщо не се променят!`,
+          do: s => { harr(s, 5100, 19, 8, ['1', '2']); hput(s, 5000, 'undefined', 5100); ev(s, '[1, 2]', '5100', 5100); },
+          fly: [['h:5100', 'h:5000.undefined', '5100']] },
+        { line: [1, 4], text: `Присвояването също е израз и стойността му е присвоената стойност - масивът. Именно тя се <span class="w">записва</span> във foo! Към функцията (5000) не сочи никоя променлива - тя е недостъпна.`,
+          do: s => { set(s, 'g.foo', 5100); garbage(s, 5000); },
+          fly: [['res', 'v:g.foo', '5100']] },
+        { line: 5, text: `Какво ще отпечата <code>console.log(x, y)</code>? А какво ще стане на ред 7? Помислете, преди да продължите.`,
+          do: noev },
+        { line: 5, text: `Отпечатва се <b>undefined undefined</b> - точно както казват слайдовете. x и y не са получили 1 и 2.`,
+          do: s => { read(s, 'g.x', 'g.y'); log(s, 'undefined undefined'); code(s, 5, 'console.log(x, y);   // undefined undefined'); },
+          fly: [['v:g.x', 'con', 'undefined'], ['v:g.y', 'con', 'undefined']] },
+        { line: 6, text: `А във foo има масив, не функция: <b>TypeError: foo is not a function</b>. Значи бъгът е по-голям, отколкото изглежда - развалена е и самата функция.`,
+          do: s => { read(s, 'g.foo'); s.hl['g.foo'] = 'error'; hread(s, 5100); s.err = true; ev(s, 'foo', '5100 (масив)', 5100); log(s, 'Uncaught TypeError: foo is not a function', true); },
+          reveal: ['con'] },
+        { line: -1, text: `<b>Решение:</b> слагайте <code>;</code> след всяка команда, особено след function израз: <code>let foo = function () {...};</code>. Тогава <code>[x, y] = [1, 2];</code> е отделна команда - деструктуриращо присвояване (destructuring) - и x = 1, y = 2. Най-опасни са редовете, които започват с <code>[</code> или <code>(</code>.`,
+          do: noev },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: state[i] is the whole picture after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = {
+        line: -1, wait: [], code: sc.code.slice(),
+        frames: [{ id: 'g', title: 'global', fn: null, vars: [] }],
+        heap: {}, eval: null, console: [], hl: {}, hhl: {}, err: false,
+    };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.hhl = {}; s.err = false;
+        s.line = step.line;
+        s.wait = step.wait || [];
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 820, STAGGER = 200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\b(let|const|var|function|return|typeof|null|undefined|true|false)\b|(=>)|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, arrow, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : (k || arrow) ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+function lineSet(line) {
+    if (Array.isArray(line)) {
+        const out = [];
+        for (let i = line[0]; i <= line[1]; i++) out.push(i);
+        return out;
+    }
+    return line >= 0 ? [line] : [];
+}
+
+function renderCode(s, prev) {
+    const active = lineSet(s.line);
+    $('#code').innerHTML = s.code.map((l, i) => {
+        const cls = [];
+        if (active.includes(i)) cls.push('active');
+        if (active.includes(i) && s.err) cls.push('error');
+        if (s.wait.includes(i)) cls.push('wait');
+        if (prev && prev.code[i] !== l) cls.push('morph');
+        return `<li class="${cls.join(' ')}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`;
+    }).join('');
+    let note = '';
+    if (active.length === 1) note = `изпълнява се ред ${active[0] + 1}`;
+    else if (active.length > 1) note = `редове ${active[0] + 1}-${active[active.length - 1] + 1}`;
+    if (note && s.wait.length) note += `, извикана от ред ${s.wait[s.wait.length - 1] + 1}`;
+    $('#lineNote').textContent = note;
+}
+
+function flightTargets(step, animate) {
+    return new Set(animate && step.fly ? step.fly.map(f => f[1]) : []);
+}
+
+function valueHtml(v) {
+    if (v.value === null || v.value === '<uninit>') return '<span class="val uninit">неинициализирана</span>';
+    const type = v.type === 'ref' ? 'референция' : v.type;
+    return `<span class="val t-${v.type}">${esc(v.value)}</span><span class="type">${type}</span>`;
+}
+
+function frameHtml(f, s, prev, targets, extra) {
+    const pf = prev && prev.frames.find(p => p.id === f.id);
+    const rows = f.vars.map(v => {
+        const key = f.id + '.' + v.name;
+        const pv = pf && pf.vars.find(p => p.name === v.name);
+        const rowCls = ['frow'];
+        const cellCls = ['cell'];
+        if (s.hl[key] && !extra) cellCls.push('hl-' + s.hl[key]);
+        let ghost = '';
+        if (prev && pf && !extra) {
+            if (!pv) rowCls.push('appear');
+            else if (pv.value !== null && pv.value !== v.value) {
+                const delay = targets.has('v:' + key) ? FLY_MS : 0;
+                ghost = `<span class="ghost" style="animation-delay:${delay}ms">${esc(pv.value)}</span>`;
+                if (!delay) cellCls.push('changed');
+            } else if (pv.value === null && v.value !== null && !targets.has('v:' + key)) cellCls.push('changed');
+        }
+        const label = v.kind === 'scope'
+            ? `<span class="name scope">${esc(v.label)}</span>`
+            : `<span class="name">${esc(v.name)}</span><span class="kw">${esc(v.kind)}</span>`;
+        return `<div class="${rowCls.join(' ')}" data-var="${key}">
+            <div class="label">${label}</div>
+            <div class="${cellCls.join(' ')}">${ghost}${valueHtml(v)}</div>
+        </div>`;
+    }).join('') || '<div class="fempty">няма локални променливи</div>';
+    const isTop = !extra && f === s.frames[s.frames.length - 1];
+    const cls = ['frame'];
+    if (isTop && s.frames.length > 1) cls.push('cur');
+    if (extra) cls.push(extra);
+    else if (prev && !pf) cls.push('appear');
+    let note = f.id === 'g' ? 'глобален обхват' : 'чака';
+    if (isTop && f.id !== 'g') note = 'изпълнява се';
+    if (f.id !== 'g' && !f.fn && isTop) note = 'вградена функция';
+    else if (f.id !== 'g' && !f.fn) note = 'вградена - чака';
+    return `<div class="${cls.join(' ')}" data-frame="${f.id}">
+        <div class="fhead"><span class="ftitle">${esc(f.title)}</span><span class="fnote">${note}</span></div>
+        ${rows}
+    </div>`;
+}
+
+function renderStack(s, prev, step) {
+    const targets = flightTargets(step, !!prev);
+    let html = s.frames.map(f => frameHtml(f, s, prev, targets, '')).join('');
+    if (prev) {
+        prev.frames.filter(p => !s.frames.some(f => f.id === p.id))
+            .forEach(p => html += frameHtml(p, prev, null, targets, 'popping'));
+    }
+    $('#stack').innerHTML = html;
+}
+
+function cardHtml(addr, o, s, extra) {
+    const running = s.frames.map(f => f.fn);
+    const top = running[running.length - 1];
+    const cls = ['hobj', 'kind-' + o.kind];
+    let tag = '';
+    if (o.garbage) { cls.push('garbage'); tag = '<span class="tag">недостъпен</span>'; }
+    else if (!extra && top === +addr) { cls.push('running'); tag = '<span class="tag run">изпълнява се</span>'; }
+    else if (!extra && running.includes(+addr)) tag = '<span class="tag wait">чака</span>';
+    if (!extra && s.hhl[addr]) cls.push(s.hhl[addr]);
+    if (extra) cls.push(extra);
+    const kind = { fn: o.arrow ? 'function (arrow)' : 'function', arr: 'масив', obj: 'обект', env: o.title }[o.kind];
+    let body = '';
+    if (o.kind === 'fn') {
+        body += `<div class="fcode">${o.code.map(highlight).join('\n')}</div>`;
+        body += `<div class="fmeta">name: <code>"${esc(o.name)}"</code>${o.name ? '' : ' (анонимна)'}</div>`;
+    }
+    if (o.items.length) {
+        body += '<div class="items">' + o.items.map(it => {
+            const hl = !extra && s.hhl[addr + '.' + it.k] ? ' hl-' + s.hhl[addr + '.' + it.k] : '';
+            const k = o.kind === 'arr' ? `[${it.k}]` : it.k;
+            const v = it.value === '<uninit>' ? '<span class="uninit">неинициализирана</span>' : esc(it.value);
+            return `<div class="item" data-k="${esc(it.k)}"><span class="ik">${esc(k)}:</span> <span class="iv t-${it.type}${hl}">${v}</span></div>`;
+        }).join('') + '</div>';
+    }
+    return `<div class="${cls.join(' ')}" data-addr="${addr}" style="left:${o.x}rem; top:${o.y}rem">
+        ${tag}
+        <div class="haddr"><span>адрес <b>${addr}</b></span><span class="hkind">${esc(kind)}</span></div>
+        ${body}
+    </div>`;
+}
+
+function renderHeap(s, prev) {
+    let html = '';
+    for (const [addr, o] of Object.entries(s.heap)) html += cardHtml(addr, o, s, '');
+    if (prev) {
+        for (const [addr, o] of Object.entries(prev.heap)) {
+            if (!s.heap[addr]) html += cardHtml(addr, { ...o, garbage: true }, s, 'collected');
+        }
+    }
+    $('#heap').innerHTML = html;
+}
+
+function renderEval(s) {
+    const e = s.eval;
+    $('#eval').innerHTML = e
+        ? `<span class="ev-k">израз</span><code class="ev-v ev-src">${esc(e.src)}</code>
+           <span class="ev-k">стойност</span><code class="ev-v ev-res${e.ref !== null ? ' t-ref' : ''}">${esc(e.res)}</code>`
+        : `<div class="eval-empty">Тук ще виждаме стойността на изразите - например дали е функция (референция) или резултат от извикване.</div>`;
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.map(l =>
+        `<div class="cline ${l.err ? 'err' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderLegend(sc) {
+    $('#legend').innerHTML = [
+        '<span><i class="sw var"></i>променлива / параметър</span>',
+        '<span><i class="sw heap"></i>обект в heap</span>',
+        '<span><i class="sw run"></i>изпълнява се</span>',
+        '<span><i class="sw read"></i>четене</span>',
+        '<span><i class="sw write"></i>записване</span>',
+        '<span><i class="sw ref"></i>референция</span>',
+        sc.env ? '<span><i class="sw env"></i>[[Environment]]</span>' : '',
+    ].join('');
+}
+
+// one arrow from the rectangle a (source) to the object rectangle b
+function arrowPath(a, b) {
+    const x1 = a.right - 12, y1 = a.top + a.height / 2;
+    const y2 = b.top + Math.min(b.height / 2, 22);
+    if (b.left > x1 + 24) {
+        const x2 = b.left - 2;
+        const dx = Math.max(40, (x2 - x1) / 2);
+        return { x1, y1, d: `M${x1} ${y1} C${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}` };
+    }
+    // the target is not to the right: go around its right side
+    const x2 = b.right + 2;
+    const ox = Math.max(x1, x2) + 60;
+    return { x1, y1, d: `M${x1} ${y1} C${ox} ${y1}, ${ox} ${y2}, ${x2} ${y2}` };
+}
+
+function drawArrows(s, step, animate) {
+    const svg = $('#arrows');
+    const base = $('#stage').getBoundingClientRect();
+    const targets = flightTargets(step, animate);
+    const rel = r => ({ left: r.left - base.left, right: r.right - base.left, top: r.top - base.top, height: r.height, width: r.width });
+    const card = addr => $(`#heap .hobj[data-addr="${addr}"]:not(.collected)`);
+    let html = '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>';
+    const add = (srcEl, addr, fresh, dashed) => {
+        const dst = card(addr);
+        if (!srcEl || !dst) return;
+        const p = arrowPath(rel(srcEl.getBoundingClientRect()), rel(dst.getBoundingClientRect()));
+        const delay = fresh ? `style="animation-delay:${FLY_MS}ms"` : '';
+        html += `<circle cx="${p.x1}" cy="${p.y1}" r="4" fill="currentColor"/>
+                 <path class="refpath ${dashed ? 'dashed' : ''} ${fresh && !dashed ? 'draw' : ''}" ${delay} ${dashed ? '' : 'pathLength="1"'} marker-end="url(#ah)" d="${p.d}"/>`;
+    };
+    for (const f of s.frames) {
+        for (const v of f.vars) {
+            if (v.ref === null) continue;
+            const key = f.id + '.' + v.name;
+            add($(`#stack .frame[data-frame="${f.id}"]:not(.popping) .frow[data-var="${key}"] .cell`), v.ref, targets.has('v:' + key), v.kind === 'scope');
+        }
+    }
+    for (const [addr, o] of Object.entries(s.heap)) {
+        for (const it of o.items) {
+            if (it.ref === null) continue;
+            add($(`#heap .hobj[data-addr="${addr}"] .item[data-k="${it.k}"] .iv`), it.ref, targets.has(`h:${addr}.${it.k}`), it.k === '[[Environment]]');
+        }
+    }
+    if (s.eval && s.eval.ref !== null) add($('#eval .ev-res'), s.eval.ref, targets.has('res'), false);
+    svg.innerHTML = html;
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'ev') return $('#eval .ev-src');
+    if (key === 'res') return $('#eval .ev-res');
+    if (key === 'con') return $('#console .cline:last-child');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'v') return $(`#stack .frame:not(.popping) .frow[data-var="${rest}"] .cell`);
+    if (kind === 'h') {
+        const dot = rest.indexOf('.');
+        if (dot < 0) return $(`#heap .hobj[data-addr="${rest}"]:not(.collected) .haddr`);
+        return $(`#heap .hobj[data-addr="${rest.slice(0, dot)}"] .item[data-k="${rest.slice(dot + 1)}"] .iv`);
+    }
+    return null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (!flights.length || reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    const revealKeys = step.reveal || (flights.some(f => f[1] === 'ev') ? ['res'] : []);
+    const revealEls = revealKeys.map(resolve).filter(Boolean);
+    revealEls.forEach(el => el.classList.add('await'));
+    const gap = step.chain ? FLY_MS : STAGGER;
+
+    const plan = flights.map(([from, to, text], i) => {
+        const src = resolve(from), dst = resolve(to);
+        // a value that lands in a cell stays hidden until it arrives
+        const awaits = !!dst && (to.startsWith('v:') || /^h:\d+\./.test(to) || to === 'res' || to === 'con');
+        if (awaits) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, to, text, i, awaits };
+    });
+
+    let left = plan.length;
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            } else if (p.dst) bump(p.dst);
+            if (--left === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (/^(v:|h:\d+\.)/.test(p.to) ? 'write' : '');
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+        const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.style.left = x0 + 'px';
+        chip.style.top = y0 + 'px';
+        const anim = chip.animate([
+            { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+            { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: p.i * gap, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+        anim.onfinish = () => { chip.remove(); finish(); };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(s, prev);
+    renderStack(s, prev, step);
+    renderHeap(s, prev);
+    renderEval(s);
+    renderConsole(s);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    try { history.replaceState(null, '', '#' + (scIdx + 1) + (stepIdx ? '.' + (stepIdx + 1) : '')); } catch (e) { /* file:// in some browsers */ }
+
+    drawArrows(s, step, !!prev);
+    requestAnimationFrame(() => {
+        if (tk !== token) return;
+        drawArrows(s, step, !!prev);
+        if (prev) playFlights(step, tk);
+    });
+    // popping frames collapse after their animation: redraw the arrows then
+    if (prev) setTimeout(() => { if (tk === token) drawArrows(s, step, false); }, 750);
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    renderLegend(SCENARIOS[scIdx]);
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('varsInMemoryTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = localStorage.getItem('varsInMemoryTheme');
+    if (t) document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+const themeParam = new URLSearchParams(location.search).get('theme');
+if (themeParam === 'dark' || themeParam === 'light') document.documentElement.dataset.theme = themeParam;
+
+// arrows are positioned in pixels, so redraw them when the layout changes
+new ResizeObserver(() => drawArrows(states[stepIdx], SCENARIOS[scIdx].steps[stepIdx], false)).observe($('#stage'));
+
+// Self-test (#selftest): render every step of every scenario and report
+// JS errors and anything that does not fit on the screen.
+function selfTest() {
+    const problems = [];
+    const box = (el) => el.getBoundingClientRect();
+    let count = 0;
+    SCENARIOS.forEach((sc, i) => {
+        sc.steps.forEach((_, j) => {
+            const where = `#${i + 1}.${j + 1}`;
+            try {
+                selectScenario(i, j);
+                drawArrows(states[j], sc.steps[j], false);
+                count++;
+                (sc.steps[j].fly || []).forEach(([from, to]) => {
+                    if (!resolve(from)) problems.push(`${where}: flight source ${from} not found`);
+                    if (!resolve(to)) problems.push(`${where}: flight target ${to} not found`);
+                });
+                (sc.steps[j].reveal || []).forEach(k => { if (!resolve(k)) problems.push(`${where}: reveal ${k} not found`); });
+                const doc = document.documentElement;
+                if (doc.scrollHeight > innerHeight + 1 || doc.scrollWidth > innerWidth + 1) problems.push(`${where}: page overflows`);
+                const heap = box($('#heap'));
+                document.querySelectorAll('#heap .hobj').forEach(c => {
+                    const r = box(c);
+                    if (r.bottom > heap.bottom + 1 || r.right > heap.right + 8) problems.push(`${where}: heap card ${c.dataset.addr} overflows by ${Math.round(Math.max(r.bottom - heap.bottom, r.right - heap.right))}px`);
+                });
+                const cards = [...document.querySelectorAll('#heap .hobj')].map(box);
+                cards.forEach((a, x) => cards.forEach((b, y) => {
+                    if (x < y && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) problems.push(`${where}: heap cards overlap`);
+                }));
+                const st = $('#stack');
+                const stb = box(st);
+                document.querySelectorAll('#stack .frame').forEach(f => { if (box(f).top < stb.top - 1) problems.push(`${where}: stack overflows`); });
+                const cp = $('.code-panel');
+                if (cp.scrollHeight > cp.clientHeight + 1) problems.push(`${where}: code panel too short`);
+                document.querySelectorAll('#code li').forEach(li => { if (li.scrollWidth > li.clientWidth + 1) problems.push(`${where}: code line too wide`); });
+                document.querySelectorAll('.fcode').forEach(c => { if (c.scrollWidth > c.clientWidth + 1) problems.push(`${where}: card code too wide`); });
+                const ex = $('#explain');
+                const lines = Math.round(ex.scrollHeight / parseFloat(getComputedStyle(ex).lineHeight));
+                if (lines > 3) problems.push(`${where}: explanation has ${lines} lines`);
+            } catch (e) {
+                problems.push(`${where}: ${e.message}`);
+            }
+        });
+    });
+    const pre = document.createElement('pre');
+    pre.id = 'selftest';
+    pre.textContent = `SELFTEST ${problems.length ? 'FAIL' : 'OK'} (${count} steps, ${innerWidth}x${innerHeight})\n` + problems.join('\n');
+    document.body.appendChild(pre);
+    document.title = problems.length ? 'SELFTEST FAIL' : 'SELFTEST OK';
+}
+
+function fromHash() {
+    if (location.hash === '#selftest') { selectScenario(0); setTimeout(selfTest, 50); return; }
+    const m = /^#(\d+)(?:\.(\d+))?/.exec(location.hash);
+    selectScenario(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] - 1 : 0);
+}
+window.addEventListener('hashchange', () => { if (!/^#\d+(\.\d+)?$/.test(location.hash) || location.hash !== currentHash()) fromHash(); });
+function currentHash() { return '#' + (scIdx + 1) + (stepIdx ? '.' + (stepIdx + 1) : ''); }
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

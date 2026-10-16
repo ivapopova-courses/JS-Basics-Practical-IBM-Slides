@@ -1,0 +1,1257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The call stack</title>
+<!--
+    Step-by-step animation: function calls and the call stack.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep link: callStack.html#3 (scenario 3) or callStack.html#3.5 (scenario 3, step 5).
+    callStack.html?theme=dark forces the dark theme; #selftest walks every step.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+    --code-pause: #b38cff;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --frame-bg: #f8f3e9;
+    --frame-border: #c9bda6;
+    --run: #b07800;
+    --run-bg: #fbe7b0;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --ref-bg: #ebe1fa;
+    --heap-bg: #fff3cf;
+    --heap-border: #c99a2e;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --frame-bg: #262830; --frame-border: #4a4d5a; --run: #ffd166; --run-bg: #4a3d14;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a; --heap-bg: #3a3220; --heap-border: #c9a24a;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --frame-bg: #262830; --frame-border: #4a4d5a; --run: #ffd166; --run-bg: #4a3d14;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a; --heap-bg: #3a3220; --heap-border: #c9a24a;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: flex; flex-direction: column; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 1.02rem; }
+.code li {
+    display: flex; align-items: center; gap: .8rem;
+    min-height: 1.75rem;
+    padding: .15rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s, opacity .25s;
+}
+.code .ln { flex: none; width: 1.4rem; text-align: right; color: var(--code-num); }
+.code li.range { background: rgba(255, 209, 102, .07); }
+.code li.paused { background: rgba(179, 140, 255, .1); border-left: 3px dashed var(--code-pause); }
+.code li.active { background: var(--code-active); border-left: 3px solid var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code li.dead { opacity: .45; }
+.code li.dead .src { text-decoration: line-through; }
+.code .ltag {
+    margin-left: auto; flex: none;
+    padding: .05rem .45rem; border-radius: .3rem;
+    font-family: var(--sans); font-size: .62rem; font-weight: 700; white-space: nowrap;
+}
+.code .lt-pause { color: var(--code-pause); border: 1px dashed var(--code-pause); }
+.code .lt-dead { color: #ff8a83; border: 1px solid #ff8a83; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+.mk { border-radius: .2rem; }
+.mk.arg { background: rgba(110, 162, 255, .3); box-shadow: 0 0 0 1px rgba(110, 162, 255, .6); }
+.mk.call { background: rgba(179, 140, 255, .14); box-shadow: inset 0 -2px 0 var(--code-pause); }
+.mk.rv { padding: 0 .15rem; background: #ffa24d; color: #111111; font-weight: 700; }
+.mk.rv span { color: inherit; }
+.mk.extra { text-decoration: line-through; text-decoration-color: #ff6b63; background: rgba(255, 107, 99, .18); }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+.cline.more { color: var(--muted); font-style: italic; font-family: var(--sans); font-size: .82rem; }
+.console-empty { font-size: .8rem; color: var(--muted); font-style: italic; }
+
+/* ---------- call stack ---------- */
+.stack-panel { flex: 1; display: flex; flex-direction: column; }
+.stack {
+    position: relative;
+    flex: 1; min-height: 0;
+    display: flex; flex-direction: column-reverse; align-items: center; gap: .45rem;
+    padding: .2rem .3rem .5rem;
+    border-bottom: 3px solid var(--frame-border);
+    overflow: hidden;
+}
+.stack-empty { margin: auto; font-size: .85rem; font-style: italic; color: var(--muted); }
+.frame {
+    flex: none;
+    width: min(100%, 42rem);
+    padding: .35rem .7rem .45rem;
+    border: 2px solid var(--frame-border); border-radius: .6rem;
+    background: var(--frame-bg);
+    transition: box-shadow .25s, border-color .25s;
+}
+.frame.global { background: var(--heap-bg); border-color: var(--heap-border); }
+.frame.paused { border-style: dashed; border-color: var(--ref); }
+.frame.running { border-color: var(--run); box-shadow: 0 0 0 3px var(--run-bg); }
+.frame.pushed { animation: push .55s both; }
+.frame.popped { animation: popout .8s .45s both; pointer-events: none; }
+.fhead { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .6rem; }
+.fname { font-family: var(--mono); font-size: 1.08rem; font-weight: 700; }
+.flabel { font-size: .68rem; color: var(--muted); }
+.pill {
+    padding: .05rem .45rem; border-radius: .3rem;
+    font-size: .64rem; font-weight: 700; white-space: nowrap;
+}
+.st-run { background: var(--run-bg); color: var(--run); border: 1px solid var(--run); }
+.st-pause { color: var(--ref); border: 1px dashed var(--ref); }
+.st-done { color: var(--muted); border: 1px solid var(--line); }
+.faddr { margin-left: auto; color: var(--ref); background: var(--ref-bg); }
+.fbody { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .35rem 1.3rem; margin-top: .3rem; }
+.fnote { font-size: .78rem; font-style: italic; color: var(--muted); align-self: center; }
+.var { display: flex; flex-direction: column; gap: .1rem; }
+.vtop { display: flex; align-items: baseline; gap: .35rem; }
+.vname { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
+.vkind { font-size: .6rem; color: var(--muted); padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem; background: var(--panel); }
+.vkind.def { color: var(--write); border-color: var(--write); }
+.vbox {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 4.3rem; height: 2.2rem;
+    padding: .45rem .6rem 0;
+    border: 2px solid var(--var-border); border-radius: .45rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+    white-space: nowrap;
+    transition: box-shadow .25s;
+}
+.vbox.fn { padding-top: 0; background: var(--ref-bg); border-color: var(--ref); color: var(--ref); }
+.vbox .type {
+    position: absolute; top: .05rem; right: .35rem;
+    font-family: var(--sans); font-size: .54rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined, .val.t-null { font-style: italic; font-weight: 500; opacity: .85; }
+.val.t-function { font-style: italic; font-weight: 600; }
+.uninit { font-family: var(--sans); font-size: .68rem; font-style: italic; font-weight: 500; opacity: .7; }
+.vbox.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.vbox.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.vbox.hl-new   { box-shadow: 0 0 0 3px var(--var-border); }
+.vbox.hl-miss  { border-style: dashed; box-shadow: 0 0 0 3px var(--err), 0 0 0 6px var(--err-bg); }
+.vbox.hl-error { box-shadow: 0 0 0 3px var(--err), 0 0 0 6px var(--err-bg); animation: shake .5s 1s both; }
+.vbox.changed .val { animation: pop .45s .2s both; }
+.ffoot { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .5rem; margin-top: .4rem; }
+.ck { font-size: .66rem; color: var(--muted); }
+.cv {
+    padding: .05rem .4rem; border-radius: .3rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .95rem; white-space: pre;
+}
+.cv.calc-sub { background: var(--read-bg); }
+.cv.calc-res { background: var(--write-bg); font-weight: 700; }
+.arr { width: 1.1rem; height: .7rem; color: var(--muted); flex: none; }
+.fret {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .1rem .2rem .1rem .5rem; border-radius: .4rem;
+    border: 2px solid var(--ref); background: var(--ref-bg);
+    font-size: .66rem; font-weight: 700; color: var(--ref);
+}
+.fret .rv {
+    padding: .05rem .45rem; border-radius: .3rem;
+    background: var(--ref); color: var(--chip-ink);
+    font-family: var(--mono); font-size: .95rem;
+}
+.fret.fresh { animation: pop .45s both; }
+.frame.many {
+    padding: .5rem .7rem; text-align: center;
+    border-style: dashed;
+    background: repeating-linear-gradient(0deg, var(--frame-bg) 0 .3rem, var(--panel) .3rem .6rem);
+    font-size: .82rem; color: var(--muted);
+}
+.frame.many b { font-family: var(--mono); color: var(--ink); }
+.frame.errcard {
+    border-color: var(--err); background: var(--err-bg); color: var(--err);
+    font-family: var(--mono); font-weight: 700; text-align: center;
+}
+.frame.errcard.pushed { animation: push .5s both, shake .5s .5s both; }
+.frame.errcard small { display: block; font-family: var(--sans); font-weight: 500; font-size: .72rem; }
+
+/* compact frames (header and variables on one row) */
+.compact .frame:not(.many):not(.errcard) { display: grid; grid-template-columns: 21rem minmax(0, 1fr); column-gap: 1rem; align-items: center; }
+.compact .fhead { gap: .15rem .4rem; }
+.compact .fhead .fname { flex-basis: 100%; }
+.compact .var { flex-direction: row; align-items: center; gap: .4rem; }
+.compact .faddr { margin-left: 0; }
+.compact .fbody { margin-top: 0; }
+.compact .ffoot { grid-column: 1 / -1; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.1rem;
+    margin-top: .55rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.run { background: var(--run-bg); border-color: var(--run); }
+.sw.pause { border-style: dashed; border-color: var(--ref); }
+.sw.var { background: var(--var-bg); border-color: var(--var-border); }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+.sw.ret { background: var(--ref); border-color: var(--ref); border-radius: 50%; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .p { color: var(--ref); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.ret { background: var(--ref); }
+.fly.rejected { background: var(--err); }
+
+.await, .vbox.await .val, .vbox.await .type { visibility: hidden; }
+.vbox.await { visibility: visible; }
+.land { animation: land .45s both; }
+
+@keyframes push { from { opacity: 0; transform: translateY(-1.4rem); } to { opacity: 1; transform: none; } }
+@keyframes popout { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-1.6rem) scale(.96); } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .stack { min-height: 24rem; }
+    .code li { white-space: pre-wrap; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+    .compact .frame:not(.many):not(.errcard) { grid-template-columns: 1fr; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>The call stack <small>calling a function, arguments, return and the call stack, step by step</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="bg/callStack.html" hreflang="bg" lang="bg" title="Bulgarian version" aria-label="Bulgarian version">BG</a>
+        <button class="btn icon-btn" id="themeBtn" title="Light / dark theme" aria-label="Light / dark theme">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Code</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Console</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="panel stack-panel">
+                <div class="panel-title"><span>Call stack</span><span class="note" id="stackNote"></span></div>
+                <div class="stack" id="stack"></div>
+                <div class="legend">
+                    <span><i class="sw run"></i>running</span>
+                    <span><i class="sw pause"></i>paused (waiting for a return)</span>
+                    <span><i class="sw var"></i>local variable</span>
+                    <span><i class="sw read"></i>read</span>
+                    <span><i class="sw write"></i>write</span>
+                    <span><i class="sw ret"></i>returned value</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="To the start (Home)" aria-label="To the start">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Back (Left arrow)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Back
+                </button>
+                <button class="btn" id="playBtn" title="Auto-play (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Next (Right arrow or Space)">
+                    Next<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Keys: Left / Right arrows, Space, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Call stack model
+//   s.frames - bottom (global) to top; each frame:
+//     { id, kind: 'global' | 'fn' | 'native' | 'many' | 'error', title, vars: [{ name, value, type, kind }],
+//       retLine (call site in the caller), at (line where the frame is paused), calc, ret }
+//   s.marks  - parts of code lines that are highlighted or replaced (a returned value)
+// ---------------------------------------------------------------------------
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'null') return 'null';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit === 'function') return 'function';
+    if (lit.startsWith('"')) return 'string';
+    return 'number';
+}
+const topOf = s => s.frames[s.frames.length - 1];
+const frame = (s, id) => s.frames.find(f => f.id === id);
+const fvar = (s, id, name) => frame(s, id).vars.find(v => v.name === name);
+
+// Helpers used by the scenario steps. Each one mutates the state `s`.
+function push(s, id, title, vars, from, kind = 'fn') {
+    topOf(s).at = from;
+    s.frames.push({ id, kind, title, retLine: from, at: null, calc: null, ret: null,
+        vars: vars.map(([name, lit, k = 'param']) => ({ name, value: lit, type: typeOf(lit), kind: k })) });
+    vars.forEach(([name, lit]) => s.hl[id + '.' + name] = lit === 'undefined' ? 'miss' : 'write');
+}
+function pop(s) {
+    s.frames.pop();
+    if (s.frames.length) topOf(s).at = null;
+}
+function setv(s, id, name, lit, hl = 'write') {
+    Object.assign(fvar(s, id, name), { value: lit, type: typeOf(lit) });
+    s.hl[id + '.' + name] = hl;
+}
+function rd(s, id, ...names) { names.forEach(n => s.hl[id + '.' + n] = 'read'); }
+function calc(s, id, src, sub = '', res = '') { frame(s, id).calc = { src, sub, res }; }
+function ret(s, id, lit, implicit = false) { frame(s, id).ret = { value: lit, implicit }; }
+function mk(s, id, line, str, cls, to) {
+    const m = s.marks.find(x => x.id === id);
+    if (m) Object.assign(m, { cls, to });
+    else s.marks.push({ id, line, str, cls, to });
+}
+function unmk(s, ...ids) { s.marks = s.marks.filter(m => !ids.includes(m.id)); }
+function log(s, text, cls = '') { s.console.push({ text, cls }); }
+const FN = name => [name, 'function', 'function'];
+const LET = name => [name, null, 'let'];
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line   - active code line (0-based, -1 = none); step.range - softly highlighted lines
+//   step.do     - changes to the state
+//   step.fly    - values that fly on screen: [from, to, text, option ('ret' | 'reject')]
+//                 keys: v:frame.var, mk:markId, calc:frame, res:frame, ret:frame, fr:frame, con
+//   step.reveal - elements to keep hidden until all flights land
+// ---------------------------------------------------------------------------
+const SCENARIOS = [
+{
+    tab: 'Calling',
+    globals: [FN('greet')],
+    code: [
+        'function greet(userName) {',
+        '    console.log(`Hello ${userName}. Nice to see you.`);',
+        '}',
+        '',
+        'greet("Ada");',
+        'greet("John");',
+    ],
+    steps: [
+        { line: -1, text: `A function is like a recipe: the <b>definition</b> only writes it down, and the actions in it run only when it is <b>called</b>. On the right is the <b>call stack</b> - there JavaScript keeps track of which function is running right now. At the bottom is the <b>global frame</b> - for the code outside the functions. The function greet in it was created before the first line ran (see the Hoisting topic).` },
+        { line: 0, range: [0, 2], text: `The execution reaches the definition of greet and <b>nothing visible happens</b>: the body of the function (line 2) does <b>not</b> run, the console is empty. The function is just remembered under the name greet - like a recipe written in a notebook, but not cooked yet.` },
+        { line: 4, text: `<code>greet("Ada")</code> - a <b>call</b> (invocation) of the function. The round brackets after the name mean "run it now". In the brackets is the <b>argument</b> "Ada" - the value we pass to the function.`,
+          do: s => mk(s, 'a1', 4, '"Ada"', 'arg') },
+        { line: 0, text: `JavaScript creates a new <b>stack frame</b> for this call and puts it on top of the stack. In it the local variable userName (the parameter) is created, and the argument is <span class="w">written</span> into it - as if <code>let userName = "Ada";</code> had run. Line 5 is <b>paused</b> (the dashes): we will come back there.`,
+          do: s => push(s, 'g1', 'greet("Ada")', [['userName', '"Ada"']], 4), fly: [['mk:a1', 'v:g1.userName', '"Ada"']] },
+        { line: 1, text: `The body of the function runs. JavaScript <span class="r">reads</span> userName from the <b>top frame</b> and prints the greeting.`,
+          do: s => { rd(s, 'g1', 'userName'); log(s, 'Hello Ada. Nice to see you.'); }, fly: [['v:g1.userName', 'con', '"Ada"']] },
+        { line: 2, text: `We reached the closing bracket <code>}</code> - the function ends. It has no <code>return</code>, so it returns <b>undefined</b> (about return - in scenario 3). Here we do not need this value.`,
+          do: s => ret(s, 'g1', 'undefined', true) },
+        { line: 4, text: `The frame is removed from the stack (pop), and <b>userName disappears</b> with it: parameters are local variables and live only while the function runs (more in the Scope topic). The execution goes on from where it was paused - line 5. The call is complete.`,
+          do: s => { pop(s); unmk(s, 'a1'); } },
+        { line: 0, text: `<code>greet("John")</code> - the same function, but a <b>new</b> call, so also a <b>new frame</b> with a new variable userName = "John". Nothing is left from the previous call.`,
+          do: s => { mk(s, 'a2', 5, '"John"', 'arg'); push(s, 'g2', 'greet("John")', [['userName', '"John"']], 5); },
+          fly: [['mk:a2', 'v:g2.userName', '"John"']] },
+        { line: 1, text: `The same code, but userName is now "John" - the value comes from the frame of the <b>current</b> call.`,
+          do: s => { rd(s, 'g2', 'userName'); log(s, 'Hello John. Nice to see you.'); }, fly: [['v:g2.userName', 'con', '"John"']] },
+        { line: 5, text: `The function again reaches <code>}</code> and returns undefined. Its frame is removed and only the global frame is left in the stack. The program ends.`,
+          do: s => { ret(s, 'g2', 'undefined', true); pop(s); unmk(s, 'a2'); } },
+        { line: -1, text: `<b>Summary:</b> the definition only creates the function - the actions in it run on every <b>call</b>. Every call gets a <b>new frame</b> in the stack, with its own local variables (the parameters). When the function ends, its frame is removed and the execution goes on exactly where it was called from.` },
+    ],
+},
+{
+    tab: 'Arguments',
+    globals: [FN('sum')],
+    code: [
+        'function sum(x, y) {',
+        '    console.log(x + y);',
+        '}',
+        '',
+        'sum(2, 3);',
+        'sum(2);',
+        'sum(2, 3, 4);',
+    ],
+    steps: [
+        { line: -1, text: `The <b>parameters</b> (x, y) are the names in the definition of the function. The <b>arguments</b> are the values we pass in the call. How does JavaScript connect them? And what happens if their number does not match?` },
+        { line: 0, text: `<code>sum(2, 3)</code> - a new frame. The values are matched <b>by position</b>: the first argument goes into the first parameter, the second - into the second. As if JavaScript ran <code>let x = 2, y = 3;</code> in the new frame.`,
+          do: s => { mk(s, 'a1', 4, '2', 'arg'); mk(s, 'a2', 4, '3', 'arg'); push(s, 's1', 'sum(2, 3)', [['x', '2'], ['y', '3']], 4); },
+          fly: [['mk:a1', 'v:s1.x', '2'], ['mk:a2', 'v:s1.y', '3']] },
+        { line: 1, text: `JavaScript <span class="r">reads</span> x and y from the frame: 2 + 3 = 5 and prints 5.`,
+          do: s => { rd(s, 's1', 'x', 'y'); calc(s, 's1', 'x + y', '2 + 3', '5'); log(s, '5'); },
+          fly: [['v:s1.x', 'calc:s1', '2'], ['v:s1.y', 'calc:s1', '3']], reveal: ['res:s1', 'con'] },
+        { line: 4, text: `The function ends, the frame (together with x and y) is removed, and we go back to line 5.`,
+          do: s => { pop(s); unmk(s, 'a1', 'a2'); } },
+        { line: 5, text: `<code>sum(2)</code> - we pass <b>one</b> argument, but there are two parameters. Will there be an error? What will be printed? Think before you go on.`,
+          do: s => mk(s, 'a3', 5, '2', 'arg') },
+        { line: 0, text: `<b>No error!</b> JavaScript does not check the number of arguments. x gets 2, and there is no argument for y - it stays <b>undefined</b>. As if <code>let x = 2, y = undefined;</code>`,
+          do: s => push(s, 's2', 'sum(2)', [['x', '2'], ['y', 'undefined']], 5), fly: [['mk:a3', 'v:s2.x', '2']] },
+        { line: 1, text: `<code>2 + undefined</code> is not a sensible number, the result is <b>NaN</b> (Not a Number). This is a common bug: a forgotten argument gives no error, but a strange result.`,
+          do: s => { rd(s, 's2', 'x', 'y'); calc(s, 's2', 'x + y', '2 + undefined', 'NaN'); log(s, 'NaN'); },
+          fly: [['v:s2.x', 'calc:s2', '2'], ['v:s2.y', 'calc:s2', 'undefined']], reveal: ['res:s2', 'con'] },
+        { line: 5, text: `The frame is removed, we go on with line 7.`,
+          do: s => { pop(s); unmk(s, 'a3'); } },
+        { line: 0, text: `<code>sum(2, 3, 4)</code> - there are <b>more</b> arguments than parameters. x = 2, y = 3, and there is no parameter for the third argument (4): it is <b>ignored</b>. No error here either. (Technically 4 can be reached through the special object <code>arguments</code>, but it is rarely used.)`,
+          do: s => {
+              mk(s, 'a4', 6, '2', 'arg'); mk(s, 'a5', 6, '3', 'arg'); mk(s, 'a6', 6, '4', 'extra');
+              push(s, 's3', 'sum(2, 3, 4)', [['x', '2'], ['y', '3']], 6);
+          },
+          fly: [['mk:a4', 'v:s3.x', '2'], ['mk:a5', 'v:s3.y', '3'], ['mk:a6', 'fr:s3', '4', 'reject']] },
+        { line: 1, text: `2 + 3 = 5 - 5 is printed, as if the extra number were not there.`,
+          do: s => { rd(s, 's3', 'x', 'y'); calc(s, 's3', 'x + y', '2 + 3', '5'); log(s, '5'); },
+          fly: [['v:s3.x', 'calc:s3', '2'], ['v:s3.y', 'calc:s3', '3']], reveal: ['res:s3', 'con'] },
+        { line: -1, text: `<b>Summary:</b> on a call, JavaScript creates local variables with the names of the parameters and assigns the arguments to them <b>by position</b>. A missing argument - the parameter is undefined. An extra argument - it is ignored. In both cases there is <b>no error</b>, so be careful with the number of arguments.`,
+          do: s => { pop(s); unmk(s, 'a4', 'a5', 'a6'); } },
+    ],
+},
+{
+    tab: 'return',
+    globals: [FN('sum'), FN('f'), LET('res'), LET('ok')],
+    code: [
+        'function sum(x, y) {',
+        '    return x + y;',
+        '}',
+        'function f() {',
+        '    console.log("start");',
+        '    return true;',
+        '    console.log("end");',
+        '}',
+        'let res = sum(2, 3);',
+        'console.log(res);',
+        'let ok = f();',
+    ],
+    steps: [
+        { line: -1, text: `Every function in JavaScript <b>returns a value</b>, and with the <code>return</code> operator we say which one. The call <code>sum(2, 3)</code> itself is an <b>expression</b> - like <code>2 + 2</code>: the returned value will take its place. (res and ok are still uninitialised.)` },
+        { line: 8, text: `<code>let res = sum(2, 3);</code> - first the right-hand side is calculated. It is a function call, so line 9 stops and waits for the function to finish.`,
+          do: s => mk(s, 'c1', 8, 'sum(2, 3)', 'call') },
+        { line: 0, text: `A new frame for sum: x = 2, y = 3. The dashes on line 9 and the label in the frame show the <b>return address</b> - the place where we will go on after the end of the function.`,
+          do: s => push(s, 's', 'sum(2, 3)', [['x', '2'], ['y', '3']], 8),
+          fly: [['mk:c1', 'v:s.x', '2'], ['mk:c1', 'v:s.y', '3']] },
+        { line: 1, text: `<code>return x + y;</code> - first the expression after return is calculated: <span class="r">read</span> x and y, 2 + 3 = 5. This is the value the function will <b>return</b>.`,
+          do: s => { rd(s, 's', 'x', 'y'); calc(s, 's', 'x + y', '2 + 3', '5'); ret(s, 's', '5'); },
+          fly: [['v:s.x', 'calc:s', '2'], ['v:s.y', 'calc:s', '3']], reveal: ['res:s', 'ret:s'] },
+        { line: 8, text: `return <b>ends</b> the function and sends 5 back to the place of the call. The expression <code>sum(2, 3)</code> is literally <b>replaced</b> by 5, and the line becomes <code>let res = 5;</code>. The frame is removed - x and y no longer exist.`,
+          do: s => { pop(s); mk(s, 'c1', 8, 'sum(2, 3)', 'rv', '5'); }, fly: [['ret:s', 'mk:c1', '5', 'ret']] },
+        { line: 8, text: `Now the assignment finishes as usual: 5 is <span class="w">written</span> into res.`,
+          do: s => setv(s, 'G', 'res', '5'), fly: [['mk:c1', 'v:G.res', '5']] },
+        { line: 9, text: `5 is printed. Note: sum does not print anything itself - it only <b>returns</b> a result, and the code that calls it decides what to do with it.`,
+          do: s => { unmk(s, 'c1'); rd(s, 'G', 'res'); log(s, '5'); }, fly: [['v:G.res', 'con', '5']] },
+        { line: 10, text: `<code>let ok = f();</code> - f prints "start", then there is a return, and after it - one more console.log. What will be printed, and what value will ok get? Think before you go on.`,
+          do: s => mk(s, 'c2', 10, 'f()', 'call') },
+        { line: 3, text: `A new frame for f. The function has no parameters, so there are no local variables in its frame.`,
+          do: s => push(s, 'f', 'f()', [], 10) },
+        { line: 4, text: `start is printed.`,
+          do: s => log(s, 'start') },
+        { line: 5, text: `<code>return true;</code> - the function will return true and ends <b>at once</b>. Line 7 is crossed out: it will <b>never</b> run, and "end" will not be printed.`,
+          do: s => { ret(s, 'f', 'true'); s.dead.push(6); }, reveal: ['ret:f'] },
+        { line: 10, text: `The value true is returned to the place of the call: <code>let ok = true;</code>. The frame of f is removed.`,
+          do: s => { pop(s); mk(s, 'c2', 10, 'f()', 'rv', 'true'); }, fly: [['ret:f', 'mk:c2', 'true', 'ret']] },
+        { line: 10, text: `true is <span class="w">written</span> into ok. The console has only start.`,
+          do: s => setv(s, 'G', 'ok', 'true'), fly: [['mk:c2', 'v:G.ok', 'true']] },
+        { line: -1, text: `<b>Summary:</b> <code>return expression;</code> calculates the expression, <b>ends</b> the function and returns the value to the place of the call. The code after return does not run. A function without return returns undefined. A function that only performs actions (like greet) is called a <b>procedure</b>; one that returns a result (like sum) - a <b>function</b>.`,
+          do: s => unmk(s, 'c2') },
+    ],
+},
+{
+    tab: 'Nested calls',
+    globals: [FN('square'), FN('sumOfSquares')],
+    code: [
+        'function square(n) {',
+        '    return n * n;',
+        '}',
+        'function sumOfSquares(a, b) {',
+        '    return square(a) + square(b);',
+        '}',
+        'console.log(sumOfSquares(2, 3));',
+    ],
+    steps: [
+        { line: -1, text: `Functions can call other functions. Let us follow how the stack <b>grows</b> on every call and <b>shrinks</b> on every return.` },
+        { line: 6, text: `Line 7 calls console.log. But before a function is called, its <b>arguments</b> must be calculated. The argument here is another call - <code>sumOfSquares(2, 3)</code> - and it runs first.`,
+          do: s => mk(s, 'c1', 6, 'sumOfSquares(2, 3)', 'call') },
+        { line: 3, text: `A new frame for sumOfSquares: a = 2, b = 3. The global code is paused on line 7.`,
+          do: s => push(s, 'q', 'sumOfSquares(2, 3)', [['a', '2'], ['b', '3']], 6),
+          fly: [['mk:c1', 'v:q.a', '2'], ['mk:c1', 'v:q.b', '3']] },
+        { line: 4, text: `<code>return square(a) + square(b);</code> - to add, JavaScript must calculate the two calls, <b>from left to right</b>. First <code>square(a)</code>: it <span class="r">reads</span> a - it is 2.`,
+          do: s => { mk(s, 'sa', 4, 'square(a)', 'call'); rd(s, 'q', 'a'); } },
+        { line: 0, text: `A new frame for square, on top: n = 2. Now there are <b>three</b> frames in the stack. <b>Only the top one</b> runs, and the other two wait - each on its own line (the dashed lines 5 and 7).`,
+          do: s => push(s, 'sq1', 'square(2)', [['n', '2']], 4), fly: [['v:q.a', 'v:sq1.n', '2']] },
+        { line: 1, text: `<code>return n * n;</code> - 2 * 2 = 4.`,
+          do: s => { rd(s, 'sq1', 'n'); calc(s, 'sq1', 'n * n', '2 * 2', '4'); ret(s, 'sq1', '4'); },
+          fly: [['v:sq1.n', 'calc:sq1', '2']], reveal: ['res:sq1', 'ret:sq1'] },
+        { line: 4, text: `square returns 4 and its frame disappears. In sumOfSquares the expression is now <code>4 + square(b)</code>. There are two frames in the stack again.`,
+          do: s => { pop(s); mk(s, 'sa', 4, 'square(a)', 'rv', '4'); }, fly: [['ret:sq1', 'mk:sa', '4', 'ret']] },
+        { line: 0, text: `Now <code>square(b)</code>, i.e. square(3) - a new frame with a <b>new</b> n = 3. The previous frame of square and its n no longer exist.`,
+          do: s => { mk(s, 'sb', 4, 'square(b)', 'call'); rd(s, 'q', 'b'); push(s, 'sq2', 'square(3)', [['n', '3']], 4); },
+          fly: [['v:q.b', 'v:sq2.n', '3']] },
+        { line: 1, text: `<code>return n * n;</code> - 3 * 3 = 9.`,
+          do: s => { rd(s, 'sq2', 'n'); calc(s, 'sq2', 'n * n', '3 * 3', '9'); ret(s, 'sq2', '9'); },
+          fly: [['v:sq2.n', 'calc:sq2', '3']], reveal: ['res:sq2', 'ret:sq2'] },
+        { line: 4, text: `square returns 9: the expression becomes <code>4 + 9</code>.`,
+          do: s => { pop(s); mk(s, 'sb', 4, 'square(b)', 'rv', '9'); }, fly: [['ret:sq2', 'mk:sb', '9', 'ret']] },
+        { line: 4, text: `4 + 9 = 13 - this is the value sumOfSquares will return.`,
+          do: s => { calc(s, 'q', 'square(a) + square(b)', '4 + 9', '13'); ret(s, 'q', '13'); }, reveal: ['res:q', 'ret:q'],
+          fly: [['mk:sa', 'calc:q', '4'], ['mk:sb', 'calc:q', '9']] },
+        { line: 6, text: `sumOfSquares returns 13 and its frame is removed (with a and b). On line 7 the call is replaced by the value: <code>console.log(13);</code>`,
+          do: s => { pop(s); unmk(s, 'sa', 'sb'); mk(s, 'c1', 6, 'sumOfSquares(2, 3)', 'rv', '13'); },
+          fly: [['ret:q', 'mk:c1', '13', 'ret']] },
+        { line: 6, text: `<code>console.log</code> is also a function - a <b>built-in</b> one. It gets its own frame in the stack too! We do not see its code - it is part of Node.js or the browser. It prints 13.`,
+          do: s => { push(s, 'cl', 'console.log(13)', [['arg', '13', 'arg']], 6, 'native'); log(s, '13'); },
+          fly: [['mk:c1', 'v:cl.arg', '13']], reveal: ['con'] },
+        { line: 6, text: `console.log ends and returns undefined (it is a procedure), but nobody uses this value. Only the global frame is in the stack again.`,
+          do: s => { ret(s, 'cl', 'undefined', true); pop(s); } },
+        { line: -1, text: `<b>Summary:</b> the stack works on the <b>LIFO</b> principle (last in, first out), like a pile of plates: a new frame is put on top, and the top one is always removed first. Only the top frame runs, and all frames below it wait for the value it will return.`,
+          do: s => unmk(s, 'c1') },
+    ],
+},
+{
+    tab: 'Default values',
+    globals: [FN('f'), FN('fOld')],
+    code: [
+        'function f(x = 1, y = 2, z = 3) {',
+        '    console.log(x, y, z);',
+        '}',
+        'function fOld(x, y, z) {',
+        '    x = x || 1; y = y || 2; z = z || 3;',
+        '    console.log(x, y, z);',
+        '}',
+        'f(6, 7);',
+        'fOld(6, 7);',
+        'f(0);',
+        'fOld(0);',
+    ],
+    steps: [
+        { line: -1, text: `A <b>default value</b> is the value a parameter gets if no argument is passed for it in the call. The syntax <code>x = 1</code> in the brackets comes from ES6. Before that, a trick with <code>||</code> was used. Do the two ways work the same?` },
+        { line: 0, text: `<code>f(6, 7)</code> - x = 6 and y = 7 come from the arguments. There is no argument for z: instead of undefined, it gets the default value <b>3</b>.`,
+          do: s => {
+              mk(s, 'a1', 7, '6', 'arg'); mk(s, 'a2', 7, '7', 'arg');
+              push(s, 'f1', 'f(6, 7)', [['x', '6'], ['y', '7'], ['z', '3', 'default']], 7);
+          },
+          fly: [['mk:a1', 'v:f1.x', '6'], ['mk:a2', 'v:f1.y', '7']] },
+        { line: 1, text: `6 7 3 is printed.`,
+          do: s => { rd(s, 'f1', 'x', 'y', 'z'); log(s, '6 7 3'); }, reveal: ['con'],
+          fly: [['v:f1.x', 'con', '6'], ['v:f1.y', 'con', '7'], ['v:f1.z', 'con', '3']] },
+        { line: 7, text: `The frame is removed. Now the same, but the old way - with fOld.`,
+          do: s => { pop(s); unmk(s, 'a1', 'a2'); } },
+        { line: 3, text: `<code>fOld(6, 7)</code> - there are no default values here, so z starts as <b>undefined</b>.`,
+          do: s => {
+              mk(s, 'b1', 8, '6', 'arg'); mk(s, 'b2', 8, '7', 'arg');
+              push(s, 'o1', 'fOld(6, 7)', [['x', '6'], ['y', '7'], ['z', 'undefined']], 8);
+          },
+          fly: [['mk:b1', 'v:o1.x', '6'], ['mk:b2', 'v:o1.y', '7']] },
+        { line: 4, text: `The <code>||</code> operator returns the first operand if it is <b>truthy</b>, otherwise the second one. <code>x || 1</code> gives 6, <code>y || 2</code> gives 7, and <code>undefined || 3</code> gives 3, which is <span class="w">written</span> into z. Note: <b>without</b> let - the parameters are already local variables.`,
+          do: s => { rd(s, 'o1', 'x', 'y'); calc(s, 'o1', 'z || 3', 'undefined || 3', '3'); setv(s, 'o1', 'z', '3'); },
+          fly: [['res:o1', 'v:o1.z', '3']] },
+        { line: 5, text: `The same result: 6 7 3.`,
+          do: s => { rd(s, 'o1', 'x', 'y', 'z'); log(s, '6 7 3'); }, reveal: ['con'],
+          fly: [['v:o1.x', 'con', '6'], ['v:o1.y', 'con', '7'], ['v:o1.z', 'con', '3']] },
+        { line: 8, text: `The frame is removed. Next come <code>f(0)</code> and <code>fOld(0)</code>. Will they print the same? Think before you go on.`,
+          do: s => { pop(s); unmk(s, 'b1', 'b2'); } },
+        { line: 0, text: `The default value is used <b>only when the argument is missing</b> (i.e. it is undefined). Here we passed 0, so x = 0. y and z get 2 and 3.`,
+          do: s => { mk(s, 'c1', 9, '0', 'arg'); push(s, 'f2', 'f(0)', [['x', '0'], ['y', '2', 'default'], ['z', '3', 'default']], 9); },
+          fly: [['mk:c1', 'v:f2.x', '0']] },
+        { line: 1, text: `0 2 3 is printed - exactly what we expect.`,
+          do: s => { rd(s, 'f2', 'x', 'y', 'z'); log(s, '0 2 3'); }, reveal: ['con'],
+          fly: [['v:f2.x', 'con', '0'], ['v:f2.y', 'con', '2'], ['v:f2.z', 'con', '3']] },
+        { line: 9, text: `The frame is removed. Now <code>fOld(0)</code>.`,
+          do: s => { pop(s); unmk(s, 'c1'); } },
+        { line: 3, text: `<code>fOld(0)</code> - x = 0, and y and z are undefined.`,
+          do: s => { mk(s, 'd1', 10, '0', 'arg'); push(s, 'o2', 'fOld(0)', [['x', '0'], ['y', 'undefined'], ['z', 'undefined']], 10); },
+          fly: [['mk:d1', 'v:o2.x', '0']] },
+        { line: 4, text: `<code>0 || 1</code> gives <b>1</b>! The number 0 is a <b>falsy</b> value, so <code>||</code> "skips" it and takes 1. The argument 0 we passed is lost. (y and z become 2 and 3.)`,
+          do: s => {
+              rd(s, 'o2', 'x'); calc(s, 'o2', 'x || 1', '0 || 1', '1');
+              setv(s, 'o2', 'x', '1', 'error'); setv(s, 'o2', 'y', '2'); setv(s, 'o2', 'z', '3');
+          },
+          fly: [['v:o2.x', 'calc:o2', '0'], ['res:o2', 'v:o2.x', '1']] },
+        { line: 5, text: `1 2 3 is printed, not 0 2 3 - this is a <b>bug</b>. The same happens with "", false and null. ES6 default values do not have this problem.`,
+          do: s => { rd(s, 'o2', 'x', 'y', 'z'); log(s, '1 2 3'); }, reveal: ['con'],
+          fly: [['v:o2.x', 'con', '1'], ['v:o2.y', 'con', '2'], ['v:o2.z', 'con', '3']] },
+        { line: -1, text: `<b>Summary:</b> prefer <code>function f(x = 1)</code> - the default value is taken only if the argument is undefined. The trick <code>x = x || 1</code> replaces every falsy value. <b>Note:</b> some older materials write <code>let x = x || 1;</code>, but with let you get <code>SyntaxError: Identifier 'x' has already been declared</code>, because the parameter x is already a local variable.`,
+          do: s => { pop(s); unmk(s, 'd1'); } },
+    ],
+},
+{
+    tab: 'Recursion',
+    advanced: true,
+    compact: true,
+    globals: [FN('factorial')],
+    code: [
+        'function factorial(n) {',
+        '    if (n <= 1) return 1;',
+        '    return n * factorial(n - 1);',
+        '}',
+        'console.log(factorial(3));',
+    ],
+    steps: [
+        { line: -1, text: `<b>Advanced.</b> <b>Recursion</b> is when a function calls itself. Example: factorial(3) = 3 * 2 * 1 = 6. How can one function be "open" several times at once? The answer is in the stack: every call has its own frame with its <b>own</b> n.` },
+        { line: 0, text: `First the argument of console.log is calculated - the call <code>factorial(3)</code>. A new frame: n = 3.`,
+          do: s => { mk(s, 'c1', 4, 'factorial(3)', 'call'); push(s, 'f3', 'factorial(3)', [['n', '3']], 4); },
+          fly: [['mk:c1', 'v:f3.n', '3']] },
+        { line: 1, text: `The check for the <b>base case</b>: <code>3 <= 1</code> is false, so <code>return 1</code> does not run.`,
+          do: s => { rd(s, 'f3', 'n'); calc(s, 'f3', 'n <= 1', '3 <= 1', 'false'); }, reveal: ['res:f3'],
+          fly: [['v:f3.n', 'calc:f3', '3']] },
+        { line: 0, text: `Line 3: <code>n * factorial(n - 1)</code> becomes <code>3 * factorial(2)</code>. The multiplication waits: first factorial(2) must run - a <b>new frame</b> of the same function, with its <b>own</b> n = 2. The frame with n = 3 is paused.`,
+          do: s => { calc(s, 'f3', 'n * factorial(n - 1)', '3 * factorial(2)'); push(s, 'f2', 'factorial(2)', [['n', '2']], 2); },
+          fly: [['calc:f3', 'v:f2.n', '2']] },
+        { line: 1, text: `<code>2 <= 1</code> is false - we go on.`,
+          do: s => { rd(s, 'f2', 'n'); calc(s, 'f2', 'n <= 1', '2 <= 1', 'false'); }, reveal: ['res:f2'],
+          fly: [['v:f2.n', 'calc:f2', '2']] },
+        { line: 0, text: `<code>2 * factorial(1)</code> - one more frame, n = 1. The stack now has <b>three</b> frames of factorial, each with its own n: 3, 2 and 1.`,
+          do: s => { calc(s, 'f2', 'n * factorial(n - 1)', '2 * factorial(1)'); push(s, 'f1', 'factorial(1)', [['n', '1']], 2); },
+          fly: [['calc:f2', 'v:f1.n', '1']] },
+        { line: 1, text: `<code>1 <= 1</code> is true - we reached the <b>base case</b>: <code>return 1;</code>. From here the recursion stops "going down" and starts "coming back".`,
+          do: s => { rd(s, 'f1', 'n'); calc(s, 'f1', 'n <= 1', '1 <= 1', 'true'); ret(s, 'f1', '1'); }, reveal: ['res:f1', 'ret:f1'],
+          fly: [['v:f1.n', 'calc:f1', '1']] },
+        { line: 2, text: `factorial(1) returns 1 to the frame that called it: there the expression becomes <code>2 * 1</code> = 2. That frame is also ready to return 2.`,
+          do: s => { pop(s); calc(s, 'f2', 'n * factorial(n - 1)', '2 * 1', '2'); ret(s, 'f2', '2'); },
+          fly: [['ret:f1', 'calc:f2', '1', 'ret']], reveal: ['res:f2', 'ret:f2'] },
+        { line: 2, text: `factorial(2) returns 2: in the frame with n = 3 the expression becomes <code>3 * 2</code> = 6.`,
+          do: s => { pop(s); calc(s, 'f3', 'n * factorial(n - 1)', '3 * 2', '6'); ret(s, 'f3', '6'); },
+          fly: [['ret:f2', 'calc:f3', '2', 'ret']], reveal: ['res:f3', 'ret:f3'] },
+        { line: 4, text: `The last frame of factorial returns 6 to line 5: <code>console.log(6);</code>. All frames of factorial are now removed.`,
+          do: s => { pop(s); mk(s, 'c1', 4, 'factorial(3)', 'rv', '6'); }, fly: [['ret:f3', 'mk:c1', '6', 'ret']] },
+        { line: 4, text: `6 is printed. (console.log also gets a frame for a short time, as we saw in scenario 4.)`,
+          do: s => log(s, '6'), fly: [['mk:c1', 'con', '6']] },
+        { line: -1, text: `<b>Summary:</b> every recursive call gets a <b>new frame</b> with its own local variables - that is why n = 3, 2 and 1 exist at the same time without getting in each other's way. The stack grows until the <b>base case</b> is reached, and then the frames are removed one by one and the results are returned down the stack.`,
+          do: s => unmk(s, 'c1') },
+    ],
+},
+{
+    tab: 'Stack overflow',
+    advanced: true,
+    compact: true,
+    globals: [FN('countDown')],
+    code: [
+        'function countDown(n) {',
+        '    console.log(n);',
+        '    countDown(n - 1); // no base case!',
+        '}',
+        'countDown(3);',
+    ],
+    steps: [
+        { line: -1, text: `<b>Advanced.</b> What happens if a recursive function <b>has no base case</b>? countDown should count 3, 2, 1, but nowhere does it say when to stop.` },
+        { line: 0, text: `<code>countDown(3)</code> - a new frame, n = 3.`,
+          do: s => { mk(s, 'a1', 4, '3', 'arg'); push(s, 'c3', 'countDown(3)', [['n', '3']], 4); }, fly: [['mk:a1', 'v:c3.n', '3']] },
+        { line: 1, text: `3 is printed.`,
+          do: s => { rd(s, 'c3', 'n'); log(s, '3'); }, fly: [['v:c3.n', 'con', '3']] },
+        { line: 0, text: `<code>countDown(n - 1)</code> - a new frame with n = 2. The frame with n = 3 waits on line 3 until this call finishes.`,
+          do: s => push(s, 'c2', 'countDown(2)', [['n', '2']], 2), fly: [['v:c3.n', 'v:c2.n', '2']] },
+        { line: 1, text: `And so on: every call prints n and calls countDown(n - 1) - 2, 1, 0, -1, -2 and so on. Nothing stops the recursion, and every call <b>adds</b> a new frame. How big can the stack grow? Think before you go on.`,
+          do: s => {
+              log(s, '2');
+              for (const n of [1, 0]) { push(s, 'c' + n, `countDown(${n})`, [['n', String(n)]], 2); log(s, String(n)); }
+          } },
+        { line: 2, text: `The stack has a <b>limited size</b>. After thousands of frames (in Node.js - about 10 000 for this function; the exact number depends on the engine and on the size of the frames) the space runs out and JavaScript throws the error <code>RangeError: Maximum call stack size exceeded</code> - a <b>stack overflow</b>.`,
+          do: s => {
+              topOf(s).at = 2;
+              s.frames.push({ id: 'many', kind: 'many', text: '<b>thousands</b> more frames countDown(-1), countDown(-2) ...' });
+              s.frames.push({ id: 'err', kind: 'error', text: 'RangeError: Maximum call stack size exceeded' });
+              log(s, '-1, -2 ... (thousands of lines)', 'more');
+              log(s, 'Uncaught RangeError: Maximum call stack size exceeded', 'err');
+              s.err = true;
+          }, reveal: ['con'] },
+        { line: -1, text: `Nobody handles the error (<b>Uncaught</b>), so all frames are removed from the stack - including the global one - and the program stops. None of the calls of countDown finished normally.`,
+          do: s => { s.frames = []; unmk(s, 'a1'); } },
+        { line: -1, text: `<b>Summary:</b> every recursive function must have a <b>base case</b> - a condition under which it stops calling itself (like <code>if (n <= 1) return 1;</code> in factorial), and every call must get closer to it. Otherwise the stack overflows. The website Stack Overflow is named after exactly this error.` },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: state[i] is the call stack after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    const globalFrame = { id: 'G', kind: 'global', title: 'global', at: null, calc: null, ret: null,
+        vars: sc.globals.map(([name, lit, kind]) => ({ name, value: lit, type: lit === null ? null : typeOf(lit), kind })) };
+    let s = { line: -1, range: null, frames: [globalFrame], marks: [], dead: [], console: [], hl: {}, err: false };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.err = false;
+        s.line = step.line;
+        s.range = step.range || null;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 820, STAGGER = 200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_ARR = '<svg class="arr" viewBox="0 0 22 12"><path d="M1 6H19M14 1.5L20 6L14 10.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Play';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Pause';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|`[^`]*`)|\b(function|return|if|let|const|var|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+// split a code line into plain and marked segments; a mark may replace its text (a returned value)
+function renderLine(text, marks) {
+    let segs = [{ t: text }];
+    for (const m of marks) {
+        const i = segs.findIndex(g => !g.m && g.t.includes(m.str));
+        if (i < 0) continue;
+        const g = segs[i], at = g.t.indexOf(m.str);
+        segs.splice(i, 1, { t: g.t.slice(0, at) }, { t: m.to !== undefined ? m.to : m.str, m }, { t: g.t.slice(at + m.str.length) });
+    }
+    return segs.map(g => g.m
+        ? `<span class="mk ${g.m.cls}" data-mk="${g.m.id}">${highlight(g.t)}</span>`
+        : highlight(g.t)).join('');
+}
+
+function realFrames(s) { return s.frames.filter(f => f.kind !== 'many' && f.kind !== 'error'); }
+function topFrame(s) { return s.frames.length ? s.frames[s.frames.length - 1] : null; }
+
+function renderCode(sc, s) {
+    const paused = {};
+    const t = topFrame(s);
+    realFrames(s).forEach(f => { if (f !== t && f.at !== null) paused[f.at] = (paused[f.at] || 0) + 1; });
+    $('#code').innerHTML = sc.code.map((l, i) => {
+        const cls = [];
+        if (i === s.line) cls.push('active');
+        if (i === s.line && s.err) cls.push('error');
+        if (paused[i]) cls.push('paused');
+        if (s.range && i >= s.range[0] && i <= s.range[1]) cls.push('range');
+        if (s.dead.includes(i)) cls.push('dead');
+        let tag = '';
+        if (s.dead.includes(i)) tag = '<span class="ltag lt-dead">never runs</span>';
+        else if (paused[i]) tag = `<span class="ltag lt-pause">paused${paused[i] > 1 ? ' x' + paused[i] : ''}</span>`;
+        const marks = s.marks.filter(m => m.line === i);
+        return `<li class="${cls.join(' ')}"><span class="ln">${i + 1}</span><span class="src">${renderLine(l, marks)}</span>${tag}</li>`;
+    }).join('');
+    $('#lineNote').textContent = s.line >= 0 ? `running line ${s.line + 1}` : '';
+}
+
+const KIND_LABEL = { param: 'parameter', default: 'default', let: 'let' };
+
+function varHTML(f, v, s, prevF, targets) {
+    const key = f.id + '.' + v.name;
+    const cls = ['vbox'];
+    if (v.type === 'function') cls.push('fn');
+    if (s.hl[key]) cls.push('hl-' + s.hl[key]);
+    const pv = prevF && prevF.vars.find(x => x.name === v.name);
+    if (pv && pv.value !== v.value && !targets.has('v:' + key)) cls.push('changed');
+    const val = v.value === null
+        ? '<span class="val uninit">uninitialised</span>'
+        : `<span class="val t-${v.type}">${esc(v.value)}</span>${v.type === 'function' ? '' : `<span class="type">${v.type}</span>`}`;
+    const name = v.kind === 'arg' ? '<span class="flabel">argument</span>' : `<span class="vname">${esc(v.name)}</span>`;
+    const kind = KIND_LABEL[v.kind] ? `<span class="vkind ${v.kind === 'default' ? 'def' : ''}">${KIND_LABEL[v.kind]}</span>` : '';
+    return `<div class="var" data-v="${esc(v.name)}"><div class="vtop">${name}${kind}</div><div class="${cls.join(' ')}">${val}</div></div>`;
+}
+
+function frameHTML(f, s, o) {
+    const anim = o.ghost ? ' popped' : o.pushed ? ' pushed' : '';
+    if (f.kind === 'many') return `<div class="frame many${anim}" data-f="${f.id}">${f.text}</div>`;
+    if (f.kind === 'error') return `<div class="frame errcard${anim}" data-f="${f.id}">${esc(f.text)}<small>no room for a new frame</small></div>`;
+    const isG = f.kind === 'global';
+    const cls = ['frame'];
+    if (isG) cls.push('global');
+    if (!o.ghost) cls.push(o.top ? 'running' : 'paused');
+    const status = o.ghost ? '<span class="pill st-done">finished</span>'
+        : o.top ? '<span class="pill st-run">running</span>'
+        : `<span class="pill st-pause">paused${f.at !== null ? ', line ' + (f.at + 1) : ''}</span>`;
+    const head = isG
+        ? `<span class="fname">global</span><span class="flabel">global frame</span>${status}`
+        : `<span class="fname">${esc(f.title)}</span>${status}<span class="pill faddr">return to line ${f.retLine + 1}</span>`;
+    let body = f.vars.map(v => varHTML(f, v, s, o.prevF, o.targets)).join('');
+    if (f.kind === 'native') body += '<span class="fnote">built-in function - its code is in the engine</span>';
+    else if (!f.vars.length) body = '<span class="fnote">no local variables</span>';
+    let foot = '';
+    if (f.calc || f.ret) {
+        const c = f.calc;
+        const calcHTML = c ? `<span class="ck">expression</span><code class="cv">${esc(c.src)}</code>`
+            + (c.sub ? ICON_ARR + `<code class="cv calc-sub">${esc(c.sub)}</code>` : '')
+            + (c.res ? ICON_ARR + `<code class="cv calc-res">${esc(c.res)}</code>` : '') : '';
+        const freshRet = f.ret && !(o.prevF && o.prevF.ret);
+        const retHTML = f.ret ? `<span class="fret${freshRet ? ' fresh' : ''}">${f.ret.implicit ? 'returns (no return)' : 'return'}<code class="rv">${esc(f.ret.value)}</code></span>` : '';
+        foot = `<div class="ffoot">${calcHTML}${retHTML}</div>`;
+    }
+    return `<div class="${cls.join(' ')}${anim}" data-f="${f.id}"><div class="fhead">${head}</div><div class="fbody">${body}</div>${foot}</div>`;
+}
+
+function renderStack(sc, s, prev, step) {
+    const box = $('#stack');
+    box.classList.toggle('compact', !!sc.compact);
+    const targets = new Set(prev && step.fly ? step.fly.map(f => f[1]) : []);
+    const t = topFrame(s);
+    const realTop = t && (t.kind === 'many' || t.kind === 'error') ? null : t;
+    let html = s.frames.map(f => {
+        const prevF = prev && prev.frames.find(x => x.id === f.id);
+        return frameHTML(f, s, { top: f === realTop, pushed: !!prev && !prevF, prevF, targets });
+    }).join('');
+    if (prev) {
+        const gone = prev.frames.filter(f => !s.frames.some(x => x.id === f.id));
+        html += gone.map(f => frameHTML(f, prev, { ghost: true, targets })).join('');
+    }
+    if (!s.frames.length && !prev) html = '<div class="stack-empty">the stack is empty</div>';
+    box.innerHTML = html;
+    const n = realFrames(s).length;
+    $('#stackNote').textContent = s.frames.some(f => f.kind === 'many') ? 'frames: thousands'
+        : n ? `frames: ${n}, the top one is running` : 'the stack is empty';
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.length
+        ? s.console.map(l => `<div class="cline ${l.cls}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('')
+        : '<div class="console-empty">(empty)</div>';
+    box.scrollTop = box.scrollHeight;
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'mk') return $(`#code [data-mk="${rest}"]`);
+    if (kind === 'v') {
+        const [fid, name] = rest.split('.');
+        return $(`#stack .frame[data-f="${fid}"] .var[data-v="${name}"] .vbox`);
+    }
+    const sel = { calc: '.calc-sub', res: '.calc-res', ret: '.fret .rv', fr: '.fname' }[kind];
+    return sel ? $(`#stack .frame[data-f="${rest}"] ${sel}`) : null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    const revealEls = (step.reveal || []).map(resolve).filter(Boolean);
+    revealEls.forEach(el => el.classList.add('await'));
+    if (!flights.length) { revealEls.forEach(el => { el.classList.remove('await'); bump(el); }); return; }
+
+    const plan = flights.map(([from, to, text, opt], i) => {
+        const src = resolve(from), dst = resolve(to);
+        const awaits = !!dst && opt !== 'reject' && to !== 'con' || (to === 'con' && !!dst && !revealEls.includes(dst));
+        if (awaits) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, to, text, opt, i, awaits };
+    });
+
+    let left = plan.length;
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            }
+            if (--left === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (p.opt === 'ret' ? 'ret' : p.to.startsWith('v:') ? 'write' : 'read');
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+        const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.style.left = x0 + 'px';
+        chip.style.top = y0 + 'px';
+        const anim = chip.animate([
+            { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+            { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: p.i * STAGGER, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+        anim.onfinish = () => {
+            if (p.opt !== 'reject') { chip.remove(); finish(); return; }
+            // an extra argument bounces off the frame: there is no parameter for it
+            chip.classList.add('rejected');
+            chip.animate([
+                { transform: `translate(${dx}px,${dy}px)` },
+                { transform: `translate(${dx + 8}px,${dy}px)` },
+                { transform: `translate(${dx - 8}px,${dy}px)` },
+                { transform: `translate(${dx}px,${dy + 40}px)`, opacity: 0 },
+            ], { duration: 700, fill: 'both' }).onfinish = () => { chip.remove(); finish(); };
+        };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderStack(sc, s, prev, step);
+    renderConsole(s);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Step ${stepIdx + 1} of ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Step ${i + 1}" aria-label="Step ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    try { history.replaceState(null, '', '#' + (scIdx + 1) + (stepIdx ? '.' + (stepIdx + 1) : '')); } catch (e) { /* file:// in some browsers */ }
+
+    if (prev) requestAnimationFrame(() => { if (tk === token) playFlights(step, tk); });
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('callStackTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('callStackTheme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+// Self-test (#selftest): render every step and check that all flight endpoints, marks
+// and reveal targets exist and that nothing overflows its panel.
+function selfTest() {
+    const errors = [];
+    const fits = (el, what) => {
+        if (el.scrollHeight > el.clientHeight + 2) errors.push(`${what}: overflow ${el.scrollHeight - el.clientHeight}px`);
+    };
+    SCENARIOS.forEach((sc, i) => {
+        selectScenario(i);
+        sc.steps.forEach((step, j) => {
+            const where = `#${i + 1}.${j + 1}`;
+            try { goto(j); } catch (e) { errors.push(`${where}: ${e.message}`); return; }
+            const s = states[j];
+            s.marks.forEach(m => { if (!$(`#code [data-mk="${m.id}"]`)) errors.push(`${where}: mark ${m.id} not found`); });
+            (step.fly || []).forEach(([a, b]) => {
+                // ret flights start from the popped frame, which is drawn only when animating
+                if (!a.startsWith('ret:') && !resolve(a)) errors.push(`${where}: no source ${a}`);
+                if (!resolve(b)) errors.push(`${where}: no target ${b}`);
+            });
+            (step.reveal || []).forEach(k => { if (!resolve(k)) errors.push(`${where}: no reveal ${k}`); });
+            fits($('#stack'), where + ' stack');
+            fits($('.code-panel'), where + ' code');
+            fits($('.app'), where + ' page');
+            if (document.documentElement.scrollHeight > innerHeight + 1) errors.push(`${where}: page taller than window`);
+        });
+    });
+    const out = document.createElement('pre');
+    out.id = 'selftest';
+    out.textContent = errors.length ? 'SELFTEST FAIL\n' + errors.join('\n') : 'SELFTEST OK';
+    document.body.appendChild(out);
+}
+
+function fromHash() {
+    if (location.hash === '#selftest') { selfTest(); return; }
+    const [a, b] = location.hash.slice(1).split('.');
+    selectScenario((parseInt(a, 10) || 1) - 1, (parseInt(b, 10) || 1) - 1);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

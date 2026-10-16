@@ -1,0 +1,79 @@
+# Translation of site/.vitepress/config.mjs into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: Claude (claude-opus-5-5)\n"
+"PO-Revision-Date: 2026-10-16\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/.vitepress/config.mjs\n"
+
+#. site title
+#: site/.vitepress/config.mjs
+msgid "Practical JavaScript Basics"
+msgstr "JavaScript на практика"
+
+#. site description
+#: site/.vitepress/config.mjs
+msgid "JavaScript basics for beginners, on real-world JSON data"
+msgstr "Основи на JavaScript за начинаещи, върху реални JSON данни"
+
+#. top menu
+#: site/.vitepress/config.mjs
+msgid "Agenda"
+msgstr "Програма"
+
+#. top menu
+#: site/.vitepress/config.mjs
+msgid "Lectures"
+msgstr "Лекции"
+
+#. top menu
+#: site/.vitepress/config.mjs
+msgid "Project"
+msgstr "Проект"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "Course"
+msgstr "Курс"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "Home"
+msgstr "Начало"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "How to use these pages"
+msgstr "Как да ползвате тези страници"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "Course project"
+msgstr "Курсов проект"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "Animations"
+msgstr "Анимации"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "1. Getting started"
+msgstr "1. Първи стъпки"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "2. Variables, types, operators"
+msgstr "2. Variables, типове, оператори"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "3. Conditions and loops"
+msgstr "3. Условия и loops"

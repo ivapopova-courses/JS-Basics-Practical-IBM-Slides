@@ -1,0 +1,1412 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Обхват на променливите</title>
+<!--
+    Step-by-step animation: scopes as nested boxes and how JavaScript looks up
+    a name along the scope chain.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep link: scopeChain.html#3 (scenario 3) or scopeChain.html#3.5 (scenario 3, step 5).
+    scopeChain.html?theme=dark forces the dark theme; #selftest walks every step.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --chip-ink: #ffffff;
+
+    /* scope boxes */
+    --g-bg: #f1ebdd;
+    --g-border: #b9aa8a;
+    --f-bg: #dcefec;
+    --f-border: #4f978e;
+    --b-bg: #fff1c9;
+    --b-border: #c99a2e;
+    --here: #e2a400;
+    --here-ink: #26221c;
+    --link: #8f8676;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff;
+        --chip-ink: #111111;
+        --g-bg: #272930; --g-border: #555a68; --f-bg: #1b3431; --f-border: #4fa197;
+        --b-bg: #3a3220; --b-border: #c9a24a; --here: #ffd166; --here-ink: #17181d; --link: #8d8b84;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff;
+    --chip-ink: #111111;
+    --g-bg: #272930; --g-border: #555a68; --f-bg: #1b3431; --f-border: #4fa197;
+    --b-bg: #3a3220; --b-border: #c9a24a; --here: #ffd166; --here-ink: #17181d; --link: #8d8b84;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: flex; flex-direction: column; gap: .6rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 1rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .17rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.3rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error:not(.await-err) { background: #4d2329; border-left-color: #ff6b63; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+#selftest { position: fixed; left: 0; bottom: 0; z-index: 99; max-height: 50vh; overflow: auto; margin: 0; padding: .5rem; background: #000; color: #0f0; font-size: 12px; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); white-space: pre-wrap; }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+
+/* ---------- scope tree ---------- */
+.tree-panel { flex: 1; display: flex; flex-direction: column; }
+.tree-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+.tree { position: relative; z-index: 1; }
+.links { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; overflow: visible; pointer-events: none; }
+.link { fill: none; stroke: var(--link); stroke-width: 2; stroke-linejoin: round; }
+.link.p-read { stroke: var(--read); stroke-width: 3; }
+.link.p-write { stroke: var(--write); stroke-width: 3; }
+.link.p-err { stroke: var(--err); stroke-width: 3; }
+.link.fresh { animation: fadein-plain .6s both; }
+
+.scope {
+    position: relative;
+    padding: .4rem .7rem .55rem 1.9rem;
+    border: 2px solid var(--sc-border); border-radius: .7rem;
+    background: var(--sc-bg);
+    transition: box-shadow .25s, opacity .3s;
+}
+.scope.k-global { --sc-bg: var(--g-bg); --sc-border: var(--g-border); }
+.scope.k-function { --sc-bg: var(--f-bg); --sc-border: var(--f-border); }
+.scope.k-block { --sc-bg: var(--b-bg); --sc-border: var(--b-border); }
+.scope.cur { box-shadow: 0 0 0 3px var(--here); }
+.scope.appear { animation: fadein-plain .6s both; }
+.scope.dying { opacity: .5; border-style: dashed; box-shadow: none; }
+.sc-head { display: flex; align-items: center; flex-wrap: wrap; gap: .25rem .5rem; min-height: 1.6rem; }
+.sc-label { font-family: var(--mono); font-size: 1.08rem; font-weight: 700; }
+.sc-kind { font-size: .62rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sc-note { font-size: .72rem; font-style: italic; color: var(--muted); }
+.builtins { margin-left: auto; font-size: .68rem; color: var(--muted); }
+.builtins code { font-family: var(--mono); }
+.here, .dtag {
+    padding: .05rem .5rem; border-radius: .3rem;
+    font-size: .64rem; font-weight: 700;
+}
+.here { background: var(--here); color: var(--here-ink); }
+.dtag { background: var(--muted); color: var(--panel); }
+.miss {
+    padding: .02rem .45rem; border-radius: .3rem;
+    border: 1.5px dashed currentColor;
+    font-family: var(--mono); font-size: .74rem; font-weight: 700;
+    background: var(--panel);
+}
+.miss.m-read { color: var(--read); }
+.miss.m-write { color: var(--write); }
+.miss.m-err { color: var(--err); border-style: solid; background: var(--err-bg); }
+.vars { display: flex; flex-wrap: wrap; gap: .45rem .7rem; margin: .3rem 0 .1rem; }
+.vars:empty::before { content: "няма декларирани имена"; font-size: .74rem; font-style: italic; color: var(--muted); }
+.kids { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .7rem; margin-top: .8rem; }
+.kids:empty { display: none; }
+
+/* variable cards */
+.vc { position: relative; display: flex; flex-direction: column; gap: .15rem; min-width: 7.4rem; }
+.vc-top { display: flex; align-items: center; gap: .3rem; }
+.name { font-family: var(--mono); font-size: 1.08rem; font-weight: 700; }
+.kw {
+    padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: .62rem; color: var(--muted);
+}
+.kw.k-implicit { color: var(--err); border-color: var(--err); font-family: var(--sans); }
+.cell {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: 2.55rem;
+    padding: .5rem .7rem 0;
+    border: 2px solid var(--var-border); border-radius: .5rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.12rem; font-weight: 700;
+    white-space: nowrap;
+    transition: box-shadow .25s;
+}
+.type {
+    position: absolute; top: .05rem; right: .35rem;
+    font-family: var(--sans); font-size: .55rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined { font-style: italic; font-weight: 500; opacity: .85; }
+.val.t-function { color: var(--ref); font-style: italic; font-size: .92rem; }
+.uninit, .old.uninit { font-family: var(--sans); font-size: .7rem; font-style: italic; font-weight: 500; opacity: .7; }
+.cell .old { display: none; }
+.cell.await .old { display: inline; opacity: .6; }
+.cell.await .val, .cell.await .type { display: none; }
+.cell.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.cell.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.cell.hl-new   { box-shadow: 0 0 0 3px var(--var-border); }
+.cell.hl-dup   { box-shadow: 0 0 0 3px var(--write); outline: 2px dashed var(--write); outline-offset: 5px; }
+.cell.await-hl { box-shadow: none; outline: none; }
+.vc.shadowed { opacity: .5; }
+.vc.shadowed .stag {
+    position: absolute; bottom: -.55rem; left: 50%; transform: translateX(-50%);
+    padding: 0 .35rem; border-radius: .25rem;
+    background: var(--muted); color: var(--panel);
+    font-size: .56rem; font-weight: 700; white-space: nowrap;
+}
+.vc.appear { animation: fadein-plain .5s both; }
+.vc.await-card { visibility: hidden; }
+
+/* lookup strip */
+.lookup-panel { flex: none; }
+.lk { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .45rem; min-height: 2.3rem; }
+.lk-empty { font-size: .8rem; font-style: italic; color: var(--muted); }
+.lk-q { display: inline-flex; align-items: center; gap: .4rem; margin-right: .4rem; }
+.lk-q .name { padding: .05rem .4rem; border-radius: .3rem; background: var(--inline-code); }
+.lk-mode { font-size: .72rem; font-weight: 700; }
+.lk-mode.m-read { color: var(--read); }
+.lk-mode.m-write { color: var(--write); }
+.hop {
+    display: inline-flex; flex-direction: column; align-items: center;
+    padding: .12rem .6rem; border-radius: .45rem;
+    border: 1.5px solid var(--line);
+    font-family: var(--mono); font-size: .86rem; font-weight: 700; line-height: 1.2;
+}
+.hop small { font-family: var(--sans); font-size: .66rem; font-weight: 600; color: var(--muted); }
+.hop.miss-h { border-style: dashed; color: var(--muted); }
+.hop.hit.m-read { border-color: var(--read); background: var(--read-bg); }
+.hop.hit.m-write { border-color: var(--write); background: var(--write-bg); }
+.hop.hit small { color: inherit; }
+.hop.err { border-color: var(--err); background: var(--err-bg); color: var(--err); }
+.hop.err small, .hop.new small { color: inherit; }
+.hop.new { border-color: var(--err); color: var(--err); border-style: dashed; }
+.hop.pending { border-style: dashed; color: var(--muted); }
+.lk-sep { width: 1.1rem; height: .8rem; color: var(--muted); }
+.hop.await, .lk-sep.await, .miss.await, .cline.await { visibility: hidden; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem 1rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.g { background: var(--g-bg); border-color: var(--g-border); }
+.sw.f { background: var(--f-bg); border-color: var(--f-border); }
+.sw.b { background: var(--b-bg); border-color: var(--b-border); }
+.sw.here { background: var(--panel); border-color: var(--here); border-width: 3px; }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+.sw.link { height: 0; border-width: 2px 0 0; border-radius: 0; border-color: var(--link); width: 1.4rem; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.08rem * 1.42 * 3); font-size: 1.08rem; line-height: 1.42; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .e { color: var(--err); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values and the search chip */
+.fly {
+    position: fixed; left: 0; top: 0; z-index: 50;
+    display: inline-flex; align-items: center; gap: .3rem;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.rejected { background: var(--err); }
+.fly svg { width: .95rem; height: .95rem; }
+.land { animation: land .45s both; }
+
+@keyframes fadein-plain { from { opacity: 0; } to { opacity: 1; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* 16:9 and narrower (e.g. 1280x720): the code column is relatively narrower, shrink code a bit */
+@media (max-aspect-ratio: 2/1) {
+    .code { font-size: .84rem; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .tree-wrap { overflow: visible; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Обхват на променливите <small>scope и веригата от обхвати (scope chain), стъпка по стъпка</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../scopeChain.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="panel tree-panel">
+                <div class="panel-title"><span>Обхвати (scopes) - всяка кутия има своя таблица с имена</span><span class="note">стрелката сочи към външния (outer) обхват</span></div>
+                <div class="tree-wrap" id="treeWrap">
+                    <div class="tree" id="tree"></div>
+                    <svg class="links" id="links" aria-hidden="true"></svg>
+                </div>
+            </div>
+            <div class="panel lookup-panel">
+                <div class="panel-title"><span>Търсене на име (lookup)</span></div>
+                <div class="lk" id="lookup"></div>
+            </div>
+            <div class="legend" id="legend"></div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Scope model
+//   s.scopes[id] = { id, parent, kind: global|function|block, label, note, vars: [{ name, kind, value }], dying }
+//   value: literal as shown ('5', '"Ada"', 'undefined', 'function') or null = not initialised yet
+//   s.look = the name lookup of this step (walks from s.cur outwards)
+// ---------------------------------------------------------------------------
+const G = 'global';
+
+function scope(s, id, parent, kind, label, note = '') {
+    s.scopes[id] = { id, parent, kind, label, note, vars: [], dying: false };
+    s.order.push(id);
+}
+function bind(s, sid, name, kind, value) {
+    if (value === undefined) value = kind === 'var' ? 'undefined' : kind === 'function' ? 'function' : null;
+    s.scopes[sid].vars.push({ name, kind, value });
+    s.hl[sid + '.' + name] = 'new';
+}
+function enter(s, sid) { s.cur = sid; }
+function die(s, sid) { s.scopes[sid].dying = true; }
+function drop(s, sid) {
+    delete s.scopes[sid];
+    s.order = s.order.filter(id => id !== sid);
+}
+function findVar(s, sid, name) { return s.scopes[sid].vars.find(v => v.name === name); }
+function setv(s, sid, name, lit) { findVar(s, sid, name).value = lit; s.hl[sid + '.' + name] = 'write'; }
+function log(s, text, err = false) { s.console.push({ text, err }); }
+function reset(s, code) { Object.assign(s, { scopes: {}, order: [], cur: null, console: [], code }); }
+
+// Resolve a name like the engine does: current scope, then outer, outer, ... global.
+//   opts.write  - literal to assign (otherwise it is a read)
+//   opts.strict - assigning to an undeclared name is a ReferenceError
+//   opts.max    - stop after this many scopes (to show the search half-way)
+function look(s, name, opts = {}) {
+    const mode = opts.write !== undefined ? 'write' : 'read';
+    const L = { name, mode, hops: [], found: null, error: null, implicit: false, partial: false, value: null, old: null };
+    let sid = s.cur, hit = null;
+    while (sid) {
+        const v = findVar(s, sid, name);
+        L.hops.push({ sid, hit: !!v });
+        if (v) { hit = v; break; }
+        sid = s.scopes[sid].parent;
+        if (opts.max && L.hops.length >= opts.max && sid) { L.partial = true; break; }
+    }
+    s.look = L;
+    if (L.partial) return L;
+    if (hit) {
+        L.found = sid;
+        const key = sid + '.' + name;
+        // (a write to a not yet initialised let/const here is always its own declaration line)
+        if (hit.value === null && mode === 'read') {
+            L.error = `Uncaught ReferenceError: Cannot access '${name}' before initialization`;
+        } else if (mode === 'write') {
+            L.old = hit.value;
+            hit.value = opts.write;
+            s.hl[key] = 'write';
+        } else {
+            s.hl[key] = 'read';
+        }
+        L.value = hit.value;
+        // names further out with the same name are shadowed
+        for (let p = s.scopes[sid].parent; p; p = s.scopes[p].parent) {
+            if (findVar(s, p, name)) s.hl[p + '.' + name] = 'shadowed';
+        }
+    } else if (mode === 'write' && !opts.strict) {
+        // sloppy mode: a new global variable appears
+        L.implicit = true;
+        L.found = s.order[0];
+        L.value = opts.write;
+        bind(s, s.order[0], name, 'implicit', opts.write);
+        s.hl[s.order[0] + '.' + name] = 'write';
+    } else {
+        L.error = `Uncaught ReferenceError: ${name} is not defined`;
+    }
+    if (L.error) { s.err = true; log(s, L.error, true); }
+    return L;
+}
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line - active code line (0-based, -1 = none)
+//   step.do   - changes to the state
+//   step.fly  - extra flying values [from, to, text]; keys: v:scope.name, con, code
+//   Lookups fly automatically (the search chip, then the value).
+// ---------------------------------------------------------------------------
+const CODE4_STRICT = [
+    "'use strict';",
+    'var firstName = "Ada";',
+    'function foo() {',
+    '    firstName = "Turing";',
+    '    lastName = "Lovelace";',
+    '}',
+    'foo();',
+    'console.log(firstName);',
+    'console.log(lastName);',
+];
+const CODE5_VAR = [
+    'let status = "none";',
+    'let userAge = 32;',
+    'if (userAge >= 18) {',
+    '    var x = 2;',
+    '    let status = "Adult";',
+    '    console.log(status);',
+    '}',
+    'console.log(status);',
+    'console.log(x);',
+    'for (var i = 0; i < 3; i++) { }',
+    'console.log(i);',
+];
+const CODE6_IIFE = [
+    '// ---- lib.js ----',
+    '(function () {',
+    '    var count = 100;',
+    '    console.log(`lib count: ${count}`);',
+    '})();',
+    '// ---- app.js ----',
+    'var count = 0;',
+    'console.log(`app count: ${count}`);',
+];
+
+const SCENARIOS = [
+{
+    tab: 'Global и local',
+    code: [
+        'let x = 5;',
+        'function foo() {',
+        '    let y = 10;',
+        '    console.log(`x in foo: ${x}`);',
+        '    console.log(`y in foo: ${y}`);',
+        '}',
+        'foo();',
+        'console.log(`x in global: ${x}`);',
+        'console.log(`y in global: ${y}`);',
+    ],
+    steps: [
+        { line: -1, text: `<b>Обхват (scope)</b> е частта от кода, в която дадено име (променлива) е видимо. Ще си представяме всеки обхват като <b>кутия</b> със собствена таблица от имена и стойности. Най-голямата кутия е <b>глобалният обхват</b> (global scope). Още преди първия ред JavaScript записва в нея имената x и foo (подробно - в анимацията за hoisting).`,
+          do: s => { scope(s, G, null, 'global', 'global'); bind(s, G, 'x', 'let'); bind(s, G, 'foo', 'function'); enter(s, G); } },
+        { line: 0, text: `<code>let x = 5;</code> - за да запише стойност, JavaScript първо трябва да <b>намери</b> името x. Търсенето (lookup) започва от <b>текущия</b> обхват - сега това е global - и x е там. В x се <span class="w">записва</span> 5.`,
+          do: s => look(s, 'x', { write: '5' }) },
+        { line: 6, text: `<code>foo();</code> - и имената на функции се търсят по същия начин. foo е в глобалния обхват и стойността ѝ е функция. Извикваме я.`,
+          do: s => look(s, 'foo') },
+        { line: 1, text: `При всяко <b>извикване</b> на функция се създава <b>нов</b> обхват - <b>local scope</b> на foo(). Кутията е вложена в global, защото foo е <b>написана</b> в глобалния код. Стрелката е връзката към външния (outer) обхват. Изпълнението вече е вътре в foo (жълтата рамка).`,
+          do: s => { scope(s, 'foo', G, 'function', 'foo()'); bind(s, 'foo', 'y', 'let'); enter(s, 'foo'); } },
+        { line: 2, text: `<code>let y = 10;</code> - y се търси в текущия обхват (foo) и се намира веднага. В y се <span class="w">записва</span> 10. Тази y съществува само в кутията на foo.`,
+          do: s => look(s, 'y', { write: '10' }) },
+        { line: 3, text: `Сега ни трябва стойността на x. Търсенето започва от текущия обхват - foo. Но в кутията на foo <b>няма</b> x! Какво ще направи JavaScript? Помислете, преди да продължите.`,
+          do: s => look(s, 'x', { max: 1 }) },
+        { line: 3, text: `JavaScript следва стрелката <b>навън</b> - към външния обхват global. Там x има и търсенето спира. Стойността 5 се <span class="r">чете</span> и се отпечатва. Затова функциите "виждат" глобалните променливи.`,
+          do: s => { look(s, 'x'); log(s, 'x in foo: 5'); } },
+        { line: 4, text: `<code>y</code> е в текущия обхват - намира се от първия опит. <span class="r">Четем</span> 10.`,
+          do: s => { look(s, 'y'); log(s, 'y in foo: 10'); } },
+        { line: 5, text: `Функцията завършва. Нейният обхват вече не е нужен и изчезва заедно с y. (Ако някоя вътрешна функция още "помни" този обхват, той се запазва - това е closure, ще го разгледаме по-късно.)`,
+          do: s => die(s, 'foo') },
+        { line: 7, text: `Отново сме в глобалния код. x се намира в global - отпечатва се 5.`,
+          do: s => { drop(s, 'foo'); enter(s, G); look(s, 'x'); log(s, 'x in global: 5'); } },
+        { line: 8, text: `<code>console.log(\`y in global: \${y}\`)</code> - какво ще се случи сега? Помислете, преди да продължите.` },
+        { line: 8, text: `Търсенето започва от global. Там няма y, а global няма външен обхват - веригата свършва. Резултат: <span class="e">ReferenceError: y is not defined</span> и програмата спира. Търсенето никога не влиза <b>навътре</b> в други кутии (а кутията на foo вече я няма).`,
+          do: s => look(s, 'y') },
+        { line: -1, text: `<b>Обобщение:</b> тялото на всяка функция е отделен <b>local scope</b>, който се създава при извикването ѝ. Търсенето на име започва от текущия обхват и върви <b>навън</b>. Затова отвътре виждаме външните (глобалните) променливи, а отвън не виждаме локалните.` },
+    ],
+},
+{
+    tab: 'Веригата от обхвати',
+    code: [
+        'let a = "global";',
+        'function outer() {',
+        '    let b = "outer";',
+        '    function inner() {',
+        '        let c = "inner";',
+        '        console.log(a, b, c);',
+        '    }',
+        '    inner();',
+        '    console.log(c);',
+        '}',
+        'outer();',
+    ],
+    steps: [
+        { line: -1, text: `Тук имаме <b>три</b> нива: global, функцията outer и функцията inner, написана <b>вътре</b> в outer. Ще видим как търсенето върви по <b>веригата от обхвати</b> (scope chain) и в каква посока.`,
+          do: s => { scope(s, G, null, 'global', 'global'); bind(s, G, 'a', 'let'); bind(s, G, 'outer', 'function'); enter(s, G); } },
+        { line: 0, text: `<code>a</code> се намира в global и в нея се <span class="w">записва</span> "global".`,
+          do: s => look(s, 'a', { write: '"global"' }) },
+        { line: 10, text: `<code>outer();</code> - намираме функцията outer в global и я извикваме.`,
+          do: s => look(s, 'outer') },
+        { line: 1, text: `Нов обхват за outer(). В него се регистрират b и inner - защото inner е декларирана (написана) вътре в outer.`,
+          do: s => { scope(s, 'outer', G, 'function', 'outer()'); bind(s, 'outer', 'b', 'let'); bind(s, 'outer', 'inner', 'function'); enter(s, 'outer'); } },
+        { line: 2, text: `<code>b</code> е в текущия обхват. <span class="w">Записваме</span> "outer".`,
+          do: s => look(s, 'b', { write: '"outer"' }) },
+        { line: 7, text: `<code>inner();</code> - името inner се намира в обхвата на outer. Извикваме я.`,
+          do: s => look(s, 'inner') },
+        { line: 3, text: `Обхватът на inner е вложен в outer, защото inner е <b>написана</b> вътре в outer. Сега веригата е: <code>inner -> outer -> global</code>.`,
+          do: s => { scope(s, 'inner', 'outer', 'function', 'inner()'); bind(s, 'inner', 'c', 'let'); enter(s, 'inner'); } },
+        { line: 4, text: `<code>c</code> е в текущия обхват. <span class="w">Записваме</span> "inner".`,
+          do: s => look(s, 'c', { write: '"inner"' }) },
+        { line: 5, text: `<code>console.log(a, b, c)</code> - търсим <b>a</b>: в inner няма, в outer няма, в global - има! Търсенето върви стъпка по стъпка навън, докато намери името.`,
+          do: s => look(s, 'a') },
+        { line: 5, text: `Търсим <b>b</b>: в inner няма, в outer - има. Търсенето спира при <b>първото</b> намиране - до global изобщо не се стига.`,
+          do: s => look(s, 'b') },
+        { line: 5, text: `Търсим <b>c</b>: намира се веднага в inner. И трите стойности са намерени - отпечатват се.`,
+          do: s => { look(s, 'c'); log(s, 'global outer inner'); },
+          fly: [['v:global.a', 'con', 'global'], ['v:outer.b', 'con', 'outer']] },
+        { line: 6, text: `inner завършва - кутията ѝ изчезва заедно с c. Продължаваме в outer.`,
+          do: s => die(s, 'inner') },
+        { line: 8, text: `<code>console.log(c)</code> вътре в outer. c е декларирана в inner, която е <b>вътре</b> в outer. Ще я намери ли outer? Помислете, преди да продължите.`,
+          do: s => { drop(s, 'inner'); enter(s, 'outer'); } },
+        { line: 8, text: `Не! Търсенето върви само <b>навън</b>: outer -> global -> край. Обхватите на вложените функции никога не се претърсват. Резултат: <span class="e">ReferenceError: c is not defined</span>.`,
+          do: s => look(s, 'c') },
+        { line: -1, text: `<b>Обобщение:</b> всеки обхват има връзка към обхвата, в който е <b>написан</b>. Тези връзки образуват <b>веригата от обхвати</b> (scope chain). Търсене: текущ -> външен -> ... -> global -> ReferenceError. Вътрешните функции виждат всичко отвън, външните не виждат нищо отвътре.` },
+    ],
+},
+{
+    tab: 'Shadowing',
+    code: [
+        'var firstName = "Ada";',
+        'function foo() {',
+        '    var firstName = "Turing";',
+        '    console.log("foo() firstName: ", firstName);',
+        '}',
+        'foo();',
+        'console.log("global firstName: ", firstName);',
+    ],
+    steps: [
+        { line: -1, text: `Какво става, ако локална и глобална променлива имат <b>едно и също име</b>? Обърнете внимание: променлива с <code>var</code> получава стойност undefined още при създаването си (а let остава "неинициализирана" до реда с декларацията).`,
+          do: s => { scope(s, G, null, 'global', 'global'); bind(s, G, 'firstName', 'var'); bind(s, G, 'foo', 'function'); enter(s, G); } },
+        { line: 0, text: `Глобалната firstName получава стойност "Ada".`,
+          do: s => look(s, 'firstName', { write: '"Ada"' }) },
+        { line: 5, text: `Извикваме foo().`,
+          do: s => look(s, 'foo') },
+        { line: 1, text: `В обхвата на foo се регистрира <b>друга</b> променлива firstName. Името е същото, но кутиите са различни - за JavaScript това са <b>2 отделни променливи</b>.`,
+          do: s => { scope(s, 'foo', G, 'function', 'foo()'); bind(s, 'foo', 'firstName', 'var'); enter(s, 'foo'); } },
+        { line: 2, text: `<code>var firstName = "Turing";</code> - търсенето намира firstName още в текущия обхват (foo) и <span class="w">записва</span> там. Глобалната firstName остава "Ada".`,
+          do: s => look(s, 'firstName', { write: '"Turing"' }) },
+        { line: 3, text: `Сега <span class="r">четем</span> firstName. Коя от двете ще бъде отпечатана? Помислете, преди да продължите.` },
+        { line: 3, text: `Търсенето спира при <b>първото</b> намерено име - в foo. Казваме, че локалната firstName <b>засенчва</b> (shadowing) глобалната: докато сме във foo, глобалната не може да бъде достъпена по това име.`,
+          do: s => { look(s, 'firstName'); log(s, 'foo() firstName:  Turing'); } },
+        { line: 4, text: `foo завършва - локалната firstName изчезва заедно с обхвата.`,
+          do: s => die(s, 'foo') },
+        { line: 6, text: `В глобалния код търсенето намира глобалната firstName - тя никога не е променяна и е "Ada".`,
+          do: s => { drop(s, 'foo'); enter(s, G); look(s, 'firstName'); log(s, 'global firstName:  Ada'); } },
+        { line: -1, text: `<b>Обобщение:</b> имена във вътрешен обхват засенчват еднаквите имена отвън. Работи, но е объркващо - по-добре избягвайте. В <b>един и същ</b> обхват: <code>var</code> позволява повторна декларация, а повторно <code>let</code> или <code>const</code> е <span class="e">SyntaxError: Identifier 'firstName' has already been declared</span>.` },
+    ],
+},
+{
+    tab: 'Без декларация',
+    code: [
+        'var firstName = "Ada";',
+        'function foo() {',
+        '    firstName = "Turing";',
+        '    lastName = "Lovelace";',
+        '}',
+        'foo();',
+        'console.log(firstName);',
+        'console.log(lastName);',
+    ],
+    steps: [
+        { line: -1, text: `Често срещана грешка: във функцията <b>забравяме</b> <code>var</code>, <code>let</code> или <code>const</code>. Какво прави тогава присвояването? Ще видим, че и <span class="w">записът</span> търси името по веригата от обхвати.`,
+          do: s => { reset(s, null); scope(s, G, null, 'global', 'global'); bind(s, G, 'firstName', 'var'); bind(s, G, 'foo', 'function'); enter(s, G); } },
+        { line: 0, text: `Глобалната firstName получава "Ada".`,
+          do: s => look(s, 'firstName', { write: '"Ada"' }) },
+        { line: 5, text: `Извикваме foo().`,
+          do: s => look(s, 'foo') },
+        { line: 1, text: `Обхватът на foo е <b>празен</b> - в тялото ѝ няма нито една декларация (var, let или const).`,
+          do: s => { scope(s, 'foo', G, 'function', 'foo()'); enter(s, 'foo'); } },
+        { line: 2, text: `<code>firstName = "Turing";</code> - търсим firstName: в foo няма, в global - има. Записът отива там и <b>презаписва глобалната</b> променлива! Това е бъгът от слайдовете.`,
+          do: s => look(s, 'firstName', { write: '"Turing"' }) },
+        { line: 3, text: `<code>lastName</code> не е декларирана никъде. Търсенето ще мине през foo и global, без да я намери. Какво ще направи JavaScript? Помислете, преди да продължите.` },
+        { line: 3, text: `В обикновения (sloppy) режим JavaScript <b>мълчаливо създава нова глобална</b> променлива - свойство на глобалния обект (window в браузъра). Никаква грешка! Функцията "изтича" навън.`,
+          do: s => look(s, 'lastName', { write: '"Lovelace"' }) },
+        { line: 4, text: `foo завършва и обхватът ѝ изчезва. Но промените, които направи навън, остават.`,
+          do: s => die(s, 'foo') },
+        { line: 6, text: `Отпечатва се "Turing" - глобалната firstName е променена.`,
+          do: s => { drop(s, 'foo'); enter(s, G); look(s, 'firstName'); log(s, 'Turing'); } },
+        { line: 7, text: `И lastName е достъпна в глобалния код - отпечатва се "Lovelace". Едно забравено <code>let</code> създаде глобална променлива, която може да се сблъска с друг код.`,
+          do: s => { look(s, 'lastName'); log(s, 'Lovelace'); } },
+        { line: -1, text: `Сега добавяме <code>'use strict';</code> в началото на скрипта - така включваме <b>strict mode</b> (строг режим). Нека изпълним кода отново.`,
+          do: s => { reset(s, CODE4_STRICT); scope(s, G, null, 'global', 'global'); bind(s, G, 'firstName', 'var'); bind(s, G, 'foo', 'function'); enter(s, G); } },
+        { line: 6, text: `Редове 2 и 7 - както преди: firstName получава "Ada", извикваме foo() и се създава празният ѝ обхват.`,
+          do: s => { setv(s, G, 'firstName', '"Ada"'); scope(s, 'foo', G, 'function', 'foo()'); enter(s, 'foo'); } },
+        { line: 3, text: `Внимание: strict mode <b>не</b> ни пази от този бъг! firstName съществува в global, затова записът е позволен и глобалната пак се презаписва.`,
+          do: s => look(s, 'firstName', { write: '"Turing"', strict: true }) },
+        { line: 4, text: `Но lastName не съществува никъде. В strict mode търсене, което стигне края на веригата, винаги завършва с <span class="e">ReferenceError: lastName is not defined</span> - и при четене, и при запис. Грешката показва бъга веднага.`,
+          do: s => look(s, 'lastName', { write: '"Lovelace"', strict: true }) },
+        { line: -1, text: `<b>Обобщение:</b> винаги декларирайте променливите с <code>let</code> / <code>const</code>. Присвояване на недекларирано име: в sloppy mode създава нова глобална, в strict mode е <span class="e">ReferenceError</span>. Присвояване на името на външна променлива я променя - и в двата режима.` },
+    ],
+},
+{
+    tab: 'Block scope: let и var',
+    code: [
+        'let status = "none";',
+        'let userAge = 32;',
+        'if (userAge >= 18) {',
+        '    var x = 2;',
+        '    let status = "Adult";',
+        '    console.log(status);',
+        '}',
+        'console.log(status);',
+        'console.log(x);',
+        'for (let i = 0; i < 3; i++) { }',
+        'console.log(i);',
+    ],
+    steps: [
+        { line: -1, text: `<b>Блок</b> (block) е всяка част от кода между <code>{</code> и <code>}</code>. <code>let</code> и <code>const</code> имат <b>block scope</b>, а <code>var</code> не признава блоковете. Вижте: <code>var x</code> е написана в if-блока, но е регистрирана в <b>глобалния</b> обхват (със стойност undefined).`,
+          do: s => { scope(s, G, null, 'global', 'global'); bind(s, G, 'status', 'let'); bind(s, G, 'userAge', 'let'); bind(s, G, 'x', 'var'); enter(s, G); } },
+        { line: 1, text: `Редове 1 и 2: status получава "none", а userAge - 32. И двете са в глобалния обхват.`,
+          do: s => { setv(s, G, 'status', '"none"'); setv(s, G, 'userAge', '32'); } },
+        { line: 2, text: `Условието <code>userAge >= 18</code>: <span class="r">четем</span> userAge (32). 32 >= 18 е true - влизаме в блока.`,
+          do: s => look(s, 'userAge') },
+        { line: 2, text: `При влизане в блока се създава нов обхват - <b>block scope</b>. В него се регистрират само <code>let</code> / <code>const</code> имената: <b>status</b>. Тази status е отделна променлива от глобалната.`,
+          do: s => { scope(s, 'if', G, 'block', '{ } на if'); bind(s, 'if', 'status', 'let'); enter(s, 'if'); } },
+        { line: 3, text: `<code>var x = 2;</code> - x се търси: в блока няма, в global - има. Записът отива в <b>глобалната</b> x.`,
+          do: s => look(s, 'x', { write: '2' }) },
+        { line: 4, text: `<code>let status = "Adult";</code> - записва се в status на <b>блока</b>. Глобалната status остава "none".`,
+          do: s => look(s, 'status', { write: '"Adult"' }) },
+        { line: 5, text: `В блока status на блока засенчва глобалната - отпечатва се "Adult".`,
+          do: s => { look(s, 'status'); log(s, 'Adult'); } },
+        { line: 6, text: `Излизаме от блока - обхватът му изчезва заедно с неговата status. Какво ще отпечата <code>console.log(status)</code> на ред 8? Помислете, преди да продължите.`,
+          do: s => die(s, 'if') },
+        { line: 7, text: `"none" - намира се глобалната status. Блокът е създал <b>нова</b> променлива, а не е променил глобалната (примерът от слайдовете).`,
+          do: s => { drop(s, 'if'); enter(s, G); look(s, 'status'); log(s, 'none'); } },
+        { line: 8, text: `x "оцелява" след блока - тя винаги е била в глобалния обхват. Отпечатва се 2.`,
+          do: s => { look(s, 'x'); log(s, '2'); } },
+        { line: 9, text: `<code>for (let i = 0; i &lt; 3; i++)</code> - i е в обхвата на цикъла. (Точно казано, при let всяка итерация получава свое копие на i - това е важно при closures.)`,
+          do: s => { scope(s, 'for', G, 'block', '{ } на for'); bind(s, 'for', 'i', 'let', '0'); enter(s, 'for'); } },
+        { line: 9, text: `Цикълът се изпълнява за i = 0, 1, 2. Когато i стане 3, условието <code>i &lt; 3</code> е false и цикълът спира.`,
+          do: s => setv(s, 'for', 'i', '3') },
+        { line: 9, text: `Цикълът свършва - обхватът му изчезва заедно с i.`,
+          do: s => die(s, 'for') },
+        { line: 10, text: `<span class="e">ReferenceError: i is not defined</span> - i не съществува извън цикъла. Търсенето в global не я намира, а блокът на for вече го няма.`,
+          do: s => { drop(s, 'for'); enter(s, G); look(s, 'i'); } },
+        { line: 9, text: `Сега сменяме <code>let</code> с <code>var</code> в цикъла и изпълняваме кода отново. <code>var i</code> не признава блока на for - тя се регистрира в <b>global</b>. Цикълът свършва с i = 3. Какво ще отпечата ред 11 сега? Помислете, преди да продължите.`,
+          do: s => {
+              reset(s, CODE5_VAR);
+              scope(s, G, null, 'global', 'global');
+              bind(s, G, 'status', 'let', '"none"'); bind(s, G, 'userAge', 'let', '32'); bind(s, G, 'x', 'var', '2'); bind(s, G, 'i', 'var', '3');
+              s.hl = { [G + '.i']: 'new' };
+              enter(s, G);
+              ['Adult', 'none', '2'].forEach(t => log(s, t));
+          } },
+        { line: 10, text: `3 - i е намерена в global и "оцелява" след цикъла, точно като x след if-блока.`,
+          do: s => { look(s, 'i'); log(s, '3'); } },
+        { line: -1, text: `<b>Обобщение:</b> <code>let</code> и <code>const</code> са видими само в блока си (block scope); <code>var</code> е видима в цялата функция (или в global). Предпочитайте <code>let</code> / <code>const</code>. И още: <code>const</code> трябва да се инициализира - <code>const G;</code> е <span class="e">SyntaxError: Missing initializer in const declaration</span>.` },
+    ],
+},
+{
+    tab: 'IIFE',
+    advanced: true,
+    code: [
+        '// ---- lib.js ----',
+        'var count = 100;',
+        'function libInfo() {',
+        '    console.log(`lib count: ${count}`);',
+        '}',
+        '// ---- app.js ----',
+        'var count = 0;',
+        'libInfo();',
+    ],
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> В браузъра всички скриптове на една страница споделят <b>един общ</b> глобален обхват. Нека lib.js и app.js са два отделни файла, включени с <code>&lt;script src="..."&gt;</code> един след друг.`,
+          do: s => { reset(s, null); scope(s, G, null, 'global', 'global', 'общ за всички скриптове'); enter(s, G); } },
+        { line: 0, text: `Браузърът изпълнява lib.js. Първо имената му - count и libInfo - се регистрират в глобалния обхват.`,
+          do: s => { bind(s, G, 'count', 'var'); bind(s, G, 'libInfo', 'function'); } },
+        { line: 1, text: `count получава 100. Функцията libInfo разчита на тази стойност.`,
+          do: s => look(s, 'count', { write: '100' }) },
+        { line: 5, text: `Следва app.js. Неговото <code>var count</code> също иска да се регистрира в global - но count вече съществува! <code>var</code> позволява повторна декларация, затова <b>не</b> се създава нова променлива и няма никаква грешка.`,
+          do: s => { s.hl[G + '.count'] = 'dup'; } },
+        { line: 6, text: `<code>var count = 0;</code> - записът отива в <b>същата</b> count и презаписва 100.`,
+          do: s => look(s, 'count', { write: '0' }) },
+        { line: 7, text: `app.js извиква libInfo() - създава се обхватът ѝ (празен).`,
+          do: s => { look(s, 'libInfo'); scope(s, 'libInfo', G, 'function', 'libInfo()'); enter(s, 'libInfo'); } },
+        { line: 3, text: `Какво ще отпечата libInfo? Помислете, преди да продължите.` },
+        { line: 3, text: `"lib count: 0" - app.js случайно "счупи" библиотеката. (Ако и двата файла бяха с <code>let count</code>, вторият скрипт изобщо нямаше да се изпълни: <span class="e">SyntaxError: Identifier 'count' has already been declared</span>.)`,
+          do: s => { look(s, 'count'); log(s, 'lib count: 0'); } },
+        { line: -1, text: `Решение: обвиваме кода на lib.js в <b>IIFE</b> (Immediately Invoked Function Expression) - функция, която се извиква веднага. Всичко вътре е в local scope на функцията. Изпълняваме отново.`,
+          do: s => { reset(s, CODE6_IIFE); scope(s, G, null, 'global', 'global', 'общ за всички скриптове'); enter(s, G); } },
+        { line: 1, text: `lib.js не регистрира <b>нищо</b> в global - функцията е израз без име. Тя веднага се извиква и създава свой обхват, в който е count.`,
+          do: s => { scope(s, 'iife', G, 'function', 'IIFE', 'анонимна функция'); bind(s, 'iife', 'count', 'var'); enter(s, 'iife'); } },
+        { line: 2, text: `count в обхвата на IIFE получава 100.`,
+          do: s => look(s, 'count', { write: '100' }) },
+        { line: 3, text: `Отпечатва се "lib count: 100".`,
+          do: s => { look(s, 'count'); log(s, 'lib count: 100'); } },
+        { line: 4, text: `IIFE завършва и обхватът ѝ изчезва. В global не е останало нищо от lib.js.`,
+          do: s => die(s, 'iife') },
+        { line: 6, text: `app.js регистрира своята count в global и записва 0. Няма сблъсък - count на lib.js беше в друга кутия.`,
+          do: s => { drop(s, 'iife'); enter(s, G); bind(s, G, 'count', 'var'); look(s, 'count', { write: '0' }); } },
+        { line: 7, text: `Отпечатва се "app count: 0".`,
+          do: s => { look(s, 'count'); log(s, 'app count: 0'); } },
+        { line: -1, text: `<b>Обобщение:</b> IIFE създава local scope, за да не "замърсяваме" общия global. Днес същото дават <b>модулите</b>: всеки <code>&lt;script type="module"&gt;</code> има свой обхват. В Node.js всеки файл също е отделен модул, затова там <code>var</code> на най-горно ниво не става глобална.` },
+    ],
+},
+{
+    tab: 'Лексикален обхват',
+    advanced: true,
+    code: [
+        'let firstName = "Ada";',
+        'function greet() {',
+        '    console.log(`Hello, ${firstName}`);',
+        '}',
+        'function caller() {',
+        '    let firstName = "Turing";',
+        '    greet();',
+        '}',
+        'caller();',
+    ],
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> Когато една функция извиква друга, вижда ли извиканата функция локалните променливи на тази, която я е извикала? Ще видим, че веригата от обхвати зависи от това <b>къде е написана</b> функцията.`,
+          do: s => { scope(s, G, null, 'global', 'global'); bind(s, G, 'firstName', 'let'); bind(s, G, 'greet', 'function'); bind(s, G, 'caller', 'function'); enter(s, G); } },
+        { line: 0, text: `Глобалната firstName получава "Ada".`,
+          do: s => look(s, 'firstName', { write: '"Ada"' }) },
+        { line: 8, text: `Извикваме caller() - нов обхват, вложен в global (там е написана caller).`,
+          do: s => { look(s, 'caller'); scope(s, 'caller', G, 'function', 'caller()'); bind(s, 'caller', 'firstName', 'let'); enter(s, 'caller'); } },
+        { line: 5, text: `Локалната firstName на caller получава "Turing".`,
+          do: s => look(s, 'firstName', { write: '"Turing"' }) },
+        { line: 6, text: `<code>greet();</code> - името greet се намира в global. Къде ще се появи кутията на greet - вътре в caller или в global? Помислете, преди да продължите.`,
+          do: s => look(s, 'greet') },
+        { line: 1, text: `В <b>global</b>! Външният обхват на функцията се определя от това къде е <b>написана</b>, а не откъде е извикана. greet е написана в глобалния код. caller чака greet да завърши (вижте call stack), но <b>не</b> е във веригата на greet.`,
+          do: s => { scope(s, 'greet', G, 'function', 'greet()', 'извикана от caller()'); enter(s, 'greet'); } },
+        { line: 2, text: `Коя firstName ще прочете greet - "Ada" или "Turing"? Помислете, преди да продължите.` },
+        { line: 2, text: `"Ada"! Търсенето: greet -> global. Обхватът на caller просто не е по пътя. Отпечатва се "Hello, Ada".`,
+          do: s => { look(s, 'firstName'); log(s, 'Hello, Ada'); } },
+        { line: 3, text: `greet завършва - нейният обхват изчезва. Продължаваме в caller.`,
+          do: s => die(s, 'greet') },
+        { line: 7, text: `caller също завършва.`,
+          do: s => { drop(s, 'greet'); enter(s, 'caller'); die(s, 'caller'); } },
+        { line: -1, text: `<b>Обобщение:</b> JavaScript използва <b>лексикален</b> (статичен) обхват - lexical scope. Веригата се определя от вложеността на функциите <b>в текста на кода</b>, още при писането му. Кой кого е извикал (call stack) е съвсем друго нещо и не влияе на търсенето на имена.`,
+          do: s => { drop(s, 'caller'); enter(s, G); } },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: states[i] is the state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, code: null, scopes: {}, order: [], cur: null, look: null, console: [], hl: {}, err: false };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.look = null; s.err = false;
+        s.line = step.line;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 760, STAGGER = 200, HOP_MS = 480;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+const ICON_LENS = '<svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 10l4.5 4.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+const ICON_SEP = '<svg class="lk-sep" viewBox="0 0 22 16"><path d="M2 8h15M12 3l6 5-6 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const KIND_TEXT = { global: 'global scope', function: 'local scope', block: 'block scope' };
+const KW_TEXT = { implicit: 'без декларация' };
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function typeOf(v) {
+    if (v === 'undefined') return 'undefined';
+    if (v === 'function') return 'function';
+    if (v === 'true' || v === 'false') return 'boolean';
+    if (v.startsWith('"')) return 'string';
+    return 'number';
+}
+const plain = v => v.replace(/^"(.*)"$/, '$1');
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|\b(let|const|var|function|if|for|return|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+function renderCode(sc, s, anim) {
+    const code = s.code || sc.code;
+    $('#code').innerHTML = code.map((l, i) => {
+        const cls = [];
+        if (i === s.line) cls.push('active');
+        if (i === s.line && s.err) cls.push('error', ...(anim ? ['await-err'] : []));
+        return `<li class="${cls.join(' ')}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`;
+    }).join('');
+    $('#lineNote').textContent = s.line >= 0 ? `изпълнява се ред ${s.line + 1}` : '';
+}
+
+function cellHtml(v) {
+    if (v.value === null) return '<span class="val uninit">неинициализирана</span>';
+    const t = typeOf(v.value);
+    if (t === 'function') return '<span class="val t-function">function</span>';
+    return `<span class="val t-${t}">${esc(v.value)}</span><span class="type">${t}</span>`;
+}
+
+function renderTree(s, prev, anim) {
+    const L = s.look;
+    const hopOf = {};
+    if (L) L.hops.forEach((h, i) => hopOf[h.sid] = i);
+
+    const box = sid => {
+        const sc = s.scopes[sid];
+        const cls = ['scope', 'k-' + sc.kind];
+        if (sid === s.cur && !sc.dying) cls.push('cur');
+        if (sc.dying) cls.push('dying');
+        if (prev && !prev.scopes[sid]) cls.push('appear');
+
+        let head = `<span class="sc-label">${esc(sc.label)}</span><span class="sc-kind">${KIND_TEXT[sc.kind]}</span>`;
+        if (sc.note) head += `<span class="sc-note">${esc(sc.note)}</span>`;
+        if (sid === s.cur && !sc.dying) head += '<span class="here">изпълнява се тук</span>';
+        if (sc.dying) head += '<span class="dtag">приключи - обхватът изчезва</span>';
+        const hi = hopOf[sid];
+        if (L && hi !== undefined && !L.hops[hi].hit) {
+            const last = hi === L.hops.length - 1 && L.error;
+            head += `<span class="miss ${last ? 'm-err' : 'm-' + L.mode}${anim ? ' await' : ''}" data-hop="${hi}">няма ${esc(L.name)}</span>`;
+        }
+        if (sc.kind === 'global') head += '<span class="builtins">+ вградени: <code>console</code>, <code>Math</code> и др.</span>';
+
+        const vars = sc.vars.map(v => {
+            const key = sid + '.' + v.name;
+            const hl = s.hl[key];
+            const isTarget = L && L.found === sid && L.name === v.name;
+            const vcCls = ['vc'];
+            const cellCls = ['cell'];
+            let extra = '';
+            if (hl === 'shadowed') { vcCls.push('shadowed'); extra = '<span class="stag">засенчена</span>'; }
+            else if (hl) cellCls.push('hl-' + hl);
+            if (prev && !(prev.scopes[sid] && prev.scopes[sid].vars.some(p => p.name === v.name))) vcCls.push('appear');
+            let old = '';
+            if (anim && isTarget) {
+                cellCls.push('await-hl');
+                if (L.implicit) vcCls.push('await-card');
+                if (L.mode === 'write' && !L.error) {
+                    cellCls.push('await');
+                    old = L.implicit ? '<span class="old"></span>'
+                        : L.old === null ? '<span class="old uninit">неинициализирана</span>' : `<span class="old">${esc(L.old)}</span>`;
+                }
+            }
+            const kw = KW_TEXT[v.kind] || v.kind;
+            return `<div class="${vcCls.join(' ')}" data-key="${esc(key)}">
+                <div class="vc-top"><span class="name">${esc(v.name)}</span><span class="kw k-${v.kind}">${kw}</span></div>
+                <div class="${cellCls.join(' ')}">${old}${cellHtml(v)}</div>${extra}
+            </div>`;
+        }).join('');
+
+        const kids = s.order.filter(id => s.scopes[id].parent === sid).map(box).join('');
+        return `<div class="${cls.join(' ')}" data-sid="${sid}">
+            <div class="sc-head">${head}</div>
+            <div class="vars">${vars}</div>
+            <div class="kids">${kids}</div>
+        </div>`;
+    };
+    const root = s.order.find(id => !s.scopes[id].parent);
+    $('#tree').innerHTML = root ? box(root) : '';
+}
+
+function renderLookup(s, anim) {
+    const L = s.look;
+    const el = $('#lookup');
+    if (!L) {
+        el.innerHTML = '<span class="lk-empty">Тук ще видим как JavaScript търси всяко име: от текущия обхват навън, по веригата от обхвати (scope chain).</span>';
+        return;
+    }
+    const aw = anim ? ' await' : '';
+    const label = sid => esc(stateScopeLabel(s, sid));
+    let html = `<span class="lk-q"><span class="name">${esc(L.name)}</span><span class="lk-mode m-${L.mode}">${L.mode === 'write' ? 'запис' : 'четене'}</span></span>`;
+    L.hops.forEach((h, i) => {
+        if (i) html += ICON_SEP.replace('lk-sep', 'lk-sep' + aw).replace('<svg', `<svg data-sep="${i}"`);
+        if (!h.hit) { html += `<span class="hop miss-h${aw}" data-hop="${i}">${label(h.sid)}<small>няма</small></span>`; return; }
+        let what;
+        if (L.error) what = 'неинициализирана';
+        else if (L.mode === 'write') what = `намерена - записва се ${L.value}`;
+        else what = `намерена: ${L.value}`;
+        html += `<span class="hop hit m-${L.mode}${aw}" data-hop="${i}">${label(h.sid)}<small>${esc(what)}</small></span>`;
+    });
+    const n = L.hops.length;
+    const sep = ICON_SEP.replace('lk-sep', 'lk-sep' + aw).replace('<svg', `<svg data-sep="${n}"`);
+    if (L.partial) html += sep + `<span class="hop pending${aw}" data-hop="${n}">?<small>продължаваме навън</small></span>`;
+    else if (L.implicit) html += sep + `<span class="hop new${aw}" data-hop="${n}">нова глобална<small>sloppy mode, без грешка</small></span>`;
+    else if (L.error && L.found === null) html += sep + `<span class="hop err${aw}" data-hop="${n}">край на веригата<small>ReferenceError</small></span>`;
+    el.innerHTML = html;
+}
+function stateScopeLabel(s, sid) { return s.scopes[sid] ? s.scopes[sid].label : sid; }
+
+function renderConsole(s, prev, anim) {
+    const box = $('#console');
+    const grew = prev && s.console.length > prev.console.length;
+    box.innerHTML = s.console.map((l, i) =>
+        `<div class="cline ${l.err ? 'err' : ''}${anim && grew && i === s.console.length - 1 ? ' await' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderLegend() {
+    $('#legend').innerHTML = [
+        '<span><i class="sw g"></i>global</span>',
+        '<span><i class="sw f"></i>функция</span>',
+        '<span><i class="sw b"></i>блок</span>',
+        '<span><i class="sw here"></i>текущ обхват</span>',
+        '<span><i class="sw link"></i>връзка навън (outer)</span>',
+        '<span><i class="sw read"></i>четене</span>',
+        '<span><i class="sw write"></i>запис</span>',
+    ].join('');
+}
+
+// outer links: from a box's top edge up into the gap above it, left into the parent's gutter,
+// up to the parent's header (so links of side-by-side boxes never cross another box)
+function drawLinks(s, prev) {
+    const svg = $('#links');
+    const base = $('#treeWrap').getBoundingClientRect();
+    const L = s.look;
+    const used = {};
+    // the links the search walked along are coloured
+    if (L) L.hops.forEach((h, i) => {
+        if (i < L.hops.length - 1 || L.partial) used[h.sid] = L.error && !L.found ? 'p-err' : 'p-' + L.mode;
+    });
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    let html = `<defs>${['link', 'read', 'write', 'err'].map(c =>
+        `<marker id="ah-${c}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c === 'link' ? 'var(--link)' : `var(--${c})`}"/></marker>`).join('')}</defs>`;
+    for (const sid of s.order) {
+        const sc = s.scopes[sid];
+        if (!sc.parent) continue;
+        const el = $(`#tree .scope[data-sid="${sid}"]`);
+        const pel = $(`#tree .scope[data-sid="${sc.parent}"]`);
+        if (!el || !pel) continue;
+        const r = el.getBoundingClientRect();
+        const p = pel.getBoundingClientRect();
+        const ph = $('.sc-label', pel).getBoundingClientRect();
+        const x1 = r.left - base.left + .9 * rem, y1 = r.top - base.top;
+        const ym = y1 - .3 * rem;
+        const gx = p.left - base.left + .9 * rem;
+        const y2 = ph.top + ph.height / 2 - base.top;
+        const x2 = ph.left - base.left - 5;
+        const cls = used[sid] || '';
+        const mk = cls ? cls.slice(2) : 'link';
+        const fresh = prev && !prev.scopes[sid] ? ' fresh' : '';
+        const rr = Math.min(6, (ym - y2) / 2, (x1 - gx) / 2);
+        html += `<path class="link ${cls}${fresh}" marker-end="url(#ah-${mk})"
+            d="M${x1} ${y1} V${ym + rr} Q${x1} ${ym} ${x1 - rr} ${ym} H${gx + rr} Q${gx} ${ym} ${gx} ${ym - rr} V${y2 + rr} Q${gx} ${y2} ${gx + rr} ${y2} H${x2}"/>`;
+    }
+    svg.innerHTML = html;
+}
+
+// ---------------------------------------------------------------------------
+// Animation: the search chip walks the chain, then values fly
+// ---------------------------------------------------------------------------
+const wait = ms => new Promise(r => setTimeout(r, ms));
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+function cellEl(key) { return $(`#tree .vc[data-key="${key}"] .cell`); }
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    if (key === 'code') return $('#code li.active');
+    if (key.startsWith('v:')) return cellEl(key.slice(2));
+    return null;
+}
+function center(el, chip) {
+    const r = el.getBoundingClientRect();
+    return [r.left + r.width / 2 - chip.offsetWidth / 2, r.top + r.height / 2 - chip.offsetHeight / 2];
+}
+function show(el) { if (el) { el.classList.remove('await', 'await-hl', 'await-card'); bump(el); } }
+function unhl(el) { if (el) { el.classList.remove('await-hl'); bump(el); } }
+
+async function playSearch(L, tk) {
+    const layer = $('#flyLayer');
+    const chip = document.createElement('div');
+    chip.className = 'fly ' + L.mode;
+    chip.innerHTML = ICON_LENS + esc(L.name);
+    layer.appendChild(chip);
+    const startEl = $(`#tree .scope[data-sid="${L.hops[0].sid}"] > .sc-head .sc-label`);
+    let [x, y] = center(startEl, chip);
+    x += startEl.getBoundingClientRect().width / 2 + chip.offsetWidth / 2 + 10;
+    chip.style.transform = `translate(${x}px,${y}px)`;
+    await chip.animate([{ opacity: 0, transform: `translate(${x}px,${y}px) scale(.7)` }, { opacity: 1, transform: `translate(${x}px,${y}px)` }],
+        { duration: 260, fill: 'forwards' }).finished;
+
+    const moveTo = async el => {
+        const [nx, ny] = center(el, chip);
+        await chip.animate([{ transform: `translate(${x}px,${y}px)` }, { transform: `translate(${nx}px,${ny}px)` }],
+            { duration: HOP_MS, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'forwards' }).finished;
+        x = nx; y = ny;
+    };
+    const reveal = i => {
+        show($(`#lookup [data-hop="${i}"]`));
+        const sep = $(`#lookup [data-sep="${i}"]`);
+        if (sep) sep.classList.remove('await');
+    };
+
+    for (let i = 0; i < L.hops.length; i++) {
+        if (tk !== token) return;
+        const h = L.hops[i];
+        const key = h.sid + '.' + L.name;
+        const target = h.hit ? cellEl(key) : $(`#tree .miss[data-hop="${i}"]`);
+        if (target) await moveTo(target);
+        if (tk !== token) return;
+        reveal(i);
+        if (h.hit) unhl(cellEl(key));
+        else show($(`#tree .miss[data-hop="${i}"]`));
+        await wait(h.hit ? 200 : 380);
+    }
+    if (tk !== token) return;
+    const n = L.hops.length;
+    if (L.implicit) {
+        const key = L.found + '.' + L.name;
+        $(`#tree .vc[data-key="${key}"]`).classList.remove('await-card');
+        reveal(n);
+        await moveTo(cellEl(key));
+        unhl(cellEl(key));
+    } else if (L.error || L.partial) {
+        reveal(n);
+        if (L.error) {
+            chip.classList.add('rejected');
+            await chip.animate([
+                { transform: `translate(${x}px,${y}px)` },
+                { transform: `translate(${x + 8}px,${y}px)` },
+                { transform: `translate(${x - 8}px,${y}px)` },
+                { transform: `translate(${x}px,${y + 30}px)`, opacity: 0 },
+            ], { duration: 650, fill: 'forwards' }).finished;
+        }
+    }
+    chip.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' }).onfinish = () => chip.remove();
+}
+
+function playFlights(flights, tk) {
+    const layer = $('#flyLayer');
+    return Promise.all(flights.map(([from, to, text], i) => new Promise(done => {
+        const src = resolve(from), dst = resolve(to);
+        if (!src || !dst || tk !== token) { done(); return; }
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (to.startsWith('v:') ? 'write' : 'read');
+        chip.textContent = text;
+        layer.appendChild(chip);
+        const [x0, y0] = center(src, chip), [x1, y1] = center(dst, chip);
+        const dx = x1 - x0, dy = y1 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.animate([
+            { transform: `translate(${x0}px,${y0}px) scale(.85)`, opacity: 0 },
+            { transform: `translate(${x0}px,${y0}px) scale(1)`, opacity: 1, offset: .12 },
+            { transform: `translate(${x0 + dx / 2}px,${y0 + dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${x1}px,${y1}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: i * STAGGER, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' }).onfinish = () => {
+            chip.remove();
+            if (tk === token && dst.classList.contains('await')) show(dst);
+            done();
+        };
+    })));
+}
+
+function autoFlights(step, s, prev) {
+    const L = s.look, out = [...(step.fly || [])];
+    if (!L || L.error || L.partial) return out;
+    const key = 'v:' + L.found + '.' + L.name;
+    if (L.mode === 'write') out.push(['code', key, plain(L.value)]);
+    else if (s.console.length > prev.console.length) out.push([key, 'con', plain(L.value)]);
+    return out;
+}
+
+async function playStep(step, s, prev, tk) {
+    if (!prev || reduceMotion) return;
+    if (s.look) await playSearch(s.look, tk);
+    if (tk !== token) return;
+    await playFlights(autoFlights(step, s, prev), tk);
+    if (tk !== token) return;
+    document.querySelectorAll('.await, .await-hl, .await-card').forEach(el => {
+        const wasHidden = el.classList.contains('await');
+        el.classList.remove('await', 'await-hl', 'await-card');
+        if (wasHidden) bump(el);
+    });
+    const errLine = $('#code li.await-err');
+    if (errLine) errLine.classList.remove('await-err');
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const anim = !!prev && !reduceMotion;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s, anim);
+    renderTree(s, prev, anim);
+    renderLookup(s, anim);
+    renderConsole(s, prev, anim);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    try { history.replaceState(null, '', location.pathname + location.search + `#${scIdx + 1}.${stepIdx + 1}`); } catch (e) { /* file:// in some browsers */ }
+
+    drawLinks(s, prev);
+    requestAnimationFrame(() => {
+        if (tk !== token) return;
+        drawLinks(s, prev);
+        playStep(step, s, prev, tk);
+    });
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    const L = states[stepIdx].look;
+    const anim = L ? 600 + L.hops.length * (HOP_MS + 380) + FLY_MS : 0;
+    autoTimer = setTimeout(next, Math.min(12000, Math.max(2800, 1200 + len * 40) + anim));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('scopeChainTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('scopeChainTheme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+renderLegend();
+// links are positioned in pixels, so redraw them when the layout changes
+new ResizeObserver(() => { if (states[stepIdx]) drawLinks(states[stepIdx], null); }).observe($('#treeWrap'));
+
+// #selftest: walk every step of every scenario and report errors and overflow
+function selfTest() {
+    const problems = [];
+    let steps = 0;
+    const over = (el, what, sc, i) => {
+        if (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1) problems.push(`${sc + 1}.${i + 1} ${what} overflow`);
+    };
+    SCENARIOS.forEach((sc, k) => {
+        try { selectScenario(k); } catch (e) { problems.push(`${k + 1} ${e.message}`); return; }
+        sc.steps.forEach((_, i) => {
+            steps++;
+            try { goto(i); } catch (e) { problems.push(`${k + 1}.${i + 1} ${e.message}`); return; }
+            const step = sc.steps[i], s = states[i];
+            if (step.line >= (s.code || sc.code).length) problems.push(`${k + 1}.${i + 1} line out of range`);
+            for (const [from, to] of step.fly || []) {
+                if (!resolve(from)) problems.push(`${k + 1}.${i + 1} no element for ${from}`);
+                if (!resolve(to)) problems.push(`${k + 1}.${i + 1} no element for ${to}`);
+            }
+            over($('#treeWrap'), 'tree', k, i);
+            over($('.code-panel'), 'code', k, i);
+            over(document.documentElement, 'page', k, i);
+            if ($('.bottom').getBoundingClientRect().bottom > innerHeight + 1) problems.push(`${k + 1}.${i + 1} footer below the fold`);
+        });
+    });
+    document.title = problems.length ? 'SELFTEST FAIL' : 'SELFTEST OK';
+    const out = document.createElement('pre');
+    out.id = 'selftest';
+    out.textContent = document.title + `\n${SCENARIOS.length} scenarios, ${steps} steps` + (problems.length ? '\n' + problems.join('\n') : '');
+    document.body.appendChild(out);
+}
+
+function fromHash() {
+    const h = location.hash.slice(1);
+    if (h === 'selftest') { selfTest(); return; }
+    const [a, b] = h.split('.');
+    selectScenario((parseInt(a, 10) || 1) - 1, (parseInt(b, 10) || 1) - 1);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

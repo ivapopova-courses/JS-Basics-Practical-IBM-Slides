@@ -137,6 +137,10 @@ They never convert. What you see is what is compared. All comparisons in the
 course use `===` / `!==`. The one `==` worth knowing is below.
 :::
 
+::: info Animation
+**Types, comparisons and logic:** [3. `==` and `===`](../animations/coercionAndLogic.html#3){target="_blank"}
+:::
+
 ### The one useful `==`: `null` and `undefined`
 
 `null == undefined` is `true`, and `null` / `undefined` are not loosely equal to
@@ -174,6 +178,10 @@ console.log(Math.abs(0.1 + 0.2 - 0.3) < 1e-9);  // true  - "close enough"
 ::: info Objects are compared by reference
 `{} === {}` and `[] === []` are `false`: two objects are equal only if they are
 **the same object**. More in session 6.
+:::
+
+::: info Animations
+**Numbers in memory:** [4. 0.1 + 0.2](../animations/numbersInMemory.html#4){target="_blank"}, [6. NaN and Infinity](../animations/numbersInMemory.html#6){target="_blank"}
 :::
 
 ## 2. Comparing strings
@@ -230,6 +238,10 @@ console.log(raised.toLowerCase() === "yes");    // true
 because it reads digit groups as numbers. Useful for sorting (session 7), but our
 version formats vary too much (`4.2.1.7-B00`, `42107-C00`), so for rules we write
 our own comparison.
+:::
+
+::: info Animation
+**Types, comparisons and logic:** [4. Comparing strings](../animations/coercionAndLogic.html#4){target="_blank"}
 :::
 
 ## 3. Logical operators
@@ -371,6 +383,10 @@ When you modernise a rule, check what the value can be. `!present` is also true
 for `null` and `undefined`, `present == false` is not. Usually `!present` is what
 the rule meant ("not there or not set"), but it is a change.
 
+::: info Animation
+**Types, comparisons and logic:** [5. Truthy and falsy](../animations/coercionAndLogic.html#5){target="_blank"}
+:::
+
 ## 5. Short-circuit evaluation and defaults
 
 `&&` and `||` stop as soon as the answer is known - this is called
@@ -478,6 +494,10 @@ console.log(name);
 ::: info ES2021+
 Check that your rule engine supports `??=`, `||=` and `&&=` before you use them in a
 rule. `??` itself is ES2020, like `?.`.
+:::
+
+::: info Animation
+**Types, comparisons and logic:** [6. Short-circuit: `&&` and `||`](../animations/coercionAndLogic.html#6){target="_blank"}
 :::
 
 ## 6. Conditional statements
@@ -604,6 +624,10 @@ console.log(status);
 ```
 
 Change `current` to `"4.2.0.5"` and `"4.10.0.0"` and run again.
+
+::: info Animation
+**Loops step by step:** [1. `if` / `else if`](../animations/loopsStepByStep.html#1){target="_blank"}
+:::
 
 ### Two conditions, four answers
 
@@ -772,6 +796,10 @@ switch (status) {
 the JSON string first: `switch (Number(count))`.
 :::
 
+::: info Animation
+**Loops step by step:** [7. `switch` without `break` (advanced)](../animations/loopsStepByStep.html#7){target="_blank"}
+:::
+
 ## 8. The conditional (ternary) operator
 
 ```js
@@ -810,6 +838,10 @@ console.log(`auth service: ${enabled ? "on" : "off"}`);
 `a ? b : c ? d : e` is valid, but hard to read. Use `if...else if` instead.
 :::
 
+::: info Animation
+**Types, comparisons and logic:** [7. Ternary operator (advanced)](../animations/coercionAndLogic.html#7){target="_blank"}
+:::
+
 ## 9. Statements and expressions
 
 JavaScript code is made of two kinds of pieces:
@@ -839,6 +871,10 @@ const enabled = true;
 console.log(`auth: ${enabled ? "on" : "off"}`);     // fine
 // console.log(`auth: ${if (enabled) {"on"}}`);     // syntax error
 ```
+
+::: info Animation
+**How an expression is evaluated:** [6. Statement vs expression (advanced)](../animations/expressionEvaluation.html#6){target="_blank"}
+:::
 
 ## 10. Loops
 
@@ -895,6 +931,10 @@ for (let tries = 5; tries > 0; tries--) {
 Existing rules often write `for (var i = 0; ...)`. It works the same here, but `i`
 still exists after the loop. Write `let` in new code; the difference is explained
 in session 5.
+:::
+
+::: info Animation
+**Loops step by step:** [2. The `for` loop](../animations/loopsStepByStep.html#2){target="_blank"}
 :::
 
 ### Loops over a string
@@ -983,6 +1023,10 @@ for (let row = 1; row <= 4; row++) {
 }
 ```
 
+::: info Animation
+**Loops step by step:** [6. Nested loops (advanced)](../animations/loopsStepByStep.html#6){target="_blank"}
+:::
+
 ### `while`
 
 ```js
@@ -1060,6 +1104,10 @@ modern form is `platform.includes("virtual")` (ES2015). And
 `model.startsWith("XR-")`.
 :::
 
+::: info Animation
+**Loops step by step:** [3. `while` and the endless loop](../animations/loopsStepByStep.html#3){target="_blank"}
+:::
+
 ### `do...while`
 
 Like `while`, but the condition is checked **after** the block - so the block runs
@@ -1083,6 +1131,10 @@ do {
 ```
 
 `do...while` is rare in rules; recognise it when you see it.
+
+::: info Animation
+**Loops step by step:** [4. `do...while`](../animations/loopsStepByStep.html#4){target="_blank"}
+:::
 
 ### `break` and `continue`
 
@@ -1128,6 +1180,10 @@ together. In session 8 we do this properly with regular expressions.
 If the condition never becomes false, the page or the rule hangs. In the browser,
 close the tab; in the terminal, press `Ctrl+C`. Before you run a `while`, ask:
 what changes the condition?
+:::
+
+::: info Animation
+**Loops step by step:** [5. `break` and `continue`](../animations/loopsStepByStep.html#5){target="_blank"}
 :::
 
 ## 11. Reading existing rules

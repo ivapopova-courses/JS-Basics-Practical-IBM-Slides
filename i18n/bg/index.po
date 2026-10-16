@@ -1,0 +1,139 @@
+# Translation of site/index.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: Claude (claude-opus-5-5)\n"
+"PO-Revision-Date: 2026-10-16\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/index.md\n"
+
+#. front matter: name
+#: site/index.md:5
+msgid "Practical JavaScript Basics"
+msgstr "Практически основи на JavaScript"
+
+#. front matter: tagline
+#: site/index.md:6
+msgid "10 sessions of 4 academic hours - JavaScript on real-world JSON data"
+msgstr "10 занятия по 4 учебни часа - JavaScript върху реални JSON данни"
+
+#. front matter: alt
+#: site/index.md:9
+msgid "A monitoring rule in JavaScript"
+msgstr "Правило за мониторинг, написано на JavaScript"
+
+#. front matter: text
+#: site/index.md:12
+msgid "First lectures"
+msgstr "Първите лекции"
+
+#. front matter: text
+#: site/index.md:15
+msgid "Agenda"
+msgstr "Програма"
+
+#. front matter: text
+#: site/index.md:18
+msgid "How to use these pages"
+msgstr "Как да ползвате тези страници"
+
+#. front matter: title
+#: site/index.md:22
+msgid "Real-world data, real rules"
+msgstr "Реални данни, реални правила"
+
+#. front matter: details
+#: site/index.md:23
+msgid "Every example uses the JSON report of one device (doc) and a check rule over it - not toy apps."
+msgstr "Всеки пример използва JSON отчета на едно устройство (doc) и правило за проверка върху него - а не учебни приложения."
+
+#. front matter: title
+#: site/index.md:24
+msgid "Run the code on the page"
+msgstr "Изпълнявайте кода на страницата"
+
+#. front matter: details
+#: site/index.md:25
+msgid "Press Run under any example, change the code with Edit, and see the output right away."
+msgstr "Натиснете Run под който и да е пример, променете кода с Edit и вижте резултата веднага."
+
+#. front matter: title
+#: site/index.md:26
+msgid "Practice in VSCode"
+msgstr "Упражнения във VSCode"
+
+#. front matter: details
+#: site/index.md:27
+msgid "Each lecture has practice tasks you run with Node.js. Every task checks itself and prints OK or FAIL."
+msgstr "Всяка лекция има задачи за упражнение, които пускате с Node.js. Всяка задача сама се проверява и извежда OK или FAIL."
+
+#. heading 2
+#: site/index.md:30
+msgid "Sessions"
+msgstr "Занятия"
+
+#. table cell
+#: site/index.md:32
+msgid "Session"
+msgstr "Занятие"
+
+#. table cell
+#: site/index.md:32
+msgid "Topic"
+msgstr "Тема"
+
+#. table cell
+#: site/index.md:34
+msgid "[Getting started](/lectures/01-getting-started)"
+msgstr "[Първи стъпки](/lectures/01-getting-started)"
+
+#. table cell
+#: site/index.md:35
+msgid "[Variables, types and operators](/lectures/02-variables-and-types)"
+msgstr "[Variables, типове и оператори](/lectures/02-variables-and-types)"
+
+#. table cell
+#: site/index.md:36
+msgid "[Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops)"
+msgstr "[Сравнения, логика, условия и loops](/lectures/03-conditions-and-loops)"
+
+#. table cell
+#: site/index.md:37
+msgid "Arrays and lists of records"
+msgstr "Arrays и списъци от записи"
+
+#. table cell
+#: site/index.md:38
+msgid "Functions, and reading older code"
+msgstr "Функции и четене на по-стар код"
+
+#. table cell
+#: site/index.md:39
+msgid "Objects: deep paths, dictionaries, different data shapes"
+msgstr "Обекти: дълбоки пътища, dictionaries, различни форми на данните"
+
+#. table cell
+#: site/index.md:40
+msgid "Array methods: transforming and grouping data; project kickoff"
+msgstr "Методи на arrays: трансформиране и групиране на данни; старт на проекта"
+
+#. table cell
+#: site/index.md:41
+msgid "Strings, regular expressions, dates and numbers"
+msgstr "Strings, regular expressions, дати и числа"
+
+#. table cell
+#: site/index.md:42
+msgid "JSON, Node.js, modules, errors, tests, JSDoc types"
+msgstr "JSON, Node.js, модули, грешки, тестове, JSDoc типове"
+
+#. table cell
+#: site/index.md:43
+msgid "Project review, Git workflow, wrap-up"
+msgstr "Преглед на проектите, работа с Git, обобщение"

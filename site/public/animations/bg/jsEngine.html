@@ -1,0 +1,1656 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как JavaScript изпълнява кода</title>
+<!--
+    Step-by-step animation: what a JavaScript engine (V8) does with a program -
+    compiler vs interpreter, scanner (tokens), parser (AST), parse-time vs runtime
+    errors, engine vs host environment, Ignition bytecode, JIT optimization.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: jsEngine.html#3 (scenario 3), jsEngine.html#3.5 (scenario 3, step 5).
+    Add ?theme=dark or ?theme=light to force a theme. #selftest walks every step.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --free-bg: #efe9dc;
+    --free-border: #cfc4af;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --ref-bg: #ebe1f8;
+    --heap-bg: #fff3cf;
+    --heap-border: #c99a2e;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --free-bg: #262830; --free-border: #3d404c;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33264a; --heap-bg: #3a3220; --heap-border: #c9a24a;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --free-bg: #262830; --free-border: #3d404c;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33264a; --heap-bg: #3a3220; --heap-border: #c9a24a;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 31fr) minmax(0, 69fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 1rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .17rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code.changed li { animation: fadein .4s both; }
+.k { color: #c792ea; }
+.s { color: #a5d986; }
+.n { color: #f7b267; }
+.c { color: #7a8299; font-style: italic; }
+.o { color: #82aaff; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .92rem; }
+.cline { display: flex; gap: .5rem; padding: .15rem .4rem; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.cline .prompt { flex: none; color: var(--muted); }
+.cline .ctext { flex: 1; }
+.cline .ctag { flex: none; align-self: center; padding: 0 .35rem; border-radius: .25rem; background: var(--inline-code); font-family: var(--sans); font-size: .62rem; color: var(--muted); }
+.cline.err { color: var(--err); background: var(--err-bg); }
+.cline.cmd { color: var(--muted); font-size: .78rem; border-bottom-style: dashed; }
+.cline.trace { color: var(--ref); font-size: .74rem; }
+.console-empty { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--muted); }
+
+/* ---------- pipeline ---------- */
+.pipe { display: flex; align-items: stretch; }
+.st {
+    flex: 1 1 0; min-width: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: .3rem .45rem;
+    border: 2px solid var(--line); border-radius: .55rem;
+    background: var(--panel);
+    text-align: center;
+    transition: background .3s, border-color .3s, box-shadow .3s, opacity .3s;
+}
+.st b { font-size: .92rem; white-space: nowrap; }
+.st small { font-size: .64rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st.ext { flex: .8 1 0; border-style: dashed; }
+.st.active { border-color: var(--write); background: var(--write-bg); box-shadow: 0 0 0 3px var(--write-bg); }
+.st.done { border-color: var(--var-border); background: var(--var-bg); color: var(--var-ink); }
+.st.done small, .st.hot small, .st.error small, .st.active small { color: inherit; opacity: .75; }
+.st.error { border-color: var(--err); background: var(--err-bg); color: var(--err); animation: shake .5s both; }
+.st.hot { border-color: var(--heap-border); background: var(--heap-bg); box-shadow: 0 0 0 3px var(--heap-border); }
+.parr { flex: 0 0 1.5rem; align-self: center; height: 1rem; color: var(--muted); }
+.engine {
+    position: relative;
+    flex: 4.6 1 0; min-width: 0;
+    display: flex; align-items: stretch;
+    margin: 0 .1rem;
+    padding: 1.05rem .45rem .4rem;
+    border: 2px dashed var(--muted); border-radius: .7rem;
+}
+.engine-label {
+    position: absolute; top: .12rem; left: .7rem;
+    font-size: .62rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+}
+.conn { flex: 0 0 2.4rem; align-self: center; height: 2.2rem; color: var(--muted); overflow: visible; }
+.conn .c-hot, .conn .c-deopt { color: var(--line); transition: color .3s; }
+.conn.hot .c-hot { color: var(--heap-border); }
+.conn.deopt .c-deopt { color: var(--err); }
+.conn text { font-family: var(--sans); font-size: 7px; font-weight: 700; fill: currentColor; }
+
+/* view panel */
+.view-panel { display: flex; flex-direction: column; }
+.view { flex: 1; min-height: 0; position: relative; }
+.sub { font-size: .66rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: .1rem 0 .4rem; }
+.sub .note, .sub code { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.legend { display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; font-size: .72rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+
+.appear { animation: appear .5s both; }
+.pop { animation: pop .45s both; }
+
+/* ---------- 1: translators ---------- */
+.tr {
+    display: grid;
+    grid-template-columns: 9.6rem minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, .95fr);
+    gap: .4rem .6rem; align-items: center;
+}
+.tr-h { font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.lane-t {
+    grid-row: span 3; align-self: stretch;
+    display: flex; flex-direction: column; justify-content: center; gap: .2rem;
+    padding: .3rem .6rem;
+    border-left: 4px solid var(--c); border-radius: .3rem;
+    background: var(--paper);
+}
+.lane-t b { font-size: 1rem; color: var(--c); }
+.lane-t span { font-size: .72rem; line-height: 1.3; color: var(--muted); }
+.lane-sep { grid-column: 1 / -1; height: 1px; background: var(--line); margin: .15rem 0; }
+.tr-src {
+    padding: .38rem .5rem; border-radius: .3rem;
+    background: var(--code-bg); color: var(--code-ink);
+    font-family: var(--mono); font-size: .92rem;
+    white-space: pre; overflow: hidden;
+}
+.tr-cell {
+    display: flex; align-items: center; gap: .45rem;
+    min-height: 2.2rem;
+    padding: .15rem .5rem;
+    border: 1.5px dashed var(--free-border); border-radius: .4rem;
+    font-family: var(--mono); font-size: .9rem;
+    white-space: nowrap; overflow: hidden;
+}
+.tr-cell.on { border-style: solid; border-color: var(--var-border); background: var(--var-bg); color: var(--var-ink); }
+.tr-cell.err { border-style: solid; border-color: var(--err); background: var(--err-bg); color: var(--err); font-weight: 700; }
+.tr-cell.skip { font-family: var(--sans); font-style: italic; color: var(--muted); }
+.tr-cell .out { margin-left: auto; padding: 0 .35rem; border-radius: .25rem; background: var(--panel); color: var(--ink); font-weight: 700; }
+.ord {
+    flex: none; display: grid; place-items: center;
+    width: 1.3rem; height: 1.3rem; border-radius: 50%;
+    background: var(--c, var(--write)); color: var(--chip-ink);
+    font-family: var(--sans); font-size: .7rem; font-weight: 700;
+}
+
+/* ---------- 2: tokens ---------- */
+.chars { display: flex; flex-wrap: wrap; gap: .25rem; min-height: 2.6rem; margin-bottom: 1.1rem; }
+.chg { display: inline-flex; gap: .2rem; border-radius: .35rem; }
+.ch {
+    position: relative;
+    display: grid; place-items: center;
+    width: 1.95rem; height: 2.6rem;
+    border: 1.5px solid var(--line); border-radius: .3rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: 1.3rem; font-weight: 700;
+    transition: opacity .3s, background .3s;
+}
+.ch.sp { border-style: dashed; }
+.ch.done { opacity: .3; }
+.ch.sel { background: var(--read-bg); border-color: var(--read); color: var(--read); }
+.ch.skip { background: var(--free-bg); color: var(--muted); text-decoration: line-through; }
+.chars-empty { font-size: .8rem; font-style: italic; color: var(--muted); align-self: center; }
+.toks { display: flex; flex-direction: column; gap: .7rem; }
+.trow { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; min-height: 3.2rem; }
+.trow .tl { flex: none; width: 3.2rem; font-size: .7rem; color: var(--muted); }
+.tk {
+    display: inline-flex; flex-direction: column; align-items: center;
+    min-width: 2.8rem;
+    padding: .15rem .6rem .22rem;
+    border: 2px solid; border-radius: .4rem;
+}
+.tk b { font-family: var(--mono); font-size: 1.25rem; line-height: 1.25; }
+.tk small { font-size: .62rem; font-weight: 700; letter-spacing: .02em; }
+.t-keyword { background: var(--ref-bg); border-color: var(--ref); color: var(--ref); }
+.t-identifier { background: var(--read-bg); border-color: var(--read); color: var(--read); }
+.t-numeric { background: var(--write-bg); border-color: var(--write); color: var(--write); }
+.t-string { background: var(--var-bg); border-color: var(--var-border); color: var(--var-ink); }
+.t-punctuator { background: var(--free-bg); border-color: var(--muted); color: var(--ink); }
+.tk.hl { box-shadow: 0 0 0 3px var(--panel), 0 0 0 5px var(--ink); }
+.tok-legend { margin-top: 1.2rem; }
+
+/* ---------- 3: AST ---------- */
+.astv { display: flex; flex-direction: column; height: 100%; }
+.tstrip { display: flex; flex-wrap: wrap; gap: .22rem; align-items: center; }
+.ts {
+    padding: .05rem .38rem;
+    border: 1.5px solid; border-radius: .3rem;
+    font-family: var(--mono); font-size: .86rem; font-weight: 700;
+    transition: opacity .3s;
+}
+.ts.used { opacity: .3; }
+.ts.sel { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--write); opacity: 1; }
+.ts-gap { width: .6rem; }
+.ast-svg { flex: 1; min-height: 0; width: 100%; margin-top: .3rem; }
+.an rect { stroke-width: 2; }
+.an.stmt rect { fill: var(--var-bg); stroke: var(--var-border); }
+.an.expr rect { fill: var(--heap-bg); stroke: var(--heap-border); }
+.an.other rect { fill: var(--panel); stroke: var(--muted); }
+.an .lab { font-family: var(--sans); font-size: 12.5px; font-weight: 600; fill: var(--ink); }
+.an .val { font-family: var(--mono); font-size: 15px; font-weight: 700; fill: var(--ink); }
+.an.new { animation: pop .5s both; transform-box: fill-box; transform-origin: center; }
+.an.hl rect { stroke-width: 4; }
+.an.dimmed { opacity: .35; }
+.ae { fill: none; stroke: var(--muted); stroke-width: 1.6; }
+.ae.new { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .6s .15s both; }
+.sw.stmt { background: var(--var-bg); border-color: var(--var-border); }
+.sw.expr { background: var(--heap-bg); border-color: var(--heap-border); }
+.sw.other { background: var(--panel); border-color: var(--muted); }
+
+/* ---------- 4: parse vs run ---------- */
+.chk {
+    display: grid;
+    grid-template-columns: 1.6rem minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: .38rem .6rem; align-items: center;
+}
+.chk .ln { text-align: right; font-family: var(--mono); font-size: .85rem; color: var(--muted); }
+.chk .tr-src { font-size: .9rem; }
+.phase { display: flex; align-items: center; gap: .4rem; }
+.phase i { font-style: normal; display: grid; place-items: center; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--muted); color: var(--paper); font-size: .7rem; }
+.phase.on i { background: var(--write); }
+.stc {
+    display: flex; align-items: center; gap: .4rem;
+    min-height: 2.1rem;
+    padding: .2rem .6rem;
+    border: 1.5px dashed var(--free-border); border-radius: .4rem;
+    font-size: .84rem;
+}
+.stc.ok { border-style: solid; border-color: var(--var-border); background: var(--var-bg); color: var(--var-ink); }
+.stc.err { border-style: solid; border-color: var(--err); background: var(--err-bg); color: var(--err); font-weight: 700; }
+.stc.skip { color: var(--muted); font-style: italic; }
+.stc code { font-family: var(--mono); font-size: .8rem; }
+.stc .out { margin-left: auto; padding: 0 .35rem; border-radius: .25rem; background: var(--panel); color: var(--ink); font-family: var(--mono); font-weight: 700; }
+.banner {
+    margin-top: .9rem;
+    padding: .55rem .8rem;
+    border: 2px solid var(--line); border-radius: .5rem;
+    font-size: .92rem;
+}
+.banner.err { border-color: var(--err); background: var(--err-bg); color: var(--err); }
+.banner.ok { border-color: var(--var-border); background: var(--var-bg); color: var(--var-ink); }
+
+/* ---------- 5: host environment ---------- */
+.host { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 100%; }
+.env {
+    position: relative;
+    display: flex; flex-direction: column; gap: .55rem;
+    padding: .55rem .75rem .7rem;
+    border: 2px solid var(--line); border-radius: .7rem;
+    background: var(--paper);
+    transition: border-color .3s, box-shadow .3s;
+}
+.env.active { border-color: var(--write); box-shadow: 0 0 0 3px var(--write-bg); }
+.env h3 { margin: 0; font-size: 1.05rem; }
+.env h3 small { font-size: .7rem; font-weight: 500; color: var(--muted); margin-left: .4rem; }
+.eng-box { padding: .45rem .6rem; border: 2px dashed var(--muted); border-radius: .55rem; background: var(--panel); }
+.eng-box .sub, .apis-box .sub { margin: 0 0 .35rem; }
+.lcs, .apis { display: flex; flex-wrap: wrap; gap: .3rem; }
+.lc { padding: .08rem .4rem; border-radius: .25rem; background: var(--inline-code); font-family: var(--mono); font-size: .8rem; }
+.api {
+    padding: .15rem .5rem;
+    border: 1.5px solid var(--heap-border); border-radius: .35rem;
+    background: var(--heap-bg);
+    font-family: var(--mono); font-size: .88rem;
+    transition: box-shadow .25s;
+}
+.api small { font-family: var(--sans); font-size: .62rem; color: var(--muted); }
+.api.hl-read { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.api.missing { border-style: dashed; border-color: var(--err); background: var(--err-bg); color: var(--err); animation: shake .5s both; }
+.api.missing small { color: inherit; }
+.loop {
+    margin-top: auto;
+    padding: .35rem .6rem;
+    border: 1.5px dashed var(--line); border-radius: .45rem;
+    font-size: .76rem; color: var(--muted);
+    transition: box-shadow .3s;
+}
+.loop.hl-read { border-color: var(--read); color: var(--ink); box-shadow: 0 0 0 3px var(--read-bg); }
+.alert-box {
+    position: absolute; left: 50%; top: 42%; z-index: 3;
+    width: 15rem; transform: translate(-50%, -50%);
+    padding: .7rem .9rem;
+    border: 1px solid var(--muted); border-radius: .5rem;
+    background: var(--panel);
+    box-shadow: 0 .6rem 1.6rem rgba(0, 0, 0, .3);
+    font-size: .9rem;
+    animation: pop .4s both;
+}
+.alert-box .from { font-size: .7rem; color: var(--muted); margin-bottom: .3rem; }
+.alert-box .okb { display: block; margin: .6rem 0 0 auto; width: 4rem; padding: .2rem; border-radius: .35rem; background: var(--read); color: var(--chip-ink); text-align: center; font-weight: 700; font-size: .8rem; }
+
+/* ---------- 6: bytecode ---------- */
+.bcv { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 1rem; height: 100%; min-height: 0; }
+.bcl {
+    padding: .5rem .4rem;
+    border-radius: .5rem;
+    background: var(--code-bg); color: var(--code-ink);
+    font-family: var(--mono); font-size: .95rem;
+    overflow: hidden;
+}
+.bcr {
+    display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: .5rem;
+    padding: .16rem .45rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    white-space: pre;
+    transition: background .25s, opacity .25s;
+}
+.bcr .off { color: var(--code-num); text-align: right; }
+.bcr .cm { color: #7a8299; font-style: italic; }
+.bcr.done { opacity: .5; }
+.bcr.active { background: var(--code-active); border-left-color: var(--code-marker); opacity: 1; }
+.regs { display: flex; flex-direction: column; gap: .3rem; }
+.reg { display: grid; grid-template-columns: 3rem 2.2rem minmax(0, 1fr); gap: .5rem; align-items: center; }
+.reg .rn { font-family: var(--mono); font-weight: 700; text-align: right; }
+.reg .ra { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+.rv {
+    display: flex; align-items: center;
+    height: 2.05rem;
+    padding: 0 .6rem;
+    border: 2px solid var(--var-border); border-radius: .45rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+    transition: box-shadow .25s;
+}
+.rv.empty { border-style: dashed; border-color: var(--free-border); background: var(--free-bg); }
+.rv.obj { color: var(--ref); font-family: var(--sans); font-size: .82rem; }
+.reg.acc .rv { border-color: var(--write); }
+.rv.hl-read { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.rv.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.cpool { display: flex; gap: .4rem; flex-wrap: wrap; }
+.cpool span { padding: .1rem .45rem; border: 1.5px solid var(--line); border-radius: .3rem; font-family: var(--mono); font-size: .82rem; transition: box-shadow .25s; }
+.cpool span.hl-read { box-shadow: 0 0 0 3px var(--read); }
+
+/* ---------- 7: JIT ---------- */
+.jit { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: .8rem; height: 100%; }
+.tiers { position: relative; display: flex; align-items: center; gap: 0; padding-bottom: 2.1rem; }
+.tier {
+    flex: 1 1 0;
+    padding: .35rem .5rem;
+    border: 2px solid var(--line); border-radius: .5rem;
+    background: var(--panel);
+    text-align: center;
+    transition: background .3s, border-color .3s, box-shadow .3s;
+}
+.tier b { display: block; font-size: .95rem; }
+.tier small { display: block; font-size: .66rem; color: var(--muted); }
+.tier.cur { border-color: var(--write); background: var(--write-bg); box-shadow: 0 0 0 3px var(--write-bg); }
+.tier.past { border-color: var(--var-border); }
+.tarr { flex: 0 0 2.2rem; height: 1rem; color: var(--muted); }
+.deopt-arc { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; color: var(--err); }
+.deopt-arc { animation: fadein .6s both; }
+.deopt-arc .arc { fill: none; stroke: currentColor; stroke-width: 2.5; }
+.deopt-arc text { font-family: var(--sans); font-size: 12px; font-weight: 700; fill: currentColor; }
+.jrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; }
+.box { padding: .5rem .7rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--paper); }
+.calls { display: flex; align-items: baseline; gap: .6rem; }
+.calls b { font-family: var(--mono); font-size: 1.6rem; }
+.calls span { font-size: .8rem; color: var(--muted); }
+.heat { height: .7rem; margin-top: .35rem; border-radius: .35rem; background: var(--free-bg); overflow: hidden; }
+.heat i { display: block; height: 100%; border-radius: .35rem; background: linear-gradient(90deg, var(--read), var(--write), var(--err)); transition: width .8s; }
+.fbs { display: flex; gap: .4rem; flex-wrap: wrap; align-items: center; min-height: 1.9rem; }
+.fb { padding: .1rem .5rem; border: 2px solid; border-radius: .35rem; font-family: var(--mono); font-size: .9rem; font-weight: 700; }
+.fb.num { border-color: var(--write); background: var(--write-bg); }
+.fb.str { border-color: var(--var-border); background: var(--var-bg); color: var(--var-ink); }
+.fbs .none { font-size: .8rem; font-style: italic; color: var(--muted); }
+.jcode { display: flex; flex-direction: column; min-height: 0; }
+.jlist {
+    flex: 1; min-height: 0;
+    padding: .45rem .7rem;
+    border-radius: .5rem;
+    background: var(--code-bg); color: var(--code-ink);
+    font-family: var(--mono); font-size: .9rem; line-height: 1.6;
+    white-space: pre; overflow: hidden;
+}
+.jlist.opt { box-shadow: inset 0 0 0 2px var(--heap-border); }
+.jlist.fail { box-shadow: inset 0 0 0 2px var(--err); }
+.jlist .bad { color: #ff8a84; font-weight: 700; }
+.jlist .empty { font-family: var(--sans); font-style: italic; color: var(--code-num); white-space: normal; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.08rem * 1.42 * 3); font-size: 1.08rem; line-height: 1.42; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .e { color: var(--err); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.data { background: var(--ref); font-family: var(--sans); font-size: .85rem; }
+.fly.err { background: var(--err); }
+.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .pipe { flex-wrap: wrap; gap: .3rem; }
+    .host, .bcv, .jrow { grid-template-columns: 1fr; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Как JavaScript изпълнява кода <small>от текста във файла до резултата на екрана, стъпка по стъпка</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../jsEngine.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Код - app.js</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="pipe" id="pipe">
+                <div class="st ext" data-k="st:src"><b>app.js</b><small>сорс код (текст)</small></div>
+                <svg class="parr" viewBox="0 0 24 12"><path d="M1 6H19" stroke="currentColor" stroke-width="2"/><path d="M23 6L16 1.5V10.5Z" fill="currentColor"/></svg>
+                <div class="engine">
+                    <span class="engine-label">JavaScript engine (V8)</span>
+                    <div class="st" data-k="st:scan"><b>Scanner</b><small>текст -> токени</small></div>
+                    <svg class="parr" viewBox="0 0 24 12"><path d="M1 6H19" stroke="currentColor" stroke-width="2"/><path d="M23 6L16 1.5V10.5Z" fill="currentColor"/></svg>
+                    <div class="st" data-k="st:parse"><b>Parser</b><small>токени -> AST</small></div>
+                    <svg class="parr" viewBox="0 0 24 12"><path d="M1 6H19" stroke="currentColor" stroke-width="2"/><path d="M23 6L16 1.5V10.5Z" fill="currentColor"/></svg>
+                    <div class="st" data-k="st:ign"><b>Ignition</b><small>интерпретатор</small></div>
+                    <svg class="conn" id="conn" viewBox="0 0 40 36">
+                        <g class="c-hot"><text x="20" y="7" text-anchor="middle">hot</text><path d="M3 12H31" stroke="currentColor" stroke-width="2.4"/><path d="M38 12L30 7.5V16.5Z" fill="currentColor"/></g>
+                        <g class="c-deopt"><path d="M37 24H9" stroke="currentColor" stroke-width="2.4"/><path d="M2 24L10 19.5V28.5Z" fill="currentColor"/><text x="20" y="35" text-anchor="middle">deopt</text></g>
+                    </svg>
+                    <div class="st" data-k="st:opt"><b>TurboFan</b><small>JIT компилатор</small></div>
+                </div>
+                <svg class="parr" viewBox="0 0 24 12"><path d="M1 6H19" stroke="currentColor" stroke-width="2"/><path d="M23 6L16 1.5V10.5Z" fill="currentColor"/></svg>
+                <div class="st ext" data-k="st:out"><b>Резултат</b><small>конзола, екран</small></div>
+            </div>
+            <div class="panel view-panel">
+                <div class="panel-title"><span id="viewTitle"></span><span class="note" id="viewNote"></span></div>
+                <div class="view" id="view"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Small helpers
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+const HL = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(let|const|var|function|return|for|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console|alert|document|process)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(HL, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+// A tiny scanner, good enough for the programs shown here.
+const KEYWORDS = new Set(['let', 'const', 'var', 'function', 'return', 'for', 'if', 'else', 'typeof', 'new']);
+const TYPE_BG = { keyword: 'ключова дума', identifier: 'идентификатор', punctuator: 'пунктуатор', numeric: 'число', string: 'низ' };
+function tokenize(lines) {
+    const out = [];
+    lines.forEach((src, line) => {
+        const re = /(\/\/.*$)|(\s+)|([A-Za-z_$][\w$]*)|(\d+(?:\.\d+)?)|("(?:[^"\\]|\\.)*")|(\S)/g;
+        let m;
+        while ((m = re.exec(src))) {
+            if (m[1] || m[2]) continue;
+            const type = m[3] ? (KEYWORDS.has(m[3]) ? 'keyword' : 'identifier') : m[4] ? 'numeric' : m[5] ? 'string' : 'punctuator';
+            out.push({ line, start: m.index, end: m.index + m[0].length, text: m[0], type });
+        }
+    });
+    return out;
+}
+
+// ---------------------------------------------------------------------------
+// Data for the scenarios
+// ---------------------------------------------------------------------------
+const PROGRAM = ['// събираме две числа', 'let x = 1;', 'let y = 2;', 'console.log(x + y);'];
+const TOKS = tokenize(PROGRAM);   // 19 tokens, the comment is skipped
+
+// scenario 1: what each "translator" produces for each line
+const TR_LANES = [
+    { k: 'comp', name: 'Компилатор', desc: 'превежда цялата книга, после я четем', color: 'var(--read)' },
+    { k: 'interp', name: 'Интерпретатор', desc: 'превежда изречение по изречение', color: 'var(--write)' },
+    { k: 'js', name: 'JavaScript (V8)', desc: 'проверява целия файл, после интерпретира + JIT', color: 'var(--ref)' },
+];
+const TR_ASM = ['mov [x], 1', 'push [x]; call log', 'add 1; call log'];
+const TR_BC = ['LdaSmi [1]; Star0', 'LdaGlobal; CallProperty1', 'Add; CallProperty1'];
+const TR_OUT = [['', '1', '2'], ['', '1', '']];
+
+// scenario 3: the AST (ESTree names, as on astexplorer.net)
+const AST = [
+    { id: 'P', label: 'Program', kind: 'other' },
+    { id: 'd1', p: 'P', label: 'VariableDeclaration', val: 'let', kind: 'stmt' },
+    { id: 'v1', p: 'd1', label: 'VariableDeclarator', kind: 'other' },
+    { id: 'i1', p: 'v1', label: 'Identifier', val: 'x', kind: 'other' },
+    { id: 'l1', p: 'v1', label: 'Literal', val: '1', kind: 'expr' },
+    { id: 'd2', p: 'P', label: 'VariableDeclaration', val: 'let', kind: 'stmt' },
+    { id: 'v2', p: 'd2', label: 'VariableDeclarator', kind: 'other' },
+    { id: 'i2', p: 'v2', label: 'Identifier', val: 'y', kind: 'other' },
+    { id: 'l2', p: 'v2', label: 'Literal', val: '2', kind: 'expr' },
+    { id: 'e3', p: 'P', label: 'ExpressionStatement', kind: 'stmt' },
+    { id: 'c3', p: 'e3', label: 'CallExpression', kind: 'expr' },
+    { id: 'm3', p: 'c3', label: 'MemberExpression', kind: 'expr' },
+    { id: 'o3', p: 'm3', label: 'Identifier', val: 'console', kind: 'expr' },
+    { id: 'p3', p: 'm3', label: 'Identifier', val: 'log', kind: 'other' },
+    { id: 'b3', p: 'c3', label: 'BinaryExpression', val: '+', kind: 'expr' },
+    { id: 'x3', p: 'b3', label: 'Identifier', val: 'x', kind: 'expr' },
+    { id: 'y3', p: 'b3', label: 'Identifier', val: 'y', kind: 'expr' },
+];
+const AST_W = 1120, AST_H = 392, NODE_W = 130, NODE_H = 44;
+(function layoutAst() {
+    const byId = {};
+    AST.forEach(n => { byId[n.id] = n; n.kids = []; });
+    AST.forEach(n => n.p && byId[n.p].kids.push(n));
+    let leaf = 0;
+    const place = (n, depth) => {
+        n.y = 12 + depth * 84;
+        if (!n.kids.length) n.x = 70 + leaf++ * 140;
+        else { n.kids.forEach(k => place(k, depth + 1)); n.x = n.kids.reduce((a, k) => a + k.x, 0) / n.kids.length; }
+    };
+    place(AST[0], 0);
+    AST.byId = byId;
+})();
+
+// scenario 4: two versions of the program
+const CHK = [
+    { kinds: ['ExpressionStatement', 'VariableDeclaration', '', 'ExpressionStatement', 'ExpressionStatement'],
+      outs: ['Start', '', '', '', 'End'] },
+    { kinds: ['ExpressionStatement', 'VariableDeclaration', 'VariableDeclaration', 'ExpressionStatement', 'ExpressionStatement'],
+      outs: ['Start', '', '', '', 'End'] },
+];
+
+// scenario 5: what each environment offers
+const LANG = ['let', 'if', 'for', 'function', 'Math', 'JSON', 'Array', 'String', 'Promise'];
+const HOSTS = [
+    { k: 'browser', name: 'Браузър', sub: 'Chrome, Edge', apis: ['console', 'alert', 'document', 'window', 'setTimeout', 'fetch', 'localStorage'],
+      loop: 'event loop на браузъра: събития (кликове), таймери, мрежа' },
+    { k: 'node', name: 'Node.js', sub: 'терминал, сървър', apis: ['console', 'process', 'require', 'fs', 'setTimeout', 'fetch', 'Buffer'],
+      loop: 'event loop (библиотеката libuv): файлове, мрежа, таймери' },
+];
+
+// scenario 6: real Ignition bytecode for PROGRAM (node --print-bytecode, Node 24)
+const BC = [
+    { off: 0, op: 'LdaSmi [1]', cm: 'acc = 1', line: 0 },
+    { off: 2, op: 'Star0', cm: 'r0 = acc', line: 0 },
+    { off: 3, op: 'LdaSmi [2]', cm: 'acc = 2', line: 1 },
+    { off: 5, op: 'Star1', cm: 'r1 = acc', line: 1 },
+    { off: 6, op: 'LdaGlobal [0], [0]', cm: 'acc = console', line: 2 },
+    { off: 9, op: 'Star3', cm: 'r3 = acc', line: 2 },
+    { off: 10, op: 'GetNamedProperty r3, [1], [2]', cm: 'acc = r3.log', line: 2 },
+    { off: 14, op: 'Star2', cm: 'r2 = acc', line: 2 },
+    { off: 15, op: 'Ldar r1', cm: 'acc = r1', line: 2 },
+    { off: 17, op: 'Add r0, [4]', cm: 'acc = r0 + acc', line: 2 },
+    { off: 20, op: 'Star4', cm: 'r4 = acc', line: 2 },
+    { off: 21, op: 'CallProperty1 r2, r3, r4, [5]', cm: 'r2(r4), this = r3', line: 2 },
+    { off: 26, op: 'LdaUndefined', cm: 'acc = undefined', line: -1 },
+    { off: 27, op: 'Return', cm: 'край', line: -1 },
+];
+const REGS = [['acc', ''], ['r0', 'x'], ['r1', 'y'], ['r2', ''], ['r3', ''], ['r4', '']];
+
+// scenario 7: the code that runs for sum()
+const JIT_BC = ['Ldar a1          // acc = y', 'Add a0, [0]      // acc = x + acc', 'Return'];
+const JIT_OPT = [
+    'провери: x е Smi?   иначе -> deopt',
+    'провери: y е Smi?   иначе -> deopt',
+    'add  x, y          // едно машинно събиране',
+    'препълване?         -> deopt',
+    'return',
+];
+const TIERS = [
+    { k: 'ign', t: 'Ignition', s: 'интерпретатор, bytecode' },
+    { k: 'maglev', t: 'Maglev', s: 'бърз оптимизиращ компилатор' },
+    { k: 'tf', t: 'TurboFan', s: 'най-силният оптимизиращ компилатор' },
+];
+
+// ---------------------------------------------------------------------------
+// Step helpers. Each one mutates the state `s`.
+// ---------------------------------------------------------------------------
+function pipe(s, ...maps) { Object.assign(s.pipe, ...maps); }
+const RUNNING = { src: 'done', scan: 'done', parse: 'done', ign: 'active', out: 'done' };
+function log(s, text, cls = '', tag = '') { s.console.push({ text, cls, tag }); }
+function hl(s, ...keys) { const v = keys.pop(); keys.forEach(k => s.hl[k] = v); }
+
+// scenario 1
+const blankLane = () => [0, 1, 2].map(() => ({ t: null, r: null }));
+function trT(s, lane, i, o, err = false) { s.tr[lane][i].t = { o, err }; }
+function trR(s, lane, i, o) { s.tr[lane][i].r = o === 'skip' ? 'skip' : { o }; }
+
+// scenario 2: show tokens [a..b] as "just scanned", tokens 0..b are done
+function scan(s, a, b) { s.tok = { line: TOKS[a].line, sel: [a, b], upto: b + 1, skip: false }; }
+
+// scenario 3
+function addNodes(s, ...ids) { s.ast.nodes.push(...ids); }
+function parseTo(s, a, b) { s.ast.sel = [a, b]; s.ast.used = b + 1; }
+
+// scenario 6: run bytecode instructions [a..b]
+function bc(s, a, b) { s.bc.pc = []; for (let i = a; i <= b; i++) s.bc.pc.push(i); s.bc.done = a; }
+function reg(s, r, v) { s.bc.regs[r] = v; hl(s, 'reg:' + r, 'write'); }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line / step.lines - active code line(s) (0-based, -1 = none)
+//   step.do     - changes to the state
+//   step.fly    - chips that fly on screen: [fromKey, toKey, text, kind]
+//                 keys are data-k attributes ("st:scan", "tok:3", "reg:acc", ...),
+//                 "con" is the last console line; kind: read | write | data | err
+//   step.reveal - extra elements kept hidden until all flights land
+// ---------------------------------------------------------------------------
+const SCENARIOS = [
+{
+    tab: 'Преводачи',
+    view: 'tr', title: 'Два вида "преводачи"', note: 'машинният код е условен',
+    codes: [
+        ['let x = 1;', 'console.log(x);', 'console.log(x + 1);'],
+        ['let x = 1;', 'console.log(x);', 'console.log(x + );'],
+    ],
+    init: s => { s.tr = { comp: blankLane(), interp: blankLane(), js: blankLane(), showJs: false }; },
+    steps: [
+        { line: -1, text: `Процесорът (CPU) разбира само <b>машинен код</b> - много прости инструкции, записани с числа. Нашата програма обаче е обикновен текст. Някой трябва да я <b>преведе</b>. Има два класически подхода: <b>компилатор</b> (compiler) и <b>интерпретатор</b> (interpreter). Да сравним двата "преводача" върху една и съща малка програма.` },
+        { lines: [0, 1, 2], text: `<b>Компилаторът</b> е като преводач, който първо превежда <b>цялата книга</b> и чак тогава ни я дава за четене. Той превежда всички редове до машинен код. Нищо още не се изпълнява. (Номерата показват реда на действията.)`,
+          do: s => [0, 1, 2].forEach(i => trT(s, 'comp', i, i + 1)),
+          fly: [0, 1, 2].map(i => [`tr:comp:src:${i}`, `tr:comp:t:${i}`, `ред ${i + 1}`, 'data']) },
+        { line: -1, text: `Резултатът е готова програма в машинен код (например файлът <code>app.exe</code>). Едва сега тя се <b>изпълнява</b> - и може да се пуска отново и отново, без да се превежда пак. Така работят езици като C, C++, Go и Rust.`,
+          do: s => { [0, 1, 2].forEach(i => trR(s, 'comp', i, i + 4)); log(s, '1', '', 'компилатор'); log(s, '2', '', 'компилатор'); pipe(s, { out: 'done' }); } },
+        { line: 0, text: `<b>Интерпретаторът</b> е като преводач, който превежда <b>изречение по изречение</b>: превежда ред 1 и веднага го изпълнява...`,
+          do: s => { trT(s, 'interp', 0, 1); trR(s, 'interp', 0, 2); },
+          fly: [['tr:interp:src:0', 'tr:interp:t:0', 'ред 1', 'data']] },
+        { line: 1, text: `...после превежда и изпълнява ред 2. В конзолата се появява <b>1</b>.`,
+          do: s => { trT(s, 'interp', 1, 3); trR(s, 'interp', 1, 4); log(s, '1', '', 'интерпретатор'); },
+          fly: [['tr:interp:src:1', 'tr:interp:t:1', 'ред 2', 'data']] },
+        { line: 2, text: `...и накрая ред 3. Резултатът е същият като при компилатора, но преводът и изпълнението се <b>редуват</b>. Python, PHP, Ruby и JavaScript традиционно се наричат интерпретируеми езици.`,
+          do: s => { trT(s, 'interp', 2, 5); trR(s, 'interp', 2, 6); log(s, '2', '', 'интерпретатор'); },
+          fly: [['tr:interp:src:2', 'tr:interp:t:2', 'ред 3', 'data']] },
+        { line: 2, text: `А ако на ред 3 има "правописна" (синтактична) грешка - <code>x +</code> без втори операнд? <b>Какво ще отпечата</b> всеки от двата преводача? Помислете, преди да продължите.`,
+          do: s => { s.cv = 1; s.err = true; s.tr.comp = blankLane(); s.tr.interp = blankLane(); s.console = []; } },
+        { line: 2, text: `Компилаторът открива грешката <b>при превода</b> - програмата изобщо не се създава и не се изпълнява нито един ред. Наивният интерпретатор успява да изпълни редове 1 и 2 (отпечатва <b>1</b>) и се "спъва" едва на ред 3.`,
+          do: s => {
+              s.err = true;
+              trT(s, 'comp', 0, 1); trT(s, 'comp', 1, 2); trT(s, 'comp', 2, 3, true);
+              [0, 1, 2].forEach(i => trR(s, 'comp', i, 'skip'));
+              log(s, 'грешка на ред 3, програмата не е създадена', 'err', 'компилатор');
+              trT(s, 'interp', 0, 1); trR(s, 'interp', 0, 2); trT(s, 'interp', 1, 3); trR(s, 'interp', 1, 4);
+              log(s, '1', '', 'интерпретатор');
+              trT(s, 'interp', 2, 5, true); trR(s, 'interp', 2, 'skip');
+              log(s, 'грешка на ред 3', 'err', 'интерпретатор');
+          } },
+        { line: 2, text: `А JavaScript? Engine-ът (например <b>V8</b> в Chrome и Node.js) първо прочита и проверява <b>целия файл</b>. Затова синтактичната грешка на ред 3 спира всичко и не се отпечатва нищо - точно като при компилатора. Ще го проверим подробно в сценарий 4.`,
+          do: s => {
+              s.err = true; s.tr.showJs = true;
+              trT(s, 'js', 0, 1); trT(s, 'js', 1, 2); trT(s, 'js', 2, 3, true);
+              [0, 1, 2].forEach(i => trR(s, 'js', i, 'skip'));
+              log(s, "SyntaxError: Unexpected token ')'", 'err', 'V8');
+              pipe(s, { src: 'done', scan: 'done', parse: 'error' });
+          } },
+        { line: -1, text: `Без грешката: V8 превежда целия файл до <b>bytecode</b> и интерпретаторът <b>Ignition</b> го изпълнява. Кодът, който се изпълнява често ("горещ" код), V8 компилира до машинен код с <b>TurboFan</b>, докато програмата работи. Това се нарича <b>JIT</b> (Just-In-Time) компилация.`,
+          do: s => {
+              s.cv = 0; s.console = []; s.tr.comp = blankLane(); s.tr.interp = blankLane(); s.tr.js = blankLane();
+              [0, 1, 2].forEach(i => { trT(s, 'js', i, i + 1); trR(s, 'js', i, i + 4); });
+              log(s, '1', '', 'V8'); log(s, '2', '', 'V8');
+              pipe(s, { src: 'done', scan: 'done', parse: 'done', ign: 'active', opt: 'hot', out: 'done' }); s.conn = 'hot';
+          } },
+        { line: -1, text: `<b>Обобщение:</b> компилаторът превежда всичко предварително, интерпретаторът - инструкция по инструкция. Слайдът казва, че JavaScript е интерпретируем език, "но съвременните интерпретатори са значително оптимизирани". Ето как: V8 проверява целия файл, интерпретира bytecode и компилира горещия код до машинен (JIT). Лентата горе показва стъпките - следващите сценарии ги разглеждат една по една.`,
+          do: s => { pipe(s, { src: 'done', scan: 'done', parse: 'done', ign: 'done', opt: 'done', out: 'done' }); } },
+    ],
+},
+{
+    tab: 'Токени',
+    view: 'tok', title: 'Scanner: от символи до токени', note: 'tokens',
+    code: PROGRAM,
+    init: s => { s.tok = { line: -1, sel: null, upto: 0, skip: false }; },
+    steps: [
+        { line: -1, text: `Да проследим какво прави engine-ът с файла <code>app.js</code>. В началото за него файлът е само <b>текст</b> - дълга редица от символи (characters). Първата стъпка е <b>scanner</b>-ът (наричан още lexer или tokenizer): той групира символите в смислени "думи" - <b>токени</b> (tokens).`,
+          do: s => pipe(s, { src: 'done', scan: 'active' }), fly: [['st:src', 'st:scan', 'текст', 'data']] },
+        { line: 0, text: `Ред 1 е коментар. Scanner-ът го разпознава по <code>//</code> и <b>пропуска</b> всичко до края на реда. Коментарите са за хората - след тази стъпка engine-ът вече не ги вижда.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); s.tok = { line: 0, sel: null, upto: 0, skip: true }; } },
+        { line: 1, text: `Ред 2. Символите <code>l</code>, <code>e</code>, <code>t</code> образуват дума. Scanner-ът я сравнява със списъка на запазените думи на езика и създава токен от тип <b>ключова дума</b> (keyword): <code>let</code>.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); scan(s, 0, 0); }, fly: [['chg:0', 'tok:0', 'let', 'read']] },
+        { line: 1, text: `Интервалът само разделя думите - той не става токен. <code>x</code> не е запазена дума, значи е <b>идентификатор</b> (identifier) - име, измислено от програмиста.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); scan(s, 1, 1); }, fly: [['chg:1', 'tok:1', 'x', 'read']] },
+        { line: 1, text: `<code>=</code> е <b>пунктуатор</b> (punctuator) - оператор или разделител. <code>1</code> е <b>числов литерал</b> (numeric literal) - стойност, записана направо в кода. <code>;</code> отново е пунктуатор. Ред 2 даде 5 токена.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); scan(s, 2, 4); },
+          fly: [['chg:2', 'tok:2', '=', 'read'], ['chg:3', 'tok:3', '1', 'read'], ['chg:4', 'tok:4', ';', 'read']] },
+        { line: 2, text: `Ред 3 - по същия начин: още 5 токена.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); scan(s, 5, 9); },
+          fly: [5, 6, 7, 8, 9].map(i => [`chg:${i}`, `tok:${i}`, TOKS[i].text, 'read']) },
+        { line: 3, text: `Ред 4: <code>console.log(x + y);</code>. <b>Колко токена</b> ще се получат? И от какъв тип е <code>console</code> - ключова дума или идентификатор? Помислете, преди да продължите.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); s.tok = { line: 3, sel: null, upto: 10, skip: false }; } },
+        { line: 3, text: `<b>9 токена.</b> <code>console</code> и <code>log</code> са <b>идентификатори</b>, а не ключови думи - това са имена на обект и на негово свойство, които ни дава средата (вижте сценарий 5). <code>.</code> <code>(</code> <code>+</code> <code>)</code> <code>;</code> са пунктуатори.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); scan(s, 10, 18); },
+          fly: [10, 11, 12, 13, 14, 15, 16, 17, 18].map(i => [`chg:${i}`, `tok:${i}`, TOKS[i].text, 'read']) },
+        { line: -1, text: `Интервалите не влияят на токените: <code>x+y</code> и <code>x + y</code> дават едни и същи 3 токена. Но те <b>разделят думите</b>: <code>letx = 1;</code> започва с един идентификатор <code>letx</code>, а не с <code>let</code> и <code>x</code>. Затова между <code>let</code> и името е нужен интервал.`,
+          do: s => { pipe(s, { src: 'done', scan: 'active' }); s.tok = { line: 3, sel: null, upto: 19, skip: false }; } },
+        { line: -1, text: `<b>Обобщение:</b> scanner-ът превръща текста в поредица от <b>токени</b>, всеки със <b>стойност</b> и <b>тип</b>. Коментарите и интервалите отпадат. Токените отиват при <b>parser</b>-а, който проверява граматиката и строи дърво - следващият сценарий.`,
+          do: s => { pipe(s, { src: 'done', scan: 'done', parse: 'active' }); s.tok = { line: -1, sel: null, upto: 19, skip: false }; },
+          fly: [['st:scan', 'st:parse', '19 токена', 'data']] },
+    ],
+},
+{
+    tab: 'AST',
+    view: 'ast', title: 'Parser: абстрактно синтактично дърво (AST)', note: 'имената на възлите са като в astexplorer.net',
+    code: PROGRAM,
+    init: s => { s.ast = { nodes: [], sel: null, used: 0, hl: '' }; pipe(s, { src: 'done', scan: 'done', parse: 'active' }); },
+    steps: [
+        { line: -1, text: `<b>Parser</b>-ът получава токените и проверява дали следват <b>граматиката</b> на езика - както проверяваме изречение на български. Докато чете, той строи дърво, което описва структурата на програмата: <b>AST</b> (Abstract Syntax Tree). Коренът на дървото е цялата програма - <b>Program</b>.`,
+          do: s => addNodes(s, 'P'), fly: [['st:scan', 'st:parse', 'токени', 'data']] },
+        { line: 1, text: `Първият токен е ключовата дума <code>let</code>. От нея parser-ът знае, че започва <b>декларация на променлива</b>, и създава възел <b>VariableDeclaration</b> (вид: let).`,
+          do: s => { parseTo(s, 0, 0); addNodes(s, 'd1'); }, fly: [['ts:0', 'an:d1', 'let', 'read']] },
+        { line: 1, text: `<code>x = 1</code> описва една променлива (<b>VariableDeclarator</b>): име <b>x</b> (Identifier) и начална стойност <b>1</b> (Literal). Токените <code>=</code> и <code>;</code> не стават възли - те помогнаха да се разбере структурата и вече не са нужни. Затова дървото е "абстрактно".`,
+          do: s => { parseTo(s, 1, 4); addNodes(s, 'v1', 'i1', 'l1'); },
+          fly: [['ts:1', 'an:i1', 'x', 'read'], ['ts:3', 'an:l1', '1', 'read']] },
+        { line: 2, text: `Ред 3 дава втори клон със същата форма. <b>Program</b> е списък от инструкции (statements), подредени една след друга - точно както в слайда "Структура на програмата".`,
+          do: s => { parseTo(s, 5, 9); addNodes(s, 'd2', 'v2', 'i2', 'l2'); },
+          fly: [['ts:5', 'an:d2', 'let', 'read'], ['ts:6', 'an:i2', 'y', 'read'], ['ts:8', 'an:l2', '2', 'read']] },
+        { line: 3, text: `<code>console.log</code> е достъп до свойството <b>log</b> на обекта <b>console</b>: <b>MemberExpression</b>. Тук <code>log</code> е име на свойство, а не променлива. Засега парчето "виси" - parser-ът още не знае какво следва след него.`,
+          do: s => { parseTo(s, 10, 12); addNodes(s, 'm3', 'o3', 'p3'); },
+          fly: [['ts:10', 'an:o3', 'console', 'read'], ['ts:12', 'an:p3', 'log', 'read']] },
+        { line: 3, text: `Скобата <code>(</code> след израз означава <b>извикване на функция</b>: <b>CallExpression</b>. В скобите е аргументът <code>x + y</code> - <b>BinaryExpression</b> с оператор + и два операнда. Дървото определя реда на работа: първо трябва да се изчисли <code>x + y</code>, после да се извика log.`,
+          do: s => { parseTo(s, 13, 17); addNodes(s, 'e3', 'c3', 'b3', 'x3', 'y3'); },
+          fly: [['ts:14', 'an:x3', 'x', 'read'], ['ts:15', 'an:b3', '+', 'read'], ['ts:16', 'an:y3', 'y', 'read']] },
+        { line: 3, text: `<code>;</code> завършва инструкцията (<b>ExpressionStatement</b>). Всички токени са използвани и няма нарушено граматическо правило - AST е готово и се предава нататък, на <b>Ignition</b>. Ако някой токен не пасваше, тук щеше да има <span class="e">SyntaxError</span> (сценарий 4).`,
+          do: s => { parseTo(s, 18, 18); s.ast.sel = [18, 18]; pipe(s, { parse: 'done', ign: 'active' }); },
+          fly: [['st:parse', 'st:ign', 'AST', 'data']] },
+        { line: -1, text: `Цветовете показват разликата от слайда "Statements vs. Expressions". <b>Statement</b> (инструкция, зелено) извършва действие: декларира променлива, изпълнява израз. <b>Expression</b> (израз, жълто) се изчислява до <b>стойност</b>: <code>1</code>, <code>x + y</code>, дори <code>console.log(x + y)</code> е израз (стойността му е undefined).`,
+          do: s => { s.ast.sel = null; s.ast.hl = 'kinds'; pipe(s, { parse: 'done', ign: 'active' }); } },
+        { line: -1, text: `<b>Обобщение:</b> parser-ът превръща плоския списък от токени в дърво, което показва кое от какво е част. Нарушена граматика означава SyntaxError - още преди да се изпълни първият ред. V8 използва свои вътрешни имена на възлите, но идеята е същата. Разгледайте AST на собствен код на <b>astexplorer.net</b>.`,
+          do: s => { s.ast.sel = null; pipe(s, { parse: 'done', ign: 'active' }); } },
+    ],
+},
+{
+    tab: 'Две фази',
+    view: 'chk', title: 'Две фази: парсване и изпълнение', note: 'node app.js',
+    codes: [
+        ['console.log("Start");', 'let x = 1;', 'let y = = 2;', 'console.log(x + y);', 'console.log("End");'],
+        ['console.log("Start");', 'let x = 1;', 'let y = 2;', 'console.log(x + z);', 'console.log("End");'],
+    ],
+    init: s => { s.chk = { parse: ['', '', '', '', ''], run: ['', '', '', '', ''], banner: null, phase: 0 }; },
+    steps: [
+        { line: 2, text: `Програмата има синтактична грешка на ред 3 (<code>= =</code>), но ред 1 е напълно правилен. <b>Какво ще отпечата</b> <code>node app.js</code>: "Start" и после грешка, или само грешка? Помислете, преди да продължите.`,
+          do: s => { s.err = true; } },
+        { lines: [0, 1], text: `Преди да изпълни каквото и да е, engine-ът <b>парсва целия файл</b> (фаза 1). Редове 1 и 2 са граматически правилни - parser-ът строи AST за тях.`,
+          do: s => { s.chk.phase = 1; s.chk.parse[0] = s.chk.parse[1] = 'ok'; pipe(s, { src: 'done', scan: 'active', parse: 'active' }); } },
+        { line: 2, text: `На ред 3, след <code>=</code>, parser-ът очаква израз (стойност), но получава още един <code>=</code>. Такова "изречение" граматиката не позволява: <span class="e">SyntaxError</span>. Парсването спира.`,
+          do: s => { s.err = true; s.chk.phase = 1; s.chk.parse[0] = s.chk.parse[1] = 'ok'; s.chk.parse[2] = 'err'; pipe(s, { src: 'done', scan: 'done', parse: 'error' }); } },
+        { line: -1, text: `Резултат: <b>не се отпечатва нищо</b> - дори "Start" от ред 1! Фаза 2 (изпълнението) изобщо не започва, защото програмата е невалидна. В браузъра е същото: <code>Uncaught SyntaxError: Unexpected token '='</code>.`,
+          do: s => {
+              s.chk.phase = 1; s.chk.parse[0] = s.chk.parse[1] = 'ok'; s.chk.parse[2] = 'err';
+              s.chk.run = ['skip', 'skip', 'skip', 'skip', 'skip'];
+              s.chk.banner = { cls: 'err', text: 'Фаза 2 не започна: не е изпълнен нито един ред.' };
+              log(s, '$ node app.js', 'cmd'); log(s, "SyntaxError: Unexpected token '='", 'err');
+              pipe(s, { src: 'done', scan: 'done', parse: 'error' });
+          }, reveal: ['con'] },
+        { line: 3, text: `Поправяме ред 3, но на ред 4 сбъркваме името: <code>z</code> вместо <code>y</code>. Ще отпечата ли програмата сега "Start"? Помислете, преди да продължите.`,
+          do: s => { s.cv = 1; s.console = []; s.chk = { parse: ['', '', '', '', ''], run: ['', '', '', '', ''], banner: null, phase: 0 }; } },
+        { lines: [0, 1, 2, 3, 4], text: `Фаза 1: всички редове са граматически правилни. За parser-а <code>z</code> е просто идентификатор - той <b>не проверява</b> дали такава променлива съществува. Това ще стане чак при изпълнението.`,
+          do: s => { s.chk.phase = 1; s.chk.parse = ['ok', 'ok', 'ok', 'ok', 'ok']; pipe(s, { src: 'done', scan: 'done', parse: 'done', ign: 'active' }); log(s, '$ node app.js', 'cmd'); },
+          fly: [['st:parse', 'st:ign', 'AST', 'data']] },
+        { line: 0, text: `Фаза 2: изпълнението започва. Ред 1 отпечатва <b>Start</b>.`,
+          do: s => { s.chk.phase = 2; s.chk.run[0] = 'ok'; log(s, 'Start'); pipe(s, RUNNING); },
+          fly: [['run:0', 'con', 'Start', 'read']] },
+        { lines: [1, 2], text: `Редове 2 и 3 създават променливите x и y.`,
+          do: s => { s.chk.phase = 2; s.chk.run[1] = s.chk.run[2] = 'ok'; pipe(s, RUNNING); } },
+        { line: 3, text: `Ред 4: engine-ът търси променлива с име <code>z</code> и не я намира: <span class="e">ReferenceError: z is not defined</span>. Това е грешка по време на изпълнение (runtime error). Програмата спира - ред 5 не се изпълнява, но "Start" вече е отпечатан.`,
+          do: s => {
+              s.err = true; s.chk.phase = 2; s.chk.run[3] = 'err'; s.chk.run[4] = 'skip';
+              s.chk.banner = { cls: 'err', text: 'Фаза 2 спря на ред 4. Редовете преди него вече са изпълнени.' };
+              log(s, 'ReferenceError: z is not defined', 'err'); pipe(s, RUNNING, { ign: 'error' });
+          }, reveal: ['con'] },
+        { line: -1, text: `<b>Обобщение:</b> <b>SyntaxError</b> се открива при парсването, преди първият ред да се изпълни - затова не се изпълнява нищо. Друга такава "ранна" грешка: <code>let x</code> два пъти дава <code>SyntaxError: Identifier 'x' has already been declared</code>. <b>ReferenceError</b>, TypeError и др. се откриват при изпълнението - редовете преди тях вече са се изпълнили.` },
+    ],
+},
+{
+    tab: 'Engine и среда',
+    view: 'host', title: 'Engine и среда (host environment)', note: 'един и същ V8, различни възможности',
+    codes: [
+        ['console.log("Hello");', 'alert("Hello");', 'console.log("End");'],
+        ['console.log(typeof document);', 'console.log(typeof process);'],
+    ],
+    init: s => { s.host = { env: null, alert: false, missing: null }; },
+    steps: [
+        { line: -1, text: `Кой всъщност изпълнява JavaScript? <b>Engine</b>-ът (напр. V8) знае само самия език (ECMAScript): променливи, оператори, if, цикли, функции, Math, JSON. Той не знае как да покаже прозорец или да прочете файл. Engine-ът винаги е вграден в <b>среда</b> (host environment), която добавя свои инструменти - <b>APIs</b>. Един и същ V8 работи и в Chrome, и в Node.js.` },
+        { line: 0, text: `Пускаме програмата в браузъра. Ред 1: <code>console</code> не е част от езика, а обект, който <b>средата</b> предоставя. В браузъра <code>console.log</code> пише в конзолата на DevTools.`,
+          do: s => { s.host.env = 'browser'; log(s, 'Браузър - конзолата на DevTools', 'cmd'); log(s, 'Hello'); hl(s, 'api:browser:console', 'read'); pipe(s, RUNNING); },
+          fly: [['api:browser:console', 'con', 'Hello', 'read']] },
+        { line: 1, text: `Ред 2: <code>alert</code> е функция на браузъра. Тя показва прозорче със съобщение и <b>спира</b> програмата, докато потребителят не натисне OK.`,
+          do: s => { s.host.env = 'browser'; s.host.alert = true; hl(s, 'api:browser:alert', 'read'); pipe(s, RUNNING); } },
+        { line: 2, text: `Ред 3 отпечатва <b>End</b>. В браузъра всичко работи.`,
+          do: s => { s.host.env = 'browser'; s.host.alert = false; log(s, 'End'); hl(s, 'api:browser:console', 'read'); pipe(s, RUNNING); },
+          fly: [['api:browser:console', 'con', 'End', 'read']] },
+        { line: -1, text: `Сега пускаме <b>същия</b> файл с <code>node app.js</code>. Node.js също използва V8. <b>Какво ще стане?</b> Помислете, преди да продължите.`,
+          do: s => { s.host.env = 'node'; } },
+        { line: 0, text: `Ред 1: Node.js също предоставя <code>console</code> - тук <code>console.log</code> пише в терминала. Затова <code>console.log</code> работи и в двете среди.`,
+          do: s => { s.host.env = 'node'; log(s, '$ node app.js', 'cmd'); log(s, 'Hello'); hl(s, 'api:node:console', 'read'); pipe(s, RUNNING); },
+          fly: [['api:node:console', 'con', 'Hello', 'read']] },
+        { line: 1, text: `Ред 2: в Node.js няма функция <code>alert</code> - в терминала няма прозорци! Engine-ът търси името <code>alert</code>, не го намира и хвърля <span class="e">ReferenceError: alert is not defined</span>. Ред 3 не се изпълнява. Същото става с <code>document</code>: DOM има само в браузъра.`,
+          do: s => { s.err = true; s.host.env = 'node'; s.host.missing = 'alert'; log(s, 'ReferenceError: alert is not defined', 'err'); pipe(s, RUNNING, { ign: 'error' }); },
+          reveal: ['con'] },
+        { lines: [0, 1], text: `Обратното също е вярно. <b>Какво ще отпечата</b> този код в браузъра и какво в Node.js? (Операторът <code>typeof</code> не дава грешка за несъществуващо име - връща "undefined".) Помислете, преди да продължите.`,
+          do: s => { s.cv = 1; s.console = []; s.host = { env: null, alert: false, missing: null }; } },
+        { lines: [0, 1], text: `В браузъра има <code>document</code> (страницата), но няма <code>process</code>. В Node.js е обратното: <code>process</code> (данни за текущата програма), <code>fs</code> (работа с файлове) и <code>require</code> има само там.`,
+          do: s => {
+              log(s, 'Браузър - конзолата на DevTools', 'cmd'); log(s, 'object'); log(s, 'undefined');
+              log(s, '$ node app.js', 'cmd'); log(s, 'undefined'); log(s, 'object');
+              hl(s, 'api:browser:document', 'api:node:process', 'read'); pipe(s, RUNNING);
+          } },
+        { line: -1, text: `Средата управлява и <b>времето</b>: <code>setTimeout</code>, събития (кликове), мрежови заявки. Тя пази опашка от чакащи задачи и ги подава на engine-а, когато той се освободи. Това е <b>event loop</b>-ът (в Node.js - чрез библиотеката libuv). Ще го разгледаме в отделна тема.`,
+          do: s => hl(s, 'loop:browser', 'loop:node', 'api:browser:setTimeout', 'api:node:setTimeout', 'read') },
+        { line: -1, text: `<b>Обобщение:</b> JavaScript = <b>език</b> (engine) + <b>APIs на средата</b>. let, if, for, функции, Math работят навсякъде. console има почти навсякъде, alert и document - в браузъра, process и fs - в Node.js. Други engines: SpiderMonkey (Firefox), JavaScriptCore (Safari, Bun). V8 е в Chrome, Edge, Node.js и Deno.` },
+    ],
+},
+{
+    tab: 'Bytecode',
+    advanced: true,
+    view: 'bc', title: 'Ignition: bytecode и регистри', note: 'истински изход от node --print-bytecode (Node 24)',
+    code: ['let x = 1;', 'let y = 2;', 'console.log(x + y);'],
+    init: s => {
+        s.bc = { pc: [], done: 0, regs: { acc: null, r0: null, r1: null, r2: null, r3: null, r4: null } };
+        pipe(s, { src: 'done', scan: 'done', parse: 'done', ign: 'active' });
+    },
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> От AST V8 генерира <b>bytecode</b> - кратки инструкции за виртуална машина, наречена <b>Ignition</b>. Ignition има <b>регистри</b> (r0, r1, ...) - клетки за временни стойности, и специален регистър <b>acc</b> (accumulator), с който работят почти всички инструкции. Числото в началото на реда е позицията на инструкцията (в байтове).`,
+          fly: [['st:parse', 'st:ign', 'AST', 'data']] },
+        { line: 0, text: `<code>LdaSmi [1]</code> - "Load accumulator with Smi": записва 1 в acc. <b>Smi</b> (small integer) е малко цяло число, което V8 пази особено ефективно.`,
+          do: s => { bc(s, 0, 0); reg(s, 'acc', '1'); }, fly: [['bc:0', 'reg:acc', '1', 'write']] },
+        { line: 0, text: `<code>Star0</code> - "Store accumulator to register r0": копира acc в r0. V8 е отредил r0 за променливата <b>x</b>. Така <code>let x = 1;</code> стана 2 инструкции.`,
+          do: s => { bc(s, 1, 1); hl(s, 'reg:acc', 'read'); reg(s, 'r0', '1'); }, fly: [['reg:acc', 'reg:r0', '1', 'write']] },
+        { line: 1, text: `<code>let y = 2;</code> - същото: 2 в acc, после от acc в r1 (това е y).`,
+          do: s => { bc(s, 2, 3); reg(s, 'acc', '2'); reg(s, 'r1', '2'); },
+          fly: [['bc:2', 'reg:acc', '2', 'write'], ['bc:2', 'reg:r1', '2', 'write']] },
+        { line: 2, text: `<code>LdaGlobal [0]</code> търси глобално име, записано в константа [0] - "console" - и зарежда намерения обект в acc. <code>Star3</code> го копира в r3.`,
+          do: s => { bc(s, 4, 5); hl(s, 'cp:0', 'read'); reg(s, 'acc', 'обект console'); reg(s, 'r3', 'обект console'); } },
+        { line: 2, text: `<code>GetNamedProperty r3, [1]</code> чете свойството "log" (константа [1]) на обекта в r3 и получава функция. <code>Star2</code> я пази в r2. Последното число, напр. <code>[2]</code>, е клетка за обратна връзка (feedback): там Ignition записва какво е видял.`,
+          do: s => { bc(s, 6, 7); hl(s, 'cp:1', 'reg:r3', 'read'); reg(s, 'acc', 'функция log'); reg(s, 'r2', 'функция log'); } },
+        { line: 2, text: `Сега аргументът <code>x + y</code>. <code>Ldar r1</code> - "Load accumulator from register": acc = r1, т.е. 2 (стойността на y).`,
+          do: s => { bc(s, 8, 8); hl(s, 'reg:r1', 'read'); reg(s, 'acc', '2'); }, fly: [['reg:r1', 'reg:acc', '2', 'read']] },
+        { line: 2, text: `<code>Add r0, [4]</code> събира r0 и acc: 1 + 2 = 3, резултатът остава в acc. В клетка [4] Ignition отбелязва, че е събирал две малки цели числа (Smi). Ще ни трябва в сценарий 7.`,
+          do: s => { bc(s, 9, 9); hl(s, 'reg:r0', 'read'); reg(s, 'acc', '3'); }, fly: [['reg:r0', 'reg:acc', '1', 'read']] },
+        { line: 2, text: `<code>Star4</code> - резултатът 3 отива в r4.`,
+          do: s => { bc(s, 10, 10); hl(s, 'reg:acc', 'read'); reg(s, 'r4', '3'); }, fly: [['reg:acc', 'reg:r4', '3', 'write']] },
+        { line: 2, text: `<code>CallProperty1 r2, r3, r4</code> вика функцията от r2 (log), като this е r3 (console), с един аргумент - r4. В конзолата се появява <b>3</b>.`,
+          do: s => { bc(s, 11, 11); hl(s, 'reg:r2', 'reg:r3', 'reg:r4', 'read'); log(s, '3'); pipe(s, { out: 'done' }); },
+          fly: [['reg:r4', 'con', '3', 'read']] },
+        { line: -1, text: `<code>LdaUndefined</code> и <code>Return</code>: кодът свърши. Три реда JavaScript станаха 14 инструкции bytecode.`,
+          do: s => { bc(s, 12, 13); reg(s, 'acc', 'undefined'); pipe(s, { ign: 'done', out: 'done' }); } },
+        { line: -1, text: `<b>Обобщение:</b> Ignition е <b>интерпретаторът</b> от слайда: изпълнява bytecode инструкция по инструкция. Bytecode се генерира бързо и заема малко памет, затова програмата тръгва веднага. Инструкциите не е нужно да се помнят - важното е, че всеки ред JavaScript става няколко много прости стъпки.`,
+          do: s => { s.bc.done = 14; pipe(s, { ign: 'done', out: 'done' }); } },
+    ],
+},
+{
+    tab: 'Горещ код',
+    advanced: true,
+    view: 'jit', title: 'Горещ код: оптимизация и деоптимизация', note: 'функцията sum',
+    code: [
+        'function sum(x, y) {',
+        '  return x + y;',
+        '}',
+        'let result;',
+        'for (let i = 0; i < 100000; i++) {',
+        '  result = sum(i, 1);',
+        '}',
+        'console.log(result);',
+        'console.log(sum("Java", "Script"));',
+    ],
+    init: s => {
+        s.jit = { calls: 0, tier: 'none', fb: [], code: 'none', deopt: false, past: [] };
+        pipe(s, { src: 'done', scan: 'done', parse: 'done', ign: 'active' });
+    },
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> Ignition тръгва бързо, но не е най-бързият начин за изпълнение. Затова V8 <b>наблюдава</b> кода: кои функции се извикват често ("горещ" код, hot code) и с какви типове данни. Ще проследим функцията <code>sum</code>, извикана 100 000 пъти в цикъл.` },
+        { lines: [0, 1, 2], text: `Редове 1-3 само <b>създават</b> функцията. V8 вече е проверил синтаксиса ѝ, но още не е генерирал bytecode за нея. Това става чак при първото извикване - "мързеливо" (lazy compilation).` },
+        { line: 5, text: `Първото извикване <code>sum(0, 1)</code>: генерира се bytecode и Ignition го изпълнява. Инструкцията <code>Add</code> записва в своята клетка за обратна връзка (feedback): "събрах две малки цели числа (Smi)".`,
+          do: s => { Object.assign(s.jit, { calls: 1, tier: 'ign', code: 'bc', fb: ['num'] }); hl(s, 'tier:ign', 'read'); } },
+        { line: 5, text: `Цикълът се върти. Всяко извикване прави <code>sum</code> по-"гореща". Типовете са все същите - числа.`,
+          do: s => { Object.assign(s.jit, { calls: 300, tier: 'ign', code: 'bc', fb: ['num'] }); } },
+        { line: 5, text: `<code>sum</code> е <b>гореща и стабилна</b> (hot and stable): V8 я компилира до машинен код с бързия оптимизиращ компилатор <b>Maglev</b>. Това става в отделна нишка (thread), без да спира цикъла. (Измерено с Node 24: след около 600 извиквания.)`,
+          do: s => {
+              Object.assign(s.jit, { calls: 600, tier: 'maglev', code: 'opt', fb: ['num'], past: ['ign'] });
+              log(s, '$ node --trace-opt --trace-deopt app.js', 'cmd');
+              log(s, '[marking sum for optimization to MAGLEV, reason: hot and stable]', 'trace');
+              pipe(s, { ign: 'done', opt: 'hot' }); s.conn = 'hot';
+          }, fly: [['st:ign', 'st:opt', 'sum', 'data']] },
+        { line: 5, text: `Функцията остава гореща, затова идва ред на <b>TurboFan</b>. Той <b>залага</b> (спекулира) на видяното досега: "x и y винаги са малки цели числа". Машинният код е много бърз, но започва с <b>проверки</b> (guards) дали залогът все още е верен. (Node 24: след около 20 000 извиквания.)`,
+          do: s => {
+              Object.assign(s.jit, { calls: 20000, tier: 'tf', code: 'opt', fb: ['num'], past: ['ign', 'maglev'] });
+              log(s, '[marking sum for optimization to TURBOFAN_JS, reason: hot and stable]', 'trace');
+              log(s, '[completed optimizing sum (target TURBOFAN_JS)]', 'trace');
+              pipe(s, { ign: 'done', opt: 'hot' }); s.conn = 'hot';
+          }, reveal: ['con'] },
+        { line: 7, text: `Цикълът свършва след 100 000 извиквания - повечето са изпълнени от оптимизирания машинен код. Ред 8 отпечатва <b>100000</b>.`,
+          do: s => {
+              Object.assign(s.jit, { calls: 100000, tier: 'tf', code: 'opt', fb: ['num'], past: ['ign', 'maglev'] });
+              log(s, '100000'); pipe(s, { ign: 'done', opt: 'hot', out: 'done' }); s.conn = 'hot';
+          } },
+        { line: 8, text: `Ред 9 вика <code>sum("Java", "Script")</code> - с <b>низове</b>! Оптимизираният машинен код разчита на числа. Какво ще стане: грешен резултат, грешка или нещо друго? Помислете, преди да продължите.`,
+          do: s => { pipe(s, { ign: 'done', opt: 'hot', out: 'done' }); s.conn = 'hot'; } },
+        { line: 8, text: `Проверката "x е Smi?" се проваля. V8 прави <b>деоптимизация</b> (deopt, bailout): изоставя машинния код и продължава в Ignition, който умее всичко. Резултатът е правилен: <b>JavaScript</b>. Обратната връзка вече помни и низове.`,
+          do: s => {
+              Object.assign(s.jit, { calls: 100001, tier: 'ign', code: 'fail', fb: ['num', 'str'], deopt: true, past: [] });
+              log(s, '[bailout (kind: deopt-eager, reason: not a Smi): deoptimizing sum]', 'trace');
+              log(s, 'JavaScript');
+              pipe(s, { ign: 'active', opt: 'error', out: 'done' }); s.conn = 'deopt';
+          }, reveal: ['con'] },
+        { line: -1, text: `<b>Обобщение:</b> V8 е <b>JIT</b> (Just-In-Time) компилатор: започва с интерпретиране, наблюдава и компилира горещия код до машинен, докато програмата работи. Оптимизацията никога не променя <b>резултата</b>, само скоростта. (Има и още едно ниво, Sparkplug.) Опитайте сами: <code>node --trace-opt --trace-deopt app.js</code>.`,
+          do: s => { Object.assign(s.jit, { calls: 100001, tier: 'ign', code: 'bc', fb: ['num', 'str'], deopt: false, past: [] }); pipe(s, { ign: 'done', opt: 'done', out: 'done' }); } },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: states[i] is the full state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, lines: null, cv: 0, err: false, console: [], pipe: {}, conn: '', hl: {} };
+    if (sc.init) sc.init(s);
+    const base = JSON.stringify(s);
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.err = false; s.conn = ''; s.pipe = JSON.parse(base).pipe;
+        s.line = step.line === undefined ? -1 : step.line;
+        s.lines = step.lines || null;
+        if (s.ast) s.ast.hl = '';
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const FLY_MS = 820, STAGGER = 180;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+const ARROW = '<svg class="tarr" viewBox="0 0 24 12"><path d="M1 6H19" stroke="currentColor" stroke-width="2"/><path d="M23 6L16 1.5V10.5Z" fill="currentColor"/></svg>';
+
+const codeOf = (sc, s) => sc.codes ? sc.codes[s.cv] : sc.code;
+const hlc = (s, key) => s.hl[key] ? ' hl-' + s.hl[key] : '';
+
+let lastCodeKey = '';
+function renderCode(sc, s) {
+    const code = codeOf(sc, s);
+    const act = s.lines || (s.line >= 0 ? [s.line] : []);
+    const el = $('#code');
+    el.innerHTML = code.map((l, i) => {
+        const on = act.includes(i);
+        return `<li class="${on ? 'active' : ''} ${on && s.err ? 'error' : ''}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`;
+    }).join('');
+    const key = code.join('\n');
+    el.classList.toggle('changed', !!lastCodeKey && key !== lastCodeKey);
+    lastCodeKey = key;
+    $('#lineNote').textContent = act.length === 1 ? `ред ${act[0] + 1}` : act.length ? `редове ${act[0] + 1}-${act[act.length - 1] + 1}` : '';
+}
+
+function renderConsole(s, prev) {
+    const box = $('#console');
+    if (!s.console.length) { box.innerHTML = '<div class="console-empty">Тук ще се появи това, което програмата отпечатва.</div>'; return; }
+    const old = prev ? prev.console.length : s.console.length;
+    box.innerHTML = s.console.map((l, i) =>
+        `<div class="cline ${l.cls}${i >= old ? ' appear' : ''}">${l.cls === 'cmd' ? '' : '<span class="prompt">&gt;</span>'}<span class="ctext">${esc(l.text)}</span>${l.tag ? `<span class="ctag">${esc(l.tag)}</span>` : ''}</div>`).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderPipe(s) {
+    for (const k of ['src', 'scan', 'parse', 'ign', 'opt', 'out']) {
+        const el = $(`[data-k="st:${k}"]`);
+        el.classList.remove('active', 'done', 'error', 'hot');
+        if (s.pipe[k]) el.classList.add(s.pipe[k]);
+    }
+    const c = $('#conn');
+    c.classList.toggle('hot', s.conn === 'hot');
+    c.classList.toggle('deopt', s.conn === 'deopt');
+}
+
+// ---- 1: translators ----
+function viewTr(sc, s, prev) {
+    const code = codeOf(sc, s);
+    let html = '<div class="tr"><span></span><span class="tr-h">Сорс код</span><span class="tr-h">Превод (машинен код / bytecode)</span><span class="tr-h">Изпълнение</span>';
+    TR_LANES.forEach((lane, li) => {
+        if (lane.k === 'js' && !s.tr.showJs) return;
+        if (li) html += '<div class="lane-sep"></div>';
+        code.forEach((line, i) => {
+            if (i === 0) html += `<div class="lane-t" style="--c:${lane.color}"><b>${lane.name}</b><span>${lane.desc}</span></div>`;
+            const row = s.tr[lane.k][i], pr = prev && prev.tr[lane.k][i];
+            html += `<div class="tr-src" data-k="tr:${lane.k}:src:${i}">${highlight(line)}</div>`;
+            // translation
+            if (!row.t) html += `<div class="tr-cell" data-k="tr:${lane.k}:t:${i}"></div>`;
+            else {
+                const txt = row.t.err ? 'SyntaxError' : lane.k === 'js' ? TR_BC[i] : TR_ASM[i];
+                const anim = prev && !(pr && pr.t) ? ' pop' : '';
+                html += `<div class="tr-cell ${row.t.err ? 'err' : 'on'}${anim}" data-k="tr:${lane.k}:t:${i}" style="--c:${lane.color}"><span class="ord">${row.t.o}</span>${esc(txt)}</div>`;
+            }
+            // execution
+            if (!row.r) html += '<div class="tr-cell"></div>';
+            else if (row.r === 'skip') html += `<div class="tr-cell skip${prev && !(pr && pr.r) ? ' appear' : ''}">не се изпълнява</div>`;
+            else {
+                const out = TR_OUT[s.cv][i];
+                const anim = prev && !(pr && pr.r) ? ' pop' : '';
+                html += `<div class="tr-cell on${anim}" style="--c:${lane.color}"><span class="ord">${row.r.o}</span>${lane.k === 'js' ? 'Ignition' : 'CPU'}${out ? `<span class="out">${esc(out)}</span>` : ''}</div>`;
+            }
+        });
+    });
+    return html + '</div>';
+}
+
+// ---- 2: tokens ----
+function viewTok(sc, s, prev) {
+    const t = s.tok;
+    let chars = '';
+    if (t.line < 0) chars = '<span class="chars-empty">Всички редове са сканирани.</span>';
+    else {
+        const src = PROGRAM[t.line];
+        const toks = TOKS.map((k, i) => ({ ...k, i })).filter(k => k.line === t.line);
+        const selStart = t.sel ? TOKS[t.sel[0]].start : -1;
+        let i = 0;
+        while (i < src.length) {
+            const tk = toks.find(k => k.start === i);
+            if (tk && !t.skip) {
+                let cls = 'ch';
+                if (t.sel && tk.i >= t.sel[0] && tk.i <= t.sel[1]) cls += ' sel';
+                else if (tk.i < t.upto) cls += ' done';
+                chars += `<span class="chg" data-k="chg:${tk.i}">` + [...tk.text].map(c => `<span class="${cls}">${esc(c)}</span>`).join('') + '</span>';
+                i = tk.end;
+                continue;
+            }
+            const c = src[i];
+            let cls = 'ch' + (c === ' ' ? ' sp' : '');
+            if (t.skip) cls += ' skip';
+            else if ((selStart >= 0 && i < selStart) || (!t.sel && toks.some(k => k.i < t.upto && k.end > i))) cls += ' done';
+            chars += `<span class="${cls}">${c === ' ' ? '' : esc(c)}</span>`;
+            i++;
+        }
+    }
+    const oldUpto = prev ? prev.tok.upto : t.upto;
+    let rows = '';
+    for (let line = 1; line < PROGRAM.length; line++) {
+        const items = TOKS.map((k, i) => ({ ...k, i })).filter(k => k.line === line && k.i < t.upto);
+        rows += `<div class="trow"><span class="tl">ред ${line + 1}</span>` + items.map(k =>
+            `<span class="tk t-${k.type}${k.i >= oldUpto ? ' pop' : ''}" data-k="tok:${k.i}"><b>${esc(k.text)}</b><small>${TYPE_BG[k.type]}</small></span>`).join('') + '</div>';
+    }
+    const legend = ['keyword', 'identifier', 'punctuator', 'numeric'].map(ty =>
+        `<span><i class="sw t-${ty}"></i>${TYPE_BG[ty]} (${ty === 'numeric' ? 'numeric literal' : ty})</span>`).join('');
+    return `<div class="sub">Символи${t.line >= 0 ? ` от ред ${t.line + 1}` : ''} <span class="note">(characters)</span></div>
+        <div class="chars">${chars}</div>
+        <div class="sub">Токени: ${t.upto} <span class="note">(tokens)</span></div>
+        <div class="toks">${rows}</div>
+        <div class="legend tok-legend">${legend}</div>`;
+}
+
+// ---- 3: AST ----
+function viewAst(sc, s, prev) {
+    const a = s.ast;
+    let strip = '';
+    let lastLine = TOKS[0].line;
+    TOKS.forEach((k, i) => {
+        if (k.line !== lastLine) { strip += '<span class="ts-gap"></span>'; lastLine = k.line; }
+        let cls = `ts t-${k.type}`;
+        if (a.sel && i >= a.sel[0] && i <= a.sel[1]) cls += ' sel';
+        else if (i < a.used) cls += ' used';
+        strip += `<span class="${cls}" data-k="ts:${i}">${esc(k.text)}</span>`;
+    });
+    const shown = new Set(a.nodes);
+    const old = new Set(prev ? prev.ast.nodes : a.nodes);
+    let edges = '', nodes = '';
+    for (const n of AST) {
+        if (!shown.has(n.id)) continue;
+        if (n.p && shown.has(n.p)) {
+            const p = AST.byId[n.p];
+            const x1 = p.x, y1 = p.y + NODE_H, x2 = n.x, y2 = n.y, my = (y1 + y2) / 2;
+            const fresh = !old.has(n.id) || !old.has(n.p);
+            edges += `<path class="ae${fresh ? ' new' : ''}" pathLength="1" d="M${x1} ${y1} C${x1} ${my}, ${x2} ${my}, ${x2} ${y2}"/>`;
+        }
+        let cls = `an ${n.kind}`;
+        if (!old.has(n.id)) cls += ' new';
+        if (a.hl === 'kinds' && n.kind !== 'other') cls += ' hl';
+        if (a.hl === 'kinds' && n.kind === 'other') cls += ' dimmed';
+        const long = n.label.length > 16 ? ` textLength="${NODE_W - 12}" lengthAdjust="spacingAndGlyphs"` : '';
+        const lab = n.val
+            ? `<text class="lab" x="${n.x}" y="${n.y + 17}" text-anchor="middle"${long}>${n.label}</text><text class="val" x="${n.x}" y="${n.y + 36}" text-anchor="middle">${esc(n.val)}</text>`
+            : `<text class="lab" x="${n.x}" y="${n.y + 27}" text-anchor="middle"${long}>${n.label}</text>`;
+        nodes += `<g class="${cls}" data-k="an:${n.id}"><rect x="${n.x - NODE_W / 2}" y="${n.y}" width="${NODE_W}" height="${NODE_H}" rx="8"/>${lab}</g>`;
+    }
+    return `<div class="astv">
+        <div class="sub">Токени от scanner-а</div>
+        <div class="tstrip">${strip}</div>
+        <svg class="ast-svg" viewBox="0 0 ${AST_W} ${AST_H}" preserveAspectRatio="xMidYMid meet">${edges}${nodes}</svg>
+        <div class="legend"><span><i class="sw stmt"></i>statement (инструкция)</span><span><i class="sw expr"></i>expression (израз - има стойност)</span><span><i class="sw other"></i>друго (име, помощен възел)</span></div>
+    </div>`;
+}
+
+// ---- 4: parse vs run ----
+function viewChk(sc, s, prev) {
+    const c = s.chk, code = codeOf(sc, s), info = CHK[s.cv];
+    const ph = (n, t) => `<span class="tr-h phase${c.phase === n ? ' on' : ''}"><i>${n}</i>${t}</span>`;
+    let html = `<div class="chk"><span></span><span class="tr-h">Код</span>${ph(1, 'Фаза 1: парсване (целия файл)')}${ph(2, 'Фаза 2: изпълнение')}`;
+    code.forEach((line, i) => {
+        const p = c.parse[i], r = c.run[i];
+        const pp = prev ? prev.chk.parse[i] : p, pr = prev ? prev.chk.run[i] : r;
+        const pa = p && p !== pp ? ' pop' : '', ra = r && r !== pr ? ' pop' : '';
+        let pc = '';
+        if (p === 'ok') pc = `<div class="stc ok${pa}">OK <code>${info.kinds[i]}</code></div>`;
+        else if (p === 'err') pc = `<div class="stc err${pa}">SyntaxError: Unexpected token '='</div>`;
+        else pc = '<div class="stc"></div>';
+        let rc = '';
+        if (r === 'ok') rc = `<div class="stc ok${ra}" data-k="run:${i}">изпълнен${info.outs[i] ? `<span class="out">${esc(info.outs[i])}</span>` : ''}</div>`;
+        else if (r === 'err') rc = `<div class="stc err${ra}">ReferenceError</div>`;
+        else if (r === 'skip') rc = `<div class="stc skip${ra}">не се изпълнява</div>`;
+        else rc = '<div class="stc"></div>';
+        html += `<span class="ln">${i + 1}</span><div class="tr-src">${highlight(line)}</div>${pc}${rc}`;
+    });
+    html += '</div>';
+    if (c.banner) html += `<div class="banner ${c.banner.cls}${prev && !prev.chk.banner ? ' appear' : ''}">${esc(c.banner.text)}</div>`;
+    return html;
+}
+
+// ---- 5: host environment ----
+function viewHost(sc, s, prev) {
+    const h = s.host;
+    return '<div class="host">' + HOSTS.map(env => {
+        const apis = env.apis.map(a => `<span class="api${hlc(s, `api:${env.k}:${a}`)}" data-k="api:${env.k}:${a}">${a}</span>`).join('')
+            + (h.missing && env.k === 'node' ? `<span class="api missing" data-k="api:node:missing">${h.missing} <small>няма го</small></span>` : '');
+        const alertBox = env.k === 'browser' && h.alert
+            ? '<div class="alert-box"><div class="from">Тази страница казва</div>Hello<span class="okb">OK</span></div>' : '';
+        return `<div class="env${h.env === env.k ? ' active' : ''}">
+            <h3>${env.name}<small>${env.sub}</small></h3>
+            <div class="eng-box"><div class="sub">Engine V8 - самият език (ECMAScript)</div><div class="lcs">${LANG.map(l => `<span class="lc">${l}</span>`).join('')}</div></div>
+            <div class="apis-box"><div class="sub">APIs на средата (host)</div><div class="apis">${apis}</div></div>
+            <div class="loop${hlc(s, 'loop:' + env.k)}">${env.loop}</div>
+            ${alertBox}
+        </div>`;
+    }).join('') + '</div>';
+}
+
+// ---- 6: bytecode ----
+function viewBc(sc, s, prev) {
+    const b = s.bc;
+    const rows = BC.map((ins, i) => {
+        const cls = b.pc.includes(i) ? 'active' : i < b.done ? 'done' : '';
+        return `<div class="bcr ${cls}" data-k="bc:${i}"><span class="off">${ins.off}</span><span>${esc(ins.op)}</span><span class="cm">// ${esc(ins.cm)}</span></div>`;
+    }).join('');
+    const regs = REGS.map(([r, alias]) => {
+        const v = b.regs[r], pv = prev ? prev.bc.regs[r] : v;
+        const cls = ['rv'];
+        if (v === null) cls.push('empty');
+        else if (/[а-я]/.test(v)) cls.push('obj');
+        if (v !== pv && v !== null) cls.push('pop');
+        return `<div class="reg ${r}"><span class="rn">${r}</span><span class="ra">${alias ? '= ' + alias : ''}</span><div class="${cls.join(' ')}${hlc(s, 'reg:' + r)}" data-k="reg:${r}">${v === null ? '' : esc(v)}</div></div>`;
+    }).join('');
+    return `<div class="bcv">
+        <div class="bcl">${rows}</div>
+        <div>
+            <div class="sub">Регистри</div>
+            <div class="regs">${regs}</div>
+            <div class="sub" style="margin-top:.9rem">Константи (constant pool)</div>
+            <div class="cpool"><span class="${hlc(s, 'cp:0')}">[0] "console"</span><span class="${hlc(s, 'cp:1')}">[1] "log"</span></div>
+        </div>
+    </div>`;
+}
+
+// ---- 7: JIT ----
+function viewJit(sc, s, prev) {
+    const j = s.jit;
+    const tiers = TIERS.map((t, i) => {
+        const cls = ['tier'];
+        if (j.tier === t.k) cls.push('cur');
+        else if (j.past.includes(t.k)) cls.push('past');
+        return (i ? ARROW : '') + `<div class="${cls.join(' ')}" data-k="tier:${t.k}"><b>${t.t}</b><small>${t.s}</small></div>`;
+    }).join('');
+    const arc = j.deopt
+        ? '<svg class="deopt-arc" id="deoptArc"></svg>' : '';
+    const heat = j.calls ? Math.min(100, Math.log10(j.calls + 1) / 5 * 100) : 0;
+    const fbs = j.fb.length
+        ? j.fb.map(f => f === 'num' ? '<span class="fb num">Smi + Smi</span>' : '<span class="fb str pop">String + String</span>').join('')
+        : '<span class="none">още няма данни</span>';
+    let list, cls = '', title;
+    if (j.code === 'none') { title = 'Код на sum'; list = '<span class="empty">Още няма bytecode - функцията не е извикана.</span>'; }
+    else if (j.code === 'bc') { title = 'Изпълнява се: bytecode (Ignition)'; list = JIT_BC.map(esc).join('\n'); }
+    else {
+        title = j.code === 'fail' ? 'Проверката се провали - деоптимизация' : `Изпълнява се: машинен код от ${j.tier === 'tf' ? 'TurboFan' : 'Maglev'} (опростено)`;
+        cls = j.code === 'fail' ? 'fail' : 'opt';
+        list = JIT_OPT.map((l, i) => j.code === 'fail' && i === 0 ? `<span class="bad">${esc(l)}   x = "Java"</span>` : esc(l)).join('\n');
+    }
+    return `<div class="jit">
+        <div class="tiers" id="tiers">${tiers}${arc}</div>
+        <div class="jrow">
+            <div class="box"><div class="sub">Извиквания на sum</div>
+                <div class="calls"><b>${j.calls.toLocaleString('en-US').replace(/,/g, ' ')}</b><span>${j.calls >= 600 ? 'гореща (hot)' : j.calls ? 'още "студена"' : ''}</span></div>
+                <div class="heat"><i style="width:${heat}%"></i></div></div>
+            <div class="box"><div class="sub">Обратна връзка за <code>x + y</code> <span class="note">(type feedback)</span></div>
+                <div class="fbs">${fbs}</div></div>
+        </div>
+        <div class="jcode"><div class="sub">${title}</div><div class="jlist ${cls}">${list}</div></div>
+    </div>`;
+}
+
+function drawDeoptArc() {
+    const svg = $('#deoptArc');
+    if (!svg) return;
+    const box = $('#tiers').getBoundingClientRect();
+    const a = $('[data-k="tier:tf"]').getBoundingClientRect(), b = $('[data-k="tier:ign"]').getBoundingClientRect();
+    const x1 = a.left + a.width / 2 - box.left, x2 = b.left + b.width / 2 - box.left;
+    const y = a.bottom - box.top + 2, yb = box.height - 8;
+    svg.innerHTML = `<path class="arc" d="M${x1} ${y} C${x1} ${yb}, ${x1} ${yb}, ${x1 - 30} ${yb} H${x2 + 30} C${x2} ${yb}, ${x2} ${yb}, ${x2} ${y + 8}"/>
+        <path d="M${x2} ${y} l-6 10 h12 z" fill="currentColor"/>
+        <rect x="${(x1 + x2) / 2 - 95}" y="${yb - 9}" width="190" height="18" fill="var(--panel)"/>
+        <text x="${(x1 + x2) / 2}" y="${yb + 4}" text-anchor="middle">деоптимизация (deopt)</text>`;
+}
+
+const VIEWS = { tr: viewTr, tok: viewTok, ast: viewAst, chk: viewChk, host: viewHost, bc: viewBc, jit: viewJit };
+
+// ---------------------------------------------------------------------------
+// Flying chips
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    return document.querySelector(`[data-k="${key}"]`);
+}
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (!flights.length || reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    const revealEls = (step.reveal || []).map(resolve).filter(Boolean);
+    revealEls.forEach(el => el.classList.add('await'));
+
+    const plan = flights.map(([from, to, text, kind = 'read'], i) => {
+        const src = resolve(from), dst = resolve(to);
+        const awaits = !!dst && !to.startsWith('st:') && !revealEls.includes(dst);
+        if (awaits) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, text, kind, i, awaits };
+    });
+
+    let left = plan.length;
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            } else if (p.dst) bump(p.dst);
+            if (--left === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + p.kind;
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+        const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.style.left = x0 + 'px';
+        chip.style.top = y0 + 'px';
+        const anim = chip.animate([
+            { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+            { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: p.i * STAGGER, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+        anim.onfinish = () => { chip.remove(); finish(); };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderConsole(s, prev);
+    renderPipe(s);
+    $('#viewTitle').textContent = sc.title;
+    $('#viewNote').textContent = sc.note || '';
+    $('#view').innerHTML = VIEWS[sc.view](sc, s, prev);
+    drawDeoptArc();
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    try { history.replaceState(null, '', location.pathname + location.search + `#${scIdx + 1}.${stepIdx + 1}`); } catch (e) { /* file:// in some browsers */ }
+
+    if (prev) requestAnimationFrame(() => { if (tk === token) playFlights(step, tk); });
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(11000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    playing = false;
+    lastCodeKey = '';
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('jsEngineTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('jsEngineTheme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+// the deopt arc is positioned in pixels, so redraw it when the layout changes
+new ResizeObserver(() => drawDeoptArc()).observe($('#stage'));
+
+// self-test: #selftest renders every step of every scenario and reports errors and overflow
+function selfTest() {
+    const problems = [];
+    let count = 0;
+    SCENARIOS.forEach((sc, i) => {
+        sc.steps.forEach((st, j) => {
+            try {
+                selectScenario(i, j);
+                count++;
+                const where = `${i + 1}.${j + 1}`;
+                if (document.documentElement.scrollHeight > innerHeight + 1) problems.push(`${where} page taller than window`);
+                document.querySelectorAll('.panel, .view, .jlist, .bcl, .tr-cell, .stc, .st').forEach(el => {
+                    if (el.scrollHeight > el.clientHeight + 2 || el.scrollWidth > el.clientWidth + 2)
+                        problems.push(`${where} overflow ${el.className.split(' ')[0]} ${el.scrollWidth}x${el.scrollHeight} > ${el.clientWidth}x${el.clientHeight}`);
+                });
+                const con = $('#console');
+                if (con.scrollHeight > con.clientHeight + 2) problems.push(`${where} console scrolls`);
+            } catch (e) { problems.push(`${i + 1}.${j + 1} ERROR ${e.message}`); }
+        });
+    });
+    const pre = document.createElement('pre');
+    pre.id = 'selftest';
+    pre.textContent = `SELFTEST steps=${count} problems=${problems.length}\n` + problems.join('\n');
+    document.body.appendChild(pre);
+}
+
+function fromHash() {
+    if (location.hash === '#selftest') { selfTest(); return; }
+    const [a, b] = location.hash.slice(1).split('.');
+    selectScenario((parseInt(a, 10) || 1) - 1, (parseInt(b, 10) || 1) - 1);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>
