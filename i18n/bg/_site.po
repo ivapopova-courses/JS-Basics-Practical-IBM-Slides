@@ -91,4 +91,4 @@ msgstr "5. Функции, по-стар код"
 #. side menu
 #: site/.vitepress/config.mjs
 msgid "6. Objects and data shapes"
-msgstr ""
+msgstr "6. Обекти и форми на данните"

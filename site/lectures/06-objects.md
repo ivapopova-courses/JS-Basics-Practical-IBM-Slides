@@ -577,8 +577,8 @@ for (const [key, m] of Object.entries(modules)) {
 }
 ```
 
-`for (const [key, m] of ...)` takes the two parts of each pair into two variables
-- *destructuring*, [section 9](#_9-spread-rest-and-destructuring).
+`for (const [key, m] of ...)` takes the two parts of each pair into two
+variables - *destructuring*, [section 9](#_9-spread-rest-and-destructuring).
 
 ::: info Animation
 **Objects in memory:** [4. A dictionary](../animations/objectsInMemory.html#4){target="_blank"}

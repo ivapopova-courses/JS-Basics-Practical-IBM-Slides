@@ -176,14 +176,12 @@ msgstr "Занятие 6 - Обекти"
 #. paragraph
 #: site/under-the-hood.md:188
 msgid "**[Objects in memory](animations/objectsInMemory.html){target=\"_blank\"}** - dot and brackets, deep paths, `?.` and `??`, dictionaries, a path helper, copies, `this` in a method. [1. Dot or brackets](animations/objectsInMemory.html#1){target=\"_blank\"}, [2. A deep path](animations/objectsInMemory.html#2){target=\"_blank\"}, [3. Safe access: `?.` and `??`](animations/objectsInMemory.html#3){target=\"_blank\"}, [4. A dictionary](animations/objectsInMemory.html#4){target=\"_blank\"}, [5. A path helper: `get`](animations/objectsInMemory.html#5){target=\"_blank\"}, [6. Copies](animations/objectsInMemory.html#6){target=\"_blank\"}, [7. `this` in a method (advanced)](animations/objectsInMemory.html#7){target=\"_blank\"}"
-msgstr ""
+msgstr "**[Обектите в паметта](animations/objectsInMemory.html){target=\"_blank\"}** - точка и скоби, дълбоки пътища, `?.` и `??`, dictionaries, helper за пътища, копия, `this` в метод. [1. Точка или скоби](animations/objectsInMemory.html#1){target=\"_blank\"}, [2. Дълъг път](animations/objectsInMemory.html#2){target=\"_blank\"}, [3. Безопасен достъп: `?.` и `??`](animations/objectsInMemory.html#3){target=\"_blank\"}, [4. Dictionary](animations/objectsInMemory.html#4){target=\"_blank\"}, [5. Helper за пътища: `get`](animations/objectsInMemory.html#5){target=\"_blank\"}, [6. Копия](animations/objectsInMemory.html#6){target=\"_blank\"}, [7. `this` в метод (advanced)](animations/objectsInMemory.html#7){target=\"_blank\"}"
 
 #. paragraph
 #: site/under-the-hood.md:199
-#, fuzzy
-#| msgid "[Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target=\"_blank\"} and [Arrays in memory - 5. References](animations/arraysInMemory.html#5){target=\"_blank\"}: two variables can point to the same object."
 msgid "Also: [Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target=\"_blank\"} and [Arrays in memory - 5. References](animations/arraysInMemory.html#5){target=\"_blank\"}: two variables can point to the same object."
-msgstr "[Variables в паметта - 6. Обекти и референции](animations/variablesInMemory.html#6){target=\"_blank\"} и [Arrays в паметта - 5. Референции](animations/arraysInMemory.html#5){target=\"_blank\"}: две variables могат да сочат към един и същ обект."
+msgstr "Също: [Variables в паметта - 6. Обекти и референции](animations/variablesInMemory.html#6){target=\"_blank\"} и [Arrays в паметта - 5. Референции](animations/arraysInMemory.html#5){target=\"_blank\"}: две variables могат да сочат към един и същ обект."
 
 #~ msgid "[Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target=\"_blank\"} and [Arrays in memory - 5. References](animations/arraysInMemory.html#5){target=\"_blank\"}: two variables can point to the same object."
 #~ msgstr "[Variables в паметта - 6. Обекти и референции](animations/variablesInMemory.html#6){target=\"_blank\"} и [Arrays в паметта - 5. Референции](animations/arraysInMemory.html#5){target=\"_blank\"}: две variables могат да сочат към един и същ обект."
