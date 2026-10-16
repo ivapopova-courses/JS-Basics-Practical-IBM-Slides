@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript под капака - анимации</title>
+<!--
+    Index of the "under the hood" animations for the JS Fundamentals course.
+    Self-contained: no external files. index.html?theme=dark forces the dark theme
+    (and passes it on to the animation links).
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --ref: #7b48c4;
+    --ref-bg: #ebe1fa;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12; --ref: #b38cff; --ref-bg: #33284a;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12; --ref: #b38cff; --ref-bg: #33284a;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(12px, min(1.05vw, 2.2vh), 20px); }
+@media (min-width: 1400px) { html { font-size: clamp(12px, min(.92vw, 1.8vh), 22px); } }
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app { max-width: 110rem; margin: 0 auto; padding: .9rem 1.2rem 1.2rem; }
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; margin-bottom: .9rem; }
+.top h1 { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -.01em; }
+.top h1 small { display: block; font-size: .75rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: .4rem; margin-left: auto; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .45rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--panel); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover { border-color: var(--muted); }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+
+/* ---------- topics ---------- */
+.topic { margin-bottom: 1rem; }
+.topic h2 {
+    display: flex; align-items: baseline; gap: .6rem;
+    margin: 0 0 .5rem;
+    font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.topic h2 .en { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.topic h2::after { content: ""; flex: 1; height: 1px; background: var(--line); align-self: center; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(19.5rem, 1fr)); gap: .8rem; }
+/* wide screens: one row for the 6 basic-syntax cards, one row for arrays (2) + functions (4) */
+@media (min-width: 1400px) {
+    #topics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: .8rem; }
+    .topic { grid-column: span var(--n); }
+    .topic .grid { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+}
+
+.pill {
+    display: inline-block;
+    padding: .1rem .5rem; border-radius: 999px;
+    font-size: .68rem; font-weight: 700; white-space: nowrap;
+}
+.t-basic { --tc: var(--read); --tc-bg: var(--read-bg); }
+.t-arrays { --tc: var(--write); --tc-bg: var(--write-bg); }
+.t-functions { --tc: var(--ref); --tc-bg: var(--ref-bg); }
+.pill.topic-pill { background: var(--tc-bg); color: var(--tc); border: 1px solid var(--tc); }
+
+/* ---------- cards ---------- */
+.card {
+    position: relative;
+    display: flex; flex-direction: column; gap: .4rem;
+    padding: .7rem .9rem .8rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-left: 4px solid var(--tc); border-radius: .6rem;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.card:hover, .card:focus-within { border-color: var(--tc); box-shadow: 0 0 0 3px var(--tc-bg); transform: translateY(-2px); }
+.card-head { display: flex; align-items: center; gap: .45rem; }
+.num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.6rem; height: 1.6rem; border-radius: 50%;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: .8rem; font-weight: 700;
+}
+.count { margin-left: auto; font-size: .75rem; color: var(--muted); white-space: nowrap; }
+.card h3 { margin: .1rem 0 0; font-size: 1.12rem; font-weight: 750; line-height: 1.25; }
+.card h3 a { color: inherit; text-decoration: none; }
+/* the title link covers the whole card; scenario links sit above it */
+.card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: .6rem; }
+.card h3 a:focus-visible { outline: none; }
+.desc { margin: 0; font-size: .9rem; line-height: 1.4; }
+.file { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+.file .old { font-family: var(--sans); font-style: italic; }
+.scen { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: auto; padding-top: .3rem; }
+.scen a {
+    position: relative; z-index: 1;
+    padding: .12rem .45rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--paper); color: var(--ink);
+    font-size: .7rem; text-decoration: none; white-space: nowrap;
+}
+.scen a:hover, .scen a:focus-visible { border-color: var(--tc); color: var(--tc); outline: none; }
+.scen a.adv { border-style: dashed; }
+.scen a.adv::after { content: " *"; color: var(--ref); font-weight: 700; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: flex; flex-wrap: wrap; gap: .4rem 1.6rem;
+    margin-top: .4rem;
+    padding: .6rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+    font-size: .8rem; color: var(--muted);
+}
+.bottom kbd, .bottom code {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code); color: var(--ink);
+    font-family: var(--mono); font-size: .92em;
+}
+.bottom .star { color: var(--ref); font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+    .card:hover, .card:focus-within { transform: none; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>JavaScript под капака <small>интерактивни анимации стъпка по стъпка към курса Practical JavaScript Basics</small></h1>
+        <div class="legend">
+            <span class="pill topic-pill t-basic">Основен синтаксис</span>
+            <span class="pill topic-pill t-arrays">Масиви</span>
+            <span class="pill topic-pill t-functions">Функции</span>
+        </div>
+        <a class="btn lang-btn" id="langBtn" href="../index.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main id="topics"></main>
+
+    <footer class="bottom">
+        <span>Номерата показват препоръчания ред.</span>
+        <span>В анимациите: <kbd>-&gt;</kbd> или <kbd>Space</kbd> напред, <kbd>&lt;-</kbd> назад, <kbd>Home</kbd> начало, <kbd>P</kbd> автоматично.</span>
+        <span>Директна връзка: <code>#3</code> = сценарий 3, <code>#3.5</code> = сценарий 3, стъпка 5.</span>
+        <span><span class="star">*</span> = за напреднали (advanced)</span>
+    </footer>
+</div>
+
+<script>
+'use strict';
+
+const TOPICS = [
+    { id: 'basic', name: 'Основен синтаксис', en: 'JS Basic Syntax' },
+    { id: 'arrays', name: 'Масиви', en: 'JS Arrays' },
+    { id: 'functions', name: 'Функции', en: 'JS Functions' },
+];
+
+// adv: 1-based numbers of the "advanced" scenarios
+const ANIMATIONS = [
+    {
+        topic: 'basic', file: 'jsEngine.html',
+        title: 'Как JavaScript изпълнява кода',
+        desc: 'От текста във файла до резултата: токени, AST, bytecode и "горещ" код в V8.',
+        scenarios: ['Преводачи', 'Токени', 'AST', 'Две фази', 'Engine и среда', 'Bytecode', 'Горещ код'], adv: [6, 7],
+    },
+    {
+        topic: 'basic', file: 'variablesInMemory.html',
+        title: 'Променливите в паметта',
+        desc: 'Деклариране, присвояване, копиране на стойности, типове, const и референции към обекти.',
+        scenarios: ['Деклариране и присвояване', 'Копиране на стойност', 'x = x ** 2', 'Типове стойности', 'const', 'Обекти и референции'], adv: [6],
+    },
+    {
+        topic: 'basic', file: 'expressionEvaluation.html',
+        title: 'Как се изчислява един израз',
+        desc: 'Приоритет, асоциативност, i++ и ++i: как изразът се превръща в една стойност.',
+        scenarios: ['Приоритет', 'Асоциативност', 'Присвояването е израз', 'i++ и ++i', 'Ред на изчисляване', 'Statement vs expression'], adv: [5, 6],
+    },
+    {
+        topic: 'basic', file: 'coercionAndLogic.html',
+        title: 'Типове, сравнения и логика',
+        desc: 'Скритите преобразувания на типове, == и ===, truthy / falsy и short-circuit.',
+        scenarios: ['Операторът +', 'Низ -> число', '== и ===', 'Сравняване на низове', 'Truthy и falsy', 'Short-circuit: && и ||', 'Тернарен оператор'], adv: [7],
+    },
+    {
+        topic: 'basic', file: 'numbersInMemory.html',
+        title: 'Числата в паметта',
+        desc: 'Битове, 64-битови дроби, защо 0.1 + 0.2 != 0.3, NaN и Infinity.',
+        scenarios: ['Битове и цели числа', 'Дроби и 0.1', '64 бита', '0.1 + 0.2', 'Големи цели числа', 'NaN и Infinity', 'Лаборатория'], adv: [3, 5],
+    },
+    {
+        topic: 'basic', file: 'loopsStepByStep.html',
+        title: 'Циклите стъпка по стъпка',
+        desc: 'if / else, for, while, do-while, break и continue: пътят на изпълнението по блок-схема.',
+        scenarios: ['if / else if', 'Цикъл for', 'while и безкраен цикъл', 'do-while', 'break и continue', 'Вложени цикли', 'switch без break'], adv: [6, 7],
+    },
+    {
+        topic: 'arrays', file: 'arraysInMemory.html',
+        title: 'Масивите в паметта',
+        desc: 'Индекси и length, масивът като обект, push / pop / shift и референции.',
+        scenarios: ['Индекси', 'Извън масива', 'Масивът е обект', 'push / pop / unshift / shift', 'Референции', 'Двумерни', 'Споделен ред'], adv: [6, 7],
+    },
+    {
+        topic: 'arrays', file: 'arrayAlgorithms.html',
+        title: 'Алгоритми с масиви',
+        desc: 'Обхождане, сума, най-голям елемент, филтриране, търсене с break и двумерен масив.',
+        scenarios: ['Обхождане с for', 'Обратен ред', 'Сума на елементите', 'Най-голям елемент', 'Филтриране в нови масиви', 'Търсене с break', 'Двумерен масив'], adv: [6, 7],
+    },
+    {
+        topic: 'functions', file: 'callStack.html',
+        title: 'Стекът на извикванията',
+        desc: 'Извикване, аргументи и параметри, return, вложени извиквания и рекурсия в call stack-а.',
+        scenarios: ['Извикване', 'Аргументи', 'return', 'Вложени извиквания', 'По подразбиране', 'Рекурсия', 'Препълване (stack overflow)'], adv: [6, 7],
+    },
+    {
+        topic: 'functions', file: 'scopeChain.html',
+        title: 'Обхват на променливите',
+        desc: 'Global, local и block scope, търсене по веригата от обхвати, shadowing и IIFE.',
+        scenarios: ['Global и local', 'Веригата от обхвати', 'Shadowing', 'Без декларация', 'Block scope: let и var', 'IIFE', 'Лексикален обхват'], adv: [6, 7],
+    },
+    {
+        topic: 'functions', file: 'hoisting.html',
+        title: 'Hoisting: двете фази на изпълнение',
+        desc: 'Какво се регистрира преди първия ред: var, function declaration, let / const и TDZ.',
+        scenarios: ['var и undefined', 'function declaration', 'function expression', 'let / const и TDZ', 'Hoisting във функция', 'let в блок', 'TDZ: време, не място'], adv: [6, 7],
+    },
+    {
+        topic: 'functions', file: 'functionsAsValues.html',
+        title: 'Функциите са стойности',
+        desc: 'Функцията е обект в паметта: callbacks, функция връща функция, arrow функции и closure.',
+        scenarios: ['Функцията е стойност', 'В масиви и обекти', 'Callback функции', 'Функция връща функция', 'Arrow функции', 'Closure', "Забравена ';'"], adv: [6, 7],
+    },
+];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// keep ?theme=... when opening an animation
+const themeParam = new URLSearchParams(location.search).get('theme');
+const href = (file, hash) => file + (themeParam === 'light' || themeParam === 'dark' ? '?theme=' + themeParam : '') + (hash || '');
+
+function render() {
+    let n = 0;
+    $('#topics').innerHTML = TOPICS.map(t => `
+        <section class="topic" style="--n: ${ANIMATIONS.filter(a => a.topic === t.id).length}">
+            <h2>${esc(t.name)} <span class="en">${esc(t.en)}</span></h2>
+            <div class="grid">${ANIMATIONS.filter(a => a.topic === t.id).map(a => {
+                n++;
+                const name = a.file.split('/').pop();
+                return `
+                <article class="card t-${t.id}">
+                    <div class="card-head">
+                        <span class="num">${n}</span>
+                        <span class="pill topic-pill">${esc(t.name)}</span>
+                        <span class="count">${a.scenarios.length} сценария</span>
+                    </div>
+                    <h3><a href="${esc(href(a.file))}">${esc(a.title)}</a></h3>
+                    <p class="desc">${esc(a.desc)}</p>
+                    <div class="file">${esc(name)}${a.old ? ' <span class="old">(вече се използва в слайдовете)</span>' : ''}</div>
+                    <nav class="scen" aria-label="Сценарии">${a.scenarios.map((s, i) =>
+                        `<a href="${esc(href(a.file, '#' + (i + 1)))}"${a.adv.includes(i + 1) ? ' class="adv"' : ''}>${i + 1}. ${esc(s)}</a>`).join('')}</nav>
+                </article>`;
+            }).join('')}</div>
+        </section>`).join('');
+}
+
+function $(sel) { return document.querySelector(sel); }
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('animationsIndexTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+(function initTheme() {
+    let t = themeParam;
+    if (!t) { try { t = localStorage.getItem('animationsIndexTheme'); } catch (e) { /* storage blocked */ } }
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+})();
+
+render();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

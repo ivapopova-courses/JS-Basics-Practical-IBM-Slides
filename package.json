@@ -8,7 +8,12 @@
     "dev:trainer": "TRAINER=1 vitepress dev site",
     "build": "vitepress build site",
     "build:trainer": "TRAINER=1 vitepress build site",
-    "preview": "vitepress preview site"
+    "preview": "vitepress preview site",
+    "i18n:update": "node i18n/cli.mjs update",
+    "i18n:status": "node i18n/cli.mjs status",
+    "i18n:check": "node i18n/cli.mjs check",
+    "i18n:pack": "node i18n/cli.mjs pack",
+    "i18n:import": "node i18n/cli.mjs import"
   },
   "dependencies": {
     "@sciscend/course-kit": "github:SciScend/course-kit#v0.2.0"

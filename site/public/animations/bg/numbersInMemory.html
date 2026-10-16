@@ -1,0 +1,1576 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как се пазят числата в паметта</title>
+<!--
+    Step-by-step animation: how JavaScript stores numbers (IEEE 754 double, 64 bits).
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: numbersInMemory.html#3 (scenario 3), #3.5 (scenario 3, step 5),
+    ?theme=dark forces the dark theme, #selftest walks every step and checks the facts.
+    All bits and exact values are computed at runtime from the real 64-bit numbers.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --free-bg: #efe9dc;
+    --free-border: #cfc4af;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --heap-bg: #fff3cf;
+    --heap-border: #c99a2e;
+    --chip-ink: #ffffff;
+
+    /* the three parts of a 64-bit number */
+    --sgn: #b03a76;
+    --sgn-bg: #f7d5e6;
+    --exp: #1f7f8c;
+    --exp-bg: #cdedef;
+    --man: #4f8a45;
+    --man-bg: #d6ecce;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --free-bg: #262830; --free-border: #3d404c;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+        --chip-ink: #111111;
+        --sgn: #f08cbf; --sgn-bg: #4a2236; --exp: #5fd0d8; --exp-bg: #173d42; --man: #8fd184; --man-bg: #24401f;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --free-bg: #262830; --free-border: #3d404c;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --heap-bg: #3a3220; --heap-border: #c9a24a;
+    --chip-ink: #111111;
+    --sgn: #f08cbf; --sgn-bg: #4a2236; --exp: #5fd0d8; --exp-bg: #173d42; --man: #8fd184; --man-bg: #24401f;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 1.02rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .2rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+.cline.appear { animation: fadein .4s both; }
+.console-empty { font-size: .8rem; color: var(--muted); font-style: italic; padding: .2rem .4rem; }
+
+/* ---------- visualisation panel ---------- */
+.viz-panel { display: flex; flex-direction: column; overflow: hidden; }
+.viz { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .75rem; }
+.sec-t {
+    margin-bottom: .3rem;
+    font-size: .66rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+}
+.sec.appear { animation: appear .5s both; }
+.appear { animation: appear .5s both; }
+.mono { font-family: var(--mono); }
+.hint-box {
+    padding: .5rem .8rem; border: 1px dashed var(--line); border-radius: .5rem;
+    font-size: .85rem; color: var(--muted);
+}
+
+/* place-value rows (decimal and binary digits) */
+.prow { display: flex; gap: .45rem; align-items: flex-end; }
+.pcol { display: flex; flex-direction: column; align-items: center; gap: .2rem; width: 4.4rem; }
+.pval { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+.pval.on { color: var(--write); font-weight: 700; }
+.pcell {
+    display: flex; align-items: center; justify-content: center;
+    width: 3.2rem; height: 2.6rem;
+    border: 2px dashed var(--free-border); border-radius: .5rem;
+    background: var(--free-bg);
+    font-family: var(--mono); font-size: 1.4rem; font-weight: 700;
+    transition: box-shadow .25s;
+}
+.pcell.full { border-style: solid; border-color: var(--var-border); background: var(--panel); color: var(--muted); }
+.pcell.one { background: var(--var-bg); color: var(--var-ink); }
+.pcell.pdec { border-style: solid; border-color: var(--heap-border); background: var(--heap-bg); color: var(--ink); }
+.pexp { font-family: var(--mono); font-size: .68rem; color: var(--muted); }
+.ppoint { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; align-self: center; padding-top: .9rem; }
+.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.hl-err   { box-shadow: 0 0 0 3px var(--err), 0 0 0 7px var(--err-bg); }
+.sumline { margin-top: .4rem; font-family: var(--mono); font-size: 1rem; }
+.sumline b { color: var(--write); }
+
+.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 1rem; }
+.work { font-family: var(--mono); font-size: 1rem; }
+.work div { padding: .15rem .5rem; border-radius: .3rem; }
+.work div.cur { background: var(--write-bg); }
+.result {
+    padding: .5rem .8rem; border: 2px solid var(--var-border); border-radius: .6rem; background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.15rem; font-weight: 700;
+}
+.result small { display: block; font-family: var(--sans); font-size: .72rem; font-weight: 600; opacity: .8; }
+
+/* 1/3 card */
+.third { font-family: var(--mono); font-size: 1.2rem; }
+.third .rep { color: var(--write); font-weight: 700; }
+
+/* doubling table */
+.dtab { border-collapse: collapse; font-family: var(--mono); font-size: .95rem; }
+.dtab td, .dtab th { padding: .12rem .6rem; text-align: left; }
+.dtab th { font-family: var(--sans); font-size: .66rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.dtab td.bitc { font-weight: 700; text-align: center; }
+.dtab td.bitc span { display: inline-block; min-width: 1.6rem; padding: 0 .3rem; border-radius: .3rem; background: var(--var-bg); color: var(--var-ink); }
+.dtab tr.cur td { background: var(--write-bg); }
+.dtab tr.loop td { background: var(--read-bg); }
+.dtab tr.appear { animation: fadein .4s both; }
+.bin-res { font-family: var(--mono); font-size: 1.05rem; overflow-wrap: anywhere; }
+.bin-res .rep { color: var(--write); font-weight: 700; }
+.cmp { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .2rem .8rem; font-size: .8rem; align-items: baseline; }
+.cmp .k { color: var(--muted); }
+.cmp code { font-family: var(--mono); font-size: .88rem; overflow-wrap: anywhere; }
+.tail { background: var(--write-bg); color: var(--write); font-weight: 700; border-radius: .2rem; }
+
+/* ---------- the 64-bit box ---------- */
+.f64 { --gap: .45rem; }
+.f64-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--gap) repeat(11, minmax(0, 1fr)) var(--gap) repeat(52, minmax(0, 1fr));
+    column-gap: 1px;
+}
+.bit {
+    display: flex; align-items: center; justify-content: center;
+    height: 1.85rem;
+    border: 1px solid var(--free-border); border-radius: .2rem;
+    background: var(--free-bg); color: var(--muted);
+    font-family: var(--mono); font-size: .78rem;
+}
+.f64.parts .bit.p-s { border-color: var(--sgn); }
+.f64.parts .bit.p-e { border-color: var(--exp); }
+.f64.parts .bit.p-m { border-color: var(--man); }
+.bit.one { font-weight: 800; color: var(--chip-ink); background: var(--muted); border-color: var(--muted); }
+.f64.parts .bit.one.p-s { background: var(--sgn); }
+.f64.parts .bit.one.p-e { background: var(--exp); }
+.f64.parts .bit.one.p-m { background: var(--man); }
+.f64.empty .bit { border-style: dashed; }
+.bit.flip { animation: pop .35s calc(var(--d) * 9ms) both; }
+.gbar { height: 4px; margin-top: .25rem; border-radius: 2px; background: var(--line); }
+.f64.parts .gbar.p-s { background: var(--sgn); }
+.f64.parts .gbar.p-e { background: var(--exp); }
+.f64.parts .gbar.p-m { background: var(--man); }
+.glab { margin-top: .15rem; font-size: .72rem; font-weight: 700; white-space: nowrap; color: var(--muted); }
+.glab.p-e { text-align: right; color: var(--exp); }
+.glab.p-m { text-align: center; color: var(--man); }
+.glab.p-s { color: var(--sgn); }
+.glab.all { text-align: center; }
+.f64-idx { display: flex; justify-content: space-between; font-family: var(--mono); font-size: .62rem; color: var(--muted); margin-bottom: .1rem; }
+
+.dec {
+    display: grid; grid-template-columns: auto auto minmax(0, 1fr);
+    gap: .2rem .8rem; align-items: baseline;
+    margin-top: .55rem;
+    font-size: .88rem;
+}
+.dec .dk { font-size: .7rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.dec .dk.p-s { color: var(--sgn); }
+.dec .dk.p-e { color: var(--exp); }
+.dec .dk.p-m { color: var(--man); }
+.dec .dk.p-v { color: var(--ink); }
+.dec code { font-family: var(--mono); font-size: .9rem; padding: .05rem .3rem; border-radius: .25rem; background: var(--inline-code); overflow-wrap: anywhere; }
+.dec .dt { color: var(--muted); overflow-wrap: anywhere; }
+.dec .dt b { color: var(--ink); }
+.dec .wide { grid-column: 2 / -1; }
+.dec .flash { animation: flash 1.2s both; }
+.exact {
+    margin-top: .5rem; padding: .4rem .7rem;
+    border: 1px solid var(--line); border-radius: .5rem; background: var(--paper);
+    font-size: .8rem;
+}
+.exact .ev { display: block; max-height: 4.2rem; overflow: auto; font-family: var(--mono); font-size: .92rem; overflow-wrap: anywhere; }
+.badge { display: inline-block; margin-left: .5rem; padding: .02rem .45rem; border-radius: .3rem; font-size: .68rem; font-weight: 700; color: var(--chip-ink); }
+.badge.ok { background: var(--var-border); }
+.badge.approx { background: var(--write); }
+.exact.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+
+/* scientific notation card */
+.sci { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .3rem 1rem; align-items: baseline; }
+.sci .k { font-size: .72rem; color: var(--muted); }
+.sci code { font-family: var(--mono); font-size: 1.12rem; }
+.sci code.new { animation: fadein .45s both; }
+
+/* exact-value cards (0.1 + 0.2) */
+.cards { display: flex; flex-direction: column; gap: .35rem; }
+.card {
+    display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: .8rem; align-items: center;
+    padding: .35rem .7rem;
+    border: 2px solid var(--heap-border); border-radius: .5rem; background: var(--heap-bg);
+}
+.card .ck { font-size: .78rem; font-weight: 700; }
+.card .ck small { display: block; font-weight: 500; color: var(--muted); }
+.card .cv { font-family: var(--mono); font-size: .9rem; overflow-wrap: anywhere; }
+.card.sum { border-color: var(--write); background: var(--write-bg); }
+
+/* number line */
+.nl { position: relative; height: 9.2rem; margin: 0 1.2rem; --axis: 4.3rem; }
+.nl-axis { position: absolute; left: -1.2rem; right: -1.2rem; top: var(--axis); height: 2px; background: var(--muted); }
+.nl-axis::before, .nl-axis::after { content: ""; position: absolute; top: -4px; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+.nl-axis::after { right: -2px; border-left: 8px solid var(--muted); }
+.nl-pt { position: absolute; top: var(--axis); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+.nl-pt .dot { width: .9rem; height: .9rem; margin-top: -.45rem; border-radius: 50%; background: var(--ink); border: 2px solid var(--ink); }
+.nl-pt.hole .dot { background: var(--paper); border: 2px dashed var(--muted); }
+.nl-pt.hl-read .dot, .nl-pt.hl-write .dot { transform: scale(1.35); }
+.nl-pt.hl-read, .nl-pt.hl-write { box-shadow: none; }
+.nl-pt.hl-read .dot { background: var(--read); border-color: var(--read); box-shadow: 0 0 0 4px var(--read-bg); }
+.nl-pt.hl-write .dot { background: var(--write); border-color: var(--write); box-shadow: 0 0 0 4px var(--write-bg); }
+.nl-lab { margin-top: .3rem; font-family: var(--mono); font-size: .8rem; font-weight: 700; white-space: nowrap; }
+.nl-pt.hole .nl-lab { color: var(--muted); font-weight: 500; }
+.nl-sub { font-family: var(--mono); font-size: .66rem; color: var(--muted); white-space: nowrap; }
+.nl-tag { margin-top: .2rem; padding: .02rem .4rem; border-radius: .3rem; font-size: .68rem; font-weight: 700; white-space: nowrap; color: var(--chip-ink); }
+.nl-tag.read { background: var(--read); }
+.nl-tag.write { background: var(--write); }
+.nl-mk { position: absolute; bottom: calc(100% - var(--axis)); display: flex; flex-direction: column; }
+.nl-mk.c { transform: translateX(-50%); align-items: center; }
+.nl-mk.l { transform: translateX(-1px); align-items: flex-start; }
+.nl-mk.r { transform: translateX(calc(-100% + 1px)); align-items: flex-end; }
+.nl-mlab { font-size: .74rem; font-weight: 700; white-space: nowrap; color: var(--ref); }
+.nl-mlab small { display: block; font-family: var(--mono); font-weight: 500; }
+.nl-mk.l .nl-mlab { padding-left: .2rem; border-left: 2px solid var(--ref); }
+.nl-mk.r .nl-mlab { padding-right: .2rem; border-right: 2px solid var(--ref); text-align: right; }
+.nl-mk .stem { width: 2px; background: var(--ref); }
+.nl-mk .stem::after { content: ""; display: block; }
+.nl-mk.sum .nl-mlab { color: var(--write); border-color: var(--write); }
+.nl-mk.sum .stem { background: var(--write); }
+.nl-arrow { position: absolute; top: calc(var(--axis) - .75rem); height: 3px; background: var(--write); transform-origin: left center; }
+.nl-arrow.rev { transform-origin: right center; }
+.nl-arrow::after {
+    content: ""; position: absolute; top: -5px; right: -6px;
+    border-top: 6.5px solid transparent; border-bottom: 6.5px solid transparent; border-left: 9px solid var(--write);
+}
+.nl-arrow.rev::after { right: auto; left: -6px; border-left: 0; border-right: 9px solid var(--write); }
+.nl-arrow.draw { animation: grow .7s .2s both; }
+.nl-legend { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; font-size: .72rem; color: var(--muted); }
+.nl-legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.nl-legend i { display: inline-block; width: .75rem; height: .75rem; border-radius: 50%; background: var(--ink); }
+.nl-legend i.hole { background: none; border: 2px dashed var(--muted); }
+.nl-legend i.mk { width: 2px; height: .9rem; border-radius: 0; background: var(--ref); }
+.nl-caption { font-size: .76rem; color: var(--muted); }
+
+/* fixes list */
+.fixes { display: flex; flex-direction: column; gap: .3rem; }
+.fix {
+    display: grid; grid-template-columns: 1.4rem 8.5rem minmax(0, 1fr); gap: .5rem; align-items: center;
+    padding: .25rem .6rem; border: 1px solid var(--var-border); border-radius: .45rem; background: var(--panel);
+    font-size: .82rem;
+}
+.fix svg { width: 1.1rem; height: 1.1rem; color: var(--var-border); }
+.fix code { font-family: var(--mono); font-size: .88rem; }
+.fix b { color: var(--var-border); }
+
+/* special values table */
+.stab { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.stab th { padding: .2rem .5rem; text-align: left; font-size: .64rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+.stab td { padding: .22rem .5rem; border-bottom: 1px solid var(--line); }
+.stab td code { font-family: var(--mono); font-size: .86rem; }
+.stab td.e code { color: var(--exp); }
+.stab td.m { color: var(--man); }
+.stab tr.cur td { background: var(--write-bg); }
+.stab tr.cur td:first-child { font-weight: 700; }
+
+/* lab */
+.lab-in { display: flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: 1.15rem; }
+.lab-in input {
+    flex: 1; min-width: 0;
+    padding: .35rem .6rem;
+    border: 2px solid var(--write); border-radius: .45rem;
+    background: var(--panel); color: var(--ink);
+    font: inherit;
+}
+.lab-in input:focus { outline: none; box-shadow: 0 0 0 4px var(--write-bg); }
+.presets { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .45rem; }
+.chip {
+    padding: .18rem .55rem; border: 1px solid var(--line); border-radius: 999px;
+    background: var(--paper); color: var(--ink);
+    font-family: var(--mono); font-size: .78rem; cursor: pointer;
+}
+.chip:hover { border-color: var(--muted); }
+.chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.lab-msg { padding: .5rem .8rem; border-radius: .45rem; background: var(--err-bg); color: var(--err); font-size: .9rem; }
+.lab-print { font-size: .85rem; color: var(--muted); }
+.lab-print code { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .cs { color: var(--sgn); }
+.explain-text .ce { color: var(--exp); }
+.explain-text .cm { color: var(--man); }
+.explain-text .q { color: var(--ref); font-weight: 700; }
+.explain-text sup, .dec sup, .sci sup, .result sup { font-size: .7em; line-height: 0; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+
+.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+#selftest { position: fixed; left: 0; right: 0; bottom: 0; z-index: 99; max-height: 50vh; overflow: auto; margin: 0; padding: .5rem; background: #000; color: #0f0; font-size: 12px; }
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+@keyframes flash { 0%, 60% { background: var(--write-bg); } 100% { background: transparent; } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+    .row2 { grid-template-columns: 1fr; }
+    .pcol { width: 2.6rem; }
+    .pcell { width: 2.3rem; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Числата в паметта <small>как JavaScript пази всяко число в 64 бита, стъпка по стъпка</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../numbersInMemory.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="panel viz-panel">
+            <div class="panel-title"><span id="vizTitle"></span><span class="note" id="vizNote"></span></div>
+            <div class="viz" id="viz"></div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// The real 64 bits of a number (IEEE 754 double), computed by the browser
+// ---------------------------------------------------------------------------
+const BUF = new DataView(new ArrayBuffer(8));
+
+function bitsOf(x) {
+    BUF.setFloat64(0, x);
+    return BUF.getBigUint64(0).toString(2).padStart(64, '0');
+}
+// the next / previous representable number (only used for positive numbers)
+function nextUp(x) { BUF.setFloat64(0, x); BUF.setBigUint64(0, BUF.getBigUint64(0) + 1n); return BUF.getFloat64(0); }
+function nextDown(x) { BUF.setFloat64(0, x); BUF.setBigUint64(0, BUF.getBigUint64(0) - 1n); return BUF.getFloat64(0); }
+
+// The exact decimal value of the stored bits: mantissa * 2^p, written out in full.
+// Every double has a finite decimal expansion, so this string is exact.
+function exactDecimal(x) {
+    if (!isFinite(x)) return String(x);
+    const b = bitsOf(x);
+    const sign = b[0] === '1' ? '-' : '';
+    const e = parseInt(b.slice(1, 12), 2);
+    let m = BigInt('0b' + b.slice(12));
+    let p;
+    if (e === 0) p = -1074;
+    else { m += 1n << 52n; p = e - 1075; }
+    if (m === 0n) return sign + '0';
+    if (p >= 0) return sign + (m << BigInt(p)).toString();
+    const k = -p;
+    const digits = (m * 5n ** BigInt(k)).toString().padStart(k + 1, '0');
+    const int = digits.slice(0, digits.length - k);
+    const frac = digits.slice(digits.length - k).replace(/0+$/, '');
+    return sign + int + (frac ? '.' + frac : '');
+}
+
+// A plain decimal literal ("0.1", "-2.5e3", "1_000") written out in full, or null.
+function literalToDecimal(src) {
+    const m = /^([+-]?)(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/.exec(src.replace(/_/g, '').trim());
+    if (!m || (m[2] + (m[3] || '')) === '') return null;
+    let digits = m[2] + (m[3] || '');
+    let point = m[2].length + (m[4] ? parseInt(m[4], 10) : 0);
+    if (Math.abs(point) > 400) return null;
+    if (point < 0) { digits = '0'.repeat(-point) + digits; point = 0; }
+    if (point > digits.length) digits += '0'.repeat(point - digits.length);
+    const int = digits.slice(0, point).replace(/^0+/, '') || '0';
+    const frac = digits.slice(point).replace(/0+$/, '');
+    return (m[1] === '-' ? '-' : '') + int + (frac ? '.' + frac : '');
+}
+
+// exact a - b for two plain decimal strings
+function decimalDiff(a, b) {
+    const scale = Math.max((a.split('.')[1] || '').length, (b.split('.')[1] || '').length);
+    const big = s => {
+        const neg = s.startsWith('-');
+        const [i, f = ''] = s.replace('-', '').split('.');
+        const v = BigInt(i + f.padEnd(scale, '0'));
+        return neg ? -v : v;
+    };
+    let d = big(a) - big(b);
+    const neg = d < 0n;
+    if (neg) d = -d;
+    let s = d.toString().padStart(scale + 1, '0');
+    const int = s.slice(0, s.length - scale), frac = s.slice(s.length - scale).replace(/0+$/, '');
+    return (neg ? '-' : '+') + int + (frac ? '.' + frac : '');
+}
+
+// what console.log prints for a value
+function show(v) {
+    if (typeof v === 'number') return Object.is(v, -0) ? '-0' : String(v);
+    if (typeof v === 'bigint') return v + 'n';
+    return String(v);
+}
+
+// mark the part of an exact value that differs from the "ideal" decimal
+function tailHL(exact, ideal) {
+    let i = 0;
+    const padded = ideal.padEnd(exact.length, '0');
+    while (i < exact.length && exact[i] === padded[i]) i++;
+    if (i >= exact.length) return esc(exact);
+    return esc(exact.slice(0, i)) + `<span class="tail">${esc(exact.slice(i))}</span>`;
+}
+
+// ---------------------------------------------------------------------------
+// Small helpers used by the scenario steps. Each one mutates the state `s`.
+// ---------------------------------------------------------------------------
+function log(s, text, err = false) { s.console.push({ text, err }); }
+function hl(s, key, kind = 'write') { s.hl[key] = kind; }
+
+const PLACES = [128, 64, 32, 16, 8, 4, 2, 1];
+const HALVES = ['1/2', '1/4', '1/8', '1/16', '1/32', '1/64', '1/128', '1/256'];
+const HALVES_V = ['0.5', '0.25', '0.125', '0.0625', '0.03125', '0.015625', '0.0078125', '0.00390625'];
+
+// one row of the "multiply by 2" table, built from exact decimal arithmetic
+// (we use strings with one digit after the point, so 0.1 * 2 really shows 0.2)
+function dbl(s, x) {
+    const t = Math.round(x * 20) / 10;             // x has one decimal digit, so this is exact enough
+    const bit = t >= 1 ? 1 : 0;
+    const rest = Math.round((t - bit) * 10) / 10;
+    s.rows.forEach(r => r.cur = false);
+    s.rows.push({ x: x.toFixed(1), t: t.toFixed(1), bit, rest: rest.toFixed(1), cur: true });
+    s.digits += bit;
+    return rest;
+}
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line   - active code line (0-based, -1 = none)
+//   step.do     - changes to the state
+//   step.fly    - values that fly on screen: [fromKey, toKey, text, 'read'|'write']
+//                 keys are data-k attributes in the visualisation, 'con' = last console line
+//   step.reveal - keys to keep hidden until all flights land
+// ---------------------------------------------------------------------------
+const SCENARIOS = [
+{
+    tab: 'Битове и цели числа',
+    view: 'bin',
+    vizTitle: 'Позиционни бройни системи',
+    init: () => ({ dec: false, pv: false, bits: null, work: [], res: false, on: -1 }),
+    code: [
+        'let x = 13;',
+        'console.log(x.toString(2));       // 1101',
+        'console.log(0b1101);              // 13',
+        'console.log(parseInt("1101", 2)); // 13',
+    ],
+    steps: [
+        { line: -1, text: `Компютърът пази всичко - числа, текст, картинки - като поредица от <b>битове</b> (bit, binary digit). Всеки бит има само две възможни стойности: <b>0</b> или <b>1</b> (няма ток / има ток). Как тогава се записва числото 13? Да започнем от системата, която вече познаваме.` },
+        { line: -1, text: `В <b>десетичната</b> система (decimal) цифрите са десет (0-9), а всяка позиция струва 10 пъти повече от позицията вдясно: 1, 10, 100, 1000. Записът 13 означава 1 * 10 + 3 * 1.`,
+          do: s => { s.dec = true; } },
+        { line: -1, text: `В <b>двоичната</b> система (binary) цифрите са само две - 0 и 1, а всяка позиция струва <b>2 пъти</b> повече от позицията вдясно: 1, 2, 4, 8, 16, 32... Ето 8 бита (1 байт) и стойността на всяка позиция.`,
+          do: s => { s.pv = true; s.bits = PLACES.map(() => null); } },
+        { line: 0, text: `<code>let x = 13;</code> - кои позиции трябва да "включим" (1), за да получим 13? Започваме отляво: 128, 64, 32 и 16 са повече от 13, там пишем 0. Позиция <b>8</b> се побира: пишем 1 и остават 13 - 8 = 5.`,
+          do: s => { s.bits = [0, 0, 0, 0, 1, null, null, null]; s.work.push('13 - 8 = 5'); s.on = 4; hl(s, 'bit4'); },
+          fly: [['w0', 'bit4', '1', 'write']] },
+        { line: 0, text: `Следващата позиция е 4. Тя се побира в 5: пишем 1 и остават 5 - 4 = 1.`,
+          do: s => { s.bits[5] = 1; s.work.push('5 - 4 = 1'); s.on = 5; hl(s, 'bit5'); },
+          fly: [['w1', 'bit5', '1', 'write']] },
+        { line: 0, text: `Позиция 2 <b>не</b> се побира в остатъка 1, затова там пишем 0.`,
+          do: s => { s.bits[6] = 0; s.work.push('1 < 2, пишем 0'); s.on = 6; hl(s, 'bit6'); },
+          fly: [['w2', 'bit6', '0', 'write']] },
+        { line: 0, text: `Последната позиция е 1 - побира се: пишем 1 и остатъкът става 0. Готово!`,
+          do: s => { s.bits[7] = 1; s.work.push('1 - 1 = 0'); s.on = 7; hl(s, 'bit7'); },
+          fly: [['w3', 'bit7', '1', 'write']] },
+        { line: 0, text: `Така 13 в двоична система е <b>1101</b> (водещите нули не се пишат). Проверка: 8 + 4 + 1 = 13. Всяко цяло число може да се запише така - като сума от различни степени на 2.`,
+          do: s => { s.res = true; s.on = -1; } },
+        { line: 1, text: `<code>x.toString(2)</code> връща записа на числото в бройна система с основа 2 - низа "1101". (С <code>toString(16)</code> бихме получили шестнадесетичен запис.)`,
+          do: s => { log(s, show((13).toString(2))); hl(s, 'res', 'read'); }, fly: [['res', 'con', '1101', 'read']] },
+        { line: 2, text: `С префикса <code>0b</code> можем да пишем числа направо в двоичен вид: <code>0b1101</code> е просто друг запис на същото число 13.`,
+          do: s => log(s, show(0b1101)) },
+        { line: 3, text: `<code>parseInt("1101", 2)</code> прави обратното: чете низа като двоично число и връща 13.`,
+          do: s => log(s, show(parseInt('1101', 2))) },
+        { line: -1, text: `<b>Обобщение:</b> всяко цяло число може да се запише <b>точно</b> с битове - като сума от степени на 2 (1, 2, 4, 8...). С 8 бита стигаме до 255. JavaScript използва по <b>64 бита</b> за всяко число - как точно ги разпределя, ще видим в сценарий 3.`,
+          do: s => { s.res = true; } },
+    ],
+},
+{
+    tab: 'Дроби и 0.1',
+    view: 'frac',
+    vizTitle: 'Дробни числа в двоична система',
+    init: () => ({ third: false, fpv: false, target: '', rows: [], digits: '', loop: false, cut: false }),
+    code: [
+        'console.log(1 / 3);',
+        'console.log((0.5).toString(2)); // 0.1',
+        'console.log((0.1).toString(2)); // ?',
+    ],
+    steps: [
+        { line: -1, text: `Целите числа се записват в битове точно. А дробните? Първо да си припомним един проблем от десетичната система, който всички познаваме от училище.` },
+        { line: 0, text: `1 / 3 в десетична система е 0.333... - тройките продължават <b>безкрай</b>. Причината: 1/3 не може да се сглоби от краен брой десети, стотни, хилядни... Колкото и цифри да запишем, винаги ще е малко по-малко от 1/3.`,
+          do: s => { s.third = true; } },
+        { line: 0, text: `JavaScript пази ограничен брой цифри, затова отпечатва <code>0.3333333333333333</code> - число, което е <b>много близо</b> до 1/3, но не е точно 1/3.`,
+          do: s => log(s, show(1 / 3)) },
+        { line: -1, text: `В двоична система позициите след точката са <b>половинки</b>: 1/2 = 0.5, 1/4 = 0.25, 1/8 = 0.125, 1/16 = 0.0625... Всяка следваща е 2 пъти по-малка. Всяко дробно число трябва да се сглоби от такива части.`,
+          do: s => { s.fpv = true; } },
+        { line: 1, text: `Как се намират битовете след точката? Умножаваме дробта по 2 и цялата част (0 или 1) е следващият бит. 0.5 * 2 = <b>1</b>.0 - битът е 1 и не остава нищо. Значи 0.5 = <b>0.1</b> в двоична система (точно 1/2).`,
+          do: s => { s.target = '0.5'; dbl(s, 0.5); hl(s, 'fb0'); }, fly: [['r0', 'fb0', '1', 'write']] },
+        { line: 1, text: `<code>(0.5).toString(2)</code> потвърждава: "0.1". Числото 0.5 се записва в паметта <b>точно</b>.`,
+          do: s => log(s, show((0.5).toString(2))), fly: [['binres', 'con', '0.1', 'read']] },
+        { line: 2, text: `Сега 0.1. Умножаваме по 2: 0.1 * 2 = <b>0</b>.2. Цялата част е 0, значи първият бит след точката е 0. Продължаваме с дробната част 0.2.`,
+          do: s => { s.target = '0.1'; s.rows = []; s.digits = ''; dbl(s, 0.1); hl(s, 'fb0'); }, fly: [['r0', 'fb0', '0', 'write']] },
+        { line: 2, text: `0.2 * 2 = <b>0</b>.4 - следващият бит е 0.`,
+          do: s => { dbl(s, 0.2); hl(s, 'fb1'); }, fly: [['r1', 'fb1', '0', 'write']] },
+        { line: 2, text: `0.4 * 2 = <b>0</b>.8 - пак 0.`,
+          do: s => { dbl(s, 0.4); hl(s, 'fb2'); }, fly: [['r2', 'fb2', '0', 'write']] },
+        { line: 2, text: `0.8 * 2 = <b>1</b>.6 - битът е 1. Цялата част "изразходваме", продължаваме само с 0.6.`,
+          do: s => { dbl(s, 0.8); hl(s, 'fb3'); }, fly: [['r3', 'fb3', '1', 'write']] },
+        { line: 2, text: `0.6 * 2 = <b>1</b>.2 - битът е 1, продължаваме с 0.2. Засега имаме 0.00011 = 1/16 + 1/32 = 0.09375 - близо, но не е 0.1.`,
+          do: s => { dbl(s, 0.6); hl(s, 'fb4'); }, fly: [['r4', 'fb4', '1', 'write']] },
+        { line: 2, text: `Отново <b>0.2</b>! С него вече сме смятали (втория ред), значи оттук нататък всичко се повтаря: 0011, 0011, 0011... безкрай. 0.1 в двоична система е <b>0.0001100110011...</b> - точно като 1/3 в десетична.`,
+          do: s => { s.loop = true; s.rows.forEach(r => r.cur = false); s.digits += '001'; } },
+        { line: 2, text: `Но паметта е крайна: пазят се само първите 53 значещи бита, а останалите се <b>отрязват</b> и последният бит се <b>закръгля</b> (тук нагоре: ...1100 става ...1101). <code>toString(2)</code> показва точно това, което е записано.`,
+          do: s => { s.cut = true; log(s, show((0.1).toString(2))); } },
+        { line: -1, text: `<b>Обобщение:</b> в двоична система точно се записват само дроби, сглобени от половинки, четвъртинки, осминки... (0.5, 0.25, 0.75, 0.375). Числа като 0.1, 0.2 и 0.3 имат безкраен двоичен запис и в паметта влиза <b>най-близкото</b> възможно число. Това не е бъг на JavaScript - така е във всички езици.` },
+    ],
+},
+{
+    tab: '64 бита',
+    advanced: true,
+    view: 'box',
+    vizTitle: 'Едно число = 64 бита (8 байта)',
+    vizNote: 'битовете са истински - изчислени от браузъра',
+    init: () => ({ sci: null, val: null, lit: '', parts: false, exact: false }),
+    code: [
+        'let million = 1e6;  // 1 * 10 ** 6',
+        'let a = 1;',
+        'let b = 13;',
+        'let c = 0.5;',
+        'let d = -2.5;',
+        'let e = 0.1;',
+        'console.log(e);     // 0.1',
+    ],
+    steps: [
+        { line: -1, text: `Всяко число в JavaScript - цяло или дробно - заема <b>64 бита</b> (8 байта) и се пази в един и същ формат: <b>IEEE 754 double</b>, т.нар. число с плаваща запетая (floating point). Затова в JavaScript целите и реалните числа са един тип - number.` },
+        { line: 0, text: `Спомнете си експонентния запис от слайдовете: <code>1e6</code> = 1 * 10<sup>6</sup>. Всяко число може да се запише като цифри с <b>една цифра преди точката</b>, умножени по степен на 10: 13 = 1.3 * 10<sup>1</sup>, 0.042 = 4.2 * 10<sup>-2</sup>.`,
+          do: s => { s.sci = { dec: '1000000 = 1 * 10<sup>6</sup>', bin: '' }; } },
+        { line: -1, text: `Компютърът прави същото, но с основа <b>2</b>: 13 = 1101 (двоично) = <b>1.101 * 2<sup>3</sup></b> - точката се премества с 3 позиции. При двоичните числа (без нулата) цифрата преди точката винаги е 1, затова тя изобщо не се записва - пести се 1 бит.`,
+          do: s => { s.sci = { dec: '13 = 1.3 * 10<sup>1</sup>', bin: '1101 = 1.101 * 2<sup>3</sup>' }; } },
+        { line: -1, text: `Така 64-те бита се делят на три части: <b class="cs">знак</b> (sign, 1 бит: 0 = плюс, 1 = минус), <b class="ce">експонента</b> (exponent, 11 бита: степента на 2) и <b class="cm">мантиса</b> (mantissa или fraction, 52 бита: цифрите след "1.").`,
+          do: s => { s.parts = true; } },
+        { line: 1, text: `<code>let a = 1;</code> - 1 = 1.0 * 2<sup>0</sup>. Знакът е 0, мантисата е само нули. Степента 0 се записва като 0 + <b>1023</b> = 1023. Към степента винаги се добавя 1023 (отместване, bias), за да могат и отрицателните степени да се пазят без отделен знак.`,
+          do: s => { s.sci = { dec: '1 = 1 * 10<sup>0</sup>', bin: '1 = 1.0 * 2<sup>0</sup>' }; s.val = 1; s.lit = '1'; s.exact = true; hl(s, 'p-e'); },
+          fly: [['sciBin', 'dexp', '0 + 1023', 'write']] },
+        { line: 2, text: `<code>let b = 13;</code> - 13 = 1.101 * 2<sup>3</sup>: в експонентата е 3 + 1023 = 1026, а в мантисата - битовете след точката: 101, следвани от нули.`,
+          do: s => { s.sci = { dec: '13 = 1.3 * 10<sup>1</sup>', bin: '1101 = 1.101 * 2<sup>3</sup>' }; s.val = 13; s.lit = '13'; hl(s, 'p-m'); },
+          fly: [['sciBin', 'dexp', '3 + 1023', 'write']] },
+        { line: 3, text: `<code>let c = 0.5;</code> - 0.5 = 0.1 (двоично) = 1.0 * 2<sup>-1</sup>. Отрицателна степен: -1 + 1023 = 1022. Мантисата отново е само нули.`,
+          do: s => { s.sci = { dec: '0.5 = 5 * 10<sup>-1</sup>', bin: '0.1 = 1.0 * 2<sup>-1</sup>' }; s.val = 0.5; s.lit = '0.5'; hl(s, 'p-e'); },
+          fly: [['sciBin', 'dexp', '-1 + 1023', 'write']] },
+        { line: 4, text: `<code>let d = -2.5;</code> - 2.5 = 10.1 (двоично) = 1.01 * 2<sup>1</sup>. Знакът е минус, затова първият бит е <b class="cs">1</b>. Всичко останало е същото като при +2.5.`,
+          do: s => { s.sci = { dec: '-2.5 = -2.5 * 10<sup>0</sup>', bin: '-10.1 = -1.01 * 2<sup>1</sup>' }; s.val = -2.5; s.lit = '-2.5'; hl(s, 'p-s'); },
+          fly: [['sciBin', 'dsgn', '-', 'write']] },
+        { line: 5, text: `<code>let e = 0.1;</code> - 0.000110011... = 1.10011001... * 2<sup>-4</sup>. Мантисата е безкрайна (сценарий 2), но местата са 52: останалите битове се отрязват и последните се <b>закръглят</b> - ...1001 1001 става ...1001 1010.`,
+          do: s => { s.sci = { dec: '0.1 = 1 * 10<sup>-1</sup>', bin: '0.000110011... = 1.10011001... * 2<sup>-4</sup>' }; s.val = 0.1; s.lit = '0.1'; hl(s, 'p-m'); },
+          fly: [['sciBin', 'dexp', '-4 + 1023', 'write']] },
+        { line: 6, text: `Затова в паметта не е точно 0.1, а 0.1000000000000000<b>055511151231257827021181583404541015625</b>. Защо тогава <code>console.log(e)</code> показва 0.1? JavaScript отпечатва <b>най-краткото</b> десетично число, което води до същите 64 бита.`,
+          do: s => { hl(s, 'exact'); log(s, show(0.1)); }, fly: [['exact', 'con', '0.1', 'read']] },
+        { line: -1, text: `<b>Обобщение:</b> number = знак * 1.мантиса * 2<sup>експонента - 1023</sup>. 52 бита мантиса (+1 скрит бит) дават около 15-17 значещи десетични цифри. Числата, които не се побират точно (като 0.1), се закръглят до най-близкото възможно - оттук идват изненадите в сценарий 4.` },
+    ],
+},
+{
+    tab: '0.1 + 0.2',
+    view: 'sum',
+    vizTitle: 'Какво точно се събира',
+    init: () => ({ cards: 0, nl: false, sum: false, pick: false, real: false, fixes: 0, diff: false }),
+    code: [
+        'console.log(0.1 + 0.2);             // ?',
+        'console.log(0.1 + 0.2 === 0.3);     // ?',
+        'let diff = Math.abs(0.1 + 0.2 - 0.3);',
+        'console.log(diff < Number.EPSILON);',
+        'console.log((0.1 + 0.2).toFixed(2));',
+        'let cents = 10 + 20;      // 30 cents',
+        'console.log(cents / 100);',
+    ],
+    steps: [
+        { line: 0, text: `Класическата изненада от слайда "Проблеми при аритметиката с реални числа". <span class="q">Какво ще отпечата <code>0.1 + 0.2</code>? Помислете, преди да продължите.</span>` },
+        { line: 0, text: `Първо литералът <code>0.1</code> се превръща в 64-битово число. 0.1 няма точен двоичен запис (сценарий 2), затова в паметта влиза най-близкото възможно число - <b>малко повече</b> от 0.1. Оцветената част е грешката.`,
+          do: s => { s.cards = 1; } },
+        { line: 0, text: `Същото с <code>0.2</code> - и то е малко повече от 0.2. (Грешката му е точно два пъти по-голяма: 0.2 = 2 * 0.1, а умножението по 2 само променя експонентата.)`,
+          do: s => { s.cards = 2; } },
+        { line: 0, text: `Процесорът събира двете стойности <b>точно</b>. Но резултатът 0.3000000000000000166533453693773481063544750213623046875 няма място в 64 бита - трябва да се <b>закръгли</b> до някое от възможните числа.`,
+          do: s => { s.cards = 3; }, fly: [['c1', 'c3', '0.1', 'read'], ['c2', 'c3', '0.2', 'read']] },
+        { line: 0, text: `Ето числовата права около 0.3, увеличена милиарди пъти. Точките са <b>единствените</b> числа, които могат да се запишат в 64 бита - между тях няма други. Тук съседните точки са на разстояние 2<sup>-54</sup> (около 0.000000000000000055).`,
+          do: s => { s.nl = true; } },
+        { line: 0, text: `Точната сума попада <b>точно по средата</b> между две съседни точки! За такъв случай IEEE 754 има правило "към четното" (round half to even): избира се числото, чийто последен бит на мантисата е 0. Това е <b>десният</b> съсед (...0100).`,
+          do: s => { s.sum = true; } },
+        { line: 0, text: `Резултатът е десният съсед. JavaScript го отпечатва с най-краткия запис, който го отличава от съседите му: <b>0.30000000000000004</b>.`,
+          do: s => { s.sum = true; s.pick = true; log(s, show(0.1 + 0.2)); }, fly: [['ptB', 'con', show(0.1 + 0.2), 'read']] },
+        { line: 1, text: `<span class="q">А какво ще отпечата <code>0.1 + 0.2 === 0.3</code>? Помислете, преди да продължите.</span>`,
+          do: s => { s.sum = true; s.pick = true; } },
+        { line: 1, text: `Литералът <code>0.3</code> се закръгля до <b>най-близката</b> до 0.3 точка - левият съсед (отпечатва се като 0.3). Сумата е десният съсед. Две различни числа, затова резултатът е <b>false</b>. Това не е бъг на JavaScript - същото е в Python, Java, C#, C++.`,
+          do: s => { s.pick = true; s.real = true; log(s, show(0.1 + 0.2 === 0.3)); } },
+        { line: 2, text: `<b>Решение 1 - сравнение с допуск (tolerance).</b> Вместо да питаме "равни ли са", питаме "достатъчно близо ли са": изчисляваме разликата. Тя е мъничка - около 5.55 * 10<sup>-17</sup>.`,
+          do: s => { s.fixes = 1; } },
+        { line: 3, text: `<code>Number.EPSILON</code> (около 2.2 * 10<sup>-16</sup>) е разстоянието между 1 и следващото възможно число. Разликата е по-малка, значи числата са "равни". Този допуск е подходящ за числа около 1; при по-големи числа се избира по-голям.`,
+          do: s => { s.fixes = 1; s.diff = true; log(s, show(Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON)); } },
+        { line: 4, text: `<b>Решение 2 - закръгляне при показване.</b> <code>toFixed(2)</code> връща <b>низ</b> с 2 цифри след точката: "0.30". Подходящо е за извеждане на екрана, но не и за следващи сметки.`,
+          do: s => { s.fixes = 2; log(s, show((0.1 + 0.2).toFixed(2))); } },
+        { line: 5, text: `<b>Решение 3 - цели числа.</b> При пари смятаме в <b>стотинки</b> (центове): 10 + 20 = 30. Целите числа (до 2<sup>53</sup>) се пазят и събират точно.`,
+          do: s => { s.fixes = 3; } },
+        { line: 6, text: `Делим на 100 едва накрая, за да покажем резултата: 30 / 100 дава числото, което се отпечатва като 0.3 - най-близкото до 0.3.`,
+          do: s => { s.fixes = 3; log(s, show((10 + 20) / 100)); } },
+        { line: -1, text: `<b>Обобщение:</b> 0.1, 0.2 и 0.3 се пазят приблизително и малките грешки могат да се натрупат. Не сравнявайте реални числа с <code>===</code>, а с допуск; закръгляйте едва при показване; за пари смятайте в цели числа или, както казва слайдът, използвайте специална библиотека.`,
+          do: s => { s.fixes = 3; } },
+    ],
+},
+{
+    tab: 'Големи цели числа',
+    advanced: true,
+    view: 'safe',
+    vizTitle: 'Цели числа около 2 ** 53',
+    init: () => ({ val: null, nl: false, mark: false }),
+    code: [
+        'console.log(Number.MAX_SAFE_INTEGER);',
+        'console.log(2 ** 53);',
+        'console.log(2 ** 53 + 1);              // ?',
+        'console.log(2 ** 53 + 1 === 2 ** 53);  // ?',
+        'console.log(Number.isSafeInteger(2 ** 53));',
+        'console.log(2n ** 53n + 1n);',
+        'console.log(2n ** 53n + 1);',
+    ],
+    steps: [
+        { line: -1, text: `Целите числа се пазят точно - но само докато всичките им битове се побират в мантисата: 52 бита + 1 скрит = <b>53 бита</b>. Какво става с по-големите?` },
+        { line: 0, text: `<code>Number.MAX_SAFE_INTEGER</code> е най-голямото "безопасно" цяло число: 2<sup>53</sup> - 1 = 9 007 199 254 740 991 (около 9 квадрилиона). Мантисата е пълна: всичките 52 бита са единици.`,
+          do: s => { s.val = Number.MAX_SAFE_INTEGER; log(s, show(Number.MAX_SAFE_INTEGER)); hl(s, 'p-m'); } },
+        { line: 1, text: `2<sup>53</sup> = 1.0 * 2<sup>53</sup>: мантисата е само нули, а в експонентата е 53 + 1023 = 1076. И това число се пази точно.`,
+          do: s => { s.val = 2 ** 53; log(s, show(2 ** 53)); hl(s, 'p-e'); } },
+        { line: 2, text: `Ето числовата права около 2<sup>53</sup>. Под 2<sup>53</sup> има точка за всяко цяло число. Над него последният бит на мантисата вече струва <b>2</b>, затова съществуват само четните числа. <span class="q">Какво ще отпечата <code>2 ** 53 + 1</code>?</span>`,
+          do: s => { s.nl = true; } },
+        { line: 2, text: `Точният резултат 9007199254740993 няма своя точка - пада се точно по средата между 2<sup>53</sup> и 2<sup>53</sup> + 2. Отново "към четното" (последен бит 0) - и резултатът е 9007199254740992. Единицата просто изчезна!`,
+          do: s => { s.mark = true; log(s, show(2 ** 53 + 1)); }, fly: [['pt0', 'con', show(2 ** 53 + 1), 'read']] },
+        { line: 3, text: `Затова <code>2 ** 53 + 1 === 2 ** 53</code> е <b>true</b>: x + 1 е равно на x! Такива грешки са опасни, защото са тихи - няма съобщение за грешка, просто резултатът е грешен.`,
+          do: s => { s.mark = true; log(s, show(2 ** 53 + 1 === 2 ** 53)); } },
+        { line: 4, text: `<code>Number.isSafeInteger()</code> проверява дали цяло число е в безопасната зона (от -(2<sup>53</sup> - 1) до 2<sup>53</sup> - 1). 2<sup>53</sup> вече не е: оттам нататък не всяко цяло число може да се запише.`,
+          do: s => { s.mark = true; log(s, show(Number.isSafeInteger(2 ** 53))); } },
+        { line: 5, text: `За наистина големи цели числа има отделен прост тип - <b>BigInt</b> (пише се с <code>n</code> накрая, <code>typeof 10n</code> е "bigint"). Той не е 64-битов double, а расте според нуждата, затова е точен за всякакви цели числа.`,
+          do: s => { s.mark = true; log(s, show(2n ** 53n + 1n)); } },
+        { line: 6, text: `BigInt и number не могат да се смесват в една аритметична операция - получаваме TypeError. Нужно е изрично преобразуване: <code>BigInt(1)</code> или <code>Number(10n)</code>.`,
+          do: s => { s.mark = true; s.err = true; log(s, 'Uncaught TypeError: Cannot mix BigInt and other types, use explicit conversions', true); } },
+        { line: -1, text: `<b>Обобщение:</b> number пази цели числа точно до 2<sup>53</sup> - 1 (<code>Number.MAX_SAFE_INTEGER</code>). Над тази граница разстоянието между възможните числа става 2, после 4, 8... За по-големи цели числа (например идентификатори от бази данни) използвайте BigInt.`,
+          do: s => { s.mark = true; } },
+    ],
+},
+{
+    tab: 'NaN и Infinity',
+    view: 'special',
+    vizTitle: 'Специални стойности',
+    init: () => ({ val: null, row: '' }),
+    code: [
+        'let res = 0 / "a";',
+        'console.log(res);',
+        'console.log(typeof res);',
+        'console.log(res === NaN);         // ?',
+        'console.log(Number.isNaN(res));',
+        'console.log(1 / 0);',
+        'console.log(-1 / 0);',
+        'console.log(0 * -1);',
+    ],
+    steps: [
+        { line: -1, text: `Някои комбинации от битове са запазени за <b>специални стойности</b>. Всички те също са от тип number. Ключът е в <b class="ce">експонентата</b>: когато всичките ѝ 11 бита са единици, числото е "специално".`,
+          do: s => { s.row = 'norm'; } },
+        { line: 0, text: `<code>0 / "a"</code>: "a" трябва да се превърне в число, но не може - получава се <b>NaN</b> (Not-a-Number), а 0 / NaN също е NaN. Битовете: експонентата е само единици, а мантисата <b>не е</b> нула.`,
+          do: s => { s.val = NaN; s.row = 'nan'; } },
+        { line: 1, text: `<code>console.log(res)</code> отпечатва NaN. Грешка не се хвърля - програмата продължава с "развалената" стойност, а всяка аритметична операция с NaN също дава NaN.`,
+          do: s => { s.val = NaN; s.row = 'nan'; log(s, show(0 / 'a')); } },
+        { line: 2, text: `<code>typeof res</code> е "number". Звучи парадоксално - "не-число" от тип число. Но NaN е просто специална стойност на типа number: същите 64 бита, само с особена комбинация.`,
+          do: s => { s.val = NaN; s.row = 'nan'; log(s, typeof (0 / 'a')); } },
+        { line: 3, text: `<span class="q">Какво ще отпечата <code>res === NaN</code>? Помислете, преди да продължите.</span>`,
+          do: s => { s.val = NaN; s.row = 'nan'; } },
+        { line: 3, text: `<b>false</b>! По стандарта NaN не е равно на нищо - <b>дори на себе си</b> (<code>NaN === NaN</code> е false). Затова с <code>===</code> не можем да проверим дали нещо е NaN.`,
+          do: s => { s.val = NaN; s.row = 'nan'; const res = 0 / 'a'; log(s, show(res === NaN)); } },
+        { line: 4, text: `Правилният начин е <code>Number.isNaN(res)</code> - true. Внимавайте със старата глобална функция <code>isNaN()</code>: тя първо превръща аргумента в число, затова <code>isNaN("abc")</code> е true, а <code>Number.isNaN("abc")</code> е false.`,
+          do: s => { s.val = NaN; s.row = 'nan'; log(s, show(Number.isNaN(0 / 'a'))); } },
+        { line: 5, text: `Деленето на 0 не е грешка в JavaScript: <code>1 / 0</code> е <b>Infinity</b> (безкрайност). Битовете: експонентата е само единици, а мантисата - само нули. Infinity се получава и при твърде голям резултат, например <code>1e308 * 10</code>.`,
+          do: s => { s.val = Infinity; s.row = 'inf'; log(s, show(1 / 0)); } },
+        { line: 6, text: `<code>-1 / 0</code> е <b>-Infinity</b> - същите битове, само знакът е 1.`,
+          do: s => { s.val = -Infinity; s.row = 'inf'; log(s, show(-1 / 0)); hl(s, 'p-s'); } },
+        { line: 7, text: `Понеже знакът е отделен бит, съществува и <b>-0</b>: знак 1, всичко останало 0. <code>-0 === 0</code> е true, така че на практика рядко има значение. (Разлика има например при <code>1 / -0</code>, което е -Infinity.)`,
+          do: s => { s.val = -0; s.row = 'zero'; log(s, show(0 * -1)); hl(s, 'p-s'); } },
+        { line: -1, text: `<b>Обобщение:</b> NaN, Infinity и -Infinity са стойности от тип number със специални комбинации от битове. NaN "заразява" всяка сметка и не е равно дори на себе си - проверявайте с <code>Number.isNaN()</code>. Деленето на 0 дава Infinity, а не грешка.`,
+          do: s => { s.val = null; s.row = ''; } },
+    ],
+},
+{
+    tab: 'Лаборатория',
+    view: 'lab',
+    vizTitle: 'Лаборатория: въведете число',
+    vizNote: 'битовете са истински - изчислени от браузъра',
+    lab: true,
+    init: () => ({}),
+    code: () => [`let x = ${labExpr.trim() || '?'};`, 'console.log(x);'],
+    steps: [
+        { line: 0, text: `Въведете число или израз в полето (например <code>0.1 + 0.2</code>, <code>2 ** 53 + 1</code>, <code>1 / 3</code>) или изберете готов пример. Ще видите 64-те бита и точната стойност, която се пази в паметта. Позволени са числа, <code>+ - * / % **</code>, скоби, NaN и Infinity.` },
+        { line: 0, text: `Опитайте: <code>0.1 * 3</code> и <code>0.3</code> (различни ли са битовете?), <code>9007199254740993</code> (какво се записва?), <code>5e-324</code> (най-малкото положително число), <code>1.7976931348623157e308</code> (най-голямото) и <code>1e309</code>.` },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: states[i] is the state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = Object.assign({ line: -1, console: [], hl: {}, err: false }, sc.init());
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.err = false;
+        s.line = step.line;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering helpers
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 820, STAGGER = 200;
+const reduceMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+const ICON_CHECK = '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7.2" fill="currentColor"/><path d="M4.6 8.2l2.3 2.3 4.6-4.8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+const hlc = (s, key) => s.hl[key] ? ' hl-' + s.hl[key] : '';
+const sec = (title, body, appear = false, cls = '') =>
+    `<div class="sec ${cls}${appear ? ' appear' : ''}">${title ? `<div class="sec-t">${title}</div>` : ''}${body}</div>`;
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(let|const|typeof)\b|\b(NaN|Infinity|true|false)\b|(\b0b[01]+\b|\b\d[\d_]*(?:\.\d+)?(?:e[+-]?\d+)?n?\b)|\b(console|Math|Number)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, lit, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : (lit || n) ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+// ---- the 64-bit box ----
+function decodeRows(x, s) {
+    const b = bitsOf(x);
+    const e = b.slice(1, 12), m = b.slice(12), ev = parseInt(e, 2);
+    const trimmed = m.replace(/0+$/, '');
+    const mt = trimmed.length <= 40 ? trimmed : m;      // keep the real tail of "long" mantissas
+    const sign = b[0] === '1' ? '-' : '+';
+    const k = key => ` data-k="${key}"`;
+    const fl = part => s && s.hl['p-' + part] ? ' flash' : '';
+    let rows = `<span class="dk p-s">знак</span><code${k('dsgn')} class="${fl('s')}">${b[0]}</code><span class="dt">${b[0] === '0' ? 'плюс' : 'минус'}</span>`;
+    let mant, value;
+    if (ev === 2047) {
+        rows += `<span class="dk p-e">експонента</span><code${k('dexp')} class="${fl('e')}">${e}</code><span class="dt">само единици: <b>специална стойност</b></span>`;
+        mant = `<span class="dt">${mt ? 'не е нула: <b>NaN</b>' : 'само нули: <b>Infinity</b>'}</span>`;
+        value = `<code>${show(x)}</code>`;
+    } else if (ev === 0) {
+        rows += `<span class="dk p-e">експонента</span><code${k('dexp')} class="${fl('e')}">${e}</code><span class="dt">само нули: <b>${mt ? 'много малко число (subnormal)' : 'нула'}</b></span>`;
+        mant = `<span class="dt">${mt ? 'тук няма скрита 1: 0.мантиса * 2<sup>-1022</sup>' : 'само нули'}</span>`;
+        value = mt ? `<code>${sign === '-' ? '-' : ''}0.${mt} * 2<sup>-1022</sup> = ${show(x)}</code>` : `<code>${show(x)}</code>`;
+    } else {
+        rows += `<span class="dk p-e">експонента</span><code${k('dexp')} class="${fl('e')}">${e}</code><span class="dt">= ${ev}; ${ev} - 1023 = <b>${ev - 1023}</b></span>`;
+        mant = `<span class="dt">52 бита след точката; отпред се подразбира скрита 1</span>`;
+        value = `<code>${sign === '-' ? '-' : ''}1.${mt || '0'} * 2<sup>${ev - 1023}</sup> = ${show(x)}</code>`;
+    }
+    rows += `<span class="dk p-m">мантиса</span><code class="${fl('m')}">${m}</code>${mant}`;
+    rows += `<span class="dk p-v">стойност</span><span class="wide">${value}</span>`;
+    return `<div class="dec">${rows}</div>`;
+}
+
+function box64(x, o = {}) {
+    const has = x !== null && x !== undefined;
+    const b = has ? bitsOf(x) : null;
+    const pb = o.prev !== undefined && o.prev !== null ? bitsOf(o.prev) : null;
+    let cells = '';
+    for (let i = 0; i < 64; i++) {
+        if (i === 1 || i === 12) cells += '<i></i>';
+        const part = i === 0 ? 's' : i < 12 ? 'e' : 'm';
+        const v = has ? b[i] : '';
+        const flip = o.animate && has && (pb === null || pb[i] !== v);
+        cells += `<span class="bit p-${part}${v === '1' ? ' one' : ''}${flip ? ' flip' : ''}" style="--d:${i}">${v}</span>`;
+    }
+    const labels = o.parts
+        ? `<span class="gbar p-s" style="grid-column:1"></span><span class="gbar p-e" style="grid-column:3 / 14"></span><span class="gbar p-m" style="grid-column:15 / 67"></span>
+           <span class="glab p-s" style="grid-column:1 / 3">знак</span><span class="glab p-e" style="grid-column:3 / 14">експонента - 11 бита</span><span class="glab p-m" style="grid-column:15 / 67">мантиса - 52 бита</span>`
+        : `<span class="gbar" style="grid-column:1 / 67"></span><span class="glab all" style="grid-column:1 / 67">64 бита = 8 байта${has ? '' : ' (засега празни)'}</span>`;
+    return `<div class="f64${o.parts ? ' parts' : ''}${has ? '' : ' empty'}" data-k="box">
+        <div class="f64-idx"><span>бит 63</span><span>бит 0</span></div>
+        <div class="f64-grid">${cells}${labels}</div>
+    </div>`;
+}
+
+function exactBox(x, lit, s) {
+    const ex = exactDecimal(x);
+    let badge = '';
+    const ideal = lit ? literalToDecimal(lit) : null;
+    if (ideal !== null && isFinite(x)) {
+        badge = ideal === ex
+            ? '<span class="badge ok">точно</span>'
+            : `<span class="badge approx">приблизително, разлика ${esc(decimalDiff(ex, ideal))}</span>`;
+    }
+    const shown = ideal !== null && ideal !== ex ? tailHL(ex, ideal) : esc(ex);
+    return `<div class="exact${s ? hlc(s, 'exact') : ''}" data-k="exact">точна стойност в паметта${badge}<span class="ev">${shown}</span></div>`;
+}
+
+// ---- number line ----
+function numLine(o) {
+    const pos = x => ((x - o.min) / (o.max - o.min) * 100).toFixed(3) + '%';
+    let h = `<div class="nl"><div class="nl-axis"></div>`;
+    for (const p of o.pts) {
+        h += `<div class="nl-pt${p.cls ? ' ' + p.cls : ''}" style="left:${pos(p.x)}"${p.k ? ` data-k="${p.k}"` : ''}><i class="dot"></i>
+            <span class="nl-lab">${p.label}</span>${p.sub ? `<span class="nl-sub">${p.sub}</span>` : ''}${p.tag ? `<span class="nl-tag ${p.tag[1]}">${p.tag[0]}</span>` : ''}</div>`;
+    }
+    for (const m of o.marks || []) {
+        h += `<div class="nl-mk ${m.align || 'c'}${m.cls ? ' ' + m.cls : ''}${m.appear ? ' appear' : ''}" style="left:${pos(m.x)}"><span class="nl-mlab">${m.label}</span><i class="stem" style="height:${m.stem || .5}rem"></i></div>`;
+    }
+    if (o.arrow) {
+        const [a, b] = o.arrow;
+        const left = Math.min(a, b), w = Math.abs(b - a) / (o.max - o.min) * 100;
+        h += `<div class="nl-arrow${b < a ? ' rev' : ''}${o.arrowDraw ? ' draw' : ''}" style="left:${pos(left)};width:${w.toFixed(3)}%"></div>`;
+    }
+    return h + '</div>';
+}
+
+// ---------------------------------------------------------------------------
+// Views: one per scenario type. Each returns the HTML of the visualisation.
+// `prev` is the previous state when the step is animated, otherwise null.
+// ---------------------------------------------------------------------------
+const VIEWS = {
+    bin(s, prev) {
+        let h = '';
+        if (s.dec) {
+            const row = [1000, 100, 10, 1].map((v, i) =>
+                `<div class="pcol"><span class="pval">${v}</span><span class="pcell pdec">${[0, 0, 1, 3][i]}</span><span class="pexp">10<sup>${3 - i}</sup></span></div>`).join('');
+            h += sec('Десетична система: основа 10', `<div class="prow">${row}</div><div class="sumline">13 = 1 * 10 + 3 * 1</div>`, prev && !prev.dec);
+        }
+        if (s.pv) {
+            const row = PLACES.map((v, i) => {
+                const d = s.bits[i];
+                const cls = d === null ? '' : d ? ' full one' : ' full';
+                const on = s.on === i || (s.res && d === 1);
+                return `<div class="pcol"><span class="pval${on ? ' on' : ''}">${v}</span><span class="pcell${cls}${hlc(s, 'bit' + i)}" data-k="bit${i}">${d === null ? '' : d}</span><span class="pexp">2<sup>${7 - i}</sup></span></div>`;
+            }).join('');
+            h += sec('Двоична система: основа 2 (8 бита = 1 байт)', `<div class="prow">${row}</div>`, prev && !prev.pv);
+        }
+        if (s.work.length || s.res) {
+            const work = s.work.map((w, i) =>
+                `<div data-k="w${i}" class="${i === s.work.length - 1 && !s.res ? 'cur' : ''}${prev && i >= prev.work.length ? ' appear' : ''}">${esc(w)}</div>`).join('');
+            const res = s.res
+                ? `<div class="result${hlc(s, 'res')}${prev && !prev.res ? ' appear' : ''}" data-k="res"><small>резултат</small>13 = 1101 (двоично) = 8 + 4 + 1</div>`
+                : '';
+            h += `<div class="row2">${sec('Сметки: изваждаме позициите отляво надясно', `<div class="work">${work}</div>`)}${sec('', res)}</div>`;
+        }
+        if (!h) h = `<div class="hint-box">Тук ще видим как се записват числата с цифри - първо в десетична, после в двоична система.</div>`;
+        return h;
+    },
+
+    frac(s, prev) {
+        let h = '';
+        if (s.third) {
+            h += sec('Десетична система', `<div class="third">1 / 3 = 0.<span class="rep">3333333333333333</span><span class="rep">...</span> <span class="pexp">(безкрайно)</span></div>`, prev && !prev.third);
+        }
+        if (s.fpv) {
+            let row = `<div class="pcol" style="width:2.4rem"><span class="pval">&nbsp;</span><span class="pcell full one" style="width:2.2rem">0</span><span class="pexp">&nbsp;</span></div><span class="ppoint">.</span>`;
+            row += HALVES.map((f, i) => {
+                const d = s.digits[i];
+                const cls = d === undefined ? '' : d === '1' ? ' full one' : ' full';
+                return `<div class="pcol"><span class="pval">${f}</span><span class="pcell${cls}${hlc(s, 'fb' + i)}" data-k="fb${i}">${d === undefined ? '' : d}</span><span class="pexp">${HALVES_V[i]}</span></div>`;
+            }).join('');
+            let sum = '';
+            if (s.digits) {
+                const n = Math.min(8, s.digits.length);
+                let v = 0;
+                for (let i = 0; i < n; i++) if (s.digits[i] === '1') v += 2 ** -(i + 1);
+                sum = `<div class="sumline">сумата на тези битове: <b>${v}</b>${s.target && String(v) !== s.target ? ` - все още не е ${s.target}` : ` = ${s.target}`}</div>`;
+            }
+            h += sec('Двоична система: позициите след точката', `<div class="prow">${row}</div>${sum}`, prev && !prev.fpv);
+        }
+        if (s.rows.length) {
+            const rows = s.rows.map((r, i) => {
+                const loop = s.loop && r.x === '0.2';
+                const fresh = prev && (i >= prev.rows.length || prev.target !== s.target);
+                return `<tr class="${r.cur ? 'cur' : ''}${loop ? ' loop' : ''}${fresh ? ' appear' : ''}"><td>${r.x} * 2 = ${r.t}</td><td class="bitc" data-k="r${i}"><span>${r.bit}</span></td><td>остава ${r.rest}</td></tr>`;
+            }).join('');
+            const more = s.loop ? `<tr class="loop appear"><td colspan="3">... и отново 0.4, 0.8, 0.6, 0.2 ... безкрай</td></tr>` : '';
+            let res;
+            if (s.target === '0.5') res = `0.5 = <b>0.1</b> (двоично)`;
+            else if (s.loop) res = `0.1 = 0.0<span class="rep">0011 0011 0011</span>... (двоично)`;
+            else res = `0.1 = 0.${s.digits}... (двоично)`;
+            const table = `<table class="dtab"><tr><th>умножаваме по 2</th><th>бит</th><th>продължаваме с</th></tr>${rows}${more}</table>`;
+            h += `<div class="row2" style="grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)">${sec(`Намиране на битовете: ${s.target}`, table)}${sec('Резултат', `<div class="bin-res" data-k="binres">${res}</div>`)}</div>`;
+        }
+        if (s.cut) {
+            const stored = (0.1).toString(2).slice(2);
+            const infinite = ('0' + '0011'.repeat(20)).slice(0, stored.length);
+            let i = 0;
+            while (stored[i] === infinite[i]) i++;
+            const mark = (str) => esc(str.slice(0, i)) + `<span class="tail">${esc(str.slice(i))}</span>`;
+            h += sec('Безкрайният запис, отрязан до 53 значещи бита', `<div class="cmp">
+                <span class="k">безкраен запис</span><code>0.${mark(infinite)}0011...</code>
+                <span class="k">в паметта</span><code>0.${mark(stored)}</code></div>`, prev && !prev.cut);
+        }
+        if (!h) h = `<div class="hint-box">Тук ще видим защо някои дроби имат безкраен запис - първо в десетична, после в двоична система.</div>`;
+        return h;
+    },
+
+    box(s, prev) {
+        let h = '';
+        if (s.sci) {
+            const nd = !prev || !prev.sci || prev.sci.dec !== s.sci.dec;
+            const nb = !prev || !prev.sci || prev.sci.bin !== s.sci.bin;
+            h += sec('Експонентен запис', `<div class="sci">
+                <span class="k">с основа 10</span><code class="${prev && nd ? 'new' : ''}">${s.sci.dec}</code>
+                <span class="k">с основа 2</span><code class="${prev && nb ? 'new' : ''}" data-k="sciBin">${s.sci.bin || '&nbsp;'}</code></div>`);
+        }
+        const body = box64(s.val, { parts: s.parts, prev: prev ? prev.val : null, animate: !!prev && prev.val !== s.val })
+            + (s.val !== null ? decodeRows(s.val, s) + exactBox(s.val, s.lit, s) : '');
+        h += sec(s.val !== null ? `В паметта: ${esc(show(s.val))}` : 'В паметта', body);
+        return h;
+    },
+
+    sum(s, prev) {
+        let h = '';
+        const a = 0.1, b = 0.2;
+        const A = 0.3, B = a + b;                       // B is the computed sum
+        const exactSum = '0.3000000000000000166533453693773481063544750213623046875';
+        if (s.cards) {
+            const cards = [
+                ['c1', '0.1 в паметта', 'малко повече от 0.1', tailHL(exactDecimal(a), '0.1')],
+                ['c2', '0.2 в паметта', 'малко повече от 0.2', tailHL(exactDecimal(b), '0.2')],
+                ['c3', 'точната им сума', 'преди закръгляне', tailHL(exactSum, '0.3')],
+            ].slice(0, s.cards).map(([k, t, n, v], i) =>
+                `<div class="card${i === 2 ? ' sum' : ''}${prev && i >= prev.cards ? ' appear' : ''}" data-k="${k}"><span class="ck">${t}<small>${n}</small></span><span class="cv">${v}</span></div>`).join('');
+            h += sec('Точните стойности (оцветено: разликата от "идеалното" число)', `<div class="cards">${cards}</div>`);
+        }
+        if (s.nl) {
+            // positions in units of 2^-55 from the double nearest to 0.3 (A); checked by the self-test
+            const pts = [
+                { x: -2, v: nextDown(A) }, { x: 0, v: A, k: 'ptA' }, { x: 2, v: B, k: 'ptB' }, { x: 4, v: nextUp(B) },
+            ].map(p => ({
+                x: p.x, k: p.k, label: esc(show(p.v)), sub: 'мантиса ...' + bitsOf(p.v).slice(-4),
+                cls: (s.pick && p.v === B) ? 'hl-write' : (s.real && p.v === A) ? 'hl-read' : '',
+                tag: (s.pick && p.v === B) ? ['= 0.1 + 0.2', 'write'] : (s.real && p.v === A) ? ['= литералът 0.3', 'read'] : null,
+            }));
+            const marks = [];
+            if (s.real) marks.push({ x: 0.4, label: '0.3 (математически)', align: 'r', stem: 2.2, appear: prev && !prev.real });
+            if (s.sum) marks.push({ x: 1, label: 'точната сума<small>(точно по средата)</small>', align: 'l', cls: 'sum', stem: 1.3, appear: prev && !prev.sum });
+            h += sec('Числовата права около 0.3 (точките = възможните 64-битови числа)', numLine({
+                min: -3, max: 5, pts, marks,
+                arrow: s.pick ? [1, 2] : null, arrowDraw: prev && !prev.pick,
+            }), prev && !prev.nl);
+        }
+        if (s.fixes) {
+            const fixes = [
+                ['допуск', `<code>Math.abs(a - b) &lt; Number.EPSILON</code>`, s.diff ? `<b>true</b> (разлика ${show(Math.abs(0.1 + 0.2 - 0.3))})` : `разлика ${show(Math.abs(0.1 + 0.2 - 0.3))}`],
+                ['toFixed', `<code>(0.1 + 0.2).toFixed(2)</code>`, `<b>"0.30"</b> - низ, само за показване`],
+                ['стотинки', `<code>(10 + 20) / 100</code>`, `<b>0.3</b> - смятаме в цели числа`],
+            ].slice(0, s.fixes).map(([t, c, r], i) =>
+                `<div class="fix${prev && i >= prev.fixes ? ' appear' : ''}">${ICON_CHECK}<span>${i + 1}. ${t}</span><span>${c} -> ${r}</span></div>`).join('');
+            h += sec('Решения', `<div class="fixes">${fixes}</div>`);
+        }
+        if (!h) h = `<div class="hint-box">Тук ще видим точните стойности, които JavaScript събира.</div>`;
+        return h;
+    },
+
+    safe(s, prev) {
+        let h = '';
+        if (s.val !== null) {
+            h += sec(`В паметта: ${esc(show(s.val))}`, box64(s.val, { parts: true, prev: prev ? prev.val : null, animate: !!prev && prev.val !== s.val }) + decodeRows(s.val, s));
+        } else {
+            h += sec('В паметта', box64(null, { parts: true }));
+        }
+        if (s.nl) {
+            const base = 2 ** 53;
+            const names = { '-1': '2**53 - 1', 0: '2**53', 1: '2**53 + 1', 2: '2**53 + 2' };
+            const pts = [];
+            for (let i = -3; i <= 4; i++) {
+                const n = BigInt(base) + BigInt(i);
+                const ok = BigInt(Number(n)) === n;               // can this integer be stored?
+                pts.push({
+                    x: i, k: 'pt' + i,
+                    label: '...' + n.toString().slice(-4),
+                    sub: names[i] || '',
+                    cls: ok ? (s.mark && i === 0 ? 'hl-write' : '') : 'hole',
+                    tag: s.mark && i === 0 ? ['= 2**53 + 1', 'write'] : null,
+                });
+            }
+            const marks = s.mark ? [{ x: 1, label: 'точно: 9007199254740993', align: 'l', cls: 'sum', stem: 1.3, appear: prev && !prev.mark }] : [];
+            h += sec('Числовата права около 2**53 = 9007199254740992', numLine({
+                min: -3.6, max: 4.6, pts, marks, arrow: s.mark ? [1, 0] : null, arrowDraw: prev && !prev.mark,
+            }) + `<div class="nl-legend"><span><i></i>може да се запише</span><span><i class="hole"></i>не може да се запише (няма такъв double)</span></div>`, prev && !prev.nl);
+        }
+        return h;
+    },
+
+    special(s, prev) {
+        let h = '';
+        if (s.val !== null) {
+            h += sec(`В паметта: ${esc(show(s.val))}`, box64(s.val, { parts: true, prev: prev ? prev.val : null, animate: !!prev && !Object.is(prev.val, s.val) }) + decodeRows(s.val, s));
+        } else {
+            h += sec('В паметта', box64(null, { parts: true }));
+        }
+        const rows = [
+            ['norm', 'обикновено число', 'от 00000000001<br>до 11111111110', 'каквато и да е'],
+            ['zero', '0 и -0', '00000000000', 'само нули'],
+            ['sub', 'много малки числа (subnormal)', '00000000000', 'не е нула'],
+            ['inf', 'Infinity и -Infinity', '11111111111', 'само нули'],
+            ['nan', 'NaN', '11111111111', 'не е нула'],
+        ].map(([k, n, e, m]) => `<tr class="${s.row === k ? 'cur' : ''}"><td>${n}</td><td class="e"><code>${e}</code></td><td class="m">${m}</td></tr>`).join('');
+        h += sec('Как се разпознава стойността', `<table class="stab"><tr><th>стойност</th><th>експонента</th><th>мантиса</th></tr>${rows}</table>`);
+        return h;
+    },
+
+    lab() {
+        const chips = LAB_PRESETS.map(p => `<button class="chip" data-v="${esc(p)}">${esc(p)}</button>`).join('');
+        return sec('', `<div class="lab-in"><label for="labInput">let x =</label><input id="labInput" value="${esc(labExpr)}" spellcheck="false" autocomplete="off" aria-label="число или израз"><span>;</span></div>
+            <div class="presets" id="presets">${chips}</div>`) + `<div id="labOut"></div>`;
+    },
+};
+
+// ---------------------------------------------------------------------------
+// Lab: a tiny, safe evaluator (only number literals, operators and a few names)
+// ---------------------------------------------------------------------------
+const LAB_PRESETS = ['0.1', '0.1 + 0.2', '0.3', '13', '-2.5', '1e6', '1 / 3', '2 ** 53 + 1', 'Number.MAX_SAFE_INTEGER', '5e-324', 'NaN', '1 / 0', '-0'];
+let labExpr = '0.1';
+const LAB_TOKEN = /\s+|0[xX][0-9a-fA-F_]+|0[bB][01_]+|0[oO][0-7_]+|(?:\d[\d_]*\.?[\d_]*|\.\d[\d_]*)(?:[eE][+-]?\d+)?|\*\*|[-+*\/%()]|NaN|Infinity|Number\.(?:MAX_SAFE_INTEGER|MIN_SAFE_INTEGER|EPSILON|MAX_VALUE|MIN_VALUE)|Math\.(?:PI|E)/y;
+function labEval(src) {
+    src = src.trim();
+    if (!src) return { error: 'Въведете число, например 0.1' };
+    LAB_TOKEN.lastIndex = 0;
+    while (LAB_TOKEN.lastIndex < src.length) {
+        const at = LAB_TOKEN.lastIndex;
+        if (!LAB_TOKEN.exec(src) || LAB_TOKEN.lastIndex === at)
+            return { error: `Не разбирам "${src.slice(at, at + 12)}". Позволени са числа, + - * / % **, скоби, NaN, Infinity, Number.MAX_SAFE_INTEGER, Number.EPSILON.` };
+    }
+    try {
+        const v = Function('"use strict"; return (' + src + ');')();
+        if (typeof v !== 'number') return { error: 'Резултатът не е number.' };
+        return { value: v };
+    } catch (e) {
+        return { error: `${e.name}: ${e.message}` };
+    }
+}
+function renderLab() {
+    const out = $('#labOut');
+    if (!out) return;
+    const r = labEval(labExpr);
+    document.querySelectorAll('#presets .chip').forEach(c => c.classList.toggle('on', c.dataset.v === labExpr.trim()));
+    renderCode(SCENARIOS[scIdx], states[stepIdx]);
+    if (r.error) {
+        out.innerHTML = `<div class="lab-msg">${esc(r.error)}</div>`;
+        $('#console').innerHTML = '<div class="console-empty">(няма резултат)</div>';
+        return;
+    }
+    const x = r.value;
+    out.innerHTML = `<div class="lab-print">console.log(x) отпечатва: <code>${esc(show(x))}</code></div>`
+        + box64(x, { parts: true }) + decodeRows(x) + exactBox(x, labExpr);
+    $('#console').innerHTML = `<div class="cline"><span class="prompt">&gt;</span>${esc(show(x))}</div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+function renderCode(sc, s) {
+    const code = typeof sc.code === 'function' ? sc.code() : sc.code;
+    $('#code').innerHTML = code.map((l, i) =>
+        `<li class="${i === s.line ? 'active' : ''} ${i === s.line && s.err ? 'error' : ''}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`
+    ).join('');
+    $('#lineNote').textContent = s.line >= 0 ? `изпълнява се ред ${s.line + 1}` : '';
+}
+
+function renderConsole(s, prev) {
+    const box = $('#console');
+    const n0 = prev ? prev.console.length : s.console.length;
+    box.innerHTML = s.console.length
+        ? s.console.map((l, i) =>
+            `<div class="cline${l.err ? ' err' : ''}${i >= n0 ? ' appear' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('')
+        : '<div class="console-empty">(празна)</div>';
+    box.scrollTop = box.scrollHeight;
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    return $(`#viz [data-k="${key}"]`);
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (!flights.length || reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    const revealEls = (step.reveal || []).map(resolve).filter(Boolean);
+    revealEls.forEach(el => el.classList.add('await'));
+
+    const plan = flights.map(([from, to, text, kind], i) => {
+        const src = resolve(from), dst = resolve(to);
+        if (dst) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, text, kind, i };
+    });
+
+    let left = plan.length;
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.dst) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            }
+            if (--left === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (p.kind === 'write' ? 'write' : 'read');
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+        const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.style.left = x0 + 'px';
+        chip.style.top = y0 + 'px';
+        const anim = chip.animate([
+            { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+            { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: p.i * STAGGER, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+        anim.onfinish = () => { chip.remove(); finish(); };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderConsole(s, prev);
+    $('#vizTitle').textContent = sc.vizTitle;
+    $('#vizNote').textContent = sc.vizNote || '';
+    $('#viz').innerHTML = VIEWS[sc.view](s, prev);
+    if (sc.lab) renderLab();
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    try { history.replaceState(null, '', location.pathname + location.search + '#' + (scIdx + 1) + '.' + (stepIdx + 1)); } catch (e) { /* file:// in some browsers */ }
+
+    if (prev) requestAnimationFrame(() => { if (tk === token) playFlights(step, tk); });
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Self-test (#selftest): walks every step and checks the facts the text relies on
+// ---------------------------------------------------------------------------
+function runCode(lines) {
+    const out = [];
+    const fakeConsole = { log: (...a) => out.push(a.map(show).join(' ')) };
+    try { Function('console', lines.join('\n'))(fakeConsole); }
+    catch (e) { out.push(`Uncaught ${e.name}: ${e.message}`); }
+    return out;
+}
+function selfTest() {
+    const report = [];
+    const check = (ok, msg) => report.push((ok ? 'ok   ' : 'FAIL ') + msg);
+    SCENARIOS.forEach((sc, i) => {
+        try {
+            selectScenario(i);
+            for (let k = 0; k < sc.steps.length; k++) { goto(k, false); goto(k, true); }
+            check(true, `scenario ${i + 1}: ${sc.steps.length} steps render`);
+        } catch (e) { check(false, `scenario ${i + 1}: ${e.message}`); }
+        if (sc.lab) return;
+        const shown = computeStates(sc).pop().console.map(l => l.text);
+        const real = runCode(sc.code);
+        check(JSON.stringify(shown) === JSON.stringify(real), `scenario ${i + 1} console = real output ${JSON.stringify(real)}`);
+    });
+    // facts used in the texts
+    check(exactDecimal(0.1) === '0.1000000000000000055511151231257827021181583404541015625', 'exact 0.1');
+    const A = 0.3, B = 0.1 + 0.2, u = '0.0000000000000000277555756156289135105907917022705078125';   // 2^-55
+    check(decimalDiff(exactDecimal(B), exactDecimal(A)) === decimalDiff('0.000000000000000055511151231257827021181583404541015625', '0'), 'B - A = 2^-54');
+    check(nextUp(A) === B, 'B is the right neighbour of 0.3');
+    check(decimalDiff('0.3000000000000000166533453693773481063544750213623046875', exactDecimal(A)) === '+' + u.slice(0), 'exact sum - A = 2^-55 (exactly half way)');
+    check(decimalDiff(exactDecimal(0.1), '0') !== '', 'diff works');
+    check(decimalDiff('0.3', exactDecimal(A)) === '+0.000000000000000011102230246251565404236316680908203125', 'real 0.3 is 0.4 units right of A');
+    check(bitsOf(A).endsWith('1') && bitsOf(B).endsWith('0'), 'tie goes to the even mantissa (B)');
+    check(bitsOf(0.1).slice(12) === '1001'.repeat(12) + '1010', '0.1 mantissa ends ...1001 1010');
+    check(parseInt(bitsOf(2 ** 53).slice(1, 12), 2) === 1076, '2**53 exponent 1076');
+    check(bitsOf(Number.MAX_SAFE_INTEGER).slice(12) === '1'.repeat(52), 'MAX_SAFE mantissa all ones');
+    check((0.1).toString(2) === '0.0001100110011001100110011001100110011001100110011001101', '0.1 toString(2)');
+    check(literalToDecimal('1.5e-3') === '0.0015' && literalToDecimal('-0') === '-0' && literalToDecimal('1_000') === '1000', 'literalToDecimal');
+    check(isNaN('abc') === true && Number.isNaN('abc') === false && 1e308 * 10 === Infinity && 1 / -0 === -Infinity, 'NaN / Infinity facts');
+    check(labEval('0.1 + 0.2').value === 0.1 + 0.2 && !!labEval('alert(1)').error && !!labEval('constructor').error, 'lab evaluator');
+    selectScenario(0);
+    const fails = report.filter(l => l.startsWith('FAIL')).length;
+    const pre = document.createElement('pre');
+    pre.id = 'selftest';
+    pre.textContent = (fails ? `SELFTEST: ${fails} FAILED\n` : 'SELFTEST: ALL OK\n') + report.join('\n');
+    document.body.appendChild(pre);
+    document.title = fails ? 'SELFTEST FAIL' : 'SELFTEST OK';
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+function init() {
+    $('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+        `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+    $('#tabs').addEventListener('click', e => {
+        const t = e.target.closest('.tab');
+        if (t) selectScenario(+t.dataset.i);
+    });
+    $('#progress').addEventListener('click', e => {
+        const b = e.target.closest('button');
+        if (b) { setPlaying(false); goto(+b.dataset.i); }
+    });
+    $('#nextBtn').addEventListener('click', next);
+    $('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+    $('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+    $('#playBtn').addEventListener('click', () => setPlaying(!playing));
+    // keep focus off the buttons, so Space always means "next step"
+    document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+    // lab input and preset chips
+    $('#viz').addEventListener('input', e => {
+        if (e.target.id === 'labInput') { labExpr = e.target.value; renderLab(); }
+    });
+    $('#viz').addEventListener('click', e => {
+        const c = e.target.closest('.chip');
+        if (!c) return;
+        labExpr = c.dataset.v;
+        $('#labInput').value = labExpr;
+        renderLab();
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        if (e.target && e.target.tagName === 'INPUT') return;
+        const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+        if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+        else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+        else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+        else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+    });
+
+    $('#themeBtn').addEventListener('click', () => {
+        const root = document.documentElement;
+        const isDark = root.dataset.theme
+            ? root.dataset.theme === 'dark'
+            : matchMedia('(prefers-color-scheme: dark)').matches;
+        root.dataset.theme = isDark ? 'light' : 'dark';
+        try { localStorage.setItem('numbersInMemoryTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+    });
+    try {
+        const t = localStorage.getItem('numbersInMemoryTheme');
+        if (t) document.documentElement.dataset.theme = t;
+    } catch (e) { /* storage blocked */ }
+    const q = /[?&]theme=(dark|light)/.exec(location.search);
+    if (q) document.documentElement.dataset.theme = q[1];
+
+    // #3 = scenario 3, #3.5 = scenario 3, step 5
+    const fromHash = () => {
+        const m = /^#(\d+)(?:\.(\d+))?/.exec(location.hash);
+        selectScenario(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] - 1 : 0);
+    };
+    window.addEventListener('hashchange', fromHash);
+    if (location.hash === '#selftest') selfTest();
+    else fromHash();
+}
+if (typeof document !== 'undefined' && document.getElementById('stage')) init();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

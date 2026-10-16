@@ -1,6 +1,11 @@
 import { defineCourse } from '@sciscend/course-kit/config'
+import { withLocales } from '../../i18n/i18n.mjs'
 
-export default defineCourse({
+const footerMessage = 'Practical JavaScript Basics'
+
+// withLocales: adds the Bulgarian version (site/bg/, generated from i18n/bg/*.po)
+// and the EN / BG button - see i18n/README.md
+export default await withLocales(defineCourse({
   title: 'Practical JavaScript Basics',
   description: 'JavaScript basics for beginners, on real-world JSON data',
   lang: 'en',
@@ -20,7 +25,8 @@ export default defineCourse({
         { text: 'Home', link: '/' },
         { text: 'Agenda', link: '/agenda' },
         { text: 'How to use these pages', link: '/how-to' },
-        { text: 'Course project', link: '/project' }
+        { text: 'Course project', link: '/project' },
+        { text: 'Animations', link: '/under-the-hood' }
       ]
     },
     {
@@ -32,5 +38,5 @@ export default defineCourse({
       ]
     }
   ],
-  footerMessage: 'Practical JavaScript Basics'
-})
+  footerMessage
+}), { footerMessage })

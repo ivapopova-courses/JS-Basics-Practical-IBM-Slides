@@ -54,6 +54,10 @@ let model = "XR-220";       // declared and defined at once
 console.log(model);
 ```
 
+::: info Animations
+**Variables in memory:** [1. Declaring and assigning](../animations/variablesInMemory.html#1){target="_blank"}, [2. Copying a value](../animations/variablesInMemory.html#2){target="_blank"}
+:::
+
 ### `let` and `const`
 
 | Keyword | Can it get a new value? | Use it for |
@@ -77,6 +81,10 @@ console.log("this line never runs");
 Write `const` by default. Change it to `let` only when you really need to give
 the variable a new value. Good rule guidelines ask the same for global
 variables: *"they must be declared as const"*.
+:::
+
+::: info Animation
+**Variables in memory:** [5. `const`](../animations/variablesInMemory.html#5){target="_blank"}
 :::
 
 ### Strict mode: no variables by accident
@@ -103,6 +111,10 @@ console.log(firmwareLevel);
 ::: info
 Modules and classes are always in strict mode. In the practice files we start with
 `"use strict";`.
+:::
+
+::: info Animation
+**Variable scope:** [4. No declaration and `"use strict"`](../animations/scopeChain.html#4){target="_blank"}
 :::
 
 ## 2. Naming variables
@@ -182,6 +194,10 @@ console.log(10 / 0);                       // Infinity
 decimals are approximations. Round results before you show them.
 :::
 
+::: info Animations
+**Numbers in memory:** [1. Bits and integers](../animations/numbersInMemory.html#1){target="_blank"}, [2. Fractions and 0.1](../animations/numbersInMemory.html#2){target="_blank"}, [4. 0.1 + 0.2](../animations/numbersInMemory.html#4){target="_blank"}, [6. NaN and Infinity](../animations/numbersInMemory.html#6){target="_blank"}
+:::
+
 ### Strings
 
 Three kinds of quotes:
@@ -232,6 +248,10 @@ Reading a missing key gives `undefined`. Reading **a key of** `undefined` is an
 error - that is what `?.` in the sample rule protects against (session 6).
 :::
 
+::: info Animation
+**Variables in memory:** [4. Types of values](../animations/variablesInMemory.html#4){target="_blank"}
+:::
+
 ## 4. Comments
 
 ```js
@@ -267,6 +287,12 @@ alerts++;              // add 1 -> 21
 alerts--;              // subtract 1 -> 20
 console.log(alerts);
 ```
+
+::: info Animations
+**Variables in memory:** [3. `x = x ** 2`](../animations/variablesInMemory.html#3){target="_blank"}
+
+**How an expression is evaluated:** [3. Assignment is an expression](../animations/expressionEvaluation.html#3){target="_blank"}, [4. `i++` and `++i`](../animations/expressionEvaluation.html#4){target="_blank"}
+:::
 
 ### Arithmetic
 
@@ -307,6 +333,10 @@ console.log(100 - 60 / 2);    // 70
 `18`: first `2 ** 2 = 4`, then `20 / 10 = 2`, `2 * 4 = 8`, then `10 + 8`.
 :::
 
+::: info Animations
+**How an expression is evaluated:** [1. Precedence](../animations/expressionEvaluation.html#1){target="_blank"}, [2. Associativity](../animations/expressionEvaluation.html#2){target="_blank"}, [5. Evaluation order (advanced)](../animations/expressionEvaluation.html#5){target="_blank"}
+:::
+
 ## 6. Strings and numbers together
 
 `+` with a string **joins** (concatenates). The other arithmetic operators
@@ -323,6 +353,10 @@ console.log("1" + 2 + 3);     // 123
 ::: warning
 `"9" + 1` is `"91"`, not `10`. When the values come from JSON, **convert them
 first**, then calculate.
+:::
+
+::: info Animation
+**Types, comparisons and logic:** [1. The `+` operator](../animations/coercionAndLogic.html#1){target="_blank"}
 :::
 
 ## 7. Converting values
@@ -359,6 +393,10 @@ console.log(parseInt("8 nodes"));     // 8
 ::: danger A version is not a number
 `"4.2.1.7"` has four parts. `Number` gives `NaN`, `parseFloat` gives `4.2` - both
 lose information. We compare versions part by part in session 5.
+:::
+
+::: info Animation
+**Types, comparisons and logic:** [2. String to number](../animations/coercionAndLogic.html#2){target="_blank"}
 :::
 
 ### Number to string

@@ -1,0 +1,168 @@
+# Animations
+
+Step-by-step animations that show what JavaScript does **under the hood**: how
+the engine reads the code, where values live in memory, how an expression is
+calculated, how a loop or a function call runs.
+
+Each animation has several **scenarios** (tabs at the top). A link below opens
+one scenario in a new tab.
+
+- **Next step:** Right arrow or `Space`. **Back:** Left arrow. **Start:** `Home`.
+  **Auto-play:** `P`.
+- `file.html#3` opens scenario 3, `file.html#3.5` opens scenario 3 at step 5.
+- Scenarios marked **(advanced)** go deeper.
+
+::: info English and Bulgarian
+Every animation has an English and a Bulgarian version. The **EN / BG** button
+at the top of an animation switches the language and keeps the current step.
+:::
+
+[All animations on one page](animations/index.html){target="_blank"} -
+[in Bulgarian](animations/bg/index.html){target="_blank"}
+
+## Session 1 - Getting started
+
+**[How JavaScript runs your code](animations/jsEngine.html){target="_blank"}** -
+from the text in the file to the result: tokens, the syntax tree (AST), bytecode
+and "hot" code in V8.
+[1. Translators](animations/jsEngine.html#1){target="_blank"},
+[2. Tokens](animations/jsEngine.html#2){target="_blank"},
+[3. AST](animations/jsEngine.html#3){target="_blank"},
+[4. Two phases](animations/jsEngine.html#4){target="_blank"},
+[5. Engine and environment](animations/jsEngine.html#5){target="_blank"},
+[6. Bytecode (advanced)](animations/jsEngine.html#6){target="_blank"},
+[7. Hot code (advanced)](animations/jsEngine.html#7){target="_blank"}
+
+## Session 2 - Variables, types and operators
+
+**[Variables in memory](animations/variablesInMemory.html){target="_blank"}** -
+declaring, assigning and copying values.
+[1. Declaring and assigning](animations/variablesInMemory.html#1){target="_blank"},
+[2. Copying a value](animations/variablesInMemory.html#2){target="_blank"},
+[3. `x = x ** 2`](animations/variablesInMemory.html#3){target="_blank"},
+[4. Types of values](animations/variablesInMemory.html#4){target="_blank"},
+[5. `const`](animations/variablesInMemory.html#5){target="_blank"},
+[6. Objects and references (advanced)](animations/variablesInMemory.html#6){target="_blank"}
+
+**[Numbers in memory](animations/numbersInMemory.html){target="_blank"}** -
+bits, why `0.1 + 0.2` is not `0.3`, big integers, `NaN` and `Infinity`.
+[1. Bits and integers](animations/numbersInMemory.html#1){target="_blank"},
+[2. Fractions and 0.1](animations/numbersInMemory.html#2){target="_blank"},
+[3. 64 bits (advanced)](animations/numbersInMemory.html#3){target="_blank"},
+[4. 0.1 + 0.2](animations/numbersInMemory.html#4){target="_blank"},
+[5. Big integers (advanced)](animations/numbersInMemory.html#5){target="_blank"},
+[6. NaN and Infinity](animations/numbersInMemory.html#6){target="_blank"},
+[7. Lab](animations/numbersInMemory.html#7){target="_blank"}
+
+**[How an expression is evaluated](animations/expressionEvaluation.html){target="_blank"}** -
+precedence, associativity, `i++` and `++i`, as a tree.
+[1. Precedence](animations/expressionEvaluation.html#1){target="_blank"},
+[2. Associativity](animations/expressionEvaluation.html#2){target="_blank"},
+[3. Assignment is an expression](animations/expressionEvaluation.html#3){target="_blank"},
+[4. `i++` and `++i`](animations/expressionEvaluation.html#4){target="_blank"},
+[5. Evaluation order (advanced)](animations/expressionEvaluation.html#5){target="_blank"},
+[6. Statement vs expression (advanced)](animations/expressionEvaluation.html#6){target="_blank"}
+
+**[Types, comparisons and logic](animations/coercionAndLogic.html){target="_blank"}** -
+scenarios 1 and 2 (session 3 uses the rest).
+[1. The `+` operator](animations/coercionAndLogic.html#1){target="_blank"},
+[2. String to number](animations/coercionAndLogic.html#2){target="_blank"}
+
+**[Variable scope](animations/scopeChain.html){target="_blank"}** -
+scenario 4 only (session 5 uses the rest).
+[4. No declaration and `"use strict"`](animations/scopeChain.html#4){target="_blank"}
+
+## Session 3 - Comparisons, logic, conditions and loops
+
+**[Types, comparisons and logic](animations/coercionAndLogic.html){target="_blank"}** -
+how JavaScript converts types when it compares, and how `&&` / `||` work.
+[3. `==` and `===`](animations/coercionAndLogic.html#3){target="_blank"},
+[4. Comparing strings](animations/coercionAndLogic.html#4){target="_blank"},
+[5. Truthy and falsy](animations/coercionAndLogic.html#5){target="_blank"},
+[6. Short-circuit: `&&` and `||`](animations/coercionAndLogic.html#6){target="_blank"},
+[7. Ternary operator (advanced)](animations/coercionAndLogic.html#7){target="_blank"}
+
+**[Loops step by step](animations/loopsStepByStep.html){target="_blank"}** -
+a flowchart with a moving token for `if`, `for`, `while`, `do...while`, `break`,
+`continue` and `switch`.
+[1. `if` / `else if`](animations/loopsStepByStep.html#1){target="_blank"},
+[2. The `for` loop](animations/loopsStepByStep.html#2){target="_blank"},
+[3. `while` and the endless loop](animations/loopsStepByStep.html#3){target="_blank"},
+[4. `do...while`](animations/loopsStepByStep.html#4){target="_blank"},
+[5. `break` and `continue`](animations/loopsStepByStep.html#5){target="_blank"},
+[6. Nested loops (advanced)](animations/loopsStepByStep.html#6){target="_blank"},
+[7. `switch` without `break` (advanced)](animations/loopsStepByStep.html#7){target="_blank"}
+
+Also: [Numbers in memory - 4. 0.1 + 0.2](animations/numbersInMemory.html#4){target="_blank"}
+and [6. NaN and Infinity](animations/numbersInMemory.html#6){target="_blank"};
+[How an expression is evaluated - 6. Statement vs expression](animations/expressionEvaluation.html#6){target="_blank"}.
+
+## Session 4 - Arrays and lists of records
+
+**[Arrays in memory](animations/arraysInMemory.html){target="_blank"}** -
+indexes, `length`, adding and removing elements, references, arrays of arrays.
+[1. Indexes](animations/arraysInMemory.html#1){target="_blank"},
+[2. Out of range](animations/arraysInMemory.html#2){target="_blank"},
+[3. An array is an object](animations/arraysInMemory.html#3){target="_blank"},
+[4. `push` / `pop` / `unshift` / `shift`](animations/arraysInMemory.html#4){target="_blank"},
+[5. References](animations/arraysInMemory.html#5){target="_blank"},
+[6. Two-dimensional (advanced)](animations/arraysInMemory.html#6){target="_blank"},
+[7. Shared row (advanced)](animations/arraysInMemory.html#7){target="_blank"}
+
+**[Algorithms with arrays](animations/arrayAlgorithms.html){target="_blank"}** -
+walking through an array, sum, maximum, filtering, searching, with the common bugs.
+[1. Traversal with `for`](animations/arrayAlgorithms.html#1){target="_blank"},
+[2. Reverse order](animations/arrayAlgorithms.html#2){target="_blank"},
+[3. Sum of the elements](animations/arrayAlgorithms.html#3){target="_blank"},
+[4. Largest element](animations/arrayAlgorithms.html#4){target="_blank"},
+[5. Filtering into new arrays](animations/arrayAlgorithms.html#5){target="_blank"},
+[6. Search with `break` (advanced)](animations/arrayAlgorithms.html#6){target="_blank"},
+[7. Two-dimensional array (advanced)](animations/arrayAlgorithms.html#7){target="_blank"}
+
+## Session 5 - Functions, and reading older code
+
+**[The call stack](animations/callStack.html){target="_blank"}** -
+what happens when a function is called and when it returns.
+[1. Calling a function](animations/callStack.html#1){target="_blank"},
+[2. Arguments](animations/callStack.html#2){target="_blank"},
+[3. `return`](animations/callStack.html#3){target="_blank"},
+[4. Nested calls](animations/callStack.html#4){target="_blank"},
+[5. Default values](animations/callStack.html#5){target="_blank"},
+[6. Recursion (advanced)](animations/callStack.html#6){target="_blank"},
+[7. Stack overflow (advanced)](animations/callStack.html#7){target="_blank"}
+
+**[Variable scope](animations/scopeChain.html){target="_blank"}** -
+where a name is looked up: local, outer, global; `let` vs `var` in a block.
+[1. Global and local](animations/scopeChain.html#1){target="_blank"},
+[2. The scope chain](animations/scopeChain.html#2){target="_blank"},
+[3. Shadowing](animations/scopeChain.html#3){target="_blank"},
+[4. No declaration](animations/scopeChain.html#4){target="_blank"},
+[5. Block scope: `let` and `var`](animations/scopeChain.html#5){target="_blank"},
+[6. IIFE (advanced)](animations/scopeChain.html#6){target="_blank"},
+[7. Lexical scope (advanced)](animations/scopeChain.html#7){target="_blank"}
+
+**[Hoisting: the two phases of execution](animations/hoisting.html){target="_blank"}** -
+why a `var` is `undefined` before its line, and what the TDZ of `let` / `const` is.
+[1. `var` and `undefined`](animations/hoisting.html#1){target="_blank"},
+[2. Function declaration](animations/hoisting.html#2){target="_blank"},
+[3. Function expression](animations/hoisting.html#3){target="_blank"},
+[4. `let` / `const` and the TDZ](animations/hoisting.html#4){target="_blank"},
+[5. Hoisting in a function](animations/hoisting.html#5){target="_blank"},
+[6. `let` in a block (advanced)](animations/hoisting.html#6){target="_blank"},
+[7. TDZ: time, not place (advanced)](animations/hoisting.html#7){target="_blank"}
+
+**[Functions are values](animations/functionsAsValues.html){target="_blank"}** -
+functions in variables, arrays and objects; callbacks; arrow functions; closures.
+[1. A function is a value](animations/functionsAsValues.html#1){target="_blank"},
+[2. In arrays and objects](animations/functionsAsValues.html#2){target="_blank"},
+[3. Callbacks](animations/functionsAsValues.html#3){target="_blank"},
+[4. A function returns a function](animations/functionsAsValues.html#4){target="_blank"},
+[5. Arrow functions](animations/functionsAsValues.html#5){target="_blank"},
+[6. Closure (advanced)](animations/functionsAsValues.html#6){target="_blank"},
+[7. A forgotten `;` (advanced)](animations/functionsAsValues.html#7){target="_blank"}
+
+## Session 6 - Objects
+
+[Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target="_blank"}
+and [Arrays in memory - 5. References](animations/arraysInMemory.html#5){target="_blank"}:
+two variables can point to the same object.

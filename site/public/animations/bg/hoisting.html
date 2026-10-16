@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoisting: двете фази на изпълнение</title>
+<!--
+    Step-by-step animation: hoisting - what JavaScript does with declarations
+    before the first line runs (creation phase) and then while it runs (execution phase).
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: hoisting.html#3 (scenario 3), hoisting.html#3.5 (scenario 3, step 5).
+    Theme override: hoisting.html?theme=dark  (or light). Self-test: hoisting.html#selftest
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --tdz-bg: #e6e1ec;
+    --tdz-bg2: #d5cee0;
+    --tdz-border: #857a9c;
+    --tdz-ink: #463d59;
+    --fn-bg: #ece2fb;
+    --scope2-bg: #f7f1e4;
+    --scope3-bg: #efe8d8;
+
+    --scan: #0f8b8d;
+    --scan-bg: #d2efed;
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --row-h: 3.1rem;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --tdz-bg: #2b2833; --tdz-bg2: #35313f; --tdz-border: #8f84a8; --tdz-ink: #d3cbe8;
+        --fn-bg: #2f2547; --scope2-bg: #1b1d23; --scope3-bg: #25272f;
+        --scan: #3fd0c9; --scan-bg: #133a3a;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --tdz-bg: #2b2833; --tdz-bg2: #35313f; --tdz-border: #8f84a8; --tdz-ink: #d3cbe8;
+    --fn-bg: #2f2547; --scope2-bg: #1b1d23; --scope3-bg: #25272f;
+    --scan: #3fd0c9; --scan-bg: #133a3a;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: flex; flex-direction: column; gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); transition: box-shadow .3s; }
+.code-panel.p1 { box-shadow: 0 0 0 2px var(--scan); }
+.code-panel .panel-title { color: var(--code-num); }
+.code-panel.p1 .panel-title .note { color: #3fd0c9; }
+.code-wrap { position: relative; }
+.code { position: relative; z-index: 1; list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 1.08rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .2rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s, opacity .3s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.dim { opacity: .35; }
+.code li.scanned { border-left-color: rgba(63, 208, 201, .45); }
+.code li.call { border-left: 3px dashed var(--code-marker); background: rgba(255, 209, 102, .07); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); opacity: 1; }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+.code .mark {
+    border-radius: .2rem;
+    outline: 2px dashed #3fd0c9; outline-offset: 1px;
+    background: rgba(63, 208, 201, .16);
+    animation: markin .5s both;
+}
+.beam {
+    position: absolute; left: -.3rem; right: -.3rem; top: 0; z-index: 0;
+    height: 1.6rem;
+    border-radius: .3rem;
+    background: linear-gradient(90deg, rgba(63, 208, 201, .05), rgba(63, 208, 201, .28) 40%, rgba(63, 208, 201, .05));
+    border-bottom: 2px solid #3fd0c9;
+    box-shadow: 0 .35rem 1rem rgba(63, 208, 201, .35);
+    opacity: 0;
+    pointer-events: none;
+    transition: top .55s cubic-bezier(.45, .05, .35, 1), height .3s, opacity .35s;
+}
+.beam span {
+    position: absolute; right: .5rem; bottom: -1.05rem;
+    padding: 0 .35rem; border-radius: .25rem;
+    background: #3fd0c9; color: #0d2524;
+    font-family: var(--sans); font-size: .58rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+}
+.beam.off { opacity: 0; }
+.beam.on { opacity: 1; }
+.ghost-code {
+    display: none;
+    margin: .5rem 0 0;
+    padding: .25rem .5rem .3rem;
+    border: 2px dashed #3fd0c9; border-radius: .35rem;
+    font-family: var(--mono); font-size: 1.02rem; color: #3fd0c9;
+    white-space: pre;
+    animation: fadein .45s both;
+}
+.ghost-code.show { display: block; }
+.ghost-code.hidden { visibility: hidden; animation: none; }
+.ghost-code small { display: block; font-family: var(--sans); font-size: .62rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; opacity: .85; }
+
+/* expression evaluation */
+.eval { display: grid; grid-template-columns: auto 1fr; gap: .3rem .8rem; align-items: center; }
+.ev-k { font-size: .72rem; color: var(--muted); }
+.ev-v {
+    justify-self: start;
+    min-width: 2rem; min-height: 1.6rem;
+    padding: .1rem .5rem;
+    border-radius: .3rem;
+    font-family: var(--mono); font-size: 1.05rem;
+    white-space: pre;
+}
+.ev-sub:not(:empty) { background: var(--read-bg); }
+.ev-res:not(:empty) { background: var(--write-bg); font-weight: 700; }
+.ev-res.err:not(:empty) { background: var(--err-bg); color: var(--err); }
+.eval-empty { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); font-style: italic; min-height: 5.3rem; display: flex; align-items: center; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+
+/* ---------- phases ---------- */
+.phases { display: flex; align-items: center; gap: .6rem; }
+.ph {
+    display: flex; align-items: center; gap: .55rem;
+    padding: .45rem .9rem .45rem .5rem;
+    border: 2px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--muted);
+    font-size: .92rem; font-weight: 650;
+    transition: background .3s, color .3s, border-color .3s;
+}
+.ph b {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.55rem; height: 1.55rem; border-radius: 50%;
+    background: var(--line); color: var(--panel);
+    font-size: .85rem;
+}
+.ph small { font-weight: 500; font-size: .72rem; }
+.ph.on.p1 { border-color: var(--scan); background: var(--scan-bg); color: var(--ink); }
+.ph.on.p1 b { background: var(--scan); }
+.ph.on.p2 { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.ph.on.p2 b { background: var(--code-marker); color: #26221c; }
+.ph.done { color: var(--ink); border-color: var(--muted); }
+.ph.done b { background: var(--muted); }
+.ph-arrow { width: 1.6rem; height: 1rem; color: var(--muted); flex: none; }
+.ph-scope { margin-left: auto; font-size: .82rem; color: var(--muted); text-align: right; }
+.ph-scope b { color: var(--ink); }
+
+/* ---------- scopes ---------- */
+.scopes-wrap { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-start; }
+.scope {
+    position: relative;
+    padding: .5rem .8rem .65rem;
+    border: 2px solid var(--line); border-radius: .7rem;
+    background: var(--panel);
+    transition: border-color .3s, box-shadow .3s;
+}
+.scope .scope { margin-top: .55rem; background: var(--scope2-bg); }
+.scope .scope .scope { background: var(--scope3-bg); }
+.scope.cur1 { border-color: var(--scan); box-shadow: 0 0 0 4px var(--scan-bg); }
+.scope.cur2 { border-color: var(--muted); }
+.scope.appear { animation: appear .5s both; }
+.scope.miss { border-color: var(--err); animation: shake .5s both; }
+.scope-title {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+    margin-bottom: .25rem;
+    font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+}
+.scope-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.search-tag {
+    padding: .05rem .45rem; border-radius: .3rem;
+    background: var(--read-bg); color: var(--read);
+    font-size: .72rem; font-weight: 700; text-transform: none; letter-spacing: 0;
+    animation: fadein .35s both;
+}
+.empty { padding: .35rem 0 .2rem; font-size: .82rem; font-style: italic; color: var(--muted); }
+.row {
+    display: grid; grid-template-columns: 4.6rem 7.5rem minmax(0, 21rem);
+    align-items: center; gap: .5rem;
+    height: var(--row-h);
+    transition: opacity .3s;
+}
+.row.appear .cell, .row.appear .name, .row.appear .kw { animation: appear .5s both; }
+.row.appear .name { animation-delay: .1s; }
+.row.shadow { opacity: .45; }
+.row .kw {
+    justify-self: end;
+    padding: 0 .35rem; border: 1px solid var(--line); border-radius: .25rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: .72rem; color: var(--muted);
+}
+.row .name { font-family: var(--mono); font-size: 1.25rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+.row .shadow-note { display: block; font-family: var(--sans); font-size: .62rem; font-weight: 600; color: var(--muted); }
+.cell {
+    position: relative;
+    display: flex; align-items: center; justify-content: center; gap: .4rem;
+    height: calc(var(--row-h) - .4rem);
+    padding: .5rem .6rem 0;
+    border: 2px solid; border-radius: .55rem;
+    font-family: var(--mono); font-size: 1.15rem; font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: box-shadow .25s;
+}
+.cell.st-val { background: var(--var-bg); border-color: var(--var-border); color: var(--var-ink); }
+.cell.st-fn { background: var(--fn-bg); border-color: var(--ref); color: var(--ref); }
+.cell.st-tdz {
+    padding-top: 0;
+    background: repeating-linear-gradient(135deg, var(--tdz-bg) 0 .45rem, var(--tdz-bg2) .45rem .9rem);
+    border-color: var(--tdz-border); border-style: dashed;
+    color: var(--tdz-ink);
+}
+.cell.st-tdz .val { font-family: var(--sans); font-size: .8rem; font-style: italic; font-weight: 600; }
+.cell.st-tdz .type { top: auto; bottom: .1rem; }
+.tdz-tag {
+    padding: 0 .35rem; border-radius: .25rem;
+    background: var(--tdz-border); color: var(--panel);
+    font-family: var(--sans); font-size: .62rem; font-weight: 800; font-style: normal; letter-spacing: .05em;
+}
+.lock { width: .95rem; height: .95rem; flex: none; }
+.type {
+    position: absolute; top: .1rem; right: .45rem;
+    font-family: var(--sans); font-size: .58rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined { font-style: italic; font-weight: 500; opacity: .85; }
+.cell.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.cell.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.cell.hl-new   { box-shadow: 0 0 0 3px var(--scan), 0 0 0 7px var(--scan-bg); }
+.cell.hl-error { box-shadow: 0 0 0 3px var(--err), 0 0 0 7px var(--err-bg); animation: shake .5s both; }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding-top: .5rem;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+.cell.changed > :not(.ghost) { animation: pop .45s .2s both; }
+.missrow {
+    display: flex; align-items: center; gap: .5rem;
+    margin-top: .45rem; padding: .35rem .6rem;
+    border: 2px dashed var(--err); border-radius: .5rem;
+    background: var(--err-bg); color: var(--err);
+    font-size: .88rem; font-weight: 600;
+    animation: fadein .4s both;
+}
+.missrow code { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; }
+
+/* rules card: what each kind of declaration gets in phase 1 */
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.rule { display: flex; flex-direction: column; gap: .3rem; padding: .45rem .6rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--panel); }
+.rule .rk { font-family: var(--mono); font-size: .85rem; font-weight: 700; }
+.rule .cell { height: 2.1rem; padding-top: 0; font-size: .9rem; }
+.rule .cell.st-tdz .val { font-size: .72rem; }
+.rules-title { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .35rem; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.1rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.val { background: var(--var-bg); border-color: var(--var-border); }
+.sw.fn { background: var(--fn-bg); border-color: var(--ref); }
+.sw.tdz { background: repeating-linear-gradient(135deg, var(--tdz-bg) 0 .2rem, var(--tdz-bg2) .2rem .4rem); border-color: var(--tdz-border); border-style: dashed; }
+.sw.scan { background: var(--scan-bg); border-color: var(--scan); }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.08rem * 1.42 * 3); font-size: 1.08rem; line-height: 1.42; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .sc { color: var(--scan); font-weight: 700; }
+.explain-text .e { color: var(--err); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.scan { background: var(--scan); }
+.fly.rejected { background: var(--err); }
+
+.cell.await > :not(.ghost) { visibility: hidden; }
+.ev-v.await, .cline.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+#selftest { position: fixed; left: 0; bottom: 0; z-index: 99; max-height: 50vh; overflow: auto; margin: 0; padding: .5rem; background: #000; color: #0f0; font-size: 12px; }
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes markin { from { outline-color: transparent; background-color: transparent; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .phases { flex-wrap: wrap; }
+    .row { grid-template-columns: 4rem 6rem minmax(0, 1fr); }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Hoisting: двете фази на изпълнение <small>какво прави JavaScript, преди да изпълни първия ред</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../hoisting.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel" id="codePanel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <div class="code-wrap">
+                    <div class="beam off" id="beam"><span>сканиране</span></div>
+                    <ol class="code" id="code"></ol>
+                </div>
+                <div class="ghost-code" id="ghostCode"></div>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><span>Изчисляване на израза</span></div>
+                <div class="eval" id="eval"></div>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="phases">
+                <div class="ph p1" id="ph1"><b>1</b><span>Създаване <small>(creation phase)</small></span></div>
+                <svg class="ph-arrow" viewBox="0 0 24 14" aria-hidden="true"><path d="M1 5.5 H15 V1.5 L23 7 L15 12.5 V8.5 H1 Z" fill="currentColor"/></svg>
+                <div class="ph p2" id="ph2"><b>2</b><span>Изпълнение <small>(execution phase)</small></span></div>
+                <div class="ph-scope" id="phScope"></div>
+            </div>
+            <div class="scopes-wrap" id="scopes"></div>
+            <div>
+                <div class="rules-title">Какво получава всяко име във фаза 1</div>
+                <div class="rules">
+                    <div class="rule"><span class="rk">var x</span><div class="cell st-val"><span class="val t-undefined">undefined</span></div></div>
+                    <div class="rule"><span class="rk">function f() {...}</span><div class="cell st-fn"><span class="val">цялата функция</span></div></div>
+                    <div class="rule"><span class="rk">let / const / class</span><div class="cell st-tdz"><svg class="lock" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="8" rx="1.5" fill="currentColor"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span class="val">неинициализирана</span><span class="tdz-tag">TDZ</span></div></div>
+                </div>
+            </div>
+            <div class="legend" id="legend"></div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Model: a list of nested scopes, each one a table of names.
+//   A name is { kind, value, type }; value === null means "uninitialized" (TDZ).
+// ---------------------------------------------------------------------------
+const FN_TEXT = 'function() {...}';
+
+function typeOf(lit) {
+    if (lit === null) return 'tdz';
+    if (lit === 'undefined') return 'undefined';
+    if (lit.startsWith('function')) return 'function';
+    if (lit.startsWith('"')) return 'string';
+    return 'number';
+}
+
+// Helpers used by the scenario steps. Each one mutates the state `s`.
+function scope(s, id, kind, title) {
+    s.scopes.push({ id, kind, title, order: [], vars: {}, started: false });
+}
+function dropScope(s, id) { s.scopes = s.scopes.filter(x => x.id !== id); }
+function getScope(s, id) { return s.scopes.find(x => x.id === id); }
+function phase1(s, id, label) {
+    Object.assign(s, { phase: 1, cur: id, plabel: label, line: -1, scan: -1, marks: [], dim: [] });
+    getScope(s, id).started = true;
+}
+function phase2(s, id, label) {
+    Object.assign(s, { phase: 2, cur: id, plabel: label, scan: -1, marks: [], dim: [] });
+}
+function scanTo(s, line) { s.scan = line; }
+// a declaration found in phase 1: var -> undefined, function -> the function, let/const -> TDZ
+function hoist(s, id, name, kind, line, fnText) {
+    const value = kind === 'var' ? 'undefined' : kind === 'function' ? fnText : null;
+    const S = getScope(s, id);
+    S.vars[name] = { kind, value, type: typeOf(value) };
+    S.order.push(name);
+    s.scan = line;
+    s.marks.push(line);
+    s.hl[id + '.' + name] = 'new';
+}
+function set(s, id, name, lit) {
+    Object.assign(getScope(s, id).vars[name], { value: lit, type: typeOf(lit) });
+    s.hl[id + '.' + name] = 'write';
+}
+function read(s, ...keys) { keys.forEach(k => s.hl[k] = 'read'); }
+function ev(s, src, sub = '', res = '', err = false) { s.eval = { src, sub, res, err }; }
+function noev(s) { s.eval = null; }
+function log(s, text, err = false) { s.console.push({ text, err }); }
+function fail(s, text) { s.err = true; log(s, text, true); }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   code / codes - the program (codes: several variants, the step picks s.variant)
+//   step.line    - active code line in phase 2 (0-based, -1 = none)
+//   step.do      - changes to the state
+//   step.fly     - values that fly on screen: [from, to, text, option]
+//                  keys: v:scope.name (value cell), mk:N (declaration found on line N),
+//                  ev (values row), res (result row), con (last console line)
+//                  option: 'scan' (phase 1 chip), 'reject'
+//   step.reveal  - elements to keep hidden until all flights land
+// ---------------------------------------------------------------------------
+const GLOBAL = 'Глобален обхват (global scope)';
+
+const SCENARIOS = [
+{
+    tab: 'var и undefined',
+    ghost: ['var x;   // само в нашата представа!'],
+    code: [
+        'console.log("x:", x);',
+        'var x = 10;',
+        'console.log("x:", x);',
+    ],
+    steps: [
+        { text: `Защо този код (от слайда "Variables Hoisting") не дава грешка, а отпечатва <b>undefined</b>? Защото JavaScript минава през кода на <b>две фази</b>: първо <span class="sc">създаване</span> (creation phase - на слайда "compile time"), после <b>изпълнение</b> (execution phase - "run time"). Вдясно е <b>обхватът</b> (scope) - таблицата с имената, които JavaScript познава. Засега е празна.`,
+          do: s => scope(s, 'g', 'global', GLOBAL) },
+        { text: `<span class="sc">Фаза 1 - създаване.</span> Преди да изпълни който и да е ред, JavaScript преглежда <b>целия</b> код отгоре надолу и търси само <b>декларации</b>: <code>var</code>, <code>let</code>, <code>const</code>, <code>function</code>. Ред 1 няма декларация - <code>console.log</code> е израз и ще се изпълни чак във фаза 2.`,
+          do: s => { phase1(s, 'g', 'глобален'); scanTo(s, 0); } },
+        { text: `Намерена е декларацията <code>var x</code>. Името x се записва в таблицата на обхвата и веднага получава стойност <b>undefined</b>. Забележете: <code>= 10</code> <b>не</b> се изпълнява сега - присвояването е израз, то ще се изпълни във фаза 2.`,
+          do: s => hoist(s, 'g', 'x', 'var', 1), fly: [['mk:1', 'v:g.x', 'x', 'scan']] },
+        { text: `Сканирането стига до края на кода. Други декларации няма. Фаза 1 приключи: JavaScript вече <b>знае</b> за x, въпреки че редът с <code>var x</code> е по-надолу. Нито един ред още не е изпълнен.`,
+          do: s => scanTo(s, 3) },
+        { text: `Затова казваме, че декларацията се "издига" (<b>hoisting</b>) в началото на обхвата - все едно най-горе пише <code>var x;</code> (пунктираната рамка). Но това е само <b>метафора</b>: кодът <b>не</b> се мести! Редовете са си на същите места - JavaScript просто е регистрирал имената предварително.`,
+          do: s => { s.ghost = true; } },
+        { line: 0, text: `<b>Фаза 2 - изпълнение.</b> Сега редовете се изпълняват един по един, отгоре надолу. Ред 1: <code>console.log("x:", x)</code>. Какво ще отпечата - грешка, undefined или 10? Помислете, преди да продължите.`,
+          do: s => phase2(s, 'g', 'глобален') },
+        { line: 0, text: `x вече е в таблицата, затова JavaScript спокойно <span class="r">чете</span> стойността му - <b>undefined</b>. Няма грешка! Отпечатва се <code>x: undefined</code>.`,
+          do: s => { read(s, 'g.x'); log(s, 'x: undefined'); }, fly: [['v:g.x', 'con', 'undefined']], reveal: ['con'] },
+        { line: 1, text: `Ред 2: <code>var x = 10;</code> Декларацията вече е обработена във фаза 1, затова сега се изпълнява само присвояването <code>x = 10</code> - в x се <span class="w">записва</span> 10.`,
+          do: s => { ev(s, '10', '', '10'); set(s, 'g', 'x', '10'); }, fly: [['res', 'v:g.x', '10']] },
+        { line: 2, text: `Ред 3: x вече е 10 - отпечатва се <code>x: 10</code>.`,
+          do: s => { noev(s); read(s, 'g.x'); log(s, 'x: 10'); }, fly: [['v:g.x', 'con', '10']], reveal: ['con'] },
+        { text: `<b>Обобщение:</b> <code>var x = 10;</code> всъщност са <b>две действия</b>: декларация <code>var x</code> (във фаза 1 - x получава undefined) и присвояване <code>x = 10</code> (във фаза 2 - чак когато се стигне до реда). Затова преди реда си x е undefined, а не грешка. Нищо не се мести - JavaScript просто знае имената предварително.`,
+          do: s => { s.phase = 2; s.cur = null; } },
+    ],
+},
+{
+    tab: 'function declaration',
+    code: [
+        'console.log( foo() );',
+        'function foo() {',
+        '    return "I am foo() and I work!";',
+        '}',
+    ],
+    steps: [
+        { text: `Функцията <code>foo</code> се извиква на ред 1, а е дефинирана по-долу, чрез <b>декларация</b> (function declaration - "Вариант 1" от слайдовете). Ще работи ли?`,
+          do: s => scope(s, 'g', 'global', GLOBAL) },
+        { text: `<span class="sc">Фаза 1.</span> Ред 1 няма декларации - извикването <code>foo()</code> е израз и ще се изпълни по-късно.`,
+          do: s => { phase1(s, 'g', 'глобален'); scanTo(s, 0); } },
+        { text: `Намерена е декларация на функция <code>function foo</code>. За разлика от var, тук името foo получава <b>веднага цялата функция</b>, а не undefined. Тялото на функцията (сивите редове) <b>не</b> се изпълнява - функцията само се създава и се запомня.`,
+          do: s => { hoist(s, 'g', 'foo', 'function', 1, 'function foo() {...}'); s.dim = [2, 3]; },
+          fly: [['mk:1', 'v:g.foo', 'foo', 'scan']] },
+        { text: `Сканирането приключи. В таблицата foo вече е готова функция, която може да се извика.`,
+          do: s => scanTo(s, 4) },
+        { line: 0, text: `<b>Фаза 2</b>, ред 1: <code>foo()</code>. Какво ще стане? Помислете, преди да продължите.`,
+          do: s => phase2(s, 'g', 'глобален') },
+        { line: 0, text: `JavaScript <span class="r">чете</span> foo и намира функция - значи може да я извика. Функцията се изпълнява и връща низа <code>"I am foo() and I work!"</code>.`,
+          do: s => { read(s, 'g.foo'); ev(s, 'foo()', 'function foo() {...}', '"I am foo() and I work!"'); },
+          fly: [['v:g.foo', 'ev', 'function foo() {...}']] },
+        { line: 0, text: `<code>console.log</code> отпечатва върнатата стойност.`,
+          do: s => log(s, 'I am foo() and I work!'), fly: [['res', 'con', '"I am foo() and I work!"']], reveal: ['con'] },
+        { line: 1, text: `Редове 2-4: самата декларация. Във фаза 2 тук <b>не се случва нищо</b> - функцията вече е създадена във фаза 1, затова JavaScript просто прескача този код.`,
+          do: s => { noev(s); s.dim = [2, 3]; } },
+        { text: `<b>Обобщение:</b> function declaration се "издига" <b>изцяло</b> - и името, и самата функция. Затова такава функция може да се извиква и преди мястото, където е написана. И тук нищо не се мести: функцията просто е създадена още във фаза 1.`,
+          do: s => { s.cur = null; } },
+    ],
+},
+{
+    tab: 'function expression',
+    codes: [[
+        'console.log( foo() );',
+        'var foo = function() {',
+        '    return "I am foo() and I work!";',
+        '};',
+    ], [
+        'console.log( foo() );',
+        'let foo = function() {',
+        '    return "I am foo() and I work!";',
+        '};',
+    ]],
+    steps: [
+        { text: `Същият пример, но функцията е зададена чрез <b>израз</b> (function expression - "Вариант 2") и е записана в променлива с <code>var</code>. Ще работи ли сега?`,
+          do: s => scope(s, 'g', 'global', GLOBAL) },
+        { text: `<span class="sc">Фаза 1.</span> Ред 1 - няма декларация.`,
+          do: s => { phase1(s, 'g', 'глобален'); scanTo(s, 0); } },
+        { text: `Намерена е декларацията <code>var foo</code>. Важно: това е декларация на <b>променлива</b>, а не на функция! Затова foo получава <b>undefined</b>. Функцията вдясно от <code>=</code> е израз - тя още не съществува и ще бъде създадена чак във фаза 2.`,
+          do: s => { hoist(s, 'g', 'foo', 'var', 1); s.dim = [2, 3]; }, fly: [['mk:1', 'v:g.foo', 'foo', 'scan']] },
+        { text: `Фаза 1 приключи. foo съществува, но стойността му е undefined.`,
+          do: s => scanTo(s, 4) },
+        { line: 0, text: `<b>Фаза 2</b>, ред 1: <code>foo()</code>. Какво ще стане този път? Помислете, преди да продължите.`,
+          do: s => phase2(s, 'g', 'глобален') },
+        { line: 0, text: `JavaScript <span class="r">чете</span> foo - стойността е <b>undefined</b>. После се опитва да извика <code>undefined()</code>...`,
+          do: s => { read(s, 'g.foo'); ev(s, 'foo()', 'undefined()'); }, fly: [['v:g.foo', 'ev', 'undefined']] },
+        { line: 0, text: `...но undefined не е функция! <span class="e">TypeError: foo is not a function</span> и програмата спира. Обърнете внимание на съобщението: не казва, че foo не съществува - foo <b>съществува</b>, но стойността му не е функция.`,
+          do: s => { ev(s, 'foo()', 'undefined()', 'TypeError', true); s.hl['g.foo'] = 'error'; fail(s, 'Uncaught TypeError: foo is not a function'); } },
+        { text: `А ако използваме <code>let</code> вместо <code>var</code>? Започваме отначало със същия код - сменена е само една дума на ред 2.`,
+          do: s => { Object.assign(s, { variant: 1, scopes: [], console: [], eval: null, phase: 0, cur: null }); scope(s, 'g', 'global', GLOBAL); } },
+        { text: `<span class="sc">Фаза 1:</span> намерена е декларацията <code>let foo</code>. Името foo <b>също</b> се регистрира в обхвата, но <b>без стойност</b> - то е <b>неинициализирано</b> (uninitialized) и "заключено" до реда, на който е декларирано. Този период се нарича <b>Temporal Dead Zone (TDZ)</b> - "времева мъртва зона".`,
+          do: s => { phase1(s, 'g', 'глобален'); hoist(s, 'g', 'foo', 'let', 1); s.dim = [2, 3]; }, fly: [['mk:1', 'v:g.foo', 'foo', 'scan']] },
+        { line: 0, text: `<b>Фаза 2</b>, ред 1: JavaScript намира foo в таблицата, но то е в TDZ. Резултатът е друга грешка: <span class="e">ReferenceError: Cannot access 'foo' before initialization</span> - "не може да се достъпи преди инициализация".`,
+          do: s => { phase2(s, 'g', 'глобален'); s.hl['g.foo'] = 'error'; fail(s, "Uncaught ReferenceError: Cannot access 'foo' before initialization"); } },
+        { text: `<b>Обобщение:</b> при function expression се "издига" само <b>променливата</b>, не функцията. С var: foo е undefined -> TypeError. С let/const: foo е в TDZ -> ReferenceError. Затова function expression се използва само <b>след</b> реда си. (На слайда <code>let functionVar = undefined // compile time</code> е опростяване: така е при var, а при let стойността е "неинициализирана".)`,
+          do: s => { s.cur = null; } },
+    ],
+},
+{
+    tab: 'let / const и TDZ',
+    codes: [[
+        'console.log(y);',
+        'let y = 5;',
+        'console.log(y);',
+    ], [
+        'let y;',
+        'console.log(y);',
+        'console.log(z);',
+    ]],
+    steps: [
+        { text: `На слайдовете е казано опростено: "при let и const не се извършва hoisting". Нека видим какво точно прави JavaScript с <code>let</code>.`,
+          do: s => scope(s, 'g', 'global', GLOBAL) },
+        { text: `<span class="sc">Фаза 1:</span> <code>let y</code> - декларацията <b>се регистрира</b>, точно както при var. Но y не получава стойност - остава <b>неинициализирана</b>. От началото на обхвата до реда с <code>let y</code> името е в <b>TDZ</b> (Temporal Dead Zone).`,
+          do: s => { phase1(s, 'g', 'глобален'); hoist(s, 'g', 'y', 'let', 1); }, fly: [['mk:1', 'v:g.y', 'y', 'scan']] },
+        { text: `Фаза 1 приключи. В таблицата има y, но е "заключено".`,
+          do: s => scanTo(s, 3) },
+        { line: 0, text: `<b>Фаза 2</b>, ред 1: <code>console.log(y)</code>. Какво ще стане - undefined, 5 или грешка? Помислете, преди да продължите.`,
+          do: s => phase2(s, 'g', 'глобален') },
+        { line: 0, text: `<span class="e">ReferenceError: Cannot access 'y' before initialization</span>. JavaScript знае, че y съществува (затова казва "преди инициализация"), но не позволява да се чете, докато не се изпълни редът <code>let y = 5</code>. С var щяхме тихо да получим undefined - TDZ ни предпазва от тази скрита грешка.`,
+          do: s => { s.hl['g.y'] = 'error'; fail(s, "Uncaught ReferenceError: Cannot access 'y' before initialization"); } },
+        { line: 0, text: `Същото важи и за <code>const</code>: <code>console.log(PI); const PI = 3.14;</code> дава ReferenceError: Cannot access 'PI' before initialization. (И за <code>class</code> - декларациите на класове също имат TDZ.)` },
+        { text: `Втори пример: <code>let y;</code> без стойност и едно име - <code>z</code>, което <b>изобщо не е декларирано</b>. Сравнете съобщенията за грешка.`,
+          do: s => { Object.assign(s, { variant: 1, scopes: [], console: [], eval: null, phase: 0, cur: null, err: false }); scope(s, 'g', 'global', GLOBAL); } },
+        { text: `<span class="sc">Фаза 1:</span> намерено е само <code>let y</code> - в TDZ. За z няма декларация никъде, затова z не влиза в таблицата.`,
+          do: s => { phase1(s, 'g', 'глобален'); hoist(s, 'g', 'y', 'let', 0); }, fly: [['mk:0', 'v:g.y', 'y', 'scan']] },
+        { text: `Сканирането приключи. В таблицата има само y.`,
+          do: s => scanTo(s, 3) },
+        { line: 0, text: `<b>Фаза 2</b>, ред 1: <code>let y;</code> - стигнахме реда на декларацията, TDZ свършва. Тъй като няма <code>=</code>, y получава <b>undefined</b>. Вече може да се използва.`,
+          do: s => { phase2(s, 'g', 'глобален'); set(s, 'g', 'y', 'undefined'); } },
+        { line: 1, text: `Ред 2: <code>console.log(y)</code> <span class="r">чете</span> y - отпечатва се undefined.`,
+          do: s => { read(s, 'g.y'); log(s, 'undefined'); }, fly: [['v:g.y', 'con', 'undefined']], reveal: ['con'] },
+        { line: 2, text: `Ред 3: <code>console.log(z)</code> - JavaScript търси z в таблицата и <b>не го намира</b>. Грешка: <span class="e">ReferenceError: z is not defined</span>.`,
+          do: s => { s.miss = 'z'; fail(s, 'Uncaught ReferenceError: z is not defined'); } },
+        { text: `<b>Обобщение:</b> "Cannot access 'y' before initialization" = името е декларирано, но е в TDZ. "z is not defined" = такова име изобщо няма. Значи let/const <b>също</b> се регистрират във фаза 1, но остават заключени до реда си. Затова на практика се държат <b>сякаш</b> не са издигнати - точно това казва слайдът.`,
+          do: s => { s.cur = null; } },
+    ],
+},
+{
+    tab: 'Hoisting във функция',
+    code: [
+        'var x = "global";',
+        'function f() {',
+        '    console.log(x);',
+        '    var x = "local";',
+        '    console.log(x);',
+        '}',
+        'f();',
+    ],
+    steps: [
+        { text: `Hoisting става във <b>всеки обхват</b> поотделно: глобалният код има своя фаза 1, а всяка функция - своя, при <b>всяко</b> извикване. Тук има две променливи с едно и също име x.`,
+          do: s => scope(s, 'g', 'global', GLOBAL) },
+        { text: `<span class="sc">Фаза 1 за глобалния обхват:</span> <code>var x</code> -> undefined.`,
+          do: s => { phase1(s, 'g', 'глобален'); hoist(s, 'g', 'x', 'var', 0); }, fly: [['mk:0', 'v:g.x', 'x', 'scan']] },
+        { text: `<code>function f</code> -> цялата функция. Тялото на f (сивите редове) <b>не се сканира</b> сега - то принадлежи на обхвата на f. Затова <code>var x</code> от ред 4 <b>не</b> влиза в глобалната таблица.`,
+          do: s => { hoist(s, 'g', 'f', 'function', 1, 'function f() {...}'); s.dim = [2, 3, 4, 5]; },
+          fly: [['mk:1', 'v:g.f', 'f', 'scan']] },
+        { text: `Ред 7 няма декларации. Фаза 1 за глобалния обхват приключи.`,
+          do: s => { scanTo(s, 7); s.dim = [2, 3, 4, 5]; } },
+        { line: 0, text: `<b>Фаза 2</b>, ред 1: в глобалното x се <span class="w">записва</span> "global".`,
+          do: s => { phase2(s, 'g', 'глобален'); ev(s, '"global"', '', '"global"'); set(s, 'g', 'x', '"global"'); },
+          fly: [['res', 'v:g.x', '"global"']] },
+        { line: 6, text: `Редове 2-6 се прескачат (функцията вече е създадена). Ред 7: <code>f()</code> - извикване. Създава се <b>нов обхват</b> - на функцията f. Засега е празен.`,
+          do: s => { noev(s); read(s, 'g.f'); scope(s, 'f', 'function', 'Обхват на f() (function scope)'); } },
+        { text: `<span class="sc">Фаза 1 - този път за обхвата на f.</span> Сканира се само тялото на f. Намерено е <code>var x</code> -> в таблицата на f се създава <b>ново, локално x</b> със стойност undefined.`,
+          do: s => { phase1(s, 'f', 'f()'); s.paused = 6; hoist(s, 'f', 'x', 'var', 3); s.dim = [0, 1, 5]; },
+          fly: [['mk:3', 'v:f.x', 'x', 'scan']] },
+        { text: `Фаза 1 за f приключи. Сега има <b>две</b> x: глобално ("global") и локално (undefined).`,
+          do: s => { s.paused = 6; scanTo(s, 5); s.dim = [0, 1, 5]; } },
+        { line: 2, text: `<b>Фаза 2 в f</b>, ред 3: <code>console.log(x)</code>. Какво ще отпечата - "global" или undefined? Помислете, преди да продължите.`,
+          do: s => { phase2(s, 'f', 'f()'); s.paused = 6; } },
+        { line: 2, text: `<b>undefined</b>! JavaScript търси x първо в <b>текущия</b> обхват (на f) - и го намира там. До глобалното x изобщо не се стига: локалното x го <b>засенчва</b> (shadowing) още от първия ред на функцията, въпреки че е декларирано по-надолу.`,
+          do: s => { s.paused = 6; read(s, 'f.x'); s.hl['g.x'] = 'shadow'; log(s, 'undefined'); },
+          fly: [['v:f.x', 'con', 'undefined']], reveal: ['con'] },
+        { line: 3, text: `Ред 4: в локалното x се <span class="w">записва</span> "local". Глобалното x не се променя.`,
+          do: s => { s.paused = 6; s.hl['g.x'] = 'shadow'; ev(s, '"local"', '', '"local"'); set(s, 'f', 'x', '"local"'); },
+          fly: [['res', 'v:f.x', '"local"']] },
+        { line: 4, text: `Ред 5: отпечатва се "local".`,
+          do: s => { s.paused = 6; s.hl['g.x'] = 'shadow'; noev(s); read(s, 'f.x'); log(s, 'local'); },
+          fly: [['v:f.x', 'con', '"local"']], reveal: ['con'] },
+        { line: 5, text: `Функцията приключва и нейният обхват изчезва. Глобалното x през цялото време е "global".`,
+          do: s => { dropScope(s, 'f'); phase2(s, 'g', 'глобален'); } },
+        { text: `<b>Обобщение:</b> hoisting става в <b>началото на всеки обхват</b>. var в тялото на функция е видимо в цялата функция - и преди реда си (като undefined). Съвет: декларирайте променливите в началото на обхвата и предпочитайте let/const - с <code>let x = "local"</code> ред 3 щеше да даде ясна грешка (ReferenceError) вместо тихо undefined.`,
+          do: s => { s.cur = null; } },
+    ],
+},
+{
+    tab: 'let в блок',
+    advanced: true,
+    code: [
+        'let x = "global";',
+        '{',
+        '    console.log(x);',
+        '    let x = "block";',
+        '}',
+    ],
+    steps: [
+        { text: `<b>За напреднали.</b> Ако let наистина <b>не</b> се издигаше, този код би отпечатал "global": на ред 3 вътрешното x още не е декларирано, значи би трябвало да се използва външното. Да проверим.`,
+          do: s => scope(s, 'g', 'global', GLOBAL) },
+        { text: `<span class="sc">Фаза 1 за глобалния обхват:</span> <code>let x</code> -> TDZ. Блокът <code>{ }</code> има <b>собствен</b> обхват за let и const, затова <code>let x</code> от ред 4 не се регистрира тук.`,
+          do: s => { phase1(s, 'g', 'глобален'); hoist(s, 'g', 'x', 'let', 0); s.dim = [2, 3]; }, fly: [['mk:0', 'v:g.x', 'x', 'scan']] },
+        { text: `Фаза 1 приключи.`,
+          do: s => { scanTo(s, 5); s.dim = [2, 3]; } },
+        { line: 0, text: `<b>Фаза 2</b>, ред 1: в x се <span class="w">записва</span> "global" - TDZ на глобалното x свършва.`,
+          do: s => { phase2(s, 'g', 'глобален'); ev(s, '"global"', '', '"global"'); set(s, 'g', 'x', '"global"'); },
+          fly: [['res', 'v:g.x', '"global"']] },
+        { line: 1, text: `Ред 2: влизаме в блока. Създава се нов обхват - на блока (block scope). И за него първо има <span class="sc">фаза 1</span>...`,
+          do: s => { noev(s); scope(s, 'b', 'block', 'Обхват на блока (block scope)'); } },
+        { text: `<span class="sc">Фаза 1 за блока:</span> намерено е <code>let x</code> -> ново, вътрешно x в TDZ.`,
+          do: s => { phase1(s, 'b', 'блок { }'); s.paused = 1; hoist(s, 'b', 'x', 'let', 3); s.dim = [0, 4]; },
+          fly: [['mk:3', 'v:b.x', 'x', 'scan']] },
+        { line: 2, text: `<b>Фаза 2 в блока</b>, ред 3: <code>console.log(x)</code>. "global" или грешка? Помислете, преди да продължите.`,
+          do: s => phase2(s, 'b', 'блок { }') },
+        { line: 2, text: `<span class="e">ReferenceError: Cannot access 'x' before initialization</span>! JavaScript търси x в обхвата на блока и го <b>намира</b> - но в TDZ. Външното "global" не се използва. Това доказва, че вътрешното x е регистрирано още при влизане в блока - т.е. в известен смисъл е "издигнато".`,
+          do: s => { s.hl['b.x'] = 'error'; s.hl['g.x'] = 'shadow'; fail(s, "Uncaught ReferenceError: Cannot access 'x' before initialization"); } },
+        { text: `<b>Обобщение:</b> let, const (и class) <b>също</b> се регистрират във фаза 1, но остават неинициализирани до реда си (TDZ). Слайдът казва "не се издигат" - разумно опростяване, защото до реда си не могат да се използват. Точният модел: издигат се <b>без стойност</b> и засенчват външните имена още от началото на блока.`,
+          do: s => { s.cur = null; } },
+    ],
+},
+{
+    tab: 'TDZ: време, не място',
+    advanced: true,
+    code: [
+        'function greet() {',
+        '    console.log("Hi, " + firstName);',
+        '}',
+        'let firstName = "Ada";',
+        'greet();',
+    ],
+    steps: [
+        { text: `<b>За напреднали.</b> Функцията greet използва firstName, а е написана <b>над</b> <code>let firstName</code>. Грешка ли е това? Ще видим, че TDZ зависи от това <b>кога</b> се изпълнява кодът, а не <b>къде</b> е написан.`,
+          do: s => scope(s, 'g', 'global', GLOBAL) },
+        { text: `<span class="sc">Фаза 1:</span> <code>function greet</code> -> цялата функция. Тялото ѝ не се сканира сега.`,
+          do: s => { phase1(s, 'g', 'глобален'); hoist(s, 'g', 'greet', 'function', 0, 'function greet() {...}'); s.dim = [1, 2]; },
+          fly: [['mk:0', 'v:g.greet', 'greet', 'scan']] },
+        { text: `<code>let firstName</code> -> TDZ.`,
+          do: s => { hoist(s, 'g', 'firstName', 'let', 3); s.dim = [1, 2]; }, fly: [['mk:3', 'v:g.firstName', 'firstName', 'scan']] },
+        { text: `Фаза 1 приключи.`,
+          do: s => { scanTo(s, 5); s.dim = [1, 2]; } },
+        { line: 0, text: `<b>Фаза 2</b>, редове 1-3: декларацията на функцията - вече е готова, прескача се. Функцията <b>не</b> се извиква тук, затова firstName не се чете.`,
+          do: s => { phase2(s, 'g', 'глобален'); s.dim = [1, 2]; } },
+        { line: 3, text: `Ред 4: в firstName се <span class="w">записва</span> "Ada" - TDZ свършва.`,
+          do: s => { ev(s, '"Ada"', '', '"Ada"'); set(s, 'g', 'firstName', '"Ada"'); }, fly: [['res', 'v:g.firstName', '"Ada"']] },
+        { text: `Ред 5: <code>greet()</code>. Нов обхват за greet и <span class="sc">фаза 1</span> за него: в тялото няма декларации, таблицата остава празна.`,
+          do: s => { noev(s); read(s, 'g.greet'); scope(s, 'fn', 'function', 'Обхват на greet() (function scope)'); phase1(s, 'fn', 'greet()'); s.paused = 4; scanTo(s, 1); s.dim = [0, 2, 3]; } },
+        { line: 1, text: `<b>Фаза 2 в greet</b>, ред 2: firstName го няма в обхвата на greet, затова се търси във <b>външния</b> обхват - глобалния. Там е "Ada" (ред 4 вече е изпълнен, TDZ е свършила).`,
+          do: s => { phase2(s, 'fn', 'greet()'); s.paused = 4; s.searched = { fn: 'firstName' }; read(s, 'g.firstName'); ev(s, '"Hi, " + firstName', '"Hi, " + "Ada"', '"Hi, Ada"'); },
+          fly: [['v:g.firstName', 'ev', '"Ada"']] },
+        { line: 1, text: `Отпечатва се <code>Hi, Ada</code>.`,
+          do: s => { s.paused = 4; log(s, 'Hi, Ada'); }, fly: [['res', 'con', '"Hi, Ada"']], reveal: ['con'] },
+        { text: `<b>Обобщение:</b> TDZ е <b>времева</b> (temporal): важно е дали редът с let вече е <b>изпълнен</b>, когато името се чете. Ако извикаме <code>greet()</code> преди ред 4, ще получим ReferenceError: Cannot access 'firstName' before initialization. Затова функцията може да използва променлива, декларирана по-надолу - стига да я извикаме след това.`,
+          do: s => { noev(s); dropScope(s, 'fn'); s.cur = null; } },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: state[i] is the full state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = {
+        variant: 0, phase: 0, cur: null, plabel: '', line: -1, scan: -1, marks: [], dim: [], paused: -1,
+        scopes: [], eval: null, console: [], hl: {}, err: false, miss: null, ghost: null, searched: {},
+    };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        Object.assign(s, { hl: {}, err: false, miss: null, ghost: null, searched: {}, paused: -1 });
+        s.line = step.line === undefined ? -1 : step.line;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+const codeOf = (sc, s) => (sc.codes || [sc.code])[s.variant];
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 820, STAGGER = 200, SCAN_DELAY = 380;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_LOCK = '<svg class="lock" viewBox="0 0 16 16"><rect x="3" y="7" width="10" height="8" rx="1.5" fill="currentColor"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+const ICON_X = '<svg class="lock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M5.3 5.3l5.4 5.4M10.7 5.3l-5.4 5.4" stroke="#fff" stroke-width="1.8"/></svg>';
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(let|const|var|function|return|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+const DECL = /\b(var|let|const|function)\s+[A-Za-z_$][\w$]*/;
+function lineHtml(line, marked) {
+    const m = marked && DECL.exec(line);
+    if (!m) return highlight(line);
+    const a = m.index, b = a + m[0].length;
+    return highlight(line.slice(0, a)) + `<span class="mark">${highlight(line.slice(a, b))}</span>` + highlight(line.slice(b));
+}
+
+function renderCode(sc, s) {
+    const code = codeOf(sc, s);
+    $('#code').innerHTML = code.map((l, i) => {
+        const cls = [];
+        if (s.dim.includes(i)) cls.push('dim');
+        if (s.phase === 1 && s.scan > i && !s.dim.includes(i)) cls.push('scanned');
+        if (s.paused === i) cls.push('call');
+        if (i === s.line) cls.push('active');
+        if (i === s.line && s.err) cls.push('error');
+        return `<li class="${cls.join(' ')}" data-i="${i}"><span class="ln">${i + 1}</span><span>${lineHtml(l, s.marks.includes(i))}</span></li>`;
+    }).join('');
+    let note = '';
+    if (s.phase === 1) note = 'фаза 1: търсят се декларации';
+    else if (s.line >= 0) note = `изпълнява се ред ${s.line + 1}`;
+    if (s.paused >= 0) note += ` (ред ${s.paused + 1} чака)`;
+    $('#lineNote').textContent = note;
+    $('#codePanel').classList.toggle('p1', s.phase === 1);
+    const g = $('#ghostCode');
+    g.classList.toggle('show', !!sc.ghost);
+    g.classList.toggle('hidden', !s.ghost);
+    g.innerHTML = sc.ghost ? '<small>мислен модел: все едно най-горе пише</small>' + sc.ghost.map(highlight).join('\n') : '';
+}
+
+function placeBeam(sc, s, animate) {
+    const beam = $('#beam');
+    const lis = document.querySelectorAll('#code li');
+    if (!animate || reduceMotion) beam.style.transition = 'none';
+    const on = s.phase === 1 && s.scan >= 0;
+    if (on && s.scan < lis.length) {
+        const li = lis[s.scan];
+        beam.style.top = li.offsetTop + 'px';
+        beam.style.height = li.offsetHeight + 'px';
+        beam.className = 'beam on';
+    } else if (on) {
+        const last = lis[lis.length - 1];
+        beam.style.top = (last.offsetTop + last.offsetHeight) + 'px';
+        beam.style.height = '4px';
+        beam.className = 'beam off';
+    } else {
+        beam.className = 'beam off';
+    }
+    if (!animate || reduceMotion) { void beam.offsetWidth; beam.style.transition = ''; }
+}
+
+function cellHtml(v) {
+    if (v.value === null) {
+        return `${ICON_LOCK}<span class="val">неинициализирана</span><span class="tdz-tag">TDZ</span>`;
+    }
+    return `<span class="val t-${v.type}">${esc(v.value)}</span><span class="type">${v.type}</span>`;
+}
+const stClass = v => v.value === null ? 'st-tdz' : v.type === 'function' ? 'st-fn' : 'st-val';
+
+function renderScopes(sc, s, prev, step) {
+    const targets = new Set(prev && step.fly ? step.fly.map(f => f[1]) : []);
+    const scopeHtml = idx => {
+        const S = s.scopes[idx];
+        if (!S) return '';
+        const pS = prev && prev.scopes.find(x => x.id === S.id && prev.variant === s.variant);
+        const cls = ['scope'];
+        if (prev && !pS) cls.push('appear');
+        if (s.cur === S.id) cls.push(s.phase === 1 ? 'cur1' : 'cur2');
+        if (s.miss) cls.push('miss');
+        const rows = S.order.map(name => {
+            const key = S.id + '.' + name;
+            const v = S.vars[name], pv = pS && pS.vars[name];
+            const hl = s.hl[key];
+            const rowCls = ['row'];
+            if (prev && !pv) rowCls.push('appear');
+            if (hl === 'shadow') rowCls.push('shadow');
+            const cellCls = ['cell', stClass(v)];
+            if (hl && hl !== 'shadow') cellCls.push('hl-' + hl);
+            let ghost = '', style = '';
+            const fresh = targets.has('v:' + key);
+            if (pv && pv.value !== v.value) {
+                const delay = fresh ? FLY_MS : 0;
+                ghost = `<span class="ghost" style="animation-delay:${delay}ms">${pv.value === null ? 'TDZ' : esc(pv.value)}</span>`;
+                if (!fresh) cellCls.push('changed');
+            }
+            if (hl === 'error' && fresh) style = ` style="animation-delay:${FLY_MS}ms"`;
+            const note = hl === 'shadow' ? '<span class="shadow-note">засенчено</span>' : '';
+            return `<div class="${rowCls.join(' ')}" data-v="${key}">
+                <span class="kw">${v.kind}</span>
+                <span class="name">${esc(name)}${note}</span>
+                <div class="${cellCls.join(' ')}"${style}>${ghost}${cellHtml(v)}</div>
+            </div>`;
+        }).join('');
+        const empty = S.order.length ? '' : `<div class="empty">${S.started ? 'няма декларации' : 'празна - фаза 1 още не е започнала'}</div>`;
+        const search = s.searched[S.id] ? `<span class="search-tag">${esc(s.searched[S.id])}: няма тук -> търси се навън</span>` : '';
+        const miss = s.miss && idx === 0
+            ? `<div class="missrow">${ICON_X}<span><code>${esc(s.miss)}</code> - няма такова име в нито един обхват</span></div>` : '';
+        return `<div class="${cls.join(' ')}" data-scope="${S.id}">
+            <div class="scope-title"><span>${esc(S.title)}</span>${search || '<span class="note">таблица на имената</span>'}</div>
+            ${rows}${empty}${miss}${scopeHtml(idx + 1)}
+        </div>`;
+    };
+    $('#scopes').innerHTML = scopeHtml(0);
+}
+
+function renderPhases(s) {
+    $('#ph1').className = 'ph p1' + (s.phase === 1 ? ' on' : s.phase === 2 ? ' done' : '');
+    $('#ph2').className = 'ph p2' + (s.phase === 2 && s.cur ? ' on' : s.phase === 2 ? ' done' : '');
+    $('#phScope').innerHTML = s.phase && s.cur ? `за обхвата: <b>${esc(s.plabel)}</b>` : s.phase ? '' : 'нито един ред не е изпълнен';
+}
+
+function renderEval(s) {
+    const e = s.eval;
+    $('#eval').innerHTML = e
+        ? `<span class="ev-k">израз</span><code class="ev-v ev-src">${esc(e.src)}</code>
+           <span class="ev-k">стойности</span><code class="ev-v ev-sub">${esc(e.sub)}</code>
+           <span class="ev-k">резултат</span><code class="ev-v ev-res${e.err ? ' err' : ''}">${esc(e.res)}</code>`
+        : `<div class="eval-empty">Тук ще видим как се изчислява изразът на текущия ред.</div>`;
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.map(l =>
+        `<div class="cline ${l.err ? 'err' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function renderLegend() {
+    $('#legend').innerHTML = [
+        '<span><i class="sw scan"></i>фаза 1: открита декларация</span>',
+        '<span><i class="sw val"></i>стойност</span>',
+        '<span><i class="sw fn"></i>функция</span>',
+        '<span><i class="sw tdz"></i>TDZ - не може да се чете</span>',
+        '<span><i class="sw read"></i>четене</span>',
+        '<span><i class="sw write"></i>записване</span>',
+    ].join('');
+}
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'ev') return $('#eval .ev-sub');
+    if (key === 'res') return $('#eval .ev-res');
+    if (key === 'con') return $('#console .cline:last-child');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'v') return $(`#scopes .row[data-v="${rest}"] .cell`);
+    if (kind === 'mk') return $(`#code li[data-i="${rest}"] .mark`) || $(`#code li[data-i="${rest}"]`);
+    return null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (!flights.length || reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    const revealKeys = step.reveal || (flights.some(f => f[1] === 'ev') ? ['res'] : []);
+    const revealEls = revealKeys.map(resolve).filter(Boolean);
+    revealEls.forEach(el => el.classList.add('await'));
+
+    const plan = flights.map(([from, to, text, opt], i) => {
+        const src = resolve(from), dst = resolve(to);
+        const awaits = !!dst && opt !== 'reject';
+        if (awaits) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, to, text, opt, i, awaits };
+    });
+
+    let left = plan.length;
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            }
+            if (--left === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (p.opt === 'scan' ? 'scan' : /^v:/.test(p.to) ? 'write' : 'read');
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+        const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.style.left = x0 + 'px';
+        chip.style.top = y0 + 'px';
+        const anim = chip.animate([
+            { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+            { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: p.i * STAGGER + (p.opt === 'scan' ? SCAN_DELAY : 0), easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+        anim.onfinish = () => { chip.remove(); finish(); };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderPhases(s);
+    renderScopes(sc, s, prev, step);
+    renderEval(s);
+    renderConsole(s);
+    // the beam slides only when we stay in the same program variant
+    placeBeam(sc, s, !!prev && prev.variant === s.variant && prev.phase === 1);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+
+    requestAnimationFrame(() => {
+        if (tk !== token) return;
+        if (prev) playFlights(step, tk);
+    });
+    scheduleAuto();
+}
+
+function writeHash() {
+    if (selftest) return;
+    try { history.replaceState(null, '', '#' + (scIdx + 1) + (stepIdx ? '.' + (stepIdx + 1) : '')); } catch (e) { /* file:// in some browsers */ }
+}
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+    writeHash();
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    playing = false;
+    clearTimeout(autoTimer);
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+const selftest = location.hash === '#selftest';
+
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('hoistingTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+(() => {
+    const q = new URLSearchParams(location.search).get('theme');
+    let t = q === 'dark' || q === 'light' ? q : null;
+    if (!t) { try { t = localStorage.getItem('hoistingTheme'); } catch (e) { /* storage blocked */ } }
+    if (t) document.documentElement.dataset.theme = t;
+})();
+
+// the beam is positioned in pixels, so re-place it when the layout changes
+new ResizeObserver(() => { if (states[stepIdx]) placeBeam(SCENARIOS[scIdx], states[stepIdx], false); }).observe($('#stage'));
+
+// #3 = scenario 3, #3.5 = scenario 3, step 5 (both 1-based)
+function fromHash() {
+    const m = /^#(\d+)(?:\.(\d+))?$/.exec(location.hash);
+    const sc = m ? +m[1] - 1 : 0, st = m && m[2] ? +m[2] - 1 : 0;
+    if (sc === scIdx && st === stepIdx && states.length) return;
+    selectScenario(sc, st);
+}
+window.addEventListener('hashchange', fromHash);
+renderLegend();
+
+if (selftest) {
+    // walk every step of every scenario and check that the flights find their elements
+    const problems = [];
+    let steps = 0;
+    SCENARIOS.forEach((sc, i) => {
+        try { selectScenario(i); } catch (e) { problems.push(`#${i + 1}: ${e.message}`); return; }
+        sc.steps.forEach((step, j) => {
+            steps++;
+            try {
+                goto(j, true);
+                for (const [from, to] of step.fly || []) {
+                    if (!resolve(from)) problems.push(`#${i + 1}.${j + 1}: no element for ${from}`);
+                    if (!resolve(to)) problems.push(`#${i + 1}.${j + 1}: no element for ${to}`);
+                }
+                if (step.line >= codeOf(sc, states[j]).length) problems.push(`#${i + 1}.${j + 1}: line out of range`);
+            } catch (e) { problems.push(`#${i + 1}.${j + 1}: ${e.message}`); }
+        });
+    });
+    const out = document.createElement('pre');
+    out.id = 'selftest';
+    out.textContent = (problems.length ? 'SELFTEST FAIL\n' + problems.join('\n') : 'SELFTEST OK') + `\n${SCENARIOS.length} scenarios, ${steps} steps`;
+    document.body.appendChild(out);
+    document.title = problems.length ? 'SELFTEST FAIL' : 'SELFTEST OK';
+} else {
+    fromHash();
+}
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

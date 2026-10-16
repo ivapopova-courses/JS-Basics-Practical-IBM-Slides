@@ -1,0 +1,1605 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Циклите стъпка по стъпка</title>
+<!--
+    Step-by-step animation: how JavaScript walks through if / switch and loops.
+    The same glowing token moves through the code and through the flowchart.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: loopsStepByStep.html#3 (scenario 3), #3.5 (scenario 3, step 5),
+    ?theme=dark or ?theme=light, #selftest (walks every step and reports).
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --free-bg: #efe9dc;
+    --free-border: #cfc4af;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --ref-bg: #ebe1f8;
+    --chip-ink: #ffffff;
+
+    --yes: #2e7d32;
+    --yes-bg: #d8eed4;
+    --no: #c4302b;
+    --no-bg: #f9d9d6;
+    --tok: #f2a900;
+    --tok-ring: #6b4a00;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --free-bg: #262830; --free-border: #3d404c;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a;
+        --chip-ink: #111111;
+        --yes: #7fd18a; --yes-bg: #1f3a22; --no: #ff6b63; --no-bg: #4a1c1a;
+        --tok: #ffd166; --tok-ring: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --free-bg: #262830; --free-border: #3d404c;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a;
+    --chip-ink: #111111;
+    --yes: #7fd18a; --yes-bg: #1f3a22; --no: #ff6b63; --no-bg: #4a1c1a;
+    --tok: #ffd166; --tok-ring: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 35fr) minmax(0, 39fr) minmax(0, 26fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.col { display: flex; flex-direction: column; gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { flex: none; overflow: hidden; background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code-wrap { position: relative; }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .98rem; }
+.code li {
+    display: flex; gap: .8rem;
+    padding: .2rem .5rem .2rem 1.35rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code li.edited { animation: edited 1.6s both; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+.code .part {
+    border-radius: .2rem;
+    outline: 2px solid var(--code-marker); outline-offset: 1px;
+    background: rgba(255, 209, 102, .16);
+}
+.ctok {
+    position: absolute; left: .3rem; top: 0;
+    width: .72rem; height: .72rem; border-radius: 50%;
+    background: var(--tok);
+    box-shadow: 0 0 0 .18rem rgba(255, 209, 102, .28), 0 0 .7rem .15rem var(--tok);
+    transition: transform .45s cubic-bezier(.45, .05, .35, 1), opacity .25s;
+    pointer-events: none;
+}
+
+/* console */
+.console-panel { flex: 1; display: flex; flex-direction: column; min-height: 5rem; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); white-space: pre; }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+.cline.fresh { animation: fadein .35s both; }
+
+/* flowchart */
+.flow-panel { display: flex; flex-direction: column; }
+.flow-box { position: relative; flex: 1; min-height: 0; }
+#flow { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fn .sh { stroke-width: 2; transition: stroke .25s, stroke-width .25s, filter .25s; }
+.fn text { font-family: var(--mono); font-size: 16px; fill: var(--ink); }
+.fn.k-box .sh { fill: var(--write-bg); stroke: var(--write); }
+.fn.k-dia .sh { fill: var(--read-bg); stroke: var(--read); }
+.fn.k-act .sh { fill: var(--panel); stroke: var(--muted); }
+.fn.k-jump .sh { fill: var(--ref-bg); stroke: var(--ref); }
+.fn.k-end .sh { fill: var(--free-bg); stroke: var(--muted); stroke-dasharray: 4 3; }
+.fn.k-end text { font-family: var(--sans); font-size: 14px; fill: var(--muted); }
+.fn { transition: opacity .3s; }
+.fn.active .sh { stroke: var(--tok); stroke-width: 4; filter: drop-shadow(0 0 5px var(--tok)); }
+.fn.off { opacity: .45; }
+.fn.off .sh { stroke-dasharray: 6 4; }
+.fn.off text { text-decoration: line-through; }
+.fn.dim { opacity: .38; }
+.edge { fill: none; stroke: var(--muted); stroke-width: 1.8; stroke-linejoin: round; marker-end: url(#ah); transition: stroke .25s; }
+.edge.walk { stroke: var(--tok); stroke-width: 3.2; marker-end: url(#ahw); }
+#ah path { fill: var(--muted); }
+#ahw path { fill: var(--tok); }
+.elab { font-family: var(--sans); font-size: 13px; font-weight: 700; fill: var(--muted); }
+.elab.yes { fill: var(--yes); }
+.elab.no { fill: var(--no); }
+.elab.warn { fill: var(--err); }
+.region { fill: none; stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 5 4; opacity: .7; }
+.rlab { font-family: var(--sans); font-size: 13px; font-style: italic; fill: var(--muted); }
+.chk rect { stroke-width: 1.5; }
+.chk.yes rect { fill: var(--yes-bg); stroke: var(--yes); }
+.chk.no rect { fill: var(--no-bg); stroke: var(--no); }
+.chk text { font-family: var(--mono); font-size: 13px; fill: var(--ink); }
+.chk text b, .chk .rv { font-weight: 700; }
+.chk.yes .rv { fill: var(--yes); }
+.chk.no .rv { fill: var(--no); }
+.chk.old { opacity: .55; }
+.chk.pop { animation: pop .4s both; transform-box: fill-box; transform-origin: center; }
+.chk.await { visibility: hidden; }
+#tok { transition: opacity .2s; pointer-events: none; }
+.tok-halo { fill: var(--tok); opacity: .35; animation: halo 1.3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.tok-core { fill: var(--tok); stroke: var(--tok-ring); stroke-width: 2.5; }
+.warn-pill {
+    display: none;
+    padding: .12rem .6rem; border-radius: 999px;
+    background: var(--err); color: #fff;
+    text-transform: none; letter-spacing: 0; font-size: .75rem;
+}
+.warn-pill.on { display: inline-block; animation: blink .8s ease-in-out infinite alternate; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem 1rem;
+    margin-top: .4rem;
+    font-size: .7rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .75rem; border: 2px solid; border-radius: .2rem; }
+.sw.dia { width: .7rem; height: .7rem; transform: rotate(45deg); border-radius: .1rem; background: var(--read-bg); border-color: var(--read); }
+.sw.box { background: var(--write-bg); border-color: var(--write); }
+.sw.act { background: var(--panel); border-color: var(--muted); }
+.sw.jump { background: var(--ref-bg); border-color: var(--ref); border-radius: .4rem; }
+.sw.tokd { width: .75rem; height: .75rem; border-radius: 50%; background: var(--tok); border-color: var(--tok-ring); }
+
+/* variables */
+.vars-panel { flex: 1; overflow: hidden; }
+.vrow {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    align-items: center; gap: .6rem;
+    margin-bottom: .5rem;
+}
+.vname { display: flex; align-items: center; justify-content: flex-end; gap: .4rem; }
+.name { font-family: var(--mono); font-size: 1.15rem; font-weight: 700; }
+.kw {
+    padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: .62rem; color: var(--muted);
+}
+.vcell {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: 2.55rem;
+    padding-top: .55rem;
+    border: 2px solid var(--var-border); border-radius: .55rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.15rem; font-weight: 700;
+    overflow: hidden;
+    transition: box-shadow .25s;
+}
+.type {
+    position: absolute; top: .1rem; right: .4rem;
+    font-family: var(--sans); font-size: .58rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined { font-style: italic; font-weight: 500; opacity: .85; }
+.vcell.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 7px var(--read-bg); }
+.vcell.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 7px var(--write-bg); }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding-top: .55rem;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+.vcell.changed .val { animation: pop .45s .2s both; }
+.vrow.appear { animation: appear .5s both; }
+.vrow.leaving { animation: leave 1.1s .5s both; overflow: hidden; }
+.vcell.gone { background: var(--free-bg); border-color: var(--free-border); border-style: dashed; color: var(--muted); }
+.vcell.gone .val { text-decoration: line-through; }
+.empty { font-size: .8rem; color: var(--muted); font-style: italic; }
+
+/* counters */
+.counters-panel { flex: none; }
+.counters { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.2rem, 1fr)); gap: .5rem; }
+.stat { padding: .35rem .6rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--paper); }
+.stat b { display: block; font-family: var(--mono); font-size: 1.6rem; line-height: 1.15; }
+.stat span { display: block; font-size: .7rem; color: var(--muted); line-height: 1.25; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+    white-space: nowrap;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .y { color: var(--yes); font-weight: 700; }
+.explain-text .x { color: var(--no); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+#selftest {
+    position: fixed; inset: 1rem; z-index: 100; overflow: auto;
+    padding: 1rem; border: 2px solid var(--ink); border-radius: .6rem;
+    background: var(--panel); color: var(--ink);
+    font-family: var(--mono); font-size: .9rem; white-space: pre-wrap;
+}
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes leave { 0% { opacity: 1; max-height: 3rem; } 60% { opacity: 0; max-height: 3rem; margin-bottom: .5rem; } 100% { opacity: 0; max-height: 0; margin-bottom: 0; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+@keyframes halo { 0%, 100% { transform: scale(.8); opacity: .45; } 50% { transform: scale(1.25); opacity: .15; } }
+@keyframes blink { from { opacity: 1; } to { opacity: .55; } }
+@keyframes edited { 0%, 60% { background: rgba(255, 162, 77, .35); } 100% { background: transparent; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .flow-box { height: 32rem; flex: none; }
+    .console-panel { min-height: 9rem; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Циклите стъпка по стъпка <small>пътят на изпълнението през условия и цикли</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../loopsStepByStep.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="col">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <div class="code-wrap"><ol class="code" id="code"></ol><div class="ctok" id="ctok"></div></div>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="panel flow-panel">
+            <div class="panel-title"><span>Блок-схема (flowchart)</span><span class="warn-pill" id="warn"></span></div>
+            <div class="flow-box"><svg id="flow" aria-label="Блок-схема на кода"></svg></div>
+            <div class="legend">
+                <span><i class="sw dia"></i>условие (чете)</span>
+                <span><i class="sw box"></i>присвояване (записва)</span>
+                <span><i class="sw act"></i>действие</span>
+                <span><i class="sw jump"></i>скок</span>
+                <span><i class="sw tokd"></i>текущо място</span>
+            </div>
+        </section>
+        <section class="col">
+            <div class="panel vars-panel">
+                <div class="panel-title"><span>Променливи</span><span class="note">стойностите в момента</span></div>
+                <div id="vars"></div>
+            </div>
+            <div class="panel counters-panel" id="countersPanel">
+                <div class="panel-title"><span>Броячи</span></div>
+                <div class="counters" id="counters"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ===========================================================================
+// BEGIN PURE - scenario data and state replay (no DOM; also loaded by a Node test)
+// ===========================================================================
+function freshState() {
+    return {
+        node: null, line: -1, part: null, tok: null,
+        vars: {}, order: [], console: [], checks: {}, cnt: {}, hl: {},
+        code: null, edited: [], off: [], dim: [], walk: [], warn: null, stepNo: 0,
+    };
+}
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit.startsWith('"')) return 'string';
+    return 'number';
+}
+
+// Helpers used by the steps. Each one mutates the state `s`.
+function decl(s, name, lit, kind = 'let') {
+    if (!s.vars[name]) s.order.push(name);
+    s.vars[name] = { v: lit, kind };
+    s.hl[name] = 'write';
+}
+function set(s, name, lit) { s.vars[name].v = lit; s.hl[name] = 'write'; }
+function drop(s, ...names) {
+    for (const n of names) { delete s.vars[n]; delete s.hl[n]; s.order = s.order.filter(x => x !== n); }
+}
+function log(s, text, err = false) { s.console.push({ text, err }); }
+function chk(s, node, expr, val) { s.checks[node] = { expr, val, step: s.stepNo }; }
+function cnt(s, key, d = 1) { s.cnt[key] = (s.cnt[key] || 0) + d; }
+function restart(s, code, edited) {
+    const stepNo = s.stepNo;
+    Object.assign(s, freshState(), { code, edited, stepNo });
+}
+
+// Flowchart builder. Nodes: k = box (assignment), dia (condition), act (action),
+// jump (break / continue), end (terminal). Edges: [from, to, points, label, labelPos, anchor, cls]
+function flow(w, h, nodes, edgeFn, regions = []) {
+    const N = {};
+    nodes.forEach(n => N[n.id] = n);
+    const P = (id, side) => {
+        const n = N[id];
+        if (side === 't') return [n.x, n.y - n.h / 2];
+        if (side === 'b') return [n.x, n.y + n.h / 2];
+        if (side === 'l') return [n.x - n.w / 2, n.y];
+        return [n.x + n.w / 2, n.y];
+    };
+    const E = {};
+    edgeFn((f, t, p, lab, lp, anchor, cls) => { E[f + '>' + t] = { f, t, p, lab, lp, anchor: anchor || 'start', cls }; }, P);
+    return { w, h, nodes: N, edges: E, regions };
+}
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.hops   - places the token visits in this step: { n: node id | null, line, r: [vars read], do }
+//   step.do     - changes applied before the hops (e.g. restart with edited code)
+//   step.check  - the console at this step must equal the real output of the code (tested in Node)
+//   step.spin   - endless loop: the token keeps circling along spin.path
+// ---------------------------------------------------------------------------
+const IF_CODE = [
+    'let age = 15;',
+    'let status;',
+    'if (age > 18) {',
+    '    status = "adult";',
+    '} else if (age < 18 && age > 12) {',
+    '    status = "teen";',
+    '} else {',
+    '    status = "child";',
+    '}',
+    'console.log(status);',
+];
+const IF_CODE_18 = IF_CODE.map((l, i) => i === 0 ? 'let age = 18;' : l);
+
+const WHILE_CODE = [
+    'let userTries = 5;',
+    'while (userTries > 0) {',
+    '    console.log(`Try: ${userTries}`);',
+    '    userTries--; // важен ред!',
+    '}',
+    'console.log("Край");',
+];
+const WHILE_BUG = WHILE_CODE.map((l, i) => i === 3 ? '    // userTries--;  (забравен!)' : l);
+
+const lapFor = i => [
+    { n: 'cond', r: ['i'], do: s => { chk(s, 'cond', `${i} < 5`, true); cnt(s, 'checks'); } },
+    { n: 'body', r: ['i'], do: s => { log(s, 'i=' + i); cnt(s, 'iters'); } },
+    { n: 'inc', do: s => { set(s, 'i', String(i + 1)); cnt(s, 'incs'); } },
+];
+const lapWhile = t => [
+    { n: 'cond', r: ['userTries'], do: s => { chk(s, 'cond', `${t} > 0`, true); cnt(s, 'checks'); } },
+    { n: 'log', r: ['userTries'], do: s => { log(s, 'Try: ' + t); cnt(s, 'iters'); } },
+    { n: 'dec', do: s => set(s, 'userTries', String(t - 1)) },
+];
+
+// break / continue
+const bc = {
+    cond: i => ({ n: 'cond', r: ['i'], do: s => { chk(s, 'cond', `${i} <= 20`, true); cnt(s, 'iters'); } }),
+    d1: i => ({ n: 'd1', r: ['i'], do: s => chk(s, 'd1', `${i} % 2 !== 0`, i % 2 !== 0) }),
+    log: i => ({ n: 'log', r: ['i'], do: s => log(s, String(i)) }),
+    d2: i => ({ n: 'd2', r: ['i'], do: s => chk(s, 'd2', `${i} % 7 === 0`, i % 7 === 0) }),
+    inc: i => ({ n: 'inc', do: s => set(s, 'i', String(i + 1)) }),
+    cont: () => ({ n: 'cont', do: s => cnt(s, 'cont') }),
+};
+
+// nested loops
+const nl = {
+    oc: (i, ok) => ({ n: 'oc', r: ['i', 'treeDeep'], do: s => { chk(s, 'oc', `${i} <= 3`, ok); if (ok) cnt(s, 'outer'); } }),
+    row: () => ({ n: 'row', do: s => decl(s, 'row', '""') }),
+    ii: () => ({ n: 'ii', do: s => decl(s, 'j', '1') }),
+    ic: (j, i) => ({ n: 'ic', r: ['j', 'i'], do: s => chk(s, 'ic', `${j} <= ${i}`, j <= i) }),
+    ib: r => ({ n: 'ib', r: ['row'], do: s => { set(s, 'row', `"${r}"`); cnt(s, 'inner'); } }),
+    iinc: j => ({ n: 'iinc', do: s => set(s, 'j', String(j + 1)) }),
+    log: r => ({ n: 'log', r: ['row'], do: s => { drop(s, 'j'); log(s, r); } }),
+    oinc: i => ({ n: 'oinc', do: s => { drop(s, 'row'); set(s, 'i', String(i + 1)); } }),
+};
+
+const SCENARIOS = [
+// ---------------------------------------------------------------- 1
+{
+    tab: 'if / else if',
+    code: IF_CODE,
+    flow: flow(530, 480, [
+        { id: 'c1', k: 'dia', x: 180, y: 60, w: 180, h: 76, t: 'age > 18', line: 2, part: 'age > 18', cp: [282, 100] },
+        { id: 'adult', k: 'box', x: 415, y: 60, w: 175, h: 40, t: 'status = "adult"', line: 3 },
+        { id: 'c2', k: 'dia', x: 180, y: 200, w: 220, h: 104, t: 'age < 18 &&\nage > 12', line: 4, part: 'age < 18 && age > 12', cp: [190, 266] },
+        { id: 'teen', k: 'box', x: 415, y: 200, w: 175, h: 40, t: 'status = "teen"', line: 5 },
+        { id: 'child', k: 'box', x: 180, y: 330, w: 175, h: 40, t: 'status = "child"', line: 7 },
+        { id: 'out', k: 'act', x: 320, y: 440, w: 215, h: 40, t: 'console.log(status)', line: 9 },
+    ], (e, P) => {
+        e('c1', 'adult', [P('c1', 'r'), P('adult', 'l')], 'true', [298, 51], 'middle', 'yes');
+        e('c1', 'c2', [P('c1', 'b'), P('c2', 't')], 'false', [170, 128], 'end', 'no');
+        e('c2', 'teen', [P('c2', 'r'), P('teen', 'l')], 'true', [309, 191], 'middle', 'yes');
+        e('c2', 'child', [P('c2', 'b'), P('child', 't')], 'false', [170, 285], 'end', 'no');
+        e('adult', 'out', [P('adult', 'r'), [518, 60], [518, 440], P('out', 'r')]);
+        e('teen', 'out', [P('teen', 'b'), [415, 392], [320, 392], P('out', 't')]);
+        e('child', 'out', [P('child', 'b'), [180, 440], P('out', 'l')]);
+    }),
+    steps: [
+        { text: `<b>if / else if / else</b> избира <b>само един</b> от няколко пътя. Условията се проверяват <b>отгоре надолу</b> и печели първото, което е true. Светлата точка показва докъде е стигнало изпълнението - едновременно в кода и в блок-схемата (flowchart).` },
+        { text: `<code>let age = 15;</code> - променлива age със стойност 15.`,
+          hops: [{ n: null, line: 0, do: s => decl(s, 'age', '15') }] },
+        { text: `<code>let status;</code> - status още няма стойност, затова в нея е <b>undefined</b>. Ще ѝ присвоим стойност в един от трите клона.`,
+          hops: [{ n: null, line: 1, do: s => decl(s, 'status', 'undefined') }] },
+        { text: `Първото условие: JavaScript <span class="r">чете</span> age и изчислява <code>15 > 18</code> -> <span class="x">false</span>. Блокът с "adult" се прескача и изпълнението продължава към <code>else if</code>.`,
+          hops: [{ n: 'c1', r: ['age'], do: s => chk(s, 'c1', '15 > 18', false) }] },
+        { text: `Второто условие: <code>15 < 18</code> е true и <code>15 > 12</code> е true, затова <code>&&</code> дава <span class="y">true</span>.`,
+          hops: [{ n: 'c2', r: ['age'], do: s => chk(s, 'c2', '15 < 18 && 15 > 12', true) }] },
+        { text: `Изпълнява се блокът на else if: в status се <span class="w">записва</span> "teen". Клонът else се прескача изцяло - щом едно условие е изпълнено, следващите дори не се проверяват.`,
+          hops: [{ n: 'teen', do: s => set(s, 'status', '"teen"') }] },
+        { text: `Изпълнението продължава след цялата конструкция if / else if / else. Отпечатва се <b>teen</b>.`, check: true,
+          hops: [{ n: 'out', r: ['status'], do: s => log(s, 'teen') }] },
+        { text: `Сега пускаме програмата отначало с <code>age = 18</code>. Какво ще отпечата? Помислете, преди да продължите.`,
+          do: s => restart(s, IF_CODE_18, [0]),
+          hops: [{ n: null, line: 0, do: s => decl(s, 'age', '18') }, { n: null, line: 1, do: s => decl(s, 'status', 'undefined') }] },
+        { text: `<code>18 > 18</code> -> <span class="x">false</span> (18 не е по-голямо от 18). <code>18 < 18</code> също е false, а при false лявата част на <code>&&</code> дясната дори не се изчислява. Нито едно условие не е изпълнено...`,
+          hops: [{ n: 'c1', r: ['age'], do: s => chk(s, 'c1', '18 > 18', false) }, { n: 'c2', r: ['age'], do: s => chk(s, 'c2', '18 < 18 && ...', false) }] },
+        { text: `...затова се изпълнява <b>else</b>: в status се <span class="w">записва</span> "child". Това е бъгът от слайда: 18-годишният човек е "дете", защото стойността 18 не попада в нито едно от първите две условия.`,
+          hops: [{ n: 'child', do: s => set(s, 'status', '"child"') }] },
+        { text: `Отпечатва се <b>child</b>. Поправката е <code>age >= 18</code> в първото условие - тогава 18 води до "adult". (При age = 12 също получаваме "child" - решете дали това е желаното поведение.)`, check: true,
+          hops: [{ n: 'out', r: ['status'], do: s => log(s, 'child') }] },
+        { text: `<b>Обобщение:</b> от веригата if / else if / else се изпълнява <b>точно един</b> блок - първият, чието условие е true, или else, ако никое не е. Тествайте винаги <b>граничните стойности</b> (тук 12 и 18) - там най-често се крият бъговете.` },
+    ],
+},
+// ---------------------------------------------------------------- 2
+{
+    tab: 'Цикъл for',
+    code: [
+        'for (let i = 0; i < 5; i++) {',
+        '    console.log("i=" + i);',
+        '}',
+        'console.log("Край");',
+    ],
+    counters: [['checks', 'проверки на условието'], ['iters', 'изпълнения на тялото'], ['incs', 'изпълнения на i++']],
+    flow: flow(470, 500, [
+        { id: 'init', k: 'box', x: 210, y: 45, w: 170, h: 42, t: 'let i = 0', line: 0, part: 'let i = 0' },
+        { id: 'cond', k: 'dia', x: 210, y: 150, w: 190, h: 84, t: 'i < 5', line: 0, part: 'i < 5', cp: [48, 200] },
+        { id: 'body', k: 'act', x: 210, y: 265, w: 240, h: 42, t: 'console.log("i=" + i)', line: 1 },
+        { id: 'inc', k: 'box', x: 210, y: 365, w: 130, h: 42, t: 'i++', line: 0, part: 'i++' },
+        { id: 'end', k: 'act', x: 210, y: 462, w: 215, h: 42, t: 'console.log("Край")', line: 3 },
+    ], (e, P) => {
+        e('init', 'cond', [P('init', 'b'), P('cond', 't')]);
+        e('cond', 'body', [P('cond', 'b'), P('body', 't')], 'true', [222, 224], 'start', 'yes');
+        e('body', 'inc', [P('body', 'b'), P('inc', 't')]);
+        e('inc', 'cond', [P('inc', 'l'), [40, 365], [40, 150], P('cond', 'l')]);
+        e('cond', 'end', [P('cond', 'r'), [445, 150], [445, 462], P('end', 'r')], 'false', [318, 140], 'start', 'no');
+    }),
+    steps: [
+        { text: `Цикълът <code>for</code> има 4 части: <b>init</b> - изпълнява се веднъж, в началото; <b>condition</b> - проверява се преди всяка итерация (iteration - едно изпълнение на тялото); <b>block</b> - тялото; <b>increment</b> - след тялото. Следете светлата точка в кода и в схемата.` },
+        { text: `<b>init:</b> <code>let i = 0</code> създава брояча i и му <span class="w">записва</span> 0. Тази част се изпълнява <b>само веднъж</b>. Забележете, че в кода е осветена само част от ред 1 - for събира три от частите си на един ред.`,
+          hops: [{ n: 'init', do: s => decl(s, 'i', '0') }] },
+        { text: `<b>condition:</b> JavaScript <span class="r">чете</span> i и изчислява <code>0 < 5</code> -> <span class="y">true</span>. Условието е вярно, значи влизаме в тялото на цикъла.`,
+          hops: [lapFor(0)[0]] },
+        { text: `<b>block:</b> изпълнява се тялото. <code>"i=" + i</code> дава "i=0" и то се отпечатва. Това е първата итерация.`,
+          hops: [lapFor(0)[1]] },
+        { text: `<b>increment:</b> след тялото се изпълнява <code>i++</code> и i става 1. После изпълнението се връща <b>обратно към условието</b> (стрелката вляво), а не към init!`,
+          hops: [lapFor(0)[2]] },
+        { text: `Отново condition: <code>1 < 5</code> -> <span class="y">true</span>. init не се изпълнява повторно - затова i не се нулира.`,
+          hops: [lapFor(1)[0]] },
+        { text: `Втора итерация: отпечатва се "i=1".`,
+          hops: [lapFor(1)[1]] },
+        { text: `<code>i++</code> -> i е 2. Виждате ли кръга condition -> block -> increment -> condition? Следващите обиколки ще изпълняваме с по една стъпка.`,
+          hops: [lapFor(1)[2]] },
+        { text: `Цяла обиколка наведнъж: <code>2 < 5</code> -> true, отпечатва се "i=2", <code>i++</code> -> 3.`,
+          hops: lapFor(2) },
+        { text: `Още една: <code>3 < 5</code> -> true, "i=3", i става 4.`,
+          hops: lapFor(3) },
+        { text: `<code>4 < 5</code> -> true, "i=4", а след <code>i++</code> i вече е <b>5</b>. Какво ще се случи сега? Помислете, преди да продължите.`,
+          hops: lapFor(4) },
+        { text: `<code>5 < 5</code> -> <span class="x">false</span>! 5 не е по-малко от 5. Условието се провери за <b>шести</b> път, но тялото няма да се изпълни шести път.`,
+          hops: [{ n: 'cond', r: ['i'], do: s => { chk(s, 'cond', '5 < 5', false); cnt(s, 'checks'); } }] },
+        { text: `Изпълнението излиза от цикъла по стрелката false и продължава със следващия ред: "Край". Променливата i изчезна - декларирана с let във for, тя съществува само в цикъла. (<code>console.log(i)</code> тук би дал ReferenceError: i is not defined.)`, check: true,
+          hops: [{ n: 'end', do: s => { drop(s, 'i'); log(s, 'Край'); } }] },
+        { text: `<b>Обобщение:</b> при <code>for (let i = 0; i < 5; i++)</code> init се изпълнява <b>1</b> път, тялото и i++ - по <b>5</b> пъти, а условието - <b>6</b> пъти: последната проверка (5 < 5 -> false) е тази, която спира цикъла. i минава през 0, 1, 2, 3, 4 - общо 5 итерации.` },
+    ],
+},
+// ---------------------------------------------------------------- 3
+{
+    tab: 'while и безкраен цикъл',
+    code: WHILE_CODE,
+    counters: [['checks', 'проверки на условието'], ['iters', 'изпълнения на тялото']],
+    flow: flow(480, 495, [
+        { id: 'start', k: 'box', x: 235, y: 42, w: 220, h: 42, t: 'let userTries = 5', line: 0 },
+        { id: 'cond', k: 'dia', x: 235, y: 145, w: 240, h: 84, t: 'userTries > 0', line: 1, part: 'userTries > 0', cp: [48, 194] },
+        { id: 'log', k: 'act', x: 235, y: 260, w: 330, h: 42, t: 'console.log(`Try: ${userTries}`)', line: 2 },
+        { id: 'dec', k: 'box', x: 235, y: 355, w: 170, h: 42, t: 'userTries--', line: 3, part: 'userTries--' },
+        { id: 'end', k: 'act', x: 235, y: 455, w: 215, h: 42, t: 'console.log("Край")', line: 5 },
+    ], (e, P) => {
+        e('start', 'cond', [P('start', 'b'), P('cond', 't')]);
+        e('cond', 'log', [P('cond', 'b'), P('log', 't')], 'true', [247, 219], 'start', 'yes');
+        e('log', 'dec', [P('log', 'b'), P('dec', 't')]);
+        e('dec', 'cond', [P('dec', 'l'), [40, 355], [40, 145], P('cond', 'l')]);
+        e('cond', 'end', [P('cond', 'r'), [458, 145], [458, 455], P('end', 'r')], 'false', [365, 135], 'start', 'no');
+    }),
+    steps: [
+        { text: `<code>while</code> (докато) повтаря тялото, <b>докато</b> условието е true. Няма отделни init и increment части: променливата се създава преди цикъла, а се променя <b>в тялото</b>. Примерът е от слайда: потребителят има 5 опита.` },
+        { text: `<code>let userTries = 5;</code> - преди цикъла създаваме брояча на опитите.`,
+          hops: [{ n: 'start', do: s => decl(s, 'userTries', '5') }] },
+        { text: `Проверка на условието: JavaScript <span class="r">чете</span> userTries и изчислява <code>5 > 0</code> -> <span class="y">true</span>. Влизаме в тялото.`,
+          hops: [lapWhile(5)[0]] },
+        { text: `Отпечатва се "Try: 5". Записът <code>\${userTries}</code> в template literal-а (низ в обратни кавички) вмъква стойността на променливата в текста.`,
+          hops: [lapWhile(5)[1]] },
+        { text: `<code>userTries--</code> намалява опитите с 1 -> 4. Това е редът, който <b>приближава</b> цикъла към края - без него цикълът би бил безкраен. После - обратно към условието.`,
+          hops: [lapWhile(5)[2]] },
+        { text: `Цяла обиколка: <code>4 > 0</code> -> true, "Try: 4", userTries става 3.`,
+          hops: lapWhile(4) },
+        { text: `<code>3 > 0</code> -> true, "Try: 3", userTries става 2.`,
+          hops: lapWhile(3) },
+        { text: `<code>2 > 0</code> -> true, "Try: 2", userTries става 1.`,
+          hops: lapWhile(2) },
+        { text: `<code>1 > 0</code> -> true, "Try: 1", userTries става <b>0</b>. Ще има ли "Try: 0"? Помислете, преди да продължите.`,
+          hops: lapWhile(1) },
+        { text: `<code>0 > 0</code> -> <span class="x">false</span>, затова "Try: 0" няма. Тялото се изпълни 5 пъти, а условието беше проверено 6 пъти - точно както при for.`,
+          hops: [{ n: 'cond', r: ['userTries'], do: s => { chk(s, 'cond', '0 > 0', false); cnt(s, 'checks'); } }] },
+        { text: `Цикълът свърши и изпълнението продължава след него: отпечатва се "Край". userTries е декларирана преди цикъла, затова продължава да съществува (със стойност 0).`, check: true,
+          hops: [{ n: 'end', do: s => log(s, 'Край') }] },
+        { text: `А ако забравим <code>userTries--</code>? Коментираме реда и пускаме програмата отначало. Какво ще се случи? Помислете, преди да продължите.`,
+          do: s => { restart(s, WHILE_BUG, [3]); s.off = ['dec']; } },
+        { text: `Първата обиколка изглежда нормално: "Try: 5". Но редът с userTries-- вече е коментар и не прави нищо, userTries си остава 5 и условието <code>5 > 0</code> отново е <span class="y">true</span>...`,
+          hops: [
+              { n: 'start', do: s => decl(s, 'userTries', '5') },
+              { n: 'cond', r: ['userTries'], do: s => { chk(s, 'cond', '5 > 0', true); cnt(s, 'checks'); } },
+              { n: 'log', r: ['userTries'], do: s => { log(s, 'Try: 5'); cnt(s, 'iters'); } },
+              { n: 'dec' },
+              { n: 'cond', r: ['userTries'], do: s => { chk(s, 'cond', '5 > 0', true); cnt(s, 'checks'); } },
+          ] },
+        { text: `...и така <b>завинаги</b>. Това е <b>безкраен цикъл</b> (infinite loop): условието никога не става false, програмата не стига до "Край", а конзолата се пълни с "Try: 5". В браузъра страницата замръзва.`,
+          do: s => { s.warn = 'безкраен цикъл!'; },
+          hops: [
+              { n: 'log', r: ['userTries'], do: s => { log(s, 'Try: 5'); cnt(s, 'iters'); } },
+              { n: 'dec' },
+              { n: 'cond', r: ['userTries'], do: s => { chk(s, 'cond', '5 > 0', true); cnt(s, 'checks'); } },
+          ],
+          spin: { path: ['log', 'dec', 'cond'], out: { log: 'Try: 5' }, cnt: { log: 'iters', cond: 'checks' } } },
+        { text: `Безкраен цикъл може да бъде спрян само отвън: в Node.js - с <kbd>Ctrl</kbd> + <kbd>C</kbd> в терминала, а в браузъра - като затворите таба (браузърът сам предлага да спре "блокиралата" страница). Правило: тялото трябва да променя променливата от условието.`,
+          do: s => {
+              for (let k = 0; k < 6; k++) { log(s, 'Try: 5'); cnt(s, 'iters'); cnt(s, 'checks'); }
+              log(s, '^C', true);
+              s.warn = 'спрян с Ctrl + C';
+          } },
+        { text: `<b>Обобщение:</b> while проверява условието <b>преди</b> всяка итерация. Използваме го, когато не знаем предварително колко пъти ще се повтори цикълът (както при "познай числото" от слайда). Когато броят е известен, for е по-ясен: <code>for (let userTries = 5; userTries > 0; userTries--)</code>.` },
+    ],
+},
+// ---------------------------------------------------------------- 4
+{
+    tab: 'do-while',
+    code: [
+        'let x = 10;',
+        'while (x < 5) {',
+        '    console.log("while: " + x);',
+        '    x++;',
+        '}',
+        'do {',
+        '    console.log("do-while: " + x);',
+        '    x++;',
+        '} while (x < 5);',
+        'console.log("x = " + x);',
+    ],
+    counters: [['wb', 'изпълнения на тялото на while'], ['db', 'изпълнения на тялото на do-while']],
+    flow: flow(480, 535, [
+        { id: 'decl', k: 'box', x: 235, y: 36, w: 160, h: 40, t: 'let x = 10', line: 0 },
+        { id: 'wc', k: 'dia', x: 235, y: 120, w: 180, h: 80, t: 'x < 5', line: 1, part: 'x < 5', cp: [48, 152] },
+        { id: 'wb', k: 'act', x: 235, y: 218, w: 290, h: 56, t: 'console.log("while: " + x)\nx++', line: [2, 3] },
+        { id: 'db', k: 'act', x: 235, y: 318, w: 310, h: 56, t: 'console.log("do-while: " + x)\nx++', line: [6, 7] },
+        { id: 'dc', k: 'dia', x: 235, y: 422, w: 180, h: 80, t: 'x < 5', line: 8, part: 'x < 5', cp: [48, 452] },
+        { id: 'end', k: 'act', x: 235, y: 506, w: 250, h: 40, t: 'console.log("x = " + x)', line: 9 },
+    ], (e, P) => {
+        e('decl', 'wc', [P('decl', 'b'), P('wc', 't')]);
+        e('wc', 'wb', [P('wc', 'b'), P('wb', 't')], 'true', [247, 180], 'start', 'yes');
+        e('wb', 'wc', [P('wb', 'l'), [40, 218], [40, 120], P('wc', 'l')]);
+        e('wc', 'db', [P('wc', 'r'), [455, 120], [455, 268], [235, 268], P('db', 't')], 'false', [333, 110], 'start', 'no');
+        e('db', 'dc', [P('db', 'b'), P('dc', 't')]);
+        e('dc', 'db', [P('dc', 'l'), [40, 422], [40, 318], P('db', 'l')], 'true', [130, 413], 'end', 'yes');
+        e('dc', 'end', [P('dc', 'b'), P('end', 't')], 'false', [247, 478], 'start', 'no');
+    }),
+    steps: [
+        { text: `Двата цикъла имат <b>едно и също</b> условие <code>x < 5</code>, а x е 10 - условието е false от самото начало. Какво ще отпечата програмата? Помислете, преди да продължите.` },
+        { text: `<code>let x = 10;</code> - x получава стойност 10.`,
+          hops: [{ n: 'decl', do: s => decl(s, 'x', '10') }] },
+        { text: `<b>while</b> проверява условието <b>преди</b> тялото: <code>10 < 5</code> -> <span class="x">false</span>. Тялото на while не се изпълнява <b>нито веднъж</b> и изпълнението отива след цикъла.`,
+          hops: [{ n: 'wc', r: ['x'], do: s => { chk(s, 'wc', '10 < 5', false); s.dim = ['wb']; } }] },
+        { text: `<b>do-while</b> започва направо с тялото - без проверка! Отпечатва се "do-while: 10", а <code>x++</code> прави x 11.`,
+          hops: [{ n: 'db', r: ['x'], do: s => { log(s, 'do-while: 10'); set(s, 'x', '11'); cnt(s, 'db'); } }] },
+        { text: `Едва сега, <b>след</b> тялото, се проверява условието: <code>11 < 5</code> -> <span class="x">false</span>. Цикълът свършва, без да се върне обратно.`,
+          hops: [{ n: 'dc', r: ['x'], do: s => chk(s, 'dc', '11 < 5', false) }] },
+        { text: `Отпечатва се "x = 11". При едно и също условие тялото на do-while се изпълни <b>1</b> път, а тялото на while - <b>0</b> пъти.`, check: true,
+          hops: [{ n: 'end', r: ['x'], do: s => log(s, 'x = 11') }] },
+        { text: `<b>Обобщение:</b> while: условие -> тяло (0 или повече пъти). do-while: тяло -> условие (<b>поне веднъж</b>). Затова do-while пасва на "познай числото" от слайда: потребителят трябва да въведе число поне веднъж, преди да има какво да сравняваме.` },
+    ],
+},
+// ---------------------------------------------------------------- 5
+{
+    tab: 'break и continue',
+    code: [
+        'for (let i = 10; i <= 20; i++) {',
+        '    if (i % 2 !== 0) {',
+        '        continue; // нечетно',
+        '    }',
+        '    console.log(i);',
+        '    if (i % 7 === 0) {',
+        '        break;    // намерено',
+        '    }',
+        '}',
+        'console.log("Край");',
+    ],
+    counters: [['iters', 'итерации'], ['cont', 'изпълнения на continue'], ['brk', 'изпълнения на break']],
+    flow: flow(520, 590, [
+        { id: 'init', k: 'box', x: 270, y: 32, w: 160, h: 40, t: 'let i = 10', line: 0, part: 'let i = 10' },
+        { id: 'cond', k: 'dia', x: 270, y: 115, w: 180, h: 76, t: 'i <= 20', line: 0, part: 'i <= 20', cp: [24, 150] },
+        { id: 'd1', k: 'dia', x: 270, y: 220, w: 190, h: 76, t: 'i % 2 !== 0', line: 1, part: 'i % 2 !== 0', cp: [300, 256] },
+        { id: 'cont', k: 'jump', x: 85, y: 220, w: 100, h: 38, t: 'continue', line: 2, part: 'continue' },
+        { id: 'log', k: 'act', x: 270, y: 310, w: 170, h: 40, t: 'console.log(i)', line: 4 },
+        { id: 'd2', k: 'dia', x: 270, y: 400, w: 190, h: 76, t: 'i % 7 === 0', line: 5, part: 'i % 7 === 0', cp: [300, 436] },
+        { id: 'brk', k: 'jump', x: 445, y: 400, w: 90, h: 38, t: 'break', line: 6, part: 'break' },
+        { id: 'inc', k: 'box', x: 270, y: 495, w: 110, h: 40, t: 'i++', line: 0, part: 'i++' },
+        { id: 'end', k: 'act', x: 395, y: 560, w: 215, h: 38, t: 'console.log("Край")', line: 9 },
+    ], (e, P) => {
+        e('init', 'cond', [P('init', 'b'), P('cond', 't')]);
+        e('cond', 'd1', [P('cond', 'b'), P('d1', 't')], 'true', [282, 172], 'start', 'yes');
+        e('cond', 'end', [P('cond', 'r'), [508, 115], [508, 560], P('end', 'r')], 'false', [372, 106], 'start', 'no');
+        e('d1', 'cont', [P('d1', 'l'), P('cont', 'r')], 'true', [155, 211], 'middle', 'yes');
+        e('d1', 'log', [P('d1', 'b'), P('log', 't')], 'false', [258, 278], 'end', 'no');
+        e('cont', 'inc', [P('cont', 'b'), [85, 495], P('inc', 'l')]);
+        e('log', 'd2', [P('log', 'b'), P('d2', 't')]);
+        e('d2', 'brk', [P('d2', 'r'), P('brk', 'l')], 'true', [382, 391], 'middle', 'yes');
+        e('d2', 'inc', [P('d2', 'b'), P('inc', 't')], 'false', [258, 460], 'end', 'no');
+        e('brk', 'end', [P('brk', 'r'), [508, 400], [508, 560], P('end', 'r')]);
+        e('inc', 'cond', [P('inc', 'b'), [270, 538], [15, 538], [15, 115], P('cond', 'l')]);
+    }),
+    steps: [
+        { text: `<code>continue</code> и <code>break</code> променят пътя в цикъла. Задача: да отпечатаме четните числа от 10 нататък и да спрем при първото, което се дели на 7. Следете накъде "скача" точката при continue и при break.` },
+        { text: `init: <code>let i = 10</code>.`,
+          hops: [{ n: 'init', do: s => decl(s, 'i', '10') }] },
+        { text: `<code>10 <= 20</code> -> <span class="y">true</span>: започва първата итерация.`,
+          hops: [bc.cond(10)] },
+        { text: `<code>10 % 2</code> е 0 (остатъкът при деление на 2), а <code>0 !== 0</code> -> <span class="x">false</span>. Числото е четно, така че не влизаме в блока с continue.`,
+          hops: [bc.d1(10)] },
+        { text: `Отпечатва се 10.`,
+          hops: [bc.log(10)] },
+        { text: `<code>10 % 7</code> е 3, а <code>3 === 0</code> -> <span class="x">false</span>. 10 не се дели на 7, затова break не се изпълнява.`,
+          hops: [bc.d2(10)] },
+        { text: `Тялото свърши. Изпълнява се <code>i++</code> -> 11 и обратно към условието.`,
+          hops: [bc.inc(10)] },
+        { text: `<code>11 <= 20</code> -> true. <code>11 % 2</code> е 1, а <code>1 !== 0</code> -> <span class="y">true</span>: числото е нечетно...`,
+          hops: [bc.cond(11), bc.d1(11)] },
+        { text: `...и се изпълнява <code>continue</code>. Какво ще стане с останалата част от тялото (console.log и второто if)? Помислете, преди да продължите.`,
+          hops: [bc.cont()] },
+        { text: `continue <b>прескача остатъка от тялото</b> и минава към <b>следващата итерация</b>. При for това означава: към <code>i++</code>. 11 не се отпечатва, i става 12.`,
+          hops: [bc.inc(11)] },
+        { text: `Обиколка с 12: четно -> отпечатва се; <code>12 % 7</code> е 5 -> не се дели на 7; <code>i++</code> -> 13.`,
+          hops: [bc.cond(12), bc.d1(12), bc.log(12), bc.d2(12), bc.inc(12)] },
+        { text: `13 е нечетно -> continue -> направо към <code>i++</code>. Нищо не се отпечатва, i става 14.`,
+          hops: [bc.cond(13), bc.d1(13), bc.cont(), bc.inc(13)] },
+        { text: `14 е четно и се отпечатва. Ще стигнем ли до <code>i++</code> този път? Помислете, преди да продължите.`,
+          hops: [bc.cond(14), bc.d1(14), bc.log(14)] },
+        { text: `<code>14 % 7</code> е 0, а <code>0 === 0</code> -> <span class="y">true</span>. Намерихме първото четно число, което се дели на 7.`,
+          hops: [bc.d2(14)] },
+        { text: `<code>break</code> <b>веднага</b> прекратява целия цикъл: <code>i++</code> не се изпълнява, условието не се проверява повече. Изпълнението продължава след цикъла: "Край".`, check: true,
+          hops: [{ n: 'brk', do: s => cnt(s, 'brk') }, { n: 'end', do: s => { drop(s, 'i'); log(s, 'Край'); } }] },
+        { text: `<b>Обобщение:</b> <code>continue</code> прекратява само <b>текущата итерация</b> (при for - отива към increment), а <code>break</code> прекратява <b>целия цикъл</b>. Внимание при while: continue отива направо към условието и ако прескочи реда, който променя брояча, цикълът става безкраен.` },
+    ],
+},
+// ---------------------------------------------------------------- 6
+{
+    tab: 'Вложени цикли',
+    advanced: true,
+    code: [
+        'let treeDeep = 3;',
+        'for (let i = 1; i <= treeDeep; i++) {',
+        '    let row = "";',
+        '    for (let j = 1; j <= i; j++) {',
+        '        row += "*";',
+        '    }',
+        '    console.log(row);',
+        '}',
+    ],
+    counters: [['outer', 'итерации на външния цикъл'], ['inner', 'итерации на вътрешния цикъл (общо)']],
+    flow: flow(570, 590, [
+        { id: 'oi', k: 'box', x: 140, y: 32, w: 140, h: 40, t: 'let i = 1', line: 1, part: 'let i = 1' },
+        { id: 'oc', k: 'dia', x: 140, y: 115, w: 200, h: 78, t: 'i <= treeDeep', line: 1, part: 'i <= treeDeep', cp: [246, 138] },
+        { id: 'end', k: 'end', x: 330, y: 115, w: 90, h: 36, t: 'край' },
+        { id: 'row', k: 'box', x: 140, y: 205, w: 160, h: 40, t: 'let row = ""', line: 2 },
+        { id: 'ii', k: 'box', x: 385, y: 205, w: 140, h: 40, t: 'let j = 1', line: 3, part: 'let j = 1' },
+        { id: 'ic', k: 'dia', x: 385, y: 285, w: 150, h: 70, t: 'j <= i', line: 3, part: 'j <= i', cp: [400, 323] },
+        { id: 'ib', k: 'box', x: 385, y: 365, w: 150, h: 40, t: 'row += "*"', line: 4 },
+        { id: 'iinc', k: 'box', x: 385, y: 440, w: 100, h: 40, t: 'j++', line: 3, part: 'j++' },
+        { id: 'log', k: 'act', x: 140, y: 470, w: 180, h: 40, t: 'console.log(row)', line: 6 },
+        { id: 'oinc', k: 'box', x: 140, y: 550, w: 100, h: 40, t: 'i++', line: 1, part: 'i++' },
+    ], (e, P) => {
+        e('oi', 'oc', [P('oi', 'b'), P('oc', 't')]);
+        e('oc', 'row', [P('oc', 'b'), P('row', 't')], 'true', [152, 173], 'start', 'yes');
+        e('oc', 'end', [P('oc', 'r'), P('end', 'l')], 'false', [262, 106], 'middle', 'no');
+        e('row', 'ii', [P('row', 'r'), P('ii', 'l')]);
+        e('ii', 'ic', [P('ii', 'b'), P('ic', 't')]);
+        e('ic', 'ib', [P('ic', 'b'), P('ib', 't')], 'true', [374, 338], 'end', 'yes');
+        e('ib', 'iinc', [P('ib', 'b'), P('iinc', 't')]);
+        e('iinc', 'ic', [P('iinc', 'r'), [545, 440], [545, 285], P('ic', 'r')]);
+        e('ic', 'log', [P('ic', 'l'), [282, 285], [282, 470], P('log', 'r')], 'false', [296, 276], 'middle', 'no');
+        e('log', 'oinc', [P('log', 'b'), P('oinc', 't')]);
+        e('oinc', 'oc', [P('oinc', 'l'), [18, 550], [18, 115], P('oc', 'l')]);
+    }, [{ x: 262, y: 160, w: 298, h: 316, lab: 'вътрешен цикъл', lp: [552, 468] }]),
+    steps: [
+        { text: `<b>За напреднали.</b> Цикъл в цикъла (nested loops): за всеки ред (i) вътрешният цикъл (j) добавя по една звездичка. В слайда "полуелхата" е с <code>"*".repeat(i)</code> и treeDeep = 5; тук пишем вътрешния цикъл сами и с treeDeep = 3, за да видим какво става.` },
+        { text: `<code>let treeDeep = 3;</code> - колко реда ще има елхата.`,
+          hops: [{ n: null, line: 0, do: s => decl(s, 'treeDeep', '3') }] },
+        { text: `Външният цикъл започва с init: <code>let i = 1</code>.`,
+          hops: [{ n: 'oi', do: s => decl(s, 'i', '1') }] },
+        { text: `<code>1 <= 3</code> -> <span class="y">true</span>: влизаме в тялото на външния цикъл - първият ред.`,
+          hops: [nl.oc(1, true)] },
+        { text: `<code>let row = ""</code> - празен низ, в който ще "сглобим" реда.`,
+          hops: [nl.row()] },
+        { text: `Вътрешният цикъл започва със своя init: <code>let j = 1</code>.`,
+          hops: [nl.ii()] },
+        { text: `<code>j <= i</code> -> <code>1 <= 1</code> -> <span class="y">true</span>. Забележете: условието на вътрешния цикъл зависи от i - на ред i ще има i звездички.`,
+          hops: [nl.ic(1, 1)] },
+        { text: `<code>row += "*"</code> (т.е. <code>row = row + "*"</code>) - в row се <span class="w">записва</span> "*".`,
+          hops: [nl.ib('*')] },
+        { text: `<code>j++</code> -> j е 2.`,
+          hops: [nl.iinc(1)] },
+        { text: `<code>2 <= 1</code> -> <span class="x">false</span>: вътрешният цикъл свърши и j изчезна (тя живее само в него). Отпечатва се row: "*".`,
+          hops: [nl.ic(2, 1), nl.log('*')] },
+        { text: `Тялото на външния цикъл свърши - row също изчезва, всяка итерация получава свой нов row. <code>i++</code> -> 2. Откъде ще започне j сега? Помислете, преди да продължите.`,
+          hops: [nl.oinc(1)] },
+        { text: `Втори ред: <code>2 <= 3</code>, нов празен row и вътрешният цикъл започва <b>отначало</b> - j отново е 1! Вътрешният цикъл се изпълнява изцяло при всяка итерация на външния.`,
+          hops: [nl.oc(2, true), nl.row(), nl.ii(), nl.ic(1, 2)] },
+        { text: `Обиколка на вътрешния цикъл: row става "*", j става 2, <code>2 <= 2</code> -> true.`,
+          hops: [nl.ib('*'), nl.iinc(1), nl.ic(2, 2)] },
+        { text: `Още една: row става "**", j става 3, <code>3 <= 2</code> -> false - край на вътрешния цикъл. Отпечатва се "**".`,
+          hops: [nl.ib('**'), nl.iinc(2), nl.ic(3, 2), nl.log('**')] },
+        { text: `<code>i++</code> -> 3.`,
+          hops: [nl.oinc(2)] },
+        { text: `Третият ред наведнъж: вътрешният цикъл прави <b>3</b> обиколки (j = 1, 2, 3), row става "***", а проверката <code>4 <= 3</code> го спира.`,
+          hops: [nl.oc(3, true), nl.row(), nl.ii(), nl.ic(1, 3), nl.ib('*'), nl.iinc(1), nl.ic(2, 3), nl.ib('**'), nl.iinc(2), nl.ic(3, 3), nl.ib('***'), nl.iinc(3), nl.ic(4, 3), nl.log('***')] },
+        { text: `<code>i++</code> -> 4.`,
+          hops: [nl.oinc(3)] },
+        { text: `<code>4 <= 3</code> -> <span class="x">false</span>: външният цикъл свършва. Елхата е готова.`, check: true,
+          hops: [nl.oc(4, false), { n: 'end', do: s => drop(s, 'i') }] },
+        { text: `<b>Обобщение:</b> вътрешният цикъл се изпълнява <b>изцяло</b> при всяка итерация на външния и всеки път започва отначало (j = 1). Тук външното тяло се изпълни 3 пъти, а вътрешното - 1 + 2 + 3 = <b>6</b> пъти. <code>"*".repeat(i)</code> от слайда върши работата на нашия вътрешен цикъл.` },
+    ],
+},
+// ---------------------------------------------------------------- 7
+{
+    tab: 'switch без break',
+    advanced: true,
+    code: [
+        'let fruit = "apple";',
+        'switch (fruit) {',
+        '    case "apple":',
+        '        console.log("Apple is red.");',
+        '        // тук липсва break!',
+        '    case "banana":',
+        '        console.log("Banana is yellow.");',
+        '        break;',
+        '    default:',
+        '        console.log("Unknown fruit.");',
+        '}',
+        'console.log("Край");',
+    ],
+    flow: flow(530, 510, [
+        { id: 'sw', k: 'act', x: 150, y: 32, w: 170, h: 40, t: 'switch (fruit)', line: 1, part: 'switch (fruit)' },
+        { id: 'ca', k: 'dia', x: 150, y: 125, w: 250, h: 80, t: 'fruit === "apple"', line: 2, part: 'case "apple"', cp: [285, 62] },
+        { id: 'la', k: 'act', x: 415, y: 125, w: 175, h: 56, t: 'console.log(\n"Apple is red.")', line: 3 },
+        { id: 'cb', k: 'dia', x: 150, y: 255, w: 250, h: 80, t: 'fruit === "banana"', line: 5, part: 'case "banana"' },
+        { id: 'lb', k: 'act', x: 415, y: 255, w: 210, h: 56, t: 'console.log(\n"Banana is yellow.")', line: 6 },
+        { id: 'brk', k: 'jump', x: 415, y: 350, w: 100, h: 36, t: 'break', line: 7, part: 'break' },
+        { id: 'ld', k: 'act', x: 150, y: 385, w: 195, h: 56, t: 'console.log(\n"Unknown fruit.")', line: 9 },
+        { id: 'end', k: 'act', x: 285, y: 478, w: 215, h: 40, t: 'console.log("Край")', line: 11 },
+    ], (e, P) => {
+        e('sw', 'ca', [P('sw', 'b'), P('ca', 't')]);
+        e('ca', 'la', [P('ca', 'r'), P('la', 'l')], 'true', [301, 116], 'middle', 'yes');
+        e('ca', 'cb', [P('ca', 'b'), P('cb', 't')], 'false', [138, 193], 'end', 'no');
+        e('la', 'lb', [P('la', 'b'), P('lb', 't')], 'няма break!', [425, 193], 'start', 'warn');
+        e('cb', 'lb', [P('cb', 'r'), P('lb', 'l')], 'true', [292, 246], 'middle', 'yes');
+        e('cb', 'ld', [P('cb', 'b'), P('ld', 't')], 'false (default)', [138, 330], 'end', 'no');
+        e('lb', 'brk', [P('lb', 'b'), P('brk', 't')]);
+        e('brk', 'end', [P('brk', 'b'), [415, 478], P('end', 'r')]);
+        e('ld', 'end', [P('ld', 'b'), [150, 478], P('end', 'l')]);
+    }),
+    steps: [
+        { text: `<b>За напреднали.</b> <code>switch</code> сравнява една стойност с няколко <code>case</code>-а. Сравнението е строго, както при <code>===</code>. В този код има "забравен" <code>break</code> - ще видим какво става тогава (fall-through, "пропадане").` },
+        { text: `<code>let fruit = "apple";</code>`,
+          hops: [{ n: null, line: 0, do: s => decl(s, 'fruit', '"apple"') }] },
+        { text: `<code>switch (fruit)</code> <span class="r">чете</span> стойността на fruit <b>веднъж</b>: "apple". След това я сравнява с case-овете отгоре надолу.`,
+          hops: [{ n: 'sw', r: ['fruit'] }] },
+        { text: `Първи case: <code>"apple" === "apple"</code> -> <span class="y">true</span>. Има съвпадение - изпълнението "скача" в този case.`,
+          hops: [{ n: 'ca', do: s => chk(s, 'ca', '"apple" === "apple"', true) }] },
+        { text: `Отпечатва се "Apple is red.". Следващият ред обаче не е break, а <code>case "banana":</code>. Какво ще стане? Помислете, преди да продължите.`,
+          hops: [{ n: 'la', do: s => log(s, 'Apple is red.') }] },
+        { text: `Изненада: отпечатва се и "Banana is yellow."! Без break изпълнението просто <b>продължава надолу</b> в следващия case - без да проверява дали fruit е "banana" (сивият ромб). Това се нарича fall-through.`,
+          hops: [{ n: 'lb', do: s => { log(s, 'Banana is yellow.'); s.dim = ['cb', 'ld']; } }] },
+        { text: `<code>break</code> най-сетне прекратява switch и изпълнението продължава след него: "Край". default не се изпълнява.`, check: true,
+          hops: [{ n: 'brk' }, { n: 'end', do: s => log(s, 'Край') }] },
+        { text: `<b>Обобщение:</b> case определя само <b>откъде</b> започва изпълнението, а докъде - определя <code>break</code>. Слагайте break в края на всеки case (както в слайда). Понякога fall-through е умишлен: <code>case "apple": case "cherry":</code> - общ код за няколко стойности.` },
+    ],
+},
+];
+
+// State replay: states[i] is the state after step i, frames[i] the state after each hop
+// of step i, bases[i] the state before the first hop of step i.
+function computeStates(sc) {
+    const fl = sc.flow;
+    let s = freshState();
+    const states = [], frames = [], bases = [];
+    sc.steps.forEach((step, idx) => {
+        s = clone(s);
+        s.hl = {}; s.edited = []; s.stepNo = idx;
+        const hops = step.hops || [];
+        if (hops.length) s.walk = [];
+        if (step.do) step.do(s);
+        bases.push(clone(s));
+        const fr = [];
+        for (const hop of hops) {
+            s.hl = {};
+            const from = s.node;
+            if (hop.n) {
+                const n = fl.nodes[hop.n];
+                if (!n) throw new Error(`${sc.tab}: step ${idx + 1}: no node "${hop.n}"`);
+                const key = from + '>' + hop.n;
+                if (from === hop.n) { /* stays */ }
+                else if (from && fl.edges[key]) { s.walk.push(key); s.tok = fl.edges[key].p.at(-1); }
+                else s.tok = [n.x, n.y - n.h / 2];
+                s.node = hop.n;
+                s.line = hop.line !== undefined ? hop.line : (n.line !== undefined ? n.line : -1);
+                s.part = n.part || null;
+            } else {
+                s.node = null; s.tok = null;
+                s.line = hop.line !== undefined ? hop.line : -1;
+                s.part = hop.part || null;
+            }
+            (hop.r || []).forEach(v => { if (s.vars[v]) s.hl[v] = 'read'; });
+            if (hop.do) hop.do(s);
+            fr.push(clone(s));
+        }
+        frames.push(fr);
+        states.push(clone(s));
+    });
+    return { states, frames, bases };
+}
+// ===========================================================================
+// END PURE
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const SVGNS = 'http://www.w3.org/2000/svg';
+const FLY_MS = 760, STAGGER = 180;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|`[^`]*`)|\b(let|const|var|if|else|for|while|do|switch|case|break|continue|default|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+let scIdx = 0, stepIdx = 0, data = null, playing = false, autoTimer = null, token = 0;
+const sc = () => SCENARIOS[scIdx];
+
+// ---- code panel ----
+function renderCode(s, moveMs) {
+    const code = s.code || sc().code;
+    const act = Array.isArray(s.line) ? s.line : [s.line];
+    $('#code').innerHTML = code.map((l, i) => {
+        let html = highlight(l);
+        if (i === act[0] && s.part) {
+            const p = l.indexOf(s.part);
+            if (p >= 0) html = highlight(l.slice(0, p)) + `<span class="part">${highlight(s.part)}</span>` + highlight(l.slice(p + s.part.length));
+        }
+        const cls = [act.includes(i) ? 'active' : '', s.edited.includes(i) ? 'edited' : ''].join(' ');
+        return `<li class="${cls}"><span class="ln">${i + 1}</span><span>${html}</span></li>`;
+    }).join('');
+    const valid = act.filter(i => i >= 0);
+    $('#lineNote').textContent = !valid.length ? '' : valid.length > 1
+        ? `изпълняват се редове ${valid[0] + 1}-${valid.at(-1) + 1}` : `изпълнява се ред ${valid[0] + 1}`;
+    placeCodeToken(valid[0], moveMs);
+}
+function placeCodeToken(lineIdx, moveMs) {
+    const t = $('#ctok');
+    const li = lineIdx >= 0 ? $('#code').children[lineIdx] : null;
+    if (!li) { t.style.opacity = 0; return; }
+    t.style.transitionDuration = (moveMs === undefined ? 450 : moveMs) + 'ms, 250ms';
+    t.style.opacity = 1;
+    t.style.transform = `translateY(${li.offsetTop + li.offsetHeight / 2 - t.offsetHeight / 2}px)`;
+}
+
+// ---- flowchart ----
+function svgEl(tag, attrs, parent) {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(el);
+    return el;
+}
+function buildFlow() {
+    const fl = sc().flow;
+    const svg = $('#flow');
+    svg.innerHTML = '';
+    svg.setAttribute('viewBox', `0 0 ${fl.w} ${fl.h}`);
+    const defs = svgEl('defs', {}, svg);
+    for (const id of ['ah', 'ahw']) {
+        const m = svgEl('marker', { id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 6, markerHeight: 6, markerUnits: 'strokeWidth', orient: 'auto-start-reverse' }, defs);
+        if (id === 'ahw') { m.setAttribute('markerWidth', 4); m.setAttribute('markerHeight', 4); }
+        svgEl('path', { d: 'M0 0L10 5L0 10z' }, m);
+    }
+    for (const r of fl.regions) {
+        svgEl('rect', { class: 'region', x: r.x, y: r.y, width: r.w, height: r.h, rx: 12 }, svg);
+        svgEl('text', { class: 'rlab', x: r.lp[0], y: r.lp[1], 'text-anchor': 'end' }, svg).textContent = r.lab;
+    }
+    const eg = svgEl('g', { id: 'edges' }, svg);
+    for (const [key, e] of Object.entries(fl.edges)) {
+        svgEl('path', { class: 'edge', 'data-edge': key, d: 'M' + e.p.map(p => p.join(' ')).join(' L') }, eg);
+    }
+    for (const e of Object.values(fl.edges)) {
+        if (!e.lab) continue;
+        svgEl('text', { class: 'elab ' + (e.cls || ''), x: e.lp[0], y: e.lp[1], 'text-anchor': e.anchor }, svg).textContent = e.lab;
+    }
+    const ng = svgEl('g', { id: 'nodes' }, svg);
+    for (const n of Object.values(fl.nodes)) {
+        const g = svgEl('g', { class: 'fn k-' + n.k, 'data-node': n.id }, ng);
+        if (n.k === 'dia') {
+            svgEl('polygon', { class: 'sh', points: `${n.x},${n.y - n.h / 2} ${n.x + n.w / 2},${n.y} ${n.x},${n.y + n.h / 2} ${n.x - n.w / 2},${n.y}` }, g);
+        } else {
+            const rx = n.k === 'jump' || n.k === 'end' ? n.h / 2 : 6;
+            svgEl('rect', { class: 'sh', x: n.x - n.w / 2, y: n.y - n.h / 2, width: n.w, height: n.h, rx }, g);
+        }
+        const lines = n.t.split('\n');
+        lines.forEach((l, i) => {
+            const t = svgEl('text', { x: n.x, y: n.y + (i - (lines.length - 1) / 2) * 20 + 5.5, 'text-anchor': 'middle' }, g);
+            t.textContent = l;
+        });
+    }
+    svgEl('g', { id: 'checks' }, svg);
+    const tok = svgEl('g', { id: 'tok', style: 'opacity:0' }, svg);
+    svgEl('circle', { class: 'tok-halo', r: 15 }, tok);
+    svgEl('circle', { class: 'tok-core', r: 7.5 }, tok);
+}
+function setTok(pos) {
+    const t = $('#tok');
+    if (!t) return;
+    if (!pos) { t.style.opacity = 0; return; }
+    t.style.opacity = 1;
+    t.setAttribute('transform', `translate(${pos[0]} ${pos[1]})`);
+}
+function setActiveNode(id) {
+    document.querySelectorAll('#flow .fn').forEach(g => g.classList.toggle('active', g.dataset.node === id));
+}
+function renderFlow(s, prev, fx) {
+    document.querySelectorAll('#flow .fn').forEach(g => {
+        const id = g.dataset.node;
+        g.classList.toggle('active', id === s.node);
+        g.classList.toggle('off', s.off.includes(id));
+        g.classList.toggle('dim', s.dim.includes(id));
+    });
+    document.querySelectorAll('#flow .edge').forEach(p => p.classList.toggle('walk', s.walk.includes(p.dataset.edge)));
+    const fl = sc().flow;
+    const box = $('#checks');
+    box.innerHTML = '';
+    const fresh = [];
+    for (const [id, c] of Object.entries(s.checks)) {
+        const n = fl.nodes[id];
+        const [x, y] = n.cp || [n.x + n.w / 2 + 8, n.y + n.h / 2];
+        const txt = `${c.expr} -> `, rv = String(c.val);
+        const w = (txt.length + rv.length) * 7.8 + 14;
+        const old = c.step !== s.stepNo;
+        const g = svgEl('g', { class: `chk ${c.val ? 'yes' : 'no'} ${old ? 'old' : ''}`, 'data-chk': id }, box);
+        svgEl('rect', { x, y, width: w, height: 21, rx: 5 }, g);
+        const t = svgEl('text', { x: x + 7, y: y + 15 }, g);
+        t.appendChild(document.createTextNode(txt));
+        svgEl('tspan', { class: 'rv' }, t).textContent = rv;
+        const pc = prev && prev.checks[id];
+        if (fx && (!pc || pc.expr !== c.expr || pc.step !== c.step) && !old) { g.classList.add('pop'); fresh.push(g); }
+    }
+    const w = $('#warn');
+    w.textContent = s.warn || '';
+    w.classList.toggle('on', !!s.warn);
+    return fresh;
+}
+
+// ---- variables, console, counters ----
+function renderVars(s, prev, fx) {
+    let html = '';
+    for (const name of s.order) {
+        const v = s.vars[name];
+        const pv = prev && prev.vars[name];
+        const rowCls = ['vrow'], cellCls = ['vcell'];
+        if (s.hl[name]) cellCls.push('hl-' + s.hl[name]);
+        let ghost = '';
+        if (fx && prev) {
+            if (!pv) rowCls.push('appear');
+            else if (pv.v !== v.v) { ghost = `<span class="ghost">${esc(pv.v)}</span>`; cellCls.push('changed'); }
+        }
+        const t = typeOf(v.v);
+        html += `<div class="${rowCls.join(' ')}" data-var="${name}">
+            <div class="vname"><span class="kw">${v.kind}</span><span class="name">${esc(name)}</span></div>
+            <div class="${cellCls.join(' ')}">${ghost}<span class="val t-${t}">${esc(v.v)}</span><span class="type">${t}</span></div>
+        </div>`;
+    }
+    if (fx && prev) {
+        for (const name of prev.order) {
+            if (s.vars[name]) continue;
+            html += `<div class="vrow leaving">
+                <div class="vname"><span class="kw">${prev.vars[name].kind}</span><span class="name">${esc(name)}</span></div>
+                <div class="vcell gone"><span class="val">${esc(prev.vars[name].v)}</span><span class="type">извън обхвата</span></div>
+            </div>`;
+        }
+    }
+    $('#vars').innerHTML = html || '<div class="empty">Все още няма променливи.</div>';
+}
+function consoleLine(l, fresh) {
+    return `<div class="cline ${l.err ? 'err' : ''} ${fresh ? 'fresh' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`;
+}
+function renderConsole(s, prev, fx) {
+    const box = $('#console');
+    const from = fx && prev && prev.console.length <= s.console.length ? prev.console.length : s.console.length;
+    box.innerHTML = s.console.map((l, i) => consoleLine(l, i >= from)).join('');
+    box.scrollTop = box.scrollHeight;
+    return [...box.children].slice(from);
+}
+function renderCounters(s, prev, fx) {
+    const list = sc().counters || [];
+    $('#countersPanel').style.display = list.length ? '' : 'none';
+    $('#counters').innerHTML = list.map(([k, label]) => {
+        const v = s.cnt[k] || 0;
+        const changed = fx && prev && (prev.cnt[k] || 0) !== v;
+        return `<div class="stat ${changed ? 'land' : ''}" data-k="${k}"><b>${v}</b><span>${label}</span></div>`;
+    }).join('');
+}
+
+// ---- flying values ----
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+function fly(src, dst, text, kind, delay, tk, onLand) {
+    if (!src || !dst || reduceMotion) { if (onLand) onLand(); return 0; }
+    const a = src.getBoundingClientRect(), b = dst.getBoundingClientRect();
+    const chip = document.createElement('div');
+    chip.className = 'fly ' + kind;
+    chip.textContent = text;
+    $('#flyLayer').appendChild(chip);
+    const w = chip.offsetWidth, h = chip.offsetHeight;
+    const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+    const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+    const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+    chip.style.left = x0 + 'px';
+    chip.style.top = y0 + 'px';
+    const anim = chip.animate([
+        { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+        { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+        { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+        { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+    ], { duration: FLY_MS, delay, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+    anim.onfinish = () => { chip.remove(); if (tk === token && onLand) onLand(); };
+    return delay + FLY_MS;
+}
+const nodeEl = id => id ? $(`#flow [data-node="${id}"] .sh`) : $('#code li.active');
+const varCell = name => $(`#vars .vrow[data-var="${name}"] .vcell`);
+
+// Render one full state. With fx, changes are animated relative to `prev`;
+// with flights, values fly between the node and the panels. Returns the fx time in ms.
+function renderState(s, prev, fx, flights, hop, moveMs) {
+    renderCode(s, fx ? moveMs : 0);
+    renderVars(s, prev, fx);
+    const newLines = renderConsole(s, prev, fx);
+    renderCounters(s, prev, fx);
+    const freshChecks = renderFlow(s, prev, fx);
+    setTok(s.tok);
+    if (!fx || !flights || !hop || reduceMotion || !prev) return 0;
+
+    const tk = token;
+    const src = nodeEl(hop.n);
+    let end = 0;
+    const reads = (hop.r || []).filter(v => prev.vars[v] && s.vars[v]);
+    reads.forEach((v, i) => { end = Math.max(end, fly(varCell(v), src, prev.vars[v].v, 'read', i * STAGGER, tk)); });
+    if (reads.length && freshChecks.length) {
+        freshChecks.forEach(g => g.classList.add('await'));
+        setTimeout(() => { if (tk === token) freshChecks.forEach(g => { g.classList.remove('await', 'pop'); void g.getBBox(); g.classList.add('pop'); }); }, end);
+    }
+    const start = reads.length ? end * .8 : 0;
+    let i = 0;
+    for (const name of s.order) {
+        const pv = prev.vars[name], v = s.vars[name];
+        if (pv && pv.v === v.v) continue;
+        const cell = varCell(name);
+        if (!cell) continue;
+        const val = $('.val', cell), gh = $('.ghost', cell);
+        cell.classList.remove('changed');
+        val.classList.add('await');
+        const t = start + i++ * STAGGER;
+        if (gh) gh.style.animationDelay = (t + FLY_MS) + 'ms';
+        end = Math.max(end, fly(src, cell, v.v, 'write', t, tk, () => { val.classList.remove('await'); bump(cell); }));
+    }
+    for (const el of newLines) {
+        el.classList.add('await');
+        const text = el.textContent.slice(1);
+        const t = start + i++ * STAGGER;
+        end = Math.max(end, fly(src, el, text, 'read', t, tk, () => { el.classList.remove('await', 'fresh'); bump(el); }));
+    }
+    return end;
+}
+
+// ---- token motion ----
+const wait = (ms, tk) => new Promise(res => setTimeout(res, ms));
+function polyLen(pts) {
+    let L = 0;
+    for (let i = 1; i < pts.length; i++) L += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    return L;
+}
+function pointAt(pts, d) {
+    for (let i = 1; i < pts.length; i++) {
+        const seg = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+        if (d <= seg || i === pts.length - 1) {
+            const t = seg ? Math.min(1, d / seg) : 1;
+            return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * t, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * t];
+        }
+        d -= seg;
+    }
+    return pts.at(-1);
+}
+function animateAlong(pts, dur, tk) {
+    return new Promise(res => {
+        if (reduceMotion) { setTok(pts.at(-1)); res(); return; }
+        const L = polyLen(pts), t0 = performance.now();
+        const ease = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+        const frame = now => {
+            if (tk !== token) { res(); return; }
+            const x = Math.min(1, (now - t0) / dur);
+            setTok(pointAt(pts, ease(x) * L));
+            if (x < 1) requestAnimationFrame(frame); else res();
+        };
+        requestAnimationFrame(frame);
+    });
+}
+function travelPath(a, b) {
+    if (!b.tok || !a.tok || !a.node || a.node === b.node) return null;
+    const e = sc().flow.edges[a.node + '>' + b.node];
+    return e ? [a.tok, ...e.p] : [a.tok, b.tok];
+}
+function travelMs(pts, multi) {
+    const L = polyLen(pts);
+    return multi ? Math.max(260, Math.min(620, L * 1.5)) : Math.max(420, Math.min(1000, L * 2.4));
+}
+
+async function playHops(tk, step, base, frames) {
+    renderState(base, null, false);
+    let cur = base;
+    const multi = frames.length > 1;
+    for (let k = 0; k < frames.length; k++) {
+        const f = frames[k];
+        const pts = travelPath(cur, f);
+        let ms = 0;
+        if (pts) {
+            ms = travelMs(pts, multi);
+            renderCode(f, ms);
+            await animateAlong(pts, ms, tk);
+        }
+        if (tk !== token) return;
+        const t = renderState(f, cur, true, !multi, step.hops[k], ms || 300);
+        await wait(Math.max(multi ? 240 : 300, t + 100));
+        if (tk !== token) return;
+        cur = f;
+    }
+    if (step.spin) spin(step, cur, tk);
+}
+
+// An endless loop: keep circling until the step changes.
+async function spin(step, cur, tk) {
+    if (reduceMotion) return;
+    const sp = step.spin, fl = sc().flow;
+    const counts = Object.assign({}, cur.cnt);
+    let node = cur.node, pos = cur.tok;
+    const box = $('#console');
+    while (tk === token) {
+        for (const id of sp.path) {
+            const e = fl.edges[node + '>' + id];
+            const pts = e ? [pos, ...e.p] : [pos, [fl.nodes[id].x, fl.nodes[id].y]];
+            renderCode(Object.assign({}, cur, { line: fl.nodes[id].line, part: fl.nodes[id].part || null, edited: [] }), 300);
+            await animateAlong(pts, 300, tk);
+            if (tk !== token) return;
+            pos = pts.at(-1); node = id;
+            setActiveNode(id);
+            if (sp.out[id]) {
+                box.insertAdjacentHTML('beforeend', consoleLine({ text: sp.out[id] }, true));
+                while (box.children.length > 60) box.firstElementChild.remove();
+                box.scrollTop = box.scrollHeight;
+            }
+            const k = sp.cnt[id];
+            if (k) {
+                counts[k] = (counts[k] || 0) + 1;
+                const el = $(`#counters .stat[data-k="${k}"]`);
+                if (el) { $('b', el).textContent = counts[k]; bump(el); }
+            }
+            await wait(90);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+function render(animate) {
+    const step = sc().steps[stepIdx];
+    const s = data.states[stepIdx];
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+    const frames = data.frames[stepIdx];
+    let est = 0;
+    if (animate && stepIdx > 0 && frames.length && !reduceMotion) {
+        est = frames.length * (frames.length > 1 ? 750 : 2100);
+        playHops(tk, step, data.bases[stepIdx], frames);
+    } else {
+        renderState(s, null, false);
+        if (step.spin) requestAnimationFrame(() => spin(step, s, tk));
+    }
+
+    const N = sc().steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc().steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    try { history.replaceState(null, '', location.pathname + location.search + `#${scIdx + 1}.${stepIdx + 1}`); } catch (e) { /* file:// in some browsers */ }
+    scheduleAuto(est);
+}
+
+function goto(i, animate = false) {
+    const N = sc().steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < sc().steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === sc().steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto(extra = 0) {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    if (stepIdx >= sc().steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc().steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)) + extra);
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    data = computeStates(sc());
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    buildFlow();
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Self-test (#selftest): replays every step of every scenario
+// ---------------------------------------------------------------------------
+function selfTest() {
+    const errors = [];
+    const okText = /^[\x20-\x7EЀ-ӿ\n]*$/;
+    SCENARIOS.forEach((s, si) => {
+        const name = `${si + 1}. ${s.tab}`;
+        let d;
+        try { d = computeStates(s); } catch (e) { errors.push(`${name}: ${e.message}`); return; }
+        let prevNode = null;
+        s.steps.forEach((step, k) => {
+            const where = `${name}, step ${k + 1}`;
+            if (!okText.test(step.text)) errors.push(`${where}: non-ASCII punctuation in text`);
+            if (step.text.replace(/<[^>]+>/g, '').length > 340) errors.push(`${where}: text is long (${step.text.replace(/<[^>]+>/g, '').length})`);
+            if (d.bases[k].node === null) prevNode = null;
+            (step.hops || []).forEach((h, j) => {
+                if (h.n && prevNode && prevNode !== h.n && !s.flow.edges[prevNode + '>' + h.n]) errors.push(`${where}: no edge ${prevNode}>${h.n}`);
+                prevNode = h.n;
+            });
+            for (const f of d.frames[k]) {
+                const code = f.code || s.code;
+                const act = Array.isArray(f.line) ? f.line : [f.line];
+                act.forEach(l => { if (l >= code.length) errors.push(`${where}: line ${l} out of range`); });
+                if (f.part && !code[act[0]].includes(f.part)) errors.push(`${where}: part "${f.part}" not in line ${act[0] + 1}`);
+            }
+        });
+        for (const n of Object.values(s.flow.nodes)) {
+            const lens = n.t.split('\n').map(l => l.length * 9.6 + 14);
+            const room = n.k === 'dia' ? n.w * (1 - (n.t.split('\n').length * 20) / n.h) : n.w;
+            if (Math.max(...lens) > room) errors.push(`${name}: node ${n.id} text too wide (${Math.max(...lens) | 0} > ${room | 0})`);
+        }
+        try {
+            scIdx = si; data = d; buildFlow();
+            for (let k = 0; k < s.steps.length; k++) { stepIdx = k; renderState(d.states[k], null, false); }
+        } catch (e) { errors.push(`${name}: render: ${e.message}`); }
+    });
+    const out = errors.length ? 'SELFTEST FAILED\n' + errors.join('\n') : `SELFTEST OK (${SCENARIOS.length} scenarios, ${SCENARIOS.reduce((a, s) => a + s.steps.length, 0)} steps)`;
+    const pre = document.createElement('pre');
+    pre.id = 'selftest';
+    pre.textContent = out;
+    document.body.appendChild(pre);
+    document.title = out.split('\n')[0];
+    console.log(out);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((s, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(s.tab)}${s.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+const THEME_KEY = 'loopsStepByStepTheme';
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem(THEME_KEY, root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const q = new URLSearchParams(location.search).get('theme');
+    const t = q === 'dark' || q === 'light' ? q : localStorage.getItem(THEME_KEY);
+    if (t) document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+// the code token is positioned in pixels, so move it when the layout changes
+new ResizeObserver(() => {
+    if (!data) return;
+    const s = data.states[stepIdx];
+    const act = Array.isArray(s.line) ? s.line : [s.line];
+    placeCodeToken(act[0], 0);
+}).observe($('#code'));
+
+function fromHash() {
+    const m = /^#(\d+)(?:\.(\d+))?/.exec(location.hash);
+    selectScenario(m ? +m[1] - 1 : 0, m && m[2] ? +m[2] - 1 : 0);
+}
+window.addEventListener('hashchange', fromHash);
+if (location.hash === '#selftest') { selfTest(); }
+else fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

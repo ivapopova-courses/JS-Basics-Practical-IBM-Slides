@@ -1,0 +1,1520 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как се изчислява един израз</title>
+<!--
+    Step-by-step animation: how JavaScript turns an expression into a tree
+    (precedence + associativity) and evaluates it bottom-up, left to right.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep links: expressionEvaluation.html#3 (scenario 3), #3.5 (scenario 3, step 5),
+    ?theme=dark, #selftest (walks every step and reports problems).
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --free-bg: #efe9dc;
+    --free-border: #cfc4af;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --ref-bg: #ece2fb;
+    --flow: #2f7f6b;
+    --flow-bg: #d3eee5;
+    --hot: #e0a100;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --free-bg: #262830; --free-border: #3d404c;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a;
+        --flow: #5cc7a8; --flow-bg: #1d3d35; --hot: #ffd166;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --free-bg: #262830; --free-border: #3d404c;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a;
+    --flow: #5cc7a8; --flow-bg: #1d3d35; --hot: #ffd166;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.panel-title .note code { font-family: var(--mono); font-size: .95em; padding: 0 .25rem; border-radius: .2rem; background: var(--inline-code); color: var(--ink); }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .98rem; }
+.code li {
+    display: flex; gap: .7rem;
+    padding: .18rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s;
+}
+.code .ln { flex: none; width: 1.2rem; text-align: right; color: var(--code-num); }
+.code li.active { background: var(--code-active); border-left-color: var(--code-marker); }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+
+/* variables */
+.vars { display: grid; grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr)); gap: .5rem .6rem; min-height: 3.6rem; }
+.vars-empty { grid-column: 1 / -1; align-self: center; font-size: .8rem; font-style: italic; color: var(--muted); }
+.vcard { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+.vlabel { display: flex; align-items: center; gap: .3rem; }
+.name { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; }
+.kw {
+    padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem;
+    font-family: var(--mono); font-size: .62rem; color: var(--muted);
+}
+.cell {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: 2.5rem;
+    padding-top: .5rem;
+    border: 2px solid var(--var-border); border-radius: .55rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    overflow: hidden;
+    transition: box-shadow .25s;
+}
+.type {
+    position: absolute; top: .08rem; right: .35rem;
+    font-family: var(--sans); font-size: .55rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined { font-style: italic; font-weight: 500; opacity: .85; }
+.val.t-function { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--ref); }
+.cell.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.cell.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.vcard.appear { animation: appear .5s both; }
+.ghost {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding-top: .5rem;
+    color: var(--muted); text-decoration: line-through;
+    animation: ghost .9s ease-in both;
+    pointer-events: none;
+}
+.cell.changed .val { animation: pop .45s .2s both; }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; min-height: 0; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+
+/* ---------- expression tree ---------- */
+.right { display: flex; flex-direction: column; min-height: 0; }
+.right > .panel-title { flex: none; }
+.tree-wrap { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 15.5rem; gap: .8rem; }
+.tree-box { position: relative; min-height: 0; overflow: hidden; display: flex; justify-content: center; align-items: flex-start; padding-top: .9rem; }
+.tree-inner { position: relative; flex: none; transform-origin: top center; }
+.tree-hint { margin: auto; max-width: 26rem; text-align: center; font-size: .9rem; font-style: italic; color: var(--muted); }
+.tokbar {
+    position: absolute; left: 0; top: 0; height: 2.5rem;
+    border-radius: .5rem; background: var(--code-bg);
+}
+.tok {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    padding: .05rem .3rem; border-radius: .25rem;
+    font-family: var(--mono); font-size: 1.25rem; font-weight: 600; white-space: pre;
+    color: var(--code-ink);
+    transition: background .25s;
+}
+.tok.t-num { color: #f7b267; }
+.tok.t-op, .tok.t-paren { color: #82aaff; }
+.tok.t-call { color: #c792ea; }
+.tok.hot { background: var(--code-active); box-shadow: inset 0 -3px 0 var(--code-marker); }
+.tokbar.fresh .tok { animation: fadein-plain .5s both; }
+.tree-later { position: absolute; left: 0; right: 0; top: 4.6rem; text-align: center; font-size: .85rem; font-style: italic; color: var(--muted); }
+
+.edges { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.edge { stroke: var(--muted); stroke-width: .09; transition: opacity .5s; }
+.edge.to-target { stroke: var(--write); stroke-dasharray: .25 .18; }
+.edge.consumed { opacity: .25; }
+.edges.grow .edge { animation: fadein-plain .5s .55s both; }
+
+.node {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex; align-items: center; justify-content: center;
+    min-width: 2.7rem; height: 2.7rem;
+    padding: 0 .6rem;
+    border: 2px solid var(--muted); border-radius: .7rem;
+    background: var(--panel); color: var(--ink);
+    font-family: var(--mono); font-size: 1.2rem; font-weight: 700; white-space: nowrap;
+    transition: opacity .5s, box-shadow .25s;
+}
+.node .na, .node .ntag, .node .ord { display: none; }
+.node.done .nb { display: none; }
+.node.done .na { display: inline; }
+.node.done .ntag, .node.done .ord { display: block; }
+.node.opn:not(.done) { width: 2.7rem; padding: 0; border-radius: 50%; border-color: var(--ink); background: var(--panel); color: var(--ink); font-size: 1.15rem; }
+.node.n-id:not(.done) { background: var(--var-bg); border-color: var(--var-border); color: var(--var-ink); }
+.node.n-call:not(.done) { background: var(--ref-bg); border-color: var(--ref); color: var(--ref); }
+.node.done { background: var(--flow-bg); border-color: var(--flow); color: var(--ink); }
+.node.target { border-style: dashed; border-color: var(--write); }
+.node.target:not(.done) { background: var(--write-bg); color: var(--ink); }
+.node.consumed { opacity: .4; }
+.node.hot { box-shadow: 0 0 0 3px var(--hot); }
+.node.hot.wrote { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.node.hot.n-id.done { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.ntag {
+    position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -.12rem);
+    padding: 0 .2rem; border-radius: .2rem; background: var(--panel);
+    font-size: .72rem; font-weight: 600; color: var(--muted);
+}
+.ltag {
+    position: absolute; left: 50%; top: 100%; transform: translate(-50%, .15rem);
+    padding: 0 .3rem; border-radius: .25rem;
+    font-family: var(--sans); font-size: .58rem; font-weight: 700; letter-spacing: .04em;
+    color: var(--write); white-space: nowrap;
+}
+.ord {
+    position: absolute; top: -.55rem; right: -.6rem;
+    width: 1.15rem; height: 1.15rem; border-radius: 50%;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--sans); font-size: .62rem; font-weight: 700; line-height: 1.15rem; text-align: center;
+}
+.node.hot.done .na, .node.bumped .na { animation: pop .45s both; }
+
+/* reductions */
+.reduce-panel { display: flex; flex-direction: column; min-height: 0; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .55rem; }
+.reduce { flex: 1; min-height: 0; overflow: hidden; font-family: var(--mono); font-size: .98rem; }
+.rline { padding: .22rem .35rem; border-radius: .3rem; color: var(--muted); white-space: pre; }
+.rline + .rline::before { content: "= "; color: var(--muted); }
+.rline:first-child { padding-left: 1.6ch; }
+.rline.cur { color: var(--ink); font-weight: 700; background: var(--flow-bg); }
+.rline.new { animation: fadein .35s both; }
+.reduce-empty { font-family: var(--sans); font-size: .8rem; font-style: italic; color: var(--muted); }
+
+/* statements vs expressions */
+.stmt-area { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: .35rem; padding: .3rem .4rem; }
+.sline { display: flex; align-items: flex-start; gap: 1rem; padding: .3rem .6rem; border-left: 3px solid transparent; border-radius: .35rem; transition: opacity .3s; }
+.sline.future { opacity: .35; }
+.sline.cur { background: var(--inline-code); border-left-color: var(--hot); }
+.sbody { position: relative; font-family: var(--mono); font-size: 1.2rem; }
+.scode { white-space: pre; line-height: 1.8rem; }
+.scode .k { color: var(--ref); font-weight: 700; }
+.scode .n { color: #b5651d; }
+.scode .o { color: var(--read); }
+.scode .s { color: #3f8a2f; }
+.marks { position: relative; }
+.mark { position: absolute; height: 1.95rem; }
+.mark .br { height: .45rem; border: 2px solid var(--flow); border-top: 0; border-radius: 0 0 .3rem .3rem; }
+.mark .badge {
+    position: absolute; left: 50%; top: .55rem; transform: translateX(-50%);
+    padding: 0 .4rem; border-radius: .35rem;
+    background: var(--flow); color: var(--chip-ink);
+    font-size: .8rem; font-weight: 700; line-height: 1.25rem; white-space: nowrap;
+}
+.mark .badge.t-undefined { font-style: italic; font-weight: 500; }
+.sline.cur .mark { animation: fadein .45s both; }
+.stag {
+    flex: none; align-self: center; margin-left: auto;
+    padding: .15rem .55rem; border-radius: 999px;
+    font-size: .72rem; font-weight: 700; white-space: nowrap;
+}
+.stag.st { border: 1.5px dashed var(--muted); color: var(--muted); }
+.stag.ex { border: 1.5px solid var(--flow); color: var(--flow); }
+
+/* legend */
+.legend {
+    flex: none;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem 1.1rem;
+    margin-top: .5rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.op { border-radius: 50%; border-color: var(--ink); background: var(--panel); }
+.sw.value { background: var(--flow-bg); border-color: var(--flow); }
+.sw.var { background: var(--var-bg); border-color: var(--var-border); }
+.sw.target { background: var(--write-bg); border-color: var(--write); border-style: dashed; }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+.sw.call { background: var(--ref-bg); border-color: var(--ref); }
+.sw.order { border: 0; border-radius: 50%; background: var(--ink); }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em; white-space: nowrap;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .e { color: var(--err); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.val { background: var(--flow); }
+
+.cell.await .val, .cell.await .type { visibility: hidden; }
+.cline.await, .rline.await { visibility: hidden; }
+.land { animation: land .45s both; }
+
+#selftest { position: fixed; left: 0; bottom: 0; z-index: 99; max-height: 40vh; overflow: auto; margin: 0; padding: .5rem; background: #000; color: #0f0; font-size: 12px; }
+
+@keyframes appear { from { opacity: 0; transform: translateX(-.6rem); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes ghost { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(70%) scale(.8); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+@keyframes fadein-plain { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .tree-wrap { grid-template-columns: 1fr; }
+    .tree-box { min-height: 22rem; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Как се изчислява един израз <small>от текст, през дърво, до една стойност - стъпка по стъпка</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="../expressionEvaluation.html" hreflang="en" lang="en" title="English version" aria-label="English version">EN</a>
+        <button class="btn icon-btn" id="themeBtn" title="Светла / тъмна тема" aria-label="Светла / тъмна тема">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Код</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><span>Променливи в паметта</span><span class="note">четене / записване</span></div>
+                <div class="vars" id="vars"></div>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Конзола</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="panel right">
+            <div class="panel-title"><span id="rightTitle">Дърво на израза (expression tree)</span><span class="note" id="treeNote"></span></div>
+            <div class="tree-wrap" id="treeWrap">
+                <div class="tree-box" id="treeBox"></div>
+                <div class="reduce-panel">
+                    <div class="panel-title"><span>Стъпки на изчисляване</span></div>
+                    <div class="reduce" id="reduce"></div>
+                </div>
+            </div>
+            <div class="stmt-area" id="stmtArea"></div>
+            <div class="legend" id="legend"></div>
+        </section>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="Към началото (Home)" aria-label="Към началото">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Назад (стрелка наляво)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Назад
+                </button>
+                <button class="btn" id="playBtn" title="Автоматично (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Напред (стрелка надясно или интервал)">
+                    Напред<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Клавиши: стрелки наляво / надясно, интервал, Home, P, 1-6</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// @engine-start
+// A tiny expression engine: lexer -> Pratt parser (tree) -> evaluator that
+// records every event (read, call, operator, write) in the order JavaScript
+// performs it. Only the operators used in the scenarios are supported.
+// ---------------------------------------------------------------------------
+const PREC = {                      // higher number = binds tighter
+    '=': 2, '+=': 2, '-=': 2, '*=': 2, '/=': 2, '%=': 2, '**=': 2,
+    '<': 9, '>': 9,
+    '+': 11, '-': 11,
+    '*': 12, '/': 12, '%': 12,
+    '**': 13,
+};
+const RIGHT_ASSOC = new Set(['=', '+=', '-=', '*=', '/=', '%=', '**=', '**']);
+const OPS = {
+    '+': (a, b) => a + b, '-': (a, b) => a - b, '*': (a, b) => a * b, '/': (a, b) => a / b,
+    '%': (a, b) => a % b, '**': (a, b) => a ** b, '<': (a, b) => a < b, '>': (a, b) => a > b,
+};
+const LEX = /\s*(\d+(?:\.\d+)?|[A-Za-z_$][\w$]*(?:\(\))?|\*\*=|\*\*|\+\+|--|[-+*/%]=|[-+*/%=()<>])/y;
+
+function lex(src) {
+    const toks = [];
+    LEX.lastIndex = 0;
+    let m;
+    while (LEX.lastIndex < src.length && (m = LEX.exec(src))) {
+        const v = m[1];
+        const t = /^\d/.test(v) ? 'num' : /\(\)$/.test(v) ? 'call' : /^[A-Za-z_$]/.test(v) ? 'id'
+            : v === '(' || v === ')' ? 'paren' : 'op';
+        toks.push({ t, v });
+    }
+    if (LEX.lastIndex < src.length) throw new SyntaxError('Unexpected character in: ' + src);
+    return toks;
+}
+
+function parse(src) {
+    const toks = lex(src), nodes = [];
+    let p = 0;
+    const mk = (type, tok, extra) => {
+        const n = Object.assign({ id: nodes.length, type, tok, kids: [], paren: 0 }, extra);
+        nodes.push(n);
+        return n;
+    };
+    function primary() {
+        const t = toks[p], at = p;
+        if (!t) throw new SyntaxError('Unexpected end of input');
+        p++;
+        if (t.t === 'num') return mk('num', at, { value: Number(t.v) });
+        if (t.t === 'id') return mk('id', at, { name: t.v });
+        if (t.t === 'call') return mk('call', at, { name: t.v.slice(0, -2) });
+        if (t.v === '(') {
+            const e = expr(0);
+            if (!toks[p] || toks[p].v !== ')') throw new SyntaxError('missing )');
+            p++;
+            e.paren++;
+            return e;
+        }
+        if (t.v === '++' || t.v === '--') {
+            const a = primary();
+            if (a.type !== 'id') throw new SyntaxError('Invalid left-hand side expression in prefix operation');
+            return mk('pre', at, { op: t.v, name: a.name, kids: [a.id] });
+        }
+        throw new SyntaxError(`Unexpected token '${t.v}'`);
+    }
+    function postfix() {
+        const a = primary(), t = toks[p];
+        if (t && (t.v === '++' || t.v === '--')) {
+            if (a.type !== 'id' || a.paren) throw new SyntaxError('Invalid left-hand side expression in postfix operation');
+            p++;
+            return mk('post', p - 1, { op: t.v, name: a.name, kids: [a.id] });
+        }
+        return a;
+    }
+    function expr(minBp) {
+        let left = postfix();
+        for (;;) {
+            const t = toks[p];
+            if (!t || t.t !== 'op' || !(t.v in PREC) || PREC[t.v] <= minBp) break;
+            const at = p++, bp = PREC[t.v];
+            const right = expr(RIGHT_ASSOC.has(t.v) ? bp - 1 : bp);
+            if (bp === 2) {
+                if (left.type !== 'id') throw new SyntaxError('Invalid left-hand side in assignment');
+                left.target = true;
+                left = mk('assign', at, { op: t.v, name: left.name, kids: [left.id, right.id] });
+            } else {
+                left = mk('bin', at, { op: t.v, kids: [left.id, right.id] });
+            }
+        }
+        return left;
+    }
+    const root = expr(0);
+    if (p < toks.length) throw new SyntaxError(`Unexpected token '${toks[p].v}'`);
+    return { src, toks, nodes, root: root.id };
+}
+
+const fmt = v => String(v);
+
+// Evaluates the tree like JavaScript does: operands left to right, then the operator.
+function trace(T, env0, fns) {
+    const N = T.nodes, env = Object.assign({}, env0), events = [], val = {};
+    function E(n) {
+        let v;
+        if (n.type === 'num') v = n.value;
+        else if (n.type === 'id') { v = env[n.name]; events.push({ k: 'read', id: n.id, name: n.name, v }); }
+        else if (n.type === 'call') {
+            const f = fns[n.name];
+            v = f.ret;
+            events.push({ k: 'call', id: n.id, name: n.name, v, log: f.log });
+        } else if (n.type === 'bin') {
+            const a = E(N[n.kids[0]]), b = E(N[n.kids[1]]);
+            v = OPS[n.op](a, b);
+            events.push({ k: 'op', id: n.id, v });
+        } else if (n.type === 'assign') {
+            if (n.op === '=') v = E(N[n.kids[1]]);
+            else {
+                // compound assignment: the old value of the LHS is read first, then the RHS
+                const old = env[n.name];
+                val[n.kids[0]] = old;
+                events.push({ k: 'read', id: n.kids[0], name: n.name, v: old });
+                v = OPS[n.op.slice(0, -1)](old, E(N[n.kids[1]]));
+            }
+            env[n.name] = v;
+            events.push({ k: 'assign', id: n.id, name: n.name, v });
+        } else if (n.type === 'post' || n.type === 'pre') {
+            const old = E(N[n.kids[0]]);
+            const nv = n.op === '++' ? old + 1 : old - 1;
+            env[n.name] = nv;
+            v = n.type === 'post' ? old : nv;
+            events.push({ k: n.type, id: n.id, name: n.name, v, nv });
+        }
+        val[n.id] = v;
+        return v;
+    }
+    const result = E(N[T.root]);
+    return { events, val, env, result };
+}
+
+// The expression as text after the first k events (the "Стъпки" column).
+function reducedText(T, R, k) {
+    const done = new Set(R.events.slice(0, k).map(e => e.id));
+    const show = n => {
+        if (n.type === 'num') return fmt(n.value);
+        if (done.has(n.id) && !n.target) return fmt(R.val[n.id]);
+        const K = n.kids.map(i => T.nodes[i]);
+        let t;
+        if (n.type === 'id') t = n.name;
+        else if (n.type === 'call') t = n.name + '()';
+        else if (n.type === 'bin') t = `${show(K[0])} ${n.op} ${show(K[1])}`;
+        else if (n.type === 'assign') t = `${n.name} ${n.op} ${show(K[1])}`;
+        else if (n.type === 'post') t = n.name + n.op;
+        else t = n.op + n.name;
+        return n.paren ? `(${t})` : t;
+    };
+    return show(T.nodes[T.root]);
+}
+// @engine-end
+
+// ---------------------------------------------------------------------------
+// Compiled trees (parse + trace + layout), cached by source and environment
+// ---------------------------------------------------------------------------
+const TREE_TOP = 4.4, ROW_H = 4.4, NODE_H = 2.7;   // rem
+const treeCache = new Map();
+
+function compile(t) {
+    const key = JSON.stringify([t.src, t.env, t.fns]);
+    if (treeCache.has(key)) return treeCache.get(key);
+    const T = parse(t.src);
+    const R = trace(T, t.env, t.fns || {});
+    // layout: every node sits under its own token, rows by depth
+    let x = 1;
+    const tokX = T.toks.map(tk => {
+        const w = tk.t === 'paren' ? 1.3 : Math.max(3.7, tk.v.length * .8 + 1.9);
+        const c = x + w / 2;
+        x += w;
+        return c;
+    });
+    const depth = [];
+    const walk = (id, d) => { depth[id] = d; T.nodes[id].kids.forEach(k => walk(k, d + 1)); };
+    walk(T.root, 0);
+    const maxD = Math.max(...depth);
+    const lines = [];
+    for (let k = 0; k <= R.events.length; k++) {
+        const txt = reducedText(T, R, k);
+        if (!lines.length || lines[lines.length - 1].t !== txt) lines.push({ k, t: txt });
+    }
+    const C = { T, R, tokX, depth, lines, W: x + 1, H: TREE_TOP + maxD * ROW_H + NODE_H + 1.2 };
+    treeCache.set(key, C);
+    return C;
+}
+
+// ---------------------------------------------------------------------------
+// State helpers used by the scenario steps. Each one mutates the state `s`.
+// ---------------------------------------------------------------------------
+function typeOf(lit) {
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit === 'function') return 'function';
+    return 'number';
+}
+function decl(s, name, kind = 'let') {
+    s.vars[name] = { value: null, type: null, kind };
+    s.order.push(name);
+}
+function set(s, name, lit) {
+    if (!s.vars[name]) decl(s, name);
+    Object.assign(s.vars[name], { value: lit, type: typeOf(lit) });
+    s.hl[name] = 'write';
+}
+function read(s, ...names) { names.forEach(n => s.hl[n] = 'read'); }
+function log(s, text, err = false) { s.console.push({ text, err }); return s.console.length - 1; }
+function flight(s, from, to, text, kind) { s.flights.push({ from, to, text, kind, ph: s.ph }); }
+function revealAt(s, key) { s.reveals.push({ key, ph: s.ph }); }
+
+// let name = <literal> on the active line
+function init(s, name, lit, kind = 'let') {
+    decl(s, name, kind);
+    set(s, name, lit);
+    flight(s, 'line', 'v:' + name, lit, 'write');
+}
+// show a new expression tree; built=false shows only the tokens
+function tree(s, src, opts = {}) {
+    const env = {};
+    s.order.forEach(n => { const v = s.vars[n]; if (v.type === 'number') env[n] = Number(v.value); });
+    s.tree = { src, env, fns: opts.fns || null, k: 0, built: opts.built !== false, label: opts.label || '' };
+}
+function build(s) { s.tree.built = true; }
+// perform the next n events of the evaluation
+function go(s, n = 1) {
+    const C = compile(s.tree);
+    for (let c = 0; c < n; c++) {
+        const e = C.R.events[s.tree.k++];
+        const node = C.T.nodes[e.id];
+        s.hot.push(e.id);
+        if (e.k === 'read') {
+            s.hl[e.name] = 'read';
+            flight(s, 'v:' + e.name, 'n:' + e.id, fmt(e.v), 'read');
+            s.ph++;
+        } else if (e.k === 'call') {
+            const i = log(s, e.log);
+            flight(s, 'n:' + e.id, 'con:' + i, e.log, 'val');
+            revealAt(s, 'n:' + e.id);
+            s.ph++;
+        } else if (e.k === 'op') {
+            node.kids.forEach(k => flight(s, 'n:' + k, 'n:' + e.id, fmt(C.R.val[k]), 'val'));
+            s.ph++;
+        } else if (e.k === 'assign') {
+            const kids = node.op === '=' ? [node.kids[1]] : node.kids;
+            kids.forEach(k => flight(s, 'n:' + k, 'n:' + e.id, fmt(C.R.val[k]), 'val'));
+            s.ph++;
+            set(s, e.name, fmt(e.v));
+            flight(s, 'n:' + e.id, 'v:' + e.name, fmt(e.v), 'write');
+            s.ph++;
+        } else if (e.k === 'post') {
+            flight(s, 'n:' + node.kids[0], 'n:' + e.id, fmt(e.v), 'val');
+            s.ph++;
+            set(s, e.name, fmt(e.nv));
+            flight(s, 'n:' + e.id, 'v:' + e.name, fmt(e.nv), 'write');
+            s.ph++;
+        } else if (e.k === 'pre') {
+            set(s, e.name, fmt(e.nv));
+            flight(s, 'n:' + node.kids[0], 'v:' + e.name, fmt(e.nv), 'write');
+            revealAt(s, 'n:' + e.id);
+            s.ph++;
+        }
+    }
+}
+// write the value of the whole tree into a variable (let name = <tree>)
+function out(s, name, kind = 'let') {
+    const C = compile(s.tree);
+    const v = fmt(C.R.result);
+    if (!s.vars[name]) decl(s, name, kind);
+    set(s, name, v);
+    flight(s, 'n:' + C.T.root, 'v:' + name, v, 'write');
+    s.ph++;
+}
+// console.log(<tree>)
+function print(s) {
+    const C = compile(s.tree);
+    const v = fmt(C.R.result);
+    flight(s, 'n:' + C.T.root, 'con:' + log(s, v), v, 'val');
+    s.ph++;
+}
+// console.log(a, b, ...)
+function logVars(s, ...names) {
+    read(s, ...names);
+    const i = log(s, names.map(n => s.vars[n].value).join(' '));
+    names.forEach(n => flight(s, 'v:' + n, 'con:' + i, s.vars[n].value, 'read'));
+    s.ph++;
+}
+function noTree(s) { s.tree = null; }
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line - active code line (0-based, -1 = none, or an array of lines)
+//   step.do   - changes to the state (tree, memory, console)
+// ---------------------------------------------------------------------------
+const FNS = { a: { ret: 2, log: 'a' }, b: { ret: 3, log: 'b' }, c: { ret: 4, log: 'c' } };
+
+const SCENARIOS = [
+{
+    tab: 'Приоритет',
+    code: [
+        'let a = 2 + 3 * 4;',
+        'let b = (2 + 3) * 4;',
+        'console.log(a, b); // 14 20',
+    ],
+    steps: [
+        { line: -1, text: `Как JavaScript изчислява израз (expression) като <code>2 + 3 * 4</code>? Преди да смята каквото и да е, той превръща текста в <b>дърво</b>. След това изчислява дървото отдолу нагоре, докато остане <b>една стойност</b>. Натиснете <kbd>Напред</kbd> или стрелка надясно.` },
+        { line: 0, text: `Първо JavaScript чете текста на израза и го разделя на отделни части - <b>токени</b> (tokens): числа, оператори, имена, скоби. Засега това е просто редица от символи и нищо не е изчислено.`,
+          do: s => tree(s, '2 + 3 * 4', { built: false, label: 'дясната страна на <code>let a =</code>' }) },
+        { line: 0, text: `<b>Парсърът</b> (parser) подрежда токените в <b>дърво на израза</b> (expression tree): операторите стават <b>възли</b> (кръгчета), а числата - <b>листа</b>. Всеки оператор държи под себе си двата си операнда. <code>*</code> има по-висок <b>приоритет</b> (precedence) от <code>+</code>, затова &quot;хваща&quot; 3 и 4 и стои по-ниско.`,
+          do: build },
+        { line: 0, text: `Кой оператор ще се изпълни първи? Правилото е просто: операторът може да се изпълни едва когато <b>и двата</b> му операнда са готови стойности (зелените кутийки). <code>+</code> чака резултата от <code>*</code>. Помислете, преди да продължите.` },
+        { line: 0, text: `<code>3 * 4</code> = 12. Поддървото се <b>свива</b> до една стойност - 12. Номерът в черното кръгче показва реда на изчисляване. Вдясно в &quot;Стъпки&quot; виждаме същото като текст: <code>2 + 12</code>.`,
+          do: s => go(s) },
+        { line: 0, text: `Сега <code>+</code> има и двата си операнда: <code>2 + 12</code> = 14. Коренът (root) на дървото дава стойността на <b>целия</b> израз.`,
+          do: s => go(s) },
+        { line: 0, text: `Стойността 14 се <span class="w">записва</span> в новата променлива a.`,
+          do: s => out(s, 'a') },
+        { line: 1, text: `<code>(2 + 3) * 4</code> - със скоби променяме <b>формата на дървото</b>: <code>(2 + 3)</code> става един операнд на <code>*</code>. Сега <code>+</code> е по-надолу. Самите скоби не са възли в дървото - те само казват на парсъра как да групира.`,
+          do: s => tree(s, '(2 + 3) * 4', { label: 'дясната страна на <code>let b =</code>' }) },
+        { line: 1, text: `Пак отдолу нагоре: първо <code>2 + 3</code> = 5.`,
+          do: s => go(s) },
+        { line: 1, text: `После <code>5 * 4</code> = 20.`,
+          do: s => go(s) },
+        { line: 1, text: `20 се <span class="w">записва</span> в b.`,
+          do: s => out(s, 'b') },
+        { line: 2, text: `<code>console.log(a, b)</code> <span class="r">чете</span> двете променливи и отпечатва 14 20. Едни и същи числа и оператори, но различно дърво - различен резултат.`,
+          do: s => logVars(s, 'a', 'b') },
+        { line: -1, text: `<b>Обобщение:</b> приоритетът на операторите (и скобите) определя <b>формата на дървото</b> - кой оператор с кои операнди работи. Изчисляването върви <b>отдолу нагоре</b>: всеки оператор чака стойностите на своите операнди. Затова <code>2 + 3 * 4</code> е 14, а <code>(2 + 3) * 4</code> е 20.` },
+    ],
+},
+{
+    tab: 'Асоциативност',
+    code: [
+        'console.log(10 - 3 - 2);           // 5',
+        'console.log(3 + 2 ** 2 ** 3 / 2);  // 131',
+    ],
+    steps: [
+        { line: -1, text: `Какво става, когато в израза има няколко оператора с <b>еднакъв</b> приоритет, например два пъти <code>-</code>? Тогава решава <b>асоциативността</b> (associativity): дали операторите се групират от ляво на дясно или от дясно на ляво.` },
+        { line: 0, text: `<code>10 - 3 - 2</code>: какво ще отпечата - <code>(10 - 3) - 2</code> = 5 или <code>10 - (3 - 2)</code> = 9? Помислете, преди да продължите.`,
+          do: s => tree(s, '10 - 3 - 2', { built: false, label: 'аргументът на <code>console.log</code>' }) },
+        { line: 0, text: `<code>-</code> е <b>ляво асоциативен</b> - групира се от ляво на дясно: <code>(10 - 3) - 2</code>. Затова левият <code>-</code> е по-надолу в дървото и неговият резултат е левият операнд на десния <code>-</code>.`,
+          do: build },
+        { line: 0, text: `<code>10 - 3</code> = 7.`,
+          do: s => go(s) },
+        { line: 0, text: `<code>7 - 2</code> = 5.`,
+          do: s => go(s) },
+        { line: 0, text: `Отпечатва се 5. Ако групирането беше от дясно на ляво, щяхме да получим 9 - съвсем друг резултат.`,
+          do: print },
+        { line: 1, text: `Примерът от слайдовете. Тук има три различни приоритета: най-висок е <code>**</code>, после <code>/</code>, а най-нисък - <code>+</code>. Освен това <code>**</code> е <b>дясно асоциативен</b>. Какво ще отпечата? Помислете, преди да продължите.`,
+          do: s => tree(s, '3 + 2 ** 2 ** 3 / 2', { built: false, label: 'аргументът на <code>console.log</code>' }) },
+        { line: 1, text: `Дървото: <code>2 ** 2 ** 3</code> се групира от дясно на ляво, т.е. <code>2 ** (2 ** 3)</code> - десният <code>**</code> е най-долу. Резултатът от <code>**</code> е левият операнд на <code>/</code>, а <code>/</code> е десният операнд на <code>+</code>. Най-слабият оператор, <code>+</code>, е в корена.`,
+          do: build },
+        { line: 1, text: `Най-долният оператор е първи: <code>2 ** 3</code> = 8.`,
+          do: s => go(s) },
+        { line: 1, text: `<code>2 ** 8</code> = 256. (Ако <code>**</code> беше ляво асоциативен, щяхме да имаме <code>(2 ** 2) ** 3</code> = 64.)`,
+          do: s => go(s) },
+        { line: 1, text: `<code>256 / 2</code> = 128.`,
+          do: s => go(s) },
+        { line: 1, text: `<code>3 + 128</code> = 131. Колоната &quot;Стъпки&quot; вдясно е същото разписване като на слайда.`,
+          do: s => go(s) },
+        { line: 1, text: `Отпечатва се 131.`,
+          do: print },
+        { line: -1, text: `<b>Обобщение:</b> приоритетът решава кой оператор е по-надолу в дървото, а при еднакъв приоритет решава асоциативността. Почти всички оператори са ляво асоциативни. Дясно асоциативни са <code>**</code> и операторите за присвояване (<code>=</code>, <code>+=</code> и т.н.). Пълната таблица: Operator precedence @MDN. Когато не сте сигурни - сложете скоби.` },
+    ],
+},
+{
+    tab: 'Присвояването е израз',
+    code: [
+        'let x = 3;',
+        'x = x ** 2;',
+        'let y;',
+        'y = x = 1;',
+        'x += 3;            // x = x + 3',
+        'console.log(x, y); // 4 1',
+    ],
+    steps: [
+        { line: -1, text: `Знакът <code>=</code> също е <b>оператор</b>, а <code>x = x ** 2</code> е израз със свое дърво. Ще видим в какъв ред се случват <span class="r">четенето</span> и <span class="w">записването</span> и защо <code>y = x = 1</code> работи.` },
+        { line: 0, text: `<code>let x = 3;</code> - в паметта се създава променлива x със стойност 3.`,
+          do: s => init(s, 'x', '3') },
+        { line: 1, text: `Дървото на <code>x = x ** 2</code>: <code>=</code> има <b>най-нисък</b> приоритет, затова е в корена. Левият му операнд (LHS) е <b>мястото за запис</b> (оранжевата пунктирна рамка) - тази x <b>не се чете</b>. Десният (RHS) е изразът <code>x ** 2</code>.`,
+          do: s => tree(s, 'x = x ** 2') },
+        { line: 1, text: `Изчислява се RHS. За листото x JavaScript <span class="r">чете</span> текущата стойност на x от паметта - 3.`,
+          do: s => go(s) },
+        { line: 1, text: `<code>3 ** 2</code> = 9.`,
+          do: s => go(s) },
+        { line: 1, text: `Сега <code>=</code> има готова стойност отдясно и я <span class="w">записва</span> в x. Освен това операцията <code>=</code> <b>връща стойност</b> - записаната 9. Тук никой не използва тази стойност и тя просто се изхвърля.`,
+          do: s => go(s) },
+        { line: 2, text: `<code>let y;</code> - y получава стойност undefined.`,
+          do: s => { noTree(s); decl(s, 'y'); set(s, 'y', 'undefined'); } },
+        { line: 3, text: `<code>y = x = 1</code> - два оператора <code>=</code> с еднакъв приоритет. В какъв ред ще се изпълнят? Помислете, преди да продължите.`,
+          do: s => tree(s, 'y = x = 1', { built: false }) },
+        { line: 3, text: `<code>=</code> е <b>дясно асоциативен</b>: <code>y = (x = 1)</code>. Десният <code>=</code> е по-надолу - цялото <code>x = 1</code> е RHS на левия <code>=</code>.`,
+          do: build },
+        { line: 3, text: `Вътрешният израз <code>x = 1</code> <span class="w">записва</span> 1 в x и <b>връща</b> 1 - това е &quot;резултатът от операцията&quot; от слайда.`,
+          do: s => go(s) },
+        { line: 3, text: `Външният <code>=</code> получава тази 1 като своя RHS и я <span class="w">записва</span> в y. Ето как с един ред присвояваме стойност на две променливи.`,
+          do: s => go(s) },
+        { line: 4, text: `<code>x += 3</code> - съкратен запис на <code>x = x + 3</code>. Тук x е място за запис, но старата ѝ стойност също ни трябва.`,
+          do: s => tree(s, 'x += 3') },
+        { line: 4, text: `Първо се <span class="r">чете</span> текущата стойност на x - 1. (При съкратения запис това става <b>преди</b> да се изчисли дясната страна.)`,
+          do: s => go(s) },
+        { line: 4, text: `<code>1 + 3</code> = 4 и резултатът веднага се <span class="w">записва</span> в x. Изразът <code>x += 3</code> също връща записаната стойност - 4.`,
+          do: s => go(s) },
+        { line: 5, text: `<code>console.log(x, y)</code> отпечатва 4 1.`,
+          do: s => logVars(s, 'x', 'y') },
+        { line: -1, text: `<b>Често срещана грешка:</b> отляво на <code>=</code> трябва да има <b>място за запис</b> (променлива), а не стойност. Ако напишем <code>5 = x;</code> или <code>x + 1 = y;</code>, получаваме <span class="e">SyntaxError</span> още преди програмата да започне - нищо от нея не се изпълнява.`,
+          do: s => { noTree(s); log(s, 'Uncaught SyntaxError: Invalid left-hand side in assignment', true); } },
+        { line: -1, text: `<b>Обобщение:</b> <code>=</code> е оператор с най-нисък приоритет и дясна асоциативност. Първо се изчислява RHS, след това стойността се записва в LHS, а целият израз <b>връща</b> записаната стойност. Затова <code>x = x ** 2</code> има смисъл, а <code>y = x = 1</code> работи.` },
+    ],
+},
+{
+    tab: 'i++ и ++i',
+    code: [
+        'let i = 2;',
+        'let j = i++;      // j = 2, i = 3',
+        'let k = ++i;      // k = 4, i = 4',
+        'let x = 1, y = 1;',
+        'console.log(x++ + ++y); // 3',
+        'console.log(x, y);      // 2 2',
+    ],
+    steps: [
+        { line: -1, text: `<code>i++</code> и <code>++i</code> правят едно и също с променливата - увеличават я с 1. Разликата е в <b>стойността на израза</b>: какво връща операцията в момента, в който се изчислява. Ще следим отделно дървото (стойността) и паметта (променливата).` },
+        { line: 0, text: `<code>let i = 2;</code>`,
+          do: s => init(s, 'i', '2') },
+        { line: 1, text: `<code>let j = i++;</code> - какво ще бъде записано в j: 2 или 3? Помислете, преди да продължите.`,
+          do: s => tree(s, 'i++', { label: 'дясната страна на <code>let j =</code>' }) },
+        { line: 1, text: `Първо се <span class="r">чете</span> текущата стойност на i - 2.`,
+          do: s => go(s) },
+        { line: 1, text: `Постфиксният (postfix) <code>i++</code> <span class="w">записва</span> 3 в i, но като стойност на израза <b>връща старата</b> стойност - 2. В дървото виждаме 2, а в паметта i вече е 3.`,
+          do: s => go(s) },
+        { line: 1, text: `В j се <span class="w">записва</span> стойността на израза - 2. Резултат: j = 2, i = 3.`,
+          do: s => out(s, 'j') },
+        { line: 2, text: `<code>let k = ++i;</code> - отново се <span class="r">чете</span> i, сега 3.`,
+          do: s => { tree(s, '++i', { label: 'дясната страна на <code>let k =</code>' }); go(s); } },
+        { line: 2, text: `Префиксният (prefix) <code>++i</code> <span class="w">записва</span> 4 в i и връща <b>новата</b> стойност - 4.`,
+          do: s => go(s) },
+        { line: 2, text: `В k се записва 4. Резултат: k = 4, i = 4.`,
+          do: s => out(s, 'k') },
+        { line: 3, text: `<code>let x = 1, y = 1;</code> - две променливи с една декларация.`,
+          do: s => { noTree(s); init(s, 'x', '1'); init(s, 'y', '1'); } },
+        { line: 4, text: `Примерът от слайда: какво ще отпечата <code>x++ + ++y</code>? В дървото <code>++</code> е по-надолу от <code>+</code>, защото има по-висок приоритет. Помислете, преди да продължите.`,
+          do: s => tree(s, 'x++ + ++y', { label: 'аргументът на <code>console.log</code>' }) },
+        { line: 4, text: `Левият операнд е първи: <code>x++</code> <span class="r">чете</span> 1, <span class="w">записва</span> 2 в x и връща <b>старата</b> стойност - 1.`,
+          do: s => go(s, 2) },
+        { line: 4, text: `После десният: <code>++y</code> <span class="r">чете</span> 1, <span class="w">записва</span> 2 в y и връща <b>новата</b> стойност - 2.`,
+          do: s => go(s, 2) },
+        { line: 4, text: `<code>1 + 2</code> = 3 и <code>console.log</code> отпечатва 3.`,
+          do: s => { go(s); print(s); } },
+        { line: 5, text: `След реда и двете променливи са 2 - <b>страничният ефект</b> (side effect) върху паметта се е случил и при двете. Различна е била само стойността, с която са участвали в събирането.`,
+          do: s => logVars(s, 'x', 'y') },
+        { line: -1, text: `<b>Обобщение:</b> <code>x++</code> - &quot;използвай, после увеличи&quot;: изразът връща <b>старата</b> стойност. <code>++x</code> - &quot;увеличи, после използвай&quot;: връща <b>новата</b>. Като самостоятелен ред (<code>i++;</code>) разлика няма. Добра практика: не смесвайте <code>++</code> с други операции в един израз.`,
+          do: noTree },
+    ],
+},
+{
+    tab: 'Ред на изчисляване',
+    advanced: true,
+    calls: true,
+    code: [
+        'function a() { console.log("a"); return 2; }',
+        'function b() { console.log("b"); return 3; }',
+        'function c() { console.log("c"); return 4; }',
+        'let r = a() + b() * c();',
+        'console.log(r); // 14',
+    ],
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> Често казваме &quot;умножението се изпълнява преди събирането&quot;. Вярно е за <b>операторите</b>. Но в какъв ред се изчисляват <b>операндите</b>? Нека операндите са извиквания на функции, които отпечатват нещо - така ще видим реда.` },
+        { line: [0, 1, 2], text: `Трите функции са декларирани (function declaration), затова съществуват още преди първия ред да се изпълни. Всяка отпечатва името си и връща число: <code>a()</code> връща 2, <code>b()</code> - 3, <code>c()</code> - 4.`,
+          do: s => ['a', 'b', 'c'].forEach(n => { decl(s, n, 'function'); set(s, n, 'function'); }) },
+        { line: 3, text: `Дървото: <code>*</code> е по-надолу, защото има по-висок приоритет. В какъв ред ще се отпечатат a, b и c? Помислете, преди да продължите.`,
+          do: s => tree(s, 'a() + b() * c()', { fns: FNS, label: 'дясната страна на <code>let r =</code>' }) },
+        { line: 3, text: `JavaScript обхожда дървото <b>отляво надясно</b>. Започва с левия операнд на <code>+</code> - извиква <code>a()</code>. Отпечатва се a, а листото получава стойност 2.`,
+          do: s => go(s) },
+        { line: 3, text: `За десния операнд на <code>+</code> трябва да се изчисли поддървото <code>b() * c()</code>. Отново отляво: извиква се <code>b()</code> - отпечатва b, стойност 3.`,
+          do: s => go(s) },
+        { line: 3, text: `Извиква се <code>c()</code> - отпечатва c, стойност 4.`,
+          do: s => go(s) },
+        { line: 3, text: `Едва сега, когато има и двата си операнда, се изпълнява <code>*</code>: <code>3 * 4</code> = 12.`,
+          do: s => go(s) },
+        { line: 3, text: `И накрая <code>+</code>: <code>2 + 12</code> = 14.`,
+          do: s => go(s) },
+        { line: 3, text: `14 се <span class="w">записва</span> в r.`,
+          do: s => out(s, 'r') },
+        { line: 4, text: `<code>console.log(r)</code> отпечатва 14.`,
+          do: s => logVars(s, 'r') },
+        { line: -1, text: `<b>Обобщение:</b> отпечата се a, b, c - функциите са извикани <b>отляво надясно</b>, въпреки че <code>*</code> се изпълни преди <code>+</code>. Приоритетът определя <b>формата на дървото</b>, а не реда, в който се изчисляват операндите - те винаги се изчисляват отляво надясно. Номерата в кръгчетата показват точния ред.` },
+    ],
+},
+{
+    tab: 'Statement vs expression',
+    advanced: true,
+    stmts: [
+        { tag: 'statement', marks: [] },
+        { tag: 'expression', marks: [['x = 5', '5']] },
+        { tag: 'expression', marks: [['2 + 3', '5']] },
+        { tag: 'expression', marks: [['x ** 2', '25'], ['x ** 2 - x', '20'], ['console.log(x ** 2 - x)', 'undefined']] },
+        { tag: 'statement', marks: [['x * 2', '10']] },
+        { tag: 'statement', marks: [['x > 3', 'true'], ['y = 0', '0']] },
+    ],
+    code: [
+        'let x;',
+        'x = 5;',
+        '2 + 3;',
+        'console.log(x ** 2 - x);',
+        'let y = x * 2;',
+        'if (x > 3) { y = 0; }',
+    ],
+    steps: [
+        { line: -1, text: `<b>За напреднали.</b> <b>Израз</b> (expression) е всяко парче код, което се изчислява до <b>стойност</b>. <b>Statement</b> (инструкция) е цялостна команда, която <b>извършва действие</b>: декларира променлива, проверява условие, повтаря код. Ще сложим етикет със стойност под всеки израз.`,
+          do: s => { s.stmt = { upto: -1 }; } },
+        { line: 0, text: `<code>let x;</code> - декларация. Това е statement: създава променлива, но няма стойност, която да използваме някъде.`,
+          do: s => { s.stmt.upto = 0; decl(s, 'x'); set(s, 'x', 'undefined'); } },
+        { line: 1, text: `<code>x = 5</code> е израз със стойност 5 - присвояването връща записаната стойност. С <code>;</code> накрая той става <b>expression statement</b> - израз, използван като самостоятелна инструкция.`,
+          do: s => { s.stmt.upto = 1; set(s, 'x', '5'); } },
+        { line: 2, text: `<code>2 + 3</code> е израз със стойност 5. Като самостоятелен ред е безполезен: стойността се изчислява и веднага се изхвърля. (Дори само <code>5</code> или само <code>x</code> е израз.)`,
+          do: s => { s.stmt.upto = 2; } },
+        { line: 3, text: `Изразите се влагат един в друг: <code>x ** 2</code> е 25, <code>x ** 2 - x</code> е 20. Дори <code>console.log(...)</code> е израз - извикване на функция. Тя отпечатва 20, но самата тя <b>връща</b> undefined.`,
+          do: s => { s.stmt.upto = 3; read(s, 'x'); log(s, '20'); } },
+        { line: 4, text: `<code>let y = x * 2;</code> - цялото е statement (декларация), но вътре в него има израз: <code>x * 2</code> със стойност 10, която се записва в y.`,
+          do: s => { s.stmt.upto = 4; read(s, 'x'); decl(s, 'y'); set(s, 'y', '10'); } },
+        { line: 5, text: `<code>if</code> е statement. Вътре в него има изрази: условието <code>x &gt; 3</code> (true) и <code>y = 0</code> (0).`,
+          do: s => { s.stmt.upto = 5; read(s, 'x'); set(s, 'y', '0'); } },
+        { line: -1, text: `<b>Често срещана грешка:</b> statement не може да стои там, където се очаква стойност. Ако напишем <code>let r = if (x &gt; 3) { 1 };</code>, получаваме <span class="e">SyntaxError</span>. Вдясно от <code>=</code>, в аргументите на функция и в <code>\${ }</code> може да има само изрази.`,
+          do: s => log(s, "Uncaught SyntaxError: Unexpected token 'if'", true) },
+        { line: -1, text: `<b>Любопитно:</b> в конзолата на браузъра след <code>let x;</code> се изписва undefined, а след <code>if (x &gt; 3) { y = 0; }</code> - 0. Това е служебният &quot;резултат от реда&quot; (completion value), който конзолата показва за удобство. Не е стойност, която можем да използваме в кода.` },
+        { line: -1, text: `<b>Обобщение:</b> изразът дава <b>стойност</b> и може да стои навсякъде, където е нужна стойност. Statement-ът <b>извършва действие</b> (декларация, <code>if</code>, цикъл) и често съдържа изрази в себе си. Израз с <code>;</code> накрая може да бъде самостоятелен ред (expression statement).` },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: states[i] is the full state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    let s = { line: -1, vars: {}, order: [], tree: null, stmt: null, console: [], hl: {}, hot: [], flights: [], reveals: [], ph: 0 };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        Object.assign(s, { hl: {}, hot: [], flights: [], reveals: [], ph: 0, line: step.line });
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const FLY_MS = 760, PHASE_MS = 820;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>Пусни';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>Пауза';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*")|\b(let|const|var|function|return|if|typeof|null|undefined|true|false)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+const activeLines = s => Array.isArray(s.line) ? s.line : [s.line];
+
+function renderCode(sc, s) {
+    const act = activeLines(s);
+    $('#code').innerHTML = sc.code.map((l, i) =>
+        `<li class="${act.includes(i) ? 'active' : ''}"><span class="ln">${i + 1}</span><span>${highlight(l)}</span></li>`
+    ).join('');
+    const shown = act.filter(i => i >= 0).map(i => i + 1);
+    $('#lineNote').textContent = shown.length === 1 ? `изпълнява се ред ${shown[0]}` : shown.length ? `редове ${shown.join(', ')}` : '';
+}
+
+// when each flight lands and each element may show its new content (ms)
+function timing(s) {
+    const land = {};
+    const at = (key, t) => { land[key] = Math.max(land[key] || 0, t); };
+    s.flights.forEach(f => at(f.to, f.ph * PHASE_MS + FLY_MS));
+    s.reveals.forEach(r => at(r.key, r.ph * PHASE_MS + FLY_MS * .6));
+    const end = Math.max(0, ...Object.values(land));
+    return { land, end };
+}
+
+function renderVars(s, prev, tm) {
+    if (!s.order.length) { $('#vars').innerHTML = '<div class="vars-empty">Още няма променливи.</div>'; return; }
+    $('#vars').innerHTML = s.order.map(name => {
+        const v = s.vars[name], pv = prev && prev.vars[name];
+        const cardCls = ['vcard'];
+        const cellCls = ['cell'];
+        if (s.hl[name]) cellCls.push('hl-' + s.hl[name]);
+        let ghost = '';
+        if (prev) {
+            const landAt = tm.land['v:' + name];
+            if (!pv) cardCls.push('appear');
+            else if (pv.value !== null && pv.value !== v.value) {
+                ghost = `<span class="ghost" style="animation-delay:${landAt || 0}ms">${esc(pv.value)}</span>`;
+                if (!landAt) cellCls.push('changed');
+            }
+        }
+        const val = v.value === null ? '' : v.type === 'function'
+            ? '<span class="val t-function">function</span>'
+            : `<span class="val t-${v.type}">${esc(v.value)}</span><span class="type">${v.type}</span>`;
+        return `<div class="${cardCls.join(' ')}" data-var="${name}">
+            <div class="vlabel"><span class="name">${esc(name)}</span><span class="kw">${v.kind}</span></div>
+            <div class="${cellCls.join(' ')}">${ghost}${val}</div>
+        </div>`;
+    }).join('');
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.map(l =>
+        `<div class="cline ${l.err ? 'err' : ''}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+function nodeHtml(C, n, s, done, consumedBy, hot) {
+    const isOp = n.type === 'bin' || n.type === 'assign' || n.type === 'pre' || n.type === 'post';
+    const cls = ['node', 'n-' + n.type];
+    if (isOp) cls.push('opn');
+    if (done.has(n.id) || n.type === 'num') cls.push('done');
+    if (n.target) cls.push('target');
+    if (consumedBy[n.id] !== undefined) cls.push('consumed');
+    if (hot.has(n.id)) cls.push('hot');
+    if (n.type === 'assign' || n.type === 'pre' || n.type === 'post') cls.push('wrote');
+    const before = n.type === 'num' ? fmt(n.value) : n.type === 'id' ? n.name : n.type === 'call' ? n.name + '()' : n.op;
+    const tag = n.type === 'num' ? '' : n.type === 'id' ? n.name : n.type === 'call' ? n.name + '()'
+        : n.type === 'post' ? n.name + n.op : n.type === 'pre' ? n.op + n.name : n.op;
+    const ev = C.R.events.findIndex(e => e.id === n.id);
+    const x = C.tokX[n.tok], y = TREE_TOP + C.depth[n.id] * ROW_H;
+    const by = consumedBy[n.id] !== undefined ? ` data-by="${consumedBy[n.id]}"` : '';
+    return `<div class="${cls.join(' ')}" data-id="${n.id}" data-tok="${n.tok}"${by} style="left:${x}rem;top:${y}rem">
+        <span class="nb">${esc(before)}</span><span class="na">${esc(fmt(C.R.val[n.id]))}</span>
+        ${tag ? `<span class="ntag">${esc(tag)}</span>` : ''}
+        ${ev >= 0 ? `<span class="ord">${ev + 1}</span>` : ''}
+        ${n.target ? '<span class="ltag">LHS</span>' : ''}
+    </div>`;
+}
+
+function renderTree(sc, s, prev) {
+    const box = $('#treeBox');
+    $('#treeNote').innerHTML = s.tree && s.tree.label ? s.tree.label : '';
+    if (!s.tree) {
+        box.innerHTML = '<div class="tree-hint">Тук ще видим дървото на израза, който се изчислява на текущия ред.</div>';
+        $('#reduce').innerHTML = '<div class="reduce-empty">Изразът, записан след всяка стъпка.</div>';
+        return;
+    }
+    const C = compile(s.tree), T = C.T, k = s.tree.k;
+    const sameTree = prev && prev.tree && prev.tree.src === s.tree.src && JSON.stringify(prev.tree.env) === JSON.stringify(s.tree.env);
+    const done = new Set(C.R.events.slice(0, k).map(e => e.id));
+    const consumedBy = {};
+    T.nodes.forEach(n => { if (done.has(n.id)) n.kids.forEach(c => consumedBy[c] = n.id); });
+    const hot = new Set(s.hot);
+    const hotToks = new Set(s.hot.map(id => T.nodes[id].tok));
+
+    const toks = T.toks.map((t, i) =>
+        `<span class="tok t-${t.t}${hotToks.has(i) ? ' hot' : ''}" data-tok="${i}" style="left:${C.tokX[i]}rem">${esc(t.v)}</span>`).join('');
+    let html = `<div class="tree-inner" id="treeInner" style="width:${C.W}rem;height:${s.tree.built ? C.H : 7}rem">
+        <div class="tokbar${sameTree ? '' : ' fresh'}" style="width:${C.W}rem">${toks}</div>`;
+    if (s.tree.built) {
+        let edges = '';
+        T.nodes.forEach(n => n.kids.forEach(c => {
+            const ch = T.nodes[c];
+            const x1 = C.tokX[n.tok], y1 = TREE_TOP + C.depth[n.id] * ROW_H + NODE_H;
+            const x2 = C.tokX[ch.tok], y2 = TREE_TOP + C.depth[c] * ROW_H;
+            const cls = ['edge'];
+            if (ch.target) cls.push('to-target');
+            if (consumedBy[c] !== undefined) cls.push('consumed');
+            edges += `<line class="${cls.join(' ')}" data-by="${consumedBy[c] !== undefined ? consumedBy[c] : ''}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+        }));
+        const grow = !(sameTree && prev.tree.built);
+        html += `<svg class="edges${grow && prev ? ' grow' : ''}" viewBox="0 0 ${C.W} ${C.H}" style="width:${C.W}rem;height:${C.H}rem">${edges}</svg>`;
+        html += T.nodes.map(n => nodeHtml(C, n, s, done, consumedBy, hot)).join('');
+    } else {
+        html += '<div class="tree-later">Парсърът (parser) все още не е построил дървото.</div>';
+    }
+    box.innerHTML = html + '</div>';
+    fitTree();
+
+    // the "Стъпки" column: the expression text after each event
+    const lines = s.tree.built ? C.lines.filter(l => l.k <= k) : [];
+    const prevCount = sameTree && prev.tree.built ? C.lines.filter(l => l.k <= prev.tree.k).length : (prev ? 0 : lines.length);
+    $('#reduce').innerHTML = lines.length
+        ? lines.map((l, i) => `<div class="rline${i === lines.length - 1 ? ' cur' : ''}${i >= prevCount ? ' new' : ''}">${esc(l.t)}</div>`).join('')
+        : '<div class="reduce-empty">Изразът, записан след всяка стъпка.</div>';
+}
+
+function fitTree() {
+    const inner = $('#treeInner'), box = $('#treeBox');
+    if (!inner) return;
+    inner.style.transform = '';
+    const sx = (box.clientWidth - 8) / inner.offsetWidth;
+    const sy = (box.clientHeight - 16) / inner.offsetHeight;
+    const f = Math.min(1.3, sx, sy);
+    inner.dataset.scale = f;
+    if (f !== 1) inner.style.transform = `scale(${f})`;
+}
+
+function renderStmts(sc, s) {
+    const area = $('#stmtArea');
+    area.innerHTML = sc.code.map((code, i) => {
+        const info = sc.stmts[i];
+        const shown = i <= s.stmt.upto;
+        const act = activeLines(s).includes(i);
+        // nesting level of every mark: a mark that contains others sits lower
+        const marks = info.marks.map(([text, value]) => ({ from: code.indexOf(text), len: text.length, value }));
+        marks.forEach(m => m.level = 0);
+        [...marks].sort((a, b) => a.len - b.len).forEach(m => {
+            marks.forEach(o => { if (o !== m && o.from <= m.from && o.from + o.len >= m.from + m.len) o.level = Math.max(o.level, m.level + 1); });
+        });
+        const levels = shown && marks.length ? Math.max(...marks.map(m => m.level)) + 1 : 0;
+        const mk = shown ? marks.map(m => `<div class="mark" style="left:${m.from}ch;width:${m.len}ch;top:${m.level * 1.95}rem">
+                <div class="br"></div><span class="badge t-${typeOf(m.value)}">${esc(m.value)}</span></div>`).join('') : '';
+        const tag = !shown ? '' : info.tag === 'statement'
+            ? '<span class="stag st">statement - няма стойност</span>'
+            : '<span class="stag ex">израз + ; (expression statement)</span>';
+        return `<div class="sline${shown ? '' : ' future'}${act ? ' cur' : ''}">
+            <div class="sbody"><div class="scode">${highlight(code)}</div><div class="marks" style="height:${levels * 1.95}rem">${mk}</div></div>
+            ${tag}
+        </div>`;
+    }).join('');
+}
+
+function renderLegend(sc) {
+    $('#legend').innerHTML = sc.stmts ? [
+        '<span><i class="sw value"></i>израз и неговата стойност</span>',
+        '<span><i class="sw read"></i>четене</span>',
+        '<span><i class="sw write"></i>записване</span>',
+    ].join('') : [
+        '<span><i class="sw op"></i>оператор</span>',
+        '<span><i class="sw value"></i>готова стойност</span>',
+        '<span><i class="sw var"></i>име на променлива</span>',
+        sc.calls ? '<span><i class="sw call"></i>извикване на функция</span>' : '',
+        '<span><i class="sw target"></i>LHS - място за запис</span>',
+        '<span><i class="sw read"></i>четене</span>',
+        '<span><i class="sw write"></i>записване</span>',
+        '<span><i class="sw order"></i>ред на изчисляване</span>',
+    ].join('');
+}
+
+// ---------------------------------------------------------------------------
+// Animations: tree growing out of the tokens, flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'line') return $('#code li.active');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'v') return $(`#vars .vcard[data-var="${rest}"] .cell`);
+    if (kind === 'n') return $(`#treeBox .node[data-id="${rest}"]`);
+    if (kind === 'con') return $('#console').children[+rest] || null;
+    return null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function growTree() {
+    const inner = $('#treeInner');
+    if (!inner || reduceMotion) return;
+    const f = +inner.dataset.scale || 1;
+    inner.querySelectorAll('.node').forEach(node => {
+        const tok = inner.querySelector(`.tok[data-tok="${node.dataset.tok}"]`);
+        const a = tok.getBoundingClientRect(), b = node.getBoundingClientRect();
+        const dx = (a.left + a.width / 2 - b.left - b.width / 2) / f;
+        const dy = (a.top + a.height / 2 - b.top - b.height / 2) / f;
+        node.animate([
+            { transform: `translate(calc(-50% + ${dx}px), ${dy}px) scale(.7)`, opacity: 0 },
+            { transform: `translate(calc(-50% + ${dx}px), ${dy}px) scale(.9)`, opacity: 1, offset: .2 },
+            { transform: 'translate(-50%, 0) scale(1)', opacity: 1 },
+        ], { duration: 900, delay: 80 * (+node.style.top.replace('rem', '') / ROW_H), easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'backwards' });
+    });
+}
+
+// hide what is about to change; show it when its value arrives
+function hold(key, el) {
+    if (key.startsWith('n:')) {
+        const byMe = $('#treeBox').querySelectorAll(`[data-by="${key.slice(2)}"]`);
+        const wasDone = el.classList.contains('done');
+        el.classList.remove('done');
+        byMe.forEach(c => c.classList.remove('consumed'));
+        return () => {
+            if (wasDone) el.classList.add('done');
+            byMe.forEach(c => c.classList.add('consumed'));
+            el.classList.add('bumped');
+            bump(el);
+        };
+    }
+    el.classList.add('await');
+    return () => { el.classList.remove('await'); bump(el); };
+}
+
+const timers = [];
+function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+function clearTimers() { while (timers.length) clearTimeout(timers.pop()); }
+
+function playStep(s, prev, tk) {
+    const grew = s.tree && s.tree.built && !(prev.tree && prev.tree.built && prev.tree.src === s.tree.src);
+    if (grew) growTree();
+    if (reduceMotion || !s.flights.length) return;
+    const tm = timing(s);
+    const delay0 = grew ? 900 : 0;
+    // what to hide until its value arrives
+    const keys = Object.keys(tm.land);
+    keys.forEach(key => {
+        const el = resolve(key);
+        if (!el) return;
+        const show = hold(key, el);
+        later(() => { if (tk === token) show(); }, delay0 + tm.land[key]);
+    });
+    const newRed = [...document.querySelectorAll('#reduce .rline.new')];
+    newRed.forEach(el => {
+        el.classList.add('await');
+        later(() => { if (tk === token) { el.classList.remove('await'); bump(el); } }, delay0 + tm.end);
+    });
+
+    const layer = $('#flyLayer');
+    s.flights.forEach(f => {
+        const src = resolve(f.from), dst = resolve(f.to);
+        if (!src || !dst) return;
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + f.kind;
+        chip.textContent = f.text;
+        chip.style.visibility = 'hidden';
+        layer.appendChild(chip);
+        later(() => {
+            if (tk !== token) return;
+            const a = src.getBoundingClientRect(), b = dst.getBoundingClientRect();
+            const w = chip.offsetWidth, h = chip.offsetHeight;
+            const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+            const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+            const lift = Math.min(70, 20 + Math.hypot(dx, dy) * .12);
+            chip.style.left = x0 + 'px';
+            chip.style.top = y0 + 'px';
+            chip.style.visibility = '';
+            chip.animate([
+                { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+                { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+                { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.12)`, opacity: 1, offset: .55 },
+                { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+            ], { duration: FLY_MS, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' }).onfinish = () => chip.remove();
+        }, delay0 + f.ph * PHASE_MS);
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    clearTimers();
+    $('#flyLayer').innerHTML = '';
+    const tm = timing(s);
+
+    renderCode(sc, s);
+    renderVars(s, prev, tm);
+    renderConsole(s);
+    const stmtMode = !!sc.stmts;
+    $('#treeWrap').style.display = stmtMode ? 'none' : '';
+    $('#stmtArea').style.display = stmtMode ? '' : 'none';
+    $('#rightTitle').textContent = stmtMode ? 'Изрази и техните стойности' : 'Дърво на израза (expression tree)';
+    if (stmtMode) { $('#treeNote').textContent = ''; renderStmts(sc, s); }
+    else renderTree(sc, s, prev);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = `Стъпка ${stepIdx + 1} от ${N}`;
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="Стъпка ${i + 1}" aria-label="Стъпка ${i + 1}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+
+    if (prev && !stmtMode) requestAnimationFrame(() => { if (tk === token) playStep(s, prev, tk); });
+    else if (prev) requestAnimationFrame(() => {
+        if (tk !== token || reduceMotion) return;
+        s.order.forEach(n => { if (s.hl[n]) { const el = resolve('v:' + n); if (el) bump(el); } });
+    });
+    scheduleAuto(tm);
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto(tm) {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.max(tm.end + 1500, Math.min(11000, Math.max(2800, 1200 + len * 40))));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    renderLegend(SCENARIOS[scIdx]);
+    try { history.replaceState(null, '', location.search + '#' + (scIdx + 1)); } catch (e) { /* file:// in some browsers */ }
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? '<span class="adv">advanced</span>' : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+const THEME_KEY = 'exprEvalTheme';
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem(THEME_KEY, root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const q = new URLSearchParams(location.search).get('theme');
+    const t = q || localStorage.getItem(THEME_KEY);
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+new ResizeObserver(() => fitTree()).observe($('#treeBox'));
+
+// #selftest: walk every step of every scenario and report errors and overflow
+function selfTest() {
+    const report = [];
+    let errors = 0;
+    SCENARIOS.forEach((sc, i) => {
+        try { selectScenario(i); } catch (e) { errors++; report.push(`#${i + 1}: ${e.message}`); return; }
+        sc.steps.forEach((_, j) => {
+            try {
+                goto(j, true);
+                const over = [];
+                if (document.documentElement.scrollHeight > innerHeight + 1) over.push('page');
+                document.querySelectorAll('.panel, .explain-text, .stmt-area').forEach(p => {
+                    if (p.offsetParent && p.scrollHeight > p.clientHeight + 2) over.push(p.id || p.className);
+                });
+                const inner = $('#treeInner');
+                if (inner && +inner.dataset.scale < .8) over.push('tree scaled ' + (+inner.dataset.scale).toFixed(2));
+                if (over.length) report.push(`#${i + 1}.${j + 1} overflow: ${over.join(', ')}`);
+            } catch (e) { errors++; report.push(`#${i + 1}.${j + 1}: ${e.message}`); }
+        });
+    });
+    const pre = document.createElement('pre');
+    pre.id = 'selftest';
+    pre.textContent = `SELFTEST ${errors ? 'FAIL' : 'OK'} (${errors} errors)\n` + report.join('\n');
+    document.body.appendChild(pre);
+}
+
+function fromHash() {
+    const h = location.hash.slice(1);
+    if (h === 'selftest') { selfTest(); return; }
+    const [a, b] = h.split('.');
+    selectScenario((parseInt(a, 10) || 1) - 1, (parseInt(b, 10) || 1) - 1);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>

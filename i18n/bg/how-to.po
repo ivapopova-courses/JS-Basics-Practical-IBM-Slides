@@ -1,0 +1,194 @@
+# Translation of site/how-to.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: Claude (claude-opus-5-5)\n"
+"PO-Revision-Date: 2026-10-16\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/how-to.md\n"
+
+#. heading 1
+#: site/how-to.md:1
+msgid "How to use these pages"
+msgstr "Как да ползвате тези страници"
+
+#. heading 2
+#: site/how-to.md:3
+msgid "Run the examples"
+msgstr "Изпълнение на примерите"
+
+#. paragraph
+#: site/how-to.md:5
+msgid "Most code examples have a bar under them:"
+msgstr "Под повечето примери с код има лента с бутони:"
+
+#. paragraph
+#: site/how-to.md:7
+msgid "**Run** executes the code in your browser and shows what `console.log` prints."
+msgstr "**Run** изпълнява кода в браузъра и показва какво извежда `console.log`."
+
+#. paragraph
+#: site/how-to.md:8
+msgid "**Edit** turns the example into an editor. Change the code and press **Run** again (or `Ctrl+Enter`)."
+msgstr "**Edit** превръща примера в редактор. Променете кода и натиснете **Run** отново (или `Ctrl+Enter`)."
+
+#. paragraph
+#: site/how-to.md:10
+msgid "**Reset** brings back the original code."
+msgstr "**Reset** връща оригиналния код."
+
+#. paragraph
+#: site/how-to.md:12
+msgid "Try it:"
+msgstr "Опитайте:"
+
+#. paragraph
+#: site/how-to.md:19
+msgid "In every runnable example, the variable `doc` holds a **sample device report**, like the `doc` a check rule receives:"
+msgstr "Във всеки пример, който може да се изпълни, variable `doc` съдържа **примерен отчет на устройство** - същия `doc`, който получава едно правило за проверка:"
+
+#. box title
+#: site/how-to.md:27
+msgid "The sample document is made up"
+msgstr "Примерният документ е измислен"
+
+#. paragraph
+#: site/how-to.md:28
+msgid "It is a sample device report. All names and values are invented; the shape is typical of such documents."
+msgstr "Това е примерен отчет на устройство. Всички имена и стойности са измислени; структурата е типична за такива документи."
+
+#. heading 2
+#: site/how-to.md:32
+msgid "Practice in VSCode"
+msgstr "Упражнения във VSCode"
+
+#. paragraph
+#: site/how-to.md:34
+msgid "The practice tasks and the homework are in the **Homework repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework"
+msgstr "Задачите за упражнение и домашните са в **Homework repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework"
+
+#. paragraph
+#: site/how-to.md:37
+msgid "Each lecture has a folder there (`02-variables-and-types/`, ...), with the tasks in `practice/` and the homework in `homework.js`. New folders are added before each session."
+msgstr "Там всяка лекция има своя папка (`02-variables-and-types/`, ...), със задачите в `practice/` и домашното в `homework.js`. Нови папки се добавят преди всяко занятие."
+
+#. heading 3
+#: site/how-to.md:41
+msgid "Set it up once"
+msgstr "Еднократна настройка"
+
+#. paragraph
+#: site/how-to.md:43
+msgid "Clone the repository, then keep it as `upstream` (new tasks come from there) and add your own repository as `origin` (your solutions go there):"
+msgstr "Клонирайте repository-то, оставете го като `upstream` (оттам идват новите задачи) и добавете ваше собствено repository като `origin` (там отиват вашите решения):"
+
+#. paragraph
+#: site/how-to.md:46
+msgid "On GitHub, create a new **empty** repository of your own (private is fine) - without a README, licence or `.gitignore`."
+msgstr "В GitHub създайте ново **празно** repository (може да е private) - без README, лиценз и `.gitignore`."
+
+#. paragraph
+#: site/how-to.md:48
+msgid "In a terminal:"
+msgstr "В терминал:"
+
+#. paragraph
+#: site/how-to.md:58
+msgid "Open the folder in VSCode."
+msgstr "Отворете папката във VSCode."
+
+#. heading 3
+#: site/how-to.md:60
+msgid "Work on a task"
+msgstr "Работа по задача"
+
+#. paragraph
+#: site/how-to.md:62
+msgid "Open the terminal (`` Ctrl+` ``) in the repository root and run a task:"
+msgstr "Отворете терминала (`` Ctrl+` ``) в основната папка на repository-то и пуснете задача:"
+
+#. paragraph
+#: site/how-to.md:68
+msgid "Every task checks your code and prints `OK` or `FAIL` for each check and ends with a line like `5 of 7 checks passed`."
+msgstr "Всяка задача проверява кода ви, извежда `OK` или `FAIL` за всяка проверка и завършва с ред като `5 of 7 checks passed`."
+
+#. paragraph
+#: site/how-to.md:71
+msgid "Save your work in your own repository:"
+msgstr "Запазете работата си във вашето repository:"
+
+#. heading 3
+#: site/how-to.md:79
+msgid "Get the new tasks"
+msgstr "Как да получите новите задачи"
+
+#. paragraph
+#: site/how-to.md:81
+msgid "Before each session, commit your work, then:"
+msgstr "Преди всяко занятие направете commit на работата си, а след това:"
+
+#. paragraph
+#: site/how-to.md:87
+msgid "The new lecture folders appear next to your work. Existing files are not changed, so there are no conflicts."
+msgstr "Новите папки на лекциите се появяват до вашата работа. Съществуващите файлове не се променят, затова няма конфликти."
+
+#. heading 2
+#: site/how-to.md:90
+msgid "Code from the lessons"
+msgstr "Кодът от занятията"
+
+#. paragraph
+#: site/how-to.md:92
+msgid "The code written during the lessons is in the **Labs repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Labs"
+msgstr "Кодът, писан по време на занятията, е в **Labs repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Labs"
+
+#. paragraph
+#: site/how-to.md:95
+msgid "Clone it once, and after each lesson run `git pull` in it to get the new code. Do not write your own code there - use the Homework repository for that."
+msgstr "Клонирайте го веднъж и след всяко занятие пускайте `git pull` в него, за да получите новия код. Не пишете свой код там - за това е Homework repository."
+
+#. heading 2
+#: site/how-to.md:104
+msgid "Animations"
+msgstr "Анимации"
+
+#. paragraph
+#: site/how-to.md:106
+msgid "Some sections have an **Animation** box with links. Each link opens a step-by-step animation in a new tab: it shows what JavaScript does under the hood (memory, the order of calculation, the path through a loop). Use the Right / Left arrow keys to step forward and back. All animations, by session: [Animations](/under-the-hood)."
+msgstr "Някои раздели имат кутия **Анимация** с линкове. Всеки линк отваря в нов таб анимация стъпка по стъпка: тя показва какво прави JavaScript \"под капака\" (паметта, реда на изчисляване, пътя през един loop). Със стрелките надясно / наляво вървите напред и назад. Всички анимации, подредени по занятия: [Анимации](/under-the-hood)."
+
+#. heading 2
+#: site/how-to.md:112
+msgid "Find things"
+msgstr "Как да намерите нещо"
+
+#. paragraph
+#: site/how-to.md:114
+msgid "The search box (top left, or `Ctrl+K`) searches all lectures."
+msgstr "Полето за търсене (горе вляво или `Ctrl+K`) търси във всички лекции."
+
+#. paragraph
+#: site/how-to.md:115
+msgid "The list on the right side of a lecture (\"In this lecture\") jumps to a section."
+msgstr "Списъкът вдясно на всяка лекция (\"На тази страница\") води директно до избран раздел."
+
+#. paragraph
+#: site/how-to.md:116
+msgid "The moon / sun switch at the top changes between dark and light mode."
+msgstr "Превключвателят луна / слънце горе сменя тъмния и светлия режим."
+
+#. paragraph
+#: site/how-to.md:117
+msgid "The **EN / BG** button next to it opens the same page in English or in Bulgarian."
+msgstr "Бутонът **EN / BG** до него отваря същата страница на английски или на български."
+
+#. paragraph
+#: site/how-to.md:118
+msgid "The navigation on the left and the \"In this lecture\" column on the right can be made narrower or wider, in any step: drag their inner edge (it turns blue under the mouse), or click the edge and use the Left / Right arrow keys (16 px a step, with Shift 64 px). At 0 the panel is hidden and a small tab stays at the edge of the window - click it to show the panel again. Double-click the edge to go back to the default width."
+msgstr "Навигацията вляво и колоната \"На тази страница\" вдясно могат да се стесняват и разширяват на произволна стъпка: плъзнете вътрешния им ръб (под мишката той става син) или щракнете върху ръба и използвайте стрелките наляво / надясно (16 px на стъпка, с Shift - 64 px). При 0 панелът се скрива и на ръба на прозореца остава малко езиче - щракнете го, за да се покаже панелът отново. Двоен клик върху ръба връща ширината по подразбиране."

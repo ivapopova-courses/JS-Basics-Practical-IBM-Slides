@@ -101,11 +101,20 @@ cd JS-Basics-Practical-IBM-Labs
 git pull          # after each lesson
 ```
 
+## Animations
+
+Some sections have an **Animation** box with links. Each link opens a
+step-by-step animation in a new tab: it shows what JavaScript does under the hood
+(memory, the order of calculation, the path through a loop). Use the Right / Left
+arrow keys to step forward and back. All animations, by session:
+[Animations](/under-the-hood).
+
 ## Find things
 
 - The search box (top left, or `Ctrl+K`) searches all lectures.
 - The list on the right side of a lecture ("In this lecture") jumps to a section.
 - The moon / sun switch at the top changes between dark and light mode.
+- The **EN / BG** button next to it opens the same page in English or in Bulgarian.
 - The navigation on the left and the "In this lecture" column on the right can
   be made narrower or wider, in any step: drag their inner edge (it turns blue
   under the mouse), or click the edge and use the Left / Right arrow keys

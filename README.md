@@ -52,13 +52,36 @@ site/                          the course site (VitePress)
     agenda.md                  course agenda
     how-to.md, project.md
     lectures/NN-topic.md       one page per lecture
+    under-the-hood.md          the animations, by session
+    public/animations/         step-by-step animations (self-contained HTML, English)
+    public/animations/bg/      the same animations in Bulgarian (EN / BG button in each)
     .vitepress/config.mjs      sidebar, nav, the "js run" and "::: trainer" extensions
-    .vitepress/theme/          RunCode.vue (runnable code), ModeToggles.vue, custom.css
+    .vitepress/theme/          RunCode.vue (runnable code), ModeToggles.vue, custom.css;
+                               LangSwitch.vue (the EN / BG button)
+    bg/                        GENERATED Bulgarian pages (git-ignored, see i18n/)
+i18n/                          translations: bg/*.po, the generator, translator guide, glossary
 data/sample-asset.json         MADE-UP sample device report (same file as in Homework/data/)
 ```
 
 Practice files are in the Homework repository; students run
 `node 02-variables-and-types/practice/task1-rule-variables.js` from its root.
+
+## Two languages
+
+Every page is also in Bulgarian, under `/bg/`; the **EN / BG** button next to the
+theme switch changes the language. English is the source. The translations are
+gettext `.po` files in `i18n/bg/` (one per page), filled in by a translator; the
+Bulgarian pages are generated from them on every `npm run dev` / `npm run build`.
+
+```bash
+npm run i18n:update     # after changing English pages: refresh the .po files
+npm run i18n:status     # what is left to translate (and how many words)
+npm run i18n:pack       # zip for the translator
+npm run i18n:import -- <folder or files>   # the translator's files back
+npm run i18n:check      # broken code, links or markup in translations
+```
+
+Workflow and details: [`i18n/README.md`](i18n/README.md).
 
 ## Writing a lecture
 
@@ -69,6 +92,8 @@ Practice files are in the Homework repository; students run
   `index.md` and `agenda.md`, and put its practice files in `NN-topic/` of the Homework repository.
 - **Before class:** run every practice file and solution with `node`, and click
   through the page in `npm run dev`.
+- **Translation:** after the English page is done, `npm run i18n:update`, then send
+  the new `.po` file to the translator (`npm run i18n:pack`).
 
 ## Licence
 

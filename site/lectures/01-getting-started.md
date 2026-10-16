@@ -23,6 +23,12 @@ title: 1. Getting started
 We stopped at **declaring and defining variables**, so the
 [next lecture](/lectures/02-variables-and-types) starts there.
 
+::: info Animations
+**How JavaScript runs your code:** [1. Translators](../animations/jsEngine.html#1){target="_blank"}, [2. Tokens](../animations/jsEngine.html#2){target="_blank"}, [3. AST](../animations/jsEngine.html#3){target="_blank"}, [4. Two phases](../animations/jsEngine.html#4){target="_blank"}, [5. Engine and environment](../animations/jsEngine.html#5){target="_blank"}
+
+**Variables in memory:** [1. Declaring and assigning](../animations/variablesInMemory.html#1){target="_blank"}
+:::
+
 ## Slides
 
 The first session used the standard course slides:

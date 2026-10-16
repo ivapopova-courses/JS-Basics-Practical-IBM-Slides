@@ -1,0 +1,739 @@
+# Translation of site/lectures/02-variables-and-types.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: Claude (claude-opus-5-5)\n"
+"PO-Revision-Date: 2026-10-16\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/lectures/02-variables-and-types.md\n"
+
+#. front matter: title
+#: site/lectures/02-variables-and-types.md:2 site/lectures/02-variables-and-types.md:5
+msgid "2. Variables, types and operators"
+msgstr "2. Variables, типове и оператори"
+
+#. html
+#: site/lectures/02-variables-and-types.md:8
+msgid "<span>Session 2</span><span>practice: <code>02-variables-and-types/</code> in the homework repository</span>"
+msgstr "<span>Занятие 2</span><span>упражнения: <code>02-variables-and-types/</code> в homework repository</span>"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:11
+msgid "**Today you will learn to:**"
+msgstr "**Днес ще се научите да:**"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:13
+msgid "declare variables with `let` and `const`, and name them well;"
+msgstr "декларирате variables с `let` и `const` и да им давате добри имена;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:14
+msgid "recognise the primitive types and check a value's type with `typeof`;"
+msgstr "разпознавате примитивните типове и да проверявате типа на стойност с `typeof`;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:15
+msgid "calculate with numbers and build text with strings;"
+msgstr "смятате с числа и да съставяте текст със strings;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:16
+msgid "convert the strings from the report JSON into numbers and booleans."
+msgstr "превръщате strings от JSON отчета в numbers и booleans."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:18
+msgid "Where this fits in the sample check rule - today we can write the highlighted lines:"
+msgstr "Къде е мястото на тази тема в примерното правило за проверка - днес можем да напишем маркираните редове:"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:37
+msgid "1. Declaring and defining variables"
+msgstr "1. Деклариране и дефиниране на variables"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:39
+msgid "A **variable** is a name for a value in memory. Creating it has two parts:"
+msgstr "**Variable** е име за стойност в паметта. Създаването ѝ има две части:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:41
+msgid "**declaring** - telling JavaScript the name: `let serial;`"
+msgstr "**деклариране** - казваме на JavaScript името: `let serial;`"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:42
+msgid "**defining** (initialising) - giving it its first value: `serial = \"SN4X7Q92\";`"
+msgstr "**дефиниране** (инициализиране) - даваме ѝ първата стойност: `serial = \"SN4X7Q92\";`"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:44
+msgid "Usually we do both at once:"
+msgstr "Обикновено правим двете наведнъж:"
+
+#. box title
+#: site/lectures/02-variables-and-types.md:57 site/lectures/02-variables-and-types.md:197 site/lectures/02-variables-and-types.md:291 site/lectures/02-variables-and-types.md:336
+msgid "Animations"
+msgstr "Анимации"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:58
+msgid "**Variables in memory:** [1. Declaring and assigning](../animations/variablesInMemory.html#1){target=\"_blank\"}, [2. Copying a value](../animations/variablesInMemory.html#2){target=\"_blank\"}"
+msgstr "**Variables в паметта:** [1. Деклариране и присвояване](../animations/variablesInMemory.html#1){target=\"_blank\"}, [2. Копиране на стойност](../animations/variablesInMemory.html#2){target=\"_blank\"}"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:61
+msgid "`let` and `const`"
+msgstr "`let` и `const`"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:63
+msgid "Keyword"
+msgstr "Ключова дума"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:63
+msgid "Can it get a new value?"
+msgstr "Може ли да получи нова стойност?"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:63
+msgid "Use it for"
+msgstr "За какво се ползва"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:65
+msgid "no"
+msgstr "не"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:65
+msgid "values that do not change - most of your variables"
+msgstr "стойности, които не се променят - повечето ви variables"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:66 site/lectures/02-variables-and-types.md:67
+msgid "yes"
+msgstr "да"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:66
+msgid "counters, results built step by step"
+msgstr "броячи, резултати, които се натрупват стъпка по стъпка"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:67
+msgid "old code only - do not use it in new code"
+msgstr "само в стар код - не го използвайте в нов код"
+
+#. box title
+#: site/lectures/02-variables-and-types.md:80
+msgid "Start with `const`"
+msgstr "Започвайте с `const`"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:81
+msgid "Write `const` by default. Change it to `let` only when you really need to give the variable a new value. Good rule guidelines ask the same for global variables: *\"they must be declared as const\"*."
+msgstr "Пишете `const` по подразбиране. Сменете го с `let` само когато наистина трябва да дадете нова стойност на variable. Добрите насоки за правилата искат същото за глобалните variables: *\"they must be declared as const\"*."
+
+#. box title
+#: site/lectures/02-variables-and-types.md:86 site/lectures/02-variables-and-types.md:116 site/lectures/02-variables-and-types.md:251 site/lectures/02-variables-and-types.md:358 site/lectures/02-variables-and-types.md:398
+msgid "Animation"
+msgstr "Анимация"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:87
+msgid "**Variables in memory:** [5. `const`](../animations/variablesInMemory.html#5){target=\"_blank\"}"
+msgstr "**Variables в паметта:** [5. `const`](../animations/variablesInMemory.html#5){target=\"_blank\"}"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:90
+msgid "Strict mode: no variables by accident"
+msgstr "Strict mode: без случайни variables"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:92
+msgid "Without `let`, `const` or `var`, JavaScript silently creates a **global** variable. A typo in a name then creates a new variable instead of an error:"
+msgstr "Без `let`, `const` или `var` JavaScript тихо създава **глобална** variable. Тогава печатна грешка в името създава нова variable, вместо да даде грешка:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:101
+msgid "Put `\"use strict\";` as the **first line** of a file (or function), and the same mistake becomes an error:"
+msgstr "Сложете `\"use strict\";` като **първи ред** на файла (или на функцията) и същата грешка вече спира програмата:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:112
+msgid "Modules and classes are always in strict mode. In the practice files we start with `\"use strict\";`."
+msgstr "Модулите и класовете винаги са в strict mode. Във файловете за упражнения започваме с `\"use strict\";`."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:117
+msgid "**Variable scope:** [4. No declaration and `\"use strict\"`](../animations/scopeChain.html#4){target=\"_blank\"}"
+msgstr "**Scope на variables:** [4. Без деклариране и `\"use strict\"`](../animations/scopeChain.html#4){target=\"_blank\"}"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:120
+msgid "2. Naming variables"
+msgstr "2. Имена на variables"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:122
+msgid "**Rules** (otherwise: syntax error):"
+msgstr "**Правила** (иначе: синтактична грешка):"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:124
+msgid "letters, digits, `_` and `$`; no spaces, no `-`;"
+msgstr "букви, цифри, `_` и `$`; без интервали, без `-`;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:125
+msgid "must not start with a digit;"
+msgstr "не може да започва с цифра;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:126
+msgid "must not be a reserved word (`let`, `const`, `if`, `function`, `class`, ...);"
+msgstr "не може да е запазена дума (`let`, `const`, `if`, `function`, `class`, ...);"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:127
+msgid "names are **case-sensitive**: `model`, `MODEL` and `Model` are three variables."
+msgstr "имената **различават малки и главни букви**: `model`, `MODEL` и `Model` са три различни variables."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:129
+msgid "**Conventions** (good practice):"
+msgstr "**Конвенции** (добра практика):"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:131
+msgid "`camelCase` for variables: `serialNumber`, `firmwareLevel`, `isAffected`;"
+msgstr "`camelCase` за variables: `serialNumber`, `firmwareLevel`, `isAffected`;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:132
+msgid "names that say what is inside: `firmwareLevel`, not `x` or `data2`;"
+msgstr "имена, които казват какво има вътре: `firmwareLevel`, а не `x` или `data2`;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:133
+msgid "booleans start with `is`, `has`, `can`: `isEnabled`, `hasCert`;"
+msgstr "имената на booleans започват с `is`, `has`, `can`: `isEnabled`, `hasCert`;"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:134
+msgid "`UPPER_SNAKE_CASE` for fixed settings: `const MIN_FIRMWARE_LEVEL = \"4.2.1.7\";`"
+msgstr "`UPPER_SNAKE_CASE` за фиксирани настройки: `const MIN_FIRMWARE_LEVEL = \"4.2.1.7\";`"
+
+#. box title
+#: site/lectures/02-variables-and-types.md:136
+msgid "JSON keys vs variable names"
+msgstr "Ключове в JSON срещу имена на variables"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:137
+msgid "The keys in the report JSON use `snake_case` (`firmware_level`, `remote_login_enabled`). That is the data's naming - keep the keys as they are. Your own variables use `camelCase`: `const firmwareLevel = doc.inventory.details.firmware_level;`"
+msgstr "Ключовете в JSON отчета са в `snake_case` (`firmware_level`, `remote_login_enabled`). Така са кръстени данните - оставете ключовете както са. Вашите собствени variables са в `camelCase`: `const firmwareLevel = doc.inventory.details.firmware_level;`"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:142
+msgid "**Check yourself:** which of these names are valid?"
+msgstr "**Проверете се:** кои от тези имена са валидни?"
+
+#. box title
+#: site/lectures/02-variables-and-types.md:146 site/lectures/02-variables-and-types.md:332
+msgid "Answer"
+msgstr "Отговор"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:147
+msgid "Valid: `serial_number`, `$total`, `isRemote`, `MODEL`. Not valid: `2ndNode` (starts with a digit), `firmware-level` (`-` is minus), `const` (reserved word)."
+msgstr "Валидни: `serial_number`, `$total`, `isRemote`, `MODEL`. Невалидни: `2ndNode` (започва с цифра), `firmware-level` (`-` е минус), `const` (запазена дума)."
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:152
+msgid "3. Primitive types"
+msgstr "3. Примитивни типове"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:154
+msgid "A value in JavaScript is either a **primitive** (a single simple value) or an **object** (a structure with properties - like `doc`). The primitive types:"
+msgstr "Една стойност в JavaScript е или **примитивна** (една проста стойност), или **обект** (структура с properties - като `doc`). Примитивните типове:"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:157
+msgid "Type"
+msgstr "Тип"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:157
+msgid "Examples"
+msgstr "Примери"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:157
+msgid "In the report data"
+msgstr "В данните на отчета"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:159
+msgid "counts, sizes (after conversion)"
+msgstr "бройки, размери (след преобразуване)"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:160
+msgid "almost every value"
+msgstr "почти всяка стойност"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:161
+msgid "\"yes\" / \"no\" after conversion"
+msgstr "\"yes\" / \"no\" след преобразуване"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:162
+msgid "a key that is not in the document"
+msgstr "ключ, който го няма в документа"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:163
+msgid "\"no value\", written on purpose"
+msgstr "\"няма стойност\", записано нарочно"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:165
+msgid "(Two more, `bigint` and `symbol`, are rarely needed.)"
+msgstr "(Има още два - `bigint` и `symbol`, но рядко трябват.)"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:178
+msgid "Numbers"
+msgstr "Numbers"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:180
+msgid "Whole numbers and decimals are the same type, `number`:"
+msgstr "Целите и дробните числа са от един и същ тип - `number`:"
+
+#. box title
+#: site/lectures/02-variables-and-types.md:192
+msgid "Decimals are not exact"
+msgstr "Дробните числа не са точни"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:193
+msgid "`0.1 + 0.2` gives `0.30000000000000004`. Numbers are stored in binary, so most decimals are approximations. Round results before you show them."
+msgstr "`0.1 + 0.2` дава `0.30000000000000004`. Числата се пазят в двоичен вид, затова повечето дробни числа са приближения. Закръглявайте резултатите, преди да ги покажете."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:198
+msgid "**Numbers in memory:** [1. Bits and integers](../animations/numbersInMemory.html#1){target=\"_blank\"}, [2. Fractions and 0.1](../animations/numbersInMemory.html#2){target=\"_blank\"}, [4. 0.1 + 0.2](../animations/numbersInMemory.html#4){target=\"_blank\"}, [6. NaN and Infinity](../animations/numbersInMemory.html#6){target=\"_blank\"}"
+msgstr "**Числата в паметта:** [1. Битове и цели числа](../animations/numbersInMemory.html#1){target=\"_blank\"}, [2. Дроби и 0.1](../animations/numbersInMemory.html#2){target=\"_blank\"}, [4. 0.1 + 0.2](../animations/numbersInMemory.html#4){target=\"_blank\"}, [6. NaN и Infinity](../animations/numbersInMemory.html#6){target=\"_blank\"}"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:201 site/lectures/02-variables-and-types.md:466
+msgid "Strings"
+msgstr "Strings"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:203
+msgid "Three kinds of quotes:"
+msgstr "Три вида кавички:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:214
+msgid "**Escape sequences** - special characters inside a string:"
+msgstr "**Escape последователности** - специални символи в string:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:223
+msgid "**Template strings** (backticks) can span lines and insert values with `${...}` - very handy for alert messages:"
+msgstr "**Template strings** (с обратни кавички) могат да са на няколко реда и вмъкват стойности с `${...}` - много удобно за съобщенията на alert:"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:235
+msgid "`undefined` and `null`"
+msgstr "`undefined` и `null`"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:237
+msgid "`undefined` - \"nothing was put here\": a declared variable without a value, or a key that is **not in the document**."
+msgstr "`undefined` - \"тук нищо не е сложено\": декларирана variable без стойност или ключ, който **го няма в документа**."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:239
+msgid "`null` - \"no value\", set on purpose."
+msgstr "`null` - \"няма стойност\", зададено нарочно."
+
+#. box title
+#: site/lectures/02-variables-and-types.md:246
+msgid "This is why rules check for missing data"
+msgstr "Ето защо правилата проверяват за липсващи данни"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:247
+msgid "Reading a missing key gives `undefined`. Reading **a key of** `undefined` is an error - that is what `?.` in the sample rule protects against (session 6)."
+msgstr "Четенето на липсващ ключ дава `undefined`. Четенето на **ключ от** `undefined` е грешка - точно от това пази `?.` в примерното правило (занятие 6)."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:252
+msgid "**Variables in memory:** [4. Types of values](../animations/variablesInMemory.html#4){target=\"_blank\"}"
+msgstr "**Variables в паметта:** [4. Типове стойности](../animations/variablesInMemory.html#4){target=\"_blank\"}"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:255
+msgid "4. Comments"
+msgstr "4. Коментари"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:271
+msgid "Write comments that explain **why**, not what: `// rule guidelines require const globals` is useful; `// set x to 5` is not."
+msgstr "Пишете коментари, които обясняват **защо**, а не какво: `// rule guidelines require const globals` е полезен; `// set x to 5` не е."
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:274
+msgid "5. Operators"
+msgstr "5. Оператори"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:276
+msgid "Assignment"
+msgstr "Присвояване"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:278
+msgid "`=` puts the value on the right into the variable on the left. Short forms:"
+msgstr "`=` слага стойността отдясно в variable отляво. Кратки форми:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:292
+msgid "**Variables in memory:** [3. `x = x ** 2`](../animations/variablesInMemory.html#3){target=\"_blank\"}"
+msgstr "**Variables в паметта:** [3. `x = x ** 2`](../animations/variablesInMemory.html#3){target=\"_blank\"}"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:294
+msgid "**How an expression is evaluated:** [3. Assignment is an expression](../animations/expressionEvaluation.html#3){target=\"_blank\"}, [4. `i++` and `++i`](../animations/expressionEvaluation.html#4){target=\"_blank\"}"
+msgstr "**Как се изчислява един израз:** [3. Присвояването е израз](../animations/expressionEvaluation.html#3){target=\"_blank\"}, [4. `i++` и `++i`](../animations/expressionEvaluation.html#4){target=\"_blank\"}"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:297
+msgid "Arithmetic"
+msgstr "Аритметика"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:299
+msgid "Operator"
+msgstr "Оператор"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:299
+msgid "Meaning"
+msgstr "Значение"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:299
+msgid "Example"
+msgstr "Пример"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:299
+msgid "Result"
+msgstr "Резултат"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:301
+msgid "as in math"
+msgstr "както в математиката"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:302
+msgid "remainder"
+msgstr "остатък"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:303
+msgid "power"
+msgstr "степен"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:305
+msgid "A disk-space example - bytes to TiB (1 TiB = 1024<sup>4</sup> bytes):"
+msgstr "Пример с дисково пространство - от байтове в TiB (1 TiB = 1024<sup>4</sup> байта):"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:320
+msgid "Precedence"
+msgstr "Приоритет"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:322
+msgid "As in math: `**` first, then `*` `/` `%`, then `+` `-`. Use parentheses when in doubt:"
+msgstr "Както в математиката: първо `**`, после `*` `/` `%`, после `+` `-`. Когато се колебаете, слагайте скоби:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:330
+msgid "**Check yourself:** what does `10 + 20 / 10 * 2 ** 2` print?"
+msgstr "**Проверете се:** какво извежда `10 + 20 / 10 * 2 ** 2`?"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:333
+msgid "`18`: first `2 ** 2 = 4`, then `20 / 10 = 2`, `2 * 4 = 8`, then `10 + 8`."
+msgstr "`18`: първо `2 ** 2 = 4`, после `20 / 10 = 2`, `2 * 4 = 8`, после `10 + 8`."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:337
+msgid "**How an expression is evaluated:** [1. Precedence](../animations/expressionEvaluation.html#1){target=\"_blank\"}, [2. Associativity](../animations/expressionEvaluation.html#2){target=\"_blank\"}, [5. Evaluation order (advanced)](../animations/expressionEvaluation.html#5){target=\"_blank\"}"
+msgstr "**Как се изчислява един израз:** [1. Приоритет](../animations/expressionEvaluation.html#1){target=\"_blank\"}, [2. Асоциативност](../animations/expressionEvaluation.html#2){target=\"_blank\"}, [5. Ред на изчисляване (advanced)](../animations/expressionEvaluation.html#5){target=\"_blank\"}"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:340
+msgid "6. Strings and numbers together"
+msgstr "6. Strings и numbers заедно"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:342
+msgid "`+` with a string **joins** (concatenates). The other arithmetic operators convert strings to numbers:"
+msgstr "`+` със string **съединява** (конкатенира). Останалите аритметични оператори превръщат strings в numbers:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:354
+msgid "`\"9\" + 1` is `\"91\"`, not `10`. When the values come from JSON, **convert them first**, then calculate."
+msgstr "`\"9\" + 1` е `\"91\"`, а не `10`. Когато стойностите идват от JSON, **първо ги преобразувайте**, после смятайте."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:359
+msgid "**Types, comparisons and logic:** [1. The `+` operator](../animations/coercionAndLogic.html#1){target=\"_blank\"}"
+msgstr "**Типове, сравнения и логика:** [1. Операторът `+`](../animations/coercionAndLogic.html#1){target=\"_blank\"}"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:362
+msgid "7. Converting values"
+msgstr "7. Преобразуване на стойности"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:364
+msgid "The values in the report JSON are strings"
+msgstr "Стойностите в JSON отчета са strings"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:376
+msgid "String to number"
+msgstr "От string към number"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:388
+msgid "`Number(x)` - the **whole** string must be a number, otherwise `NaN`."
+msgstr "`Number(x)` - **целият** string трябва да е число, иначе `NaN`."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:389
+msgid "`parseInt(x)` / `parseFloat(x)` - read from the start as far as they can."
+msgstr "`parseInt(x)` / `parseFloat(x)` - четат от началото, докъдето могат."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:390
+msgid "`NaN` is a number that means \"not a valid number\". Check it with `Number.isNaN(value)`."
+msgstr "`NaN` е number, който означава \"невалидно число\". Проверявайте го с `Number.isNaN(value)`."
+
+#. box title
+#: site/lectures/02-variables-and-types.md:393
+msgid "A version is not a number"
+msgstr "Версията не е число"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:394
+msgid "`\"4.2.1.7\"` has four parts. `Number` gives `NaN`, `parseFloat` gives `4.2` - both lose information. We compare versions part by part in session 5."
+msgstr "`\"4.2.1.7\"` има четири части. `Number` дава `NaN`, `parseFloat` дава `4.2` - и двете губят информация. Ще сравняваме версии част по част в занятие 5."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:399
+msgid "**Types, comparisons and logic:** [2. String to number](../animations/coercionAndLogic.html#2){target=\"_blank\"}"
+msgstr "**Типове, сравнения и логика:** [2. От string към number](../animations/coercionAndLogic.html#2){target=\"_blank\"}"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:402
+msgid "Number to string"
+msgstr "От number към string"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:412
+msgid "The sample rule wraps the name in `String(...)`, so the result is always a string, whatever the JSON contains."
+msgstr "Примерното правило обвива името в `String(...)`, така че резултатът винаги е string, каквото и да съдържа JSON."
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:415
+msgid "\"yes\" / \"no\" to boolean"
+msgstr "\"yes\" / \"no\" към boolean"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:417
+msgid "Compare with the text you expect - `===` means \"is exactly equal to\" (more in session 3):"
+msgstr "Сравнявайте с текста, който очаквате - `===` означава \"точно равно на\" (повече в занятие 3):"
+
+#. heading 3
+#: site/lectures/02-variables-and-types.md:428
+msgid "From EPOCH to a date"
+msgstr "От EPOCH към дата"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:430
+msgid "The report EPOCH is the number of **seconds** since 1 January 1970 (UTC), as a string. JavaScript dates count **milliseconds**:"
+msgstr "EPOCH в отчета е броят **секунди** от 1 януари 1970 г. (UTC), записан като string. Датите в JavaScript броят **милисекунди**:"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:441
+msgid "8. Practice"
+msgstr "8. Упражнения"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:443
+msgid "Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-in-vscode); before the session: `git pull upstream main`) and run the tasks from the terminal, in the repository root:"
+msgstr "Отворете във VSCode вашето копие на [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) (първия път: вижте [Как да ползвате тези страници](/how-to#practice-in-vscode); преди занятието: `git pull upstream main`) и пускайте задачите от терминала, в основната папка на repository-то:"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:449
+msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
+msgstr "Всеки файл обяснява задачата в началото си. Пишете кода си между редовете `your code`; проверките най-долу извеждат `OK` или `FAIL`."
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:452
+msgid "Task"
+msgstr "Задача"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:452
+msgid "File"
+msgstr "Файл"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:452
+msgid "What you do"
+msgstr "Какво правите"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:454
+msgid "Variables for the data of the sample rule and an alert message with a template string"
+msgstr "Variables за данните на примерното правило и съобщение за alert с template string"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:455
+msgid "Predict the result of 12 expressions, then check yourself"
+msgstr "Предвидете резултата от 12 израза, после проверете"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:456
+msgid "Bytes from the JSON (strings) to TiB and used percent"
+msgstr "Байтове от JSON (strings) в TiB и процент заето място"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:457
+msgid "How many days and hours ago a report was sent"
+msgstr "Преди колко дни и часа е изпратен един отчет"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:459
+msgid "Summary"
+msgstr "Обобщение"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:461
+msgid "Topic"
+msgstr "Тема"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:461
+msgid "Remember"
+msgstr "Запомнете"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:463
+msgid "Variables"
+msgstr "Variables"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:463
+msgid "`const` by default, `let` when the value changes, never `var`; `\"use strict\";`"
+msgstr "`const` по подразбиране, `let`, когато стойността се променя, никога `var`; `\"use strict\";`"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:464
+msgid "Names"
+msgstr "Имена"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:464
+msgid "`camelCase`, meaningful; JSON keys stay as they are"
+msgstr "`camelCase`, със смисъл; ключовете в JSON остават каквито са"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:465
+msgid "Types"
+msgstr "Типове"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:465
+msgid "`number`, `string`, `boolean`, `undefined`, `null`; check with `typeof`"
+msgstr "`number`, `string`, `boolean`, `undefined`, `null`; проверка с `typeof`"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:466
+msgid "`\"...\"`, `'...'`, `` `...${value}...` ``; escapes `\\n`, `\\t`, `\\\"`"
+msgstr "`\"...\"`, `'...'`, `` `...${value}...` ``; escape последователности `\\n`, `\\t`, `\\\"`"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:467
+msgid "Operators"
+msgstr "Оператори"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:467
+msgid "`+ - * / % **`, `+=`, `++`; precedence like in math"
+msgstr "`+ - * / % **`, `+=`, `++`; приоритет като в математиката"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:468
+msgid "`+` with strings"
+msgstr "`+` със strings"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:468
+msgid "joins: `\"9\" + 1` is `\"91\"`"
+msgstr "съединява: `\"9\" + 1` е `\"91\"`"
+
+#. table cell
+#: site/lectures/02-variables-and-types.md:469
+msgid "Converting"
+msgstr "Преобразуване"
+
+#. heading 2
+#: site/lectures/02-variables-and-types.md:471
+msgid "Homework"
+msgstr "Домашно"
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:473
+msgid "Finish the four practice tasks - every check must print `OK`."
+msgstr "Довършете четирите задачи за упражнение - всяка проверка трябва да извежда `OK`."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:474
+msgid "`02-variables-and-types/homework.js` (in the homework repository): a remote login summary from the `remote_login_*` values."
+msgstr "`02-variables-and-types/homework.js` (в homework repository): обобщение за отдалечения вход от стойностите `remote_login_*`."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:476
+msgid "Optional: take a JSON document you know (anonymised) and try the same conversions on it."
+msgstr "По желание: вземете JSON документ, който познавате (анонимизиран), и опитайте същите преобразувания върху него."
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:479
+msgid "**Next session:** comparisons, logical operators, conditions and loops - and the `if` of the sample rule."
+msgstr "**Следващото занятие:** сравнения, логически оператори, условия и loops - и `if` от примерното правило."
