@@ -22,7 +22,7 @@ device (`doc`) and a check rule.
 | 2 | [Variables, types and operators](/lectures/02-variables-and-types) |
 | 3 | [Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops) |
 | 4 | [Arrays and lists of records](/lectures/04-arrays-and-records) |
-| 5 | Functions, and reading older code |
+| 5 | [Functions, and reading older code](/lectures/05-functions) |
 | 6 | Objects: deep paths, dictionaries, different data shapes |
 | 7 | Array methods: transforming and grouping data; project kickoff |
 | 8 | Strings, regular expressions, dates and numbers |

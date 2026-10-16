@@ -105,15 +105,13 @@ msgstr "[Сравнения, логика, условия и loops](/lectures/03
 
 #. table cell
 #: site/index.md:37
-#, fuzzy
-#| msgid "Arrays and lists of records"
 msgid "[Arrays and lists of records](/lectures/04-arrays-and-records)"
-msgstr "Arrays и списъци от записи"
+msgstr "[Arrays и списъци от записи](/lectures/04-arrays-and-records)"
 
 #. table cell
 #: site/index.md:38
-msgid "Functions, and reading older code"
-msgstr "Функции и четене на по-стар код"
+msgid "[Functions, and reading older code](/lectures/05-functions)"
+msgstr "[Функции и четене на по-стар код](/lectures/05-functions)"
 
 #. table cell
 #: site/index.md:39
@@ -139,6 +137,9 @@ msgstr "JSON, Node.js, модули, грешки, тестове, JSDoc тип�
 #: site/index.md:43
 msgid "Project review, Git workflow, wrap-up"
 msgstr "Преглед на проектите, работа с Git, обобщение"
+
+#~ msgid "Functions, and reading older code"
+#~ msgstr "Функции и четене на по-стар код"
 
 #~ msgid "Arrays and lists of records"
 #~ msgstr "Arrays и списъци от записи"

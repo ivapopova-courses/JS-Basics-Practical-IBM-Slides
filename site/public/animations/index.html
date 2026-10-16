@@ -273,6 +273,12 @@ const ANIMATIONS = [
         desc: 'A function is an object in memory: callbacks, a function returns a function, arrow functions and closures.',
         scenarios: ['A function is a value', 'In arrays and objects', 'Callbacks', 'A function returns a function', 'Arrow functions', 'Closure', "A forgotten ';'"], adv: [6, 7],
     },
+    {
+        topic: 'functions', file: 'functionsAndData.html',
+        title: 'Functions and data',
+        desc: 'What a function gets: a copy of a primitive or a reference to an array or object; pure functions, callbacks, helpers inside rule, shallow copies.',
+        scenarios: ['A copy of the value', 'The same array', 'Change or replace', 'Changing the report', 'A callback, call by call', 'A helper inside rule', 'A shallow copy'], adv: [7],
+    },
 ];
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));

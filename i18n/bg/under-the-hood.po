@@ -46,19 +46,17 @@ msgstr "Сценариите, отбелязани с **(advanced)**, навли
 #. box title
 #: site/under-the-hood.md:15
 msgid "English and Bulgarian"
-msgstr ""
+msgstr "На английски и на български"
 
 #. paragraph
 #: site/under-the-hood.md:16
 msgid "Every animation has an English and a Bulgarian version. The **EN / BG** button at the top of an animation switches the language and keeps the current step."
-msgstr ""
+msgstr "Всяка анимация има английска и българска версия. Бутонът **EN / BG** горе в анимацията сменя езика и запазва текущата стъпка."
 
 #. paragraph
 #: site/under-the-hood.md:20
-#, fuzzy
-#| msgid "[All animations on one page](animations/index.html){target=\"_blank\"}"
 msgid "[All animations on one page](animations/index.html){target=\"_blank\"} - [in Bulgarian](animations/bg/index.html){target=\"_blank\"}"
-msgstr "[Всички анимации на една страница](animations/index.html){target=\"_blank\"}"
+msgstr "[Всички анимации на една страница](animations/index.html){target=\"_blank\"} - [на български](animations/bg/index.html){target=\"_blank\"}"
 
 #. heading 2
 #: site/under-the-hood.md:23
@@ -138,7 +136,7 @@ msgstr "**[Алгоритми с arrays](animations/arrayAlgorithms.html){target
 #. paragraph
 #: site/under-the-hood.md:122
 msgid "**[Array methods](animations/arrayMethods.html){target=\"_blank\"}** - copying and cutting arrays, searching, splitting strings, values packed into one string, and a list of records. [1. `slice` and `at`](animations/arrayMethods.html#1){target=\"_blank\"}, [2. `splice`](animations/arrayMethods.html#2){target=\"_blank\"}, [3. `indexOf` and `includes`](animations/arrayMethods.html#3){target=\"_blank\"}, [4. `split` and `join`](animations/arrayMethods.html#4){target=\"_blank\"}, [5. Packed values](animations/arrayMethods.html#5){target=\"_blank\"}, [6. A list of records](animations/arrayMethods.html#6){target=\"_blank\"}, [7. `splice` in a loop (advanced)](animations/arrayMethods.html#7){target=\"_blank\"}"
-msgstr ""
+msgstr "**[Методи на arrays](animations/arrayMethods.html){target=\"_blank\"}** - копиране и изрязване на arrays, търсене, разделяне на strings, стойности, пакетирани в един string, и списък от записи. [1. `slice` и `at`](animations/arrayMethods.html#1){target=\"_blank\"}, [2. `splice`](animations/arrayMethods.html#2){target=\"_blank\"}, [3. `indexOf` и `includes`](animations/arrayMethods.html#3){target=\"_blank\"}, [4. `split` и `join`](animations/arrayMethods.html#4){target=\"_blank\"}, [5. Пакетирани стойности](animations/arrayMethods.html#5){target=\"_blank\"}, [6. Списък от записи](animations/arrayMethods.html#6){target=\"_blank\"}, [7. `splice` в loop (advanced)](animations/arrayMethods.html#7){target=\"_blank\"}"
 
 #. heading 2
 #: site/under-the-hood.md:133
@@ -165,13 +163,18 @@ msgstr "**[Hoisting: двете фази на изпълнение](animations/h
 msgid "**[Functions are values](animations/functionsAsValues.html){target=\"_blank\"}** - functions in variables, arrays and objects; callbacks; arrow functions; closures. [1. A function is a value](animations/functionsAsValues.html#1){target=\"_blank\"}, [2. In arrays and objects](animations/functionsAsValues.html#2){target=\"_blank\"}, [3. Callbacks](animations/functionsAsValues.html#3){target=\"_blank\"}, [4. A function returns a function](animations/functionsAsValues.html#4){target=\"_blank\"}, [5. Arrow functions](animations/functionsAsValues.html#5){target=\"_blank\"}, [6. Closure (advanced)](animations/functionsAsValues.html#6){target=\"_blank\"}, [7. A forgotten `;` (advanced)](animations/functionsAsValues.html#7){target=\"_blank\"}"
 msgstr "**[Функциите са стойности](animations/functionsAsValues.html){target=\"_blank\"}** - функции във variables, arrays и обекти; callbacks; arrow functions; closures. [1. Функцията е стойност](animations/functionsAsValues.html#1){target=\"_blank\"}, [2. В arrays и обекти](animations/functionsAsValues.html#2){target=\"_blank\"}, [3. Callbacks](animations/functionsAsValues.html#3){target=\"_blank\"}, [4. Функция, която връща функция](animations/functionsAsValues.html#4){target=\"_blank\"}, [5. Arrow functions](animations/functionsAsValues.html#5){target=\"_blank\"}, [6. Closure (advanced)](animations/functionsAsValues.html#6){target=\"_blank\"}, [7. Забравена `;` (advanced)](animations/functionsAsValues.html#7){target=\"_blank\"}"
 
-#. heading 2
+#. paragraph
 #: site/under-the-hood.md:175
+msgid "**[Functions and data](animations/functionsAndData.html){target=\"_blank\"}** - what a function gets: a copy of a number or a string, a reference to an array or an object; pure functions, callbacks, helpers inside `rule`. [1. A copy of the value](animations/functionsAndData.html#1){target=\"_blank\"}, [2. The same array](animations/functionsAndData.html#2){target=\"_blank\"}, [3. Change or replace](animations/functionsAndData.html#3){target=\"_blank\"}, [4. Changing the report](animations/functionsAndData.html#4){target=\"_blank\"}, [5. A callback, call by call](animations/functionsAndData.html#5){target=\"_blank\"}, [6. A helper inside `rule`](animations/functionsAndData.html#6){target=\"_blank\"}, [7. A shallow copy (advanced)](animations/functionsAndData.html#7){target=\"_blank\"}"
+msgstr "**[Функциите и данните](animations/functionsAndData.html){target=\"_blank\"}** - какво получава функцията: копие на число или string, референция към array или обект; чисти функции, callbacks, helper функции в `rule`. [1. Копие на стойността](animations/functionsAndData.html#1){target=\"_blank\"}, [2. Същият array](animations/functionsAndData.html#2){target=\"_blank\"}, [3. Промяна или замяна](animations/functionsAndData.html#3){target=\"_blank\"}, [4. Промяна на отчета](animations/functionsAndData.html#4){target=\"_blank\"}, [5. Callback, извикване по извикване](animations/functionsAndData.html#5){target=\"_blank\"}, [6. Helper функция в `rule`](animations/functionsAndData.html#6){target=\"_blank\"}, [7. Плитко копие (advanced)](animations/functionsAndData.html#7){target=\"_blank\"}"
+
+#. heading 2
+#: site/under-the-hood.md:186
 msgid "Session 6 - Objects"
 msgstr "Занятие 6 - Обекти"
 
 #. paragraph
-#: site/under-the-hood.md:177
+#: site/under-the-hood.md:188
 msgid "[Variables in memory - 6. Objects and references](animations/variablesInMemory.html#6){target=\"_blank\"} and [Arrays in memory - 5. References](animations/arraysInMemory.html#5){target=\"_blank\"}: two variables can point to the same object."
 msgstr "[Variables в паметта - 6. Обекти и референции](animations/variablesInMemory.html#6){target=\"_blank\"} и [Arrays в паметта - 5. Референции](animations/arraysInMemory.html#5){target=\"_blank\"}: две variables могат да сочат към един и същ обект."
 
