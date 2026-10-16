@@ -1,0 +1,1524 @@
+# Translation of site/lectures/06-objects.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: \n"
+"PO-Revision-Date: \n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/lectures/06-objects.md\n"
+
+#. front matter: title
+#: site/lectures/06-objects.md:2 site/lectures/06-objects.md:5
+msgid "6. Objects, deep paths and data shapes"
+msgstr ""
+
+#. html
+#: site/lectures/06-objects.md:8
+msgid "<span>Session 6</span><span>practice: <code>06-objects/</code> in the homework repository</span>"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:11
+msgid "**Today you will learn to:**"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:13
+msgid "create objects, and read, add, change and delete their properties - with a dot and with square brackets (keys like `\"Firmware Version\"` or `\"12_4.20\"`);"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:15
+msgid "check if a key exists with `in`, `hasOwnProperty` and `Object.hasOwn`;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:16
+msgid "walk long paths in nested objects without a `TypeError`: the older `&&` chain, `?.` and `??`, and your own `get(doc, path, fallback)`;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:18
+msgid "work with objects used as **dictionaries**: `Object.keys`, `Object.values`, `Object.entries`, `for...in` - and read the information hidden in the keys;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:20
+msgid "recognise the same data in different shapes - a list, a dictionary, a flattened export - and convert between them;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:22
+msgid "know the difference between a reference, a shallow copy and a deep copy (`structuredClone`);"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:24
+msgid "use spread, rest and destructuring;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:25
+msgid "write methods and know what `this` is; create many objects of one kind with a factory function, a constructor and a `class`;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:27
+msgid "build the details object of an alert, with its columns in a fixed order;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:28
+msgid "read the object code of older rules: `new Object()`, `obj[\"key\"] = ...`, `for...in` with `hasOwnProperty`, `a && a.b && a.b.c`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:31
+msgid "Where this fits in the sample check rule - today's rule reads a **dictionary** of modules and builds the details of the alert. The number in each comment is the section of this lecture:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:81
+msgid "`get` is the first helper of the **course project**: the practice task 2 makes it robust, and your library grows from it in the next sessions."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:83
+msgid "The sample report now has two new parts: `doc.inventory.modules` (a dictionary with keys like `\"12_4.20\"`) and `doc.inventory.labels` (keys with spaces). In [section 13](#_13-reading-existing-rules) you run this rule, and read an older rule that does the same work."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:88
+msgid "Everything in a report is an object: the report itself, every level of it, every record in a list. Rules spend most of their lines reading objects - safely."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:91
+msgid "1. What is an object?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:93
+msgid "An **object** groups related data under one name. Each piece of data is a **property**: a **key** (a name, a string) and a **value** (any type: a number, a string, an array, another object, a function)."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:116
+msgid "In classic object-oriented languages (Java, C#, C++) an object always joins data (**properties**) and the actions on that data (**methods**): `Object = { properties + methods }`. In JavaScript an object can also be **data only**. Other languages call such a structure a *dictionary* (Python) or an *associative array* (PHP, Perl):"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:132
+msgid "A JSON report is exactly this: objects of data, with objects and arrays inside."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:134
+msgid "Objects and arrays"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:136
+msgid "Array"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:136 site/lectures/06-objects.md:1579
+msgid "Object"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:138
+msgid "Values are found by"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:138
+msgid "a number: the **index**"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:138
+msgid "a name: the **key**"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:139
+msgid "Written as"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:140
+msgid "Order"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:140
+msgid "the order of the elements is the data"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:140
+msgid "keys have an order too, but you look them up by name"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:141
+msgid "Typical use"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:141
+msgid "a list of things of one kind"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:141
+msgid "the parts of one thing; or a dictionary keyed by ids"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:143
+msgid "The old slides said \"objects are not ordered\". Today the language defines the order of the keys: keys that look like whole numbers (`\"2\"`, `\"10\"`) come **first, sorted**; all other keys follow in the order they were **created**. This matters for the columns of an alert (section 12):"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:153
+msgid "An object in memory"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:155
+msgid "Like an array, an object lives in the **heap**. The variable holds a **reference** to it - an arrow. A property whose value is an object or an array holds another arrow."
+msgstr ""
+
+#. box title
+#: site/lectures/06-objects.md:159 site/lectures/06-objects.md:319 site/lectures/06-objects.md:403 site/lectures/06-objects.md:442 site/lectures/06-objects.md:490 site/lectures/06-objects.md:583 site/lectures/06-objects.md:829 site/lectures/06-objects.md:1085
+msgid "Animation"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:160
+msgid "**Variables in memory:** [6. Objects and references (advanced)](../animations/variablesInMemory.html#6){target=\"_blank\"}; **Objects in memory:** [2. A deep path](../animations/objectsInMemory.html#2){target=\"_blank\"}"
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:164
+msgid "2. Creating an object"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:166
+msgid "The object literal - the preferred way"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:168
+msgid "Write the `key: value` pairs in curly braces, separated by commas:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:193
+msgid "The old slides said \"no comma after the last property\". That rule is from before ES5 (2009): a trailing comma is allowed today, and it makes long lists easier to edit - the same as in arrays."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:197
+msgid "When does a key need quotes?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:199
+msgid "A key is always a string. The quotes may be left out when the key is a valid name (letters, digits, `_`, `$`, not starting with a digit). Otherwise they are required:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:213
+msgid "JSON always writes the quotes: `{ \"site\": \"Demo Lab\" }`. In JavaScript code both forms work; many rules keep the quotes, because they copy keys from the JSON."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:216
+msgid "Shorthand properties (ES6)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:218
+msgid "When a property should get the value of a variable **with the same name**, write the name once:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:230
+msgid "Computed keys (ES6)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:232
+msgid "A key in square brackets is **calculated**:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:240
+msgid "`new Object()` (advanced)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:242
+msgid "Older code creates an empty object with the global `Object`, then adds the properties one by one:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:252
+msgid "It works, but `{ ... }` is shorter and shows the whole object at once. Do not mix it up with `new Developer(...)` - a call of a **constructor** ([section 11](#_11-many-objects-of-one-kind))."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:256
+msgid "3. Reading and writing properties"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:258
+msgid "The dot"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:260
+msgid "When you know the name of the key when you write the code:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:281
+msgid "What you write after the dot is taken **literally** as the name of the key."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:283
+msgid "Square brackets"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:285
+msgid "When the key is in a **variable**, is calculated, or is not a valid name:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:310
+msgid "On the report - keys with spaces, dashes and dots need brackets:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:320
+msgid "**Objects in memory:** [1. Dot or brackets](../animations/objectsInMemory.html#1){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:323
+msgid "A missing key, adding, deleting"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:325
+msgid "Reading a key that does not exist gives `undefined` - **no error**."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:326
+msgid "Writing to a key that does not exist **creates** it."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:327
+msgid "`delete obj.key` removes a property."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:342
+msgid "The last line is a common bug: a typo in a key **creates** a property instead of changing one. `// @ts-check` (session 9) can catch it."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:345
+msgid "Does the key exist?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:347
+msgid "`obj.key === undefined` cannot tell \"missing\" from \"there, with the value undefined\". Three ways to ask \"is the key there?\":"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:350
+msgid "Check"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:350
+msgid "Looks at"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:350 site/lectures/06-objects.md:692
+msgid "Note"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:352
+msgid "the object **and** what it inherits"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:352
+msgid "`\"toString\" in {}` is `true`!"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:353 site/lectures/06-objects.md:354
+msgid "only the object's own keys"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:353
+msgid "older rules; fails for objects without a prototype"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:354
+msgid "the modern form (ES2022 - check that your rule engine supports it)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:368
+msgid "For report data, \"is the value usable?\" is usually the better question: a key can be there with `\"\"`, `null` or `\"unknown\"` in it. Check the value, not only the key."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:372
+msgid "4. Nested objects and long paths"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:374
+msgid "A report is objects inside objects. A long path is read **one dot at a time**, from left to right; every dot follows an arrow one level down."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:387
+msgid "A missing level"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:389
+msgid "A missing **key** gives `undefined`. One step further - a key of `undefined` - is a `TypeError`, and the rule stops:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:404
+msgid "**Objects in memory:** [2. A deep path](../animations/objectsInMemory.html#2){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:407
+msgid "The older way: the `&&` chain"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:409
+msgid "Older rules check every level with `&&`. It stops at the first falsy value and returns it (lecture 3):"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:422
+msgid "It works, but the path is written again and again, and `&&` also stops at `0` and `\"\"` - values that can be real data."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:425
+msgid "Optional chaining `?.` and `??` (ES2020)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:427
+msgid "`a?.b` means: \"if `a` is `undefined` or `null`, stop here and give `undefined`; otherwise read `a.b`\". It works with brackets and calls too: `a?.[key]`, `f?.()`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:443
+msgid "**Objects in memory:** [3. Safe access: `?.` and `??`](../animations/objectsInMemory.html#3){target=\"_blank\"}"
+msgstr ""
+
+#. box title
+#: site/lectures/06-objects.md:446
+msgid "Where to put the `?.`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:447
+msgid "Put `?.` after each level that **may be missing** in real reports - not everywhere \"just in case\". `doc.overview?.model` says \"a report can come without an overview\". Too many `?.` hide real bugs: if `overview` must be there, a `TypeError` is the right signal."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:453
+msgid "Arrays inside objects"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:455
+msgid "Paths go through arrays too - with an index:"
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:464
+msgid "5. A helper for paths: `get(doc, path, fallback)`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:466
+msgid "`?.` is written in the code. Sometimes the path comes from **data** - a list of paths to check, a setting, a column definition. And long paths with `?.` after every key are hard to read. A helper walks any path:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:486
+msgid "`cur` starts at the top and moves one key down in every round. Before each step it checks that there is something to step into - so a missing level gives the fallback, never a `TypeError`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:491
+msgid "**Objects in memory:** [5. A path helper: `get`](../animations/objectsInMemory.html#5){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:494
+msgid "A string path, or an array?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:496
+msgid "A path as a string is easier to write: `\"inventory.details.locale\"`. `split(\".\")` turns it into an array. But a key that **contains a dot** is then cut in two:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:507
+msgid "So the helper accepts **both**: a string for simple paths, an array when a key has a dot (the sample rule at the top does this). That is practice task 2 - with all the edge cases: `0`, `\"\"` and `false` are real values and must not become the fallback; `null` in the middle of the path; an index into an array."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:513
+msgid "Some helpers write `if (cur == null)`. With `==`, `null` and `undefined` are equal to each other and to nothing else, so `cur == null` is a short form of `cur === undefined || cur === null` - the one common use of `==`."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:518
+msgid "Recursion (advanced)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:520
+msgid "Lecture 5 promised a function that finds a key at **any** level. It calls itself for every inner object - a natural fit for nested data of unknown depth:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:542
+msgid "Useful to explore a new report: \"where in this document is the serial?\"."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:544
+msgid "6. Objects as dictionaries"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:546
+msgid "In many reports the keys of an object are not fixed names like `model` - they are **ids**: of modules, drives, checks, slots. You do not know them when you write the rule. Such an object is used as a **dictionary**:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:557
+msgid "To work with a dictionary you need its keys, its values, or both:"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:559
+msgid "Method"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:559
+msgid "Returns"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:559
+msgid "Example result"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:561
+msgid "an array of the keys"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:562
+msgid "an array of the values"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:563
+msgid "an array of `[key, value]` pairs"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:580
+msgid "`for (const [key, m] of ...)` takes the two parts of each pair into two variables"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:581
+msgid "*destructuring*, [section 9](#_9-spread-rest-and-destructuring)."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:584
+msgid "**Objects in memory:** [4. A dictionary](../animations/objectsInMemory.html#4){target=\"_blank\"}"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:587
+msgid "Information in the key"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:589
+msgid "The key `\"12_4.20\"` **is** data: module number 12, version 4.20. The values do not repeat it. Take the key apart with `split`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:599
+msgid "Real exports also have keys like `\"347_v2.12\"` or `\"drive_f01_r02\"`. Check the shape before you split: `key.includes(\"_\")`, the number of parts. A regular expression (session 8) can read such keys more strictly."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:603
+msgid "The older loop: `for...in`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:605
+msgid "Older rules walk the keys with `for...in`:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:616
+msgid "`for...in` walks the object's **own and inherited** enumerable keys, so older code always adds the `hasOwnProperty` check. For plain JSON objects there is nothing inherited, but the check does no harm. The modern form, `for (const [key, m] of Object.entries(modules))`, takes only the own keys and gives key and value together. Remember from lecture 4: `for...in` is for objects, not for arrays."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:623
+msgid "Building a dictionary: counting and grouping"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:625
+msgid "An object is the natural place to **count** or **group** things by a key:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:644
+msgid "`counts[enc.state]` uses brackets: the key is in a variable. The first time a state is seen, `counts[enc.state]` is `undefined`, and `?? 0` starts the count. Grouping a long list of records once, and then reading the groups by key, is the topic of session 7 (`Object.groupBy`, `Map`)."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:649
+msgid "From pairs back to an object (ES2019)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:651
+msgid "`Object.fromEntries` is the opposite of `Object.entries`: it builds an object from `[key, value]` pairs. Together they transform a dictionary:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:661
+msgid "(`.map` with an arrow function builds a new array from every pair - session 7.)"
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:663
+msgid "7. The same data in different shapes"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:665
+msgid "Your reports describe the same kind of thing - a list of modules, of drives, of disks - in different **shapes**. A helper written for one shape fails on the other silently. Learn to recognise them:"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:692
+msgid "Shape"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:692
+msgid "Find one item"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:692
+msgid "Walk all items"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:694
+msgid "list of records"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:694
+msgid "a loop with a condition (lecture 4)"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:694
+msgid "the usual JSON array"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:695
+msgid "dictionary by id"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:695
+msgid "`obj[id]` - direct"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:695
+msgid "the id is the key, not a field"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:696
+msgid "flattened fields"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:696
+msgid "the same index in every list"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:696
+msgid "an index `i` over the lists"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:696
+msgid "keys are whole paths with dots; values are always arrays"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:698
+msgid "Converting between the shapes"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:700
+msgid "Convert to the shape your helper expects - **once**, at the start:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:723
+msgid "A flattened export"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:725
+msgid "Some exports flatten the whole document: every key is the **full path** with dots, and every value is an **array** - even when there is only one value. Lists of records are split into one array per field. The homework folder has one, `data/report-export.json` (the `fields` part):"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:750
+msgid "Here `get(fields, \"body.device_event.device_id\")` would **not** work: the dots are part of **one** key, not steps between levels. Read it with brackets: `fields[\"body.device_event.device_id\"]`. Practice task 4 works with this shape."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:754
+msgid "One record, or a list - again"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:756
+msgid "The same field can be an object in one report and an array in another (one enclosure vs many). Normalise first - `asList` from lecture 4 and 5:"
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:769
+msgid "8. References and copies"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:771
+msgid "Primitives are copied, objects are shared (advanced)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:773
+msgid "The old slides showed how values are stored:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:775
+msgid "**Primitive** values (number, string, boolean, ...) are stored **by value**. Copying a variable copies the value; the two variables are independent. Primitives cannot be changed - a \"change\" creates a new value (*immutable*)."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:778
+msgid "**Objects** (and arrays, functions) are stored **by reference**. The variable holds an arrow to the object in the heap; copying the variable copies the arrow. Objects **can** be changed (*mutable*)."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:796
+msgid "`===` compares objects by reference: `{ x: 1 } === { x: 1 }` is `false` - two different objects with the same content."
+msgstr ""
+
+#. box title
+#: site/lectures/06-objects.md:799
+msgid "Animations"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:800
+msgid "**Variables in memory:** [2. Copying a value](../animations/variablesInMemory.html#2){target=\"_blank\"}, [6. Objects and references (advanced)](../animations/variablesInMemory.html#6){target=\"_blank\"}; **Functions and data:** [2. The same array](../animations/functionsAndData.html#2){target=\"_blank\"} - the same for parameters"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:806
+msgid "Three kinds of \"copy\""
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:808
+msgid "Code"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:808
+msgid "What you get"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:808
+msgid "Shared with the original"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:810
+msgid "the same object, a second name"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:810
+msgid "everything"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:811
+msgid "`const b = { ...a };` or `Object.assign({}, a)`"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:811
+msgid "a new object, **shallow** copy"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:811
+msgid "the nested objects and arrays"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:812
+msgid "a new object, **deep** copy"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:812
+msgid "nothing"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:830
+msgid "**Objects in memory:** [6. Copies](../animations/objectsInMemory.html#6){target=\"_blank\"}; **Functions and data:** [7. A shallow copy (advanced)](../animations/functionsAndData.html#7){target=\"_blank\"}"
+msgstr ""
+
+#. box title
+#: site/lectures/06-objects.md:834
+msgid "`structuredClone` comes from the environment"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:835
+msgid "`structuredClone` is not part of the JavaScript language itself: browsers and Node.js 17+ provide it. Check that your rule engine has it. The older trick `JSON.parse(JSON.stringify(obj))` also makes a deep copy of plain JSON data (it drops functions and `undefined`, and turns dates into strings)."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:841
+msgid "Do not change the report"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:843
+msgid "Lecture 5 said: helpers must not change `doc`. With objects this is easy to break by accident - `details.Model = ...` on an object that came from `doc`, `delete` on a part of `doc`, `Object.assign(doc.overview, ...)`. Build **new** objects:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:864
+msgid "`Object.freeze(obj)` makes an object read-only (one level deep) - a way to make sure, in tests, that nothing writes into it."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:867
+msgid "9. Spread, rest and destructuring"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:869
+msgid "ES6 added three short forms with `...` and `[ ]` / `{ }` on the **left** side of an assignment. You meet them in every modern codebase."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:872
+msgid "Spread `...` - pour out the elements"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:897
+msgid "Spread never changes the original - unlike `push`, `unshift` and `splice`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:899
+msgid "An old example: flip one property and keep the rest:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:907
+msgid "Rest `...` - collect the rest"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:909
+msgid "The same three dots on the **receiving** side collect what is left into an array (or an object). Lecture 5 showed rest parameters:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:930
+msgid "Array destructuring"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:932
+msgid "Unpack the elements of an array into variables, by **position**:"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:956
+msgid "Object destructuring"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:958
+msgid "Unpack properties into variables, by **name**:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:977
+msgid "When the variables already exist, wrap the assignment in round brackets (otherwise `{` starts a block):"
+msgstr ""
+
+#. box title
+#: site/lectures/06-objects.md:986
+msgid "Destructuring a missing object"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:987
+msgid "`const { model } = doc.overview;` throws a `TypeError` when `overview` is missing - like `doc.overview.model`. Give a fallback object: `const { model } = doc.overview ?? {};` - the sample rule does this."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:992
+msgid "Destructuring in parameters"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:994
+msgid "A function that needs only some fields of a record can take them apart right in the parameter list:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1013
+msgid "(Destructuring in parameters is also very common in React components.)"
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1015
+msgid "10. Methods and `this`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1017
+msgid "A **method** is a property whose value is a function. Inside a method, `this` is the object the method was called on - the object **before the dot**:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1040
+msgid "You could write `student1.name` inside the methods instead of `this.name`, but then the methods work only for this one object. With `this` they work for any object they are attached to (section 11)."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1044
+msgid "The short method syntax (ES6)"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1056
+msgid "`this` is decided by the call"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1058
+msgid "`this` is not fixed when the method is written. It is the object before the dot **at the moment of the call**. Take the method out of the object, and `this` is lost:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1086
+msgid "**Objects in memory:** [7. `this` in a method (advanced)](../animations/objectsInMemory.html#7){target=\"_blank\"}"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1089
+msgid "Arrow functions have **no `this` of their own** (lecture 5): an arrow written as a method sees the `this` of the code around the object, not the object. Write methods with the short syntax or `function`, not as arrows."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1093
+msgid "Methods in rules"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1095
+msgid "Reports are **data**: JSON has no functions, so `doc` has no methods. Methods appear in your own code - an object that groups helpers, like a small library:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1119
+msgid "In session 9 the same idea becomes a **module** - a file that exports its helpers."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1121
+msgid "11. Many objects of one kind"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1123
+msgid "Real programs often need many objects with the **same structure** - the same keys and methods, different values."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1126
+msgid "Literals - repeated code"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1151
+msgid "The keys and the method are written twice - and a typo in one copy gives two objects with different shapes."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1154
+msgid "A factory function"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1156
+msgid "A function that **returns** a new object. Every object it makes has the same shape:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1175
+msgid "Factory functions are the most useful form for rules: a helper that builds the **details** of an alert, a record for a report, a normalised enclosure - plain data objects, always with the same keys."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1191
+msgid "A constructor function"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1193
+msgid "Before classes, JavaScript made objects of one kind with a **constructor**: a function called with `new`. `new` creates an empty object, runs the function with `this` = that object, and returns it. By convention the name starts with a capital letter:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1213
+msgid "Forget the `new`, and `this` is not a new object - in strict mode the call fails, in older code it writes into the global object. Classes (below) refuse to be called without `new`."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1217
+msgid "The class syntax (ES6)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1219
+msgid "A `class` writes the same thing in the form of other object-oriented languages:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1240
+msgid "`constructor` runs automatically on `new`; there is only one per class."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1241
+msgid "Methods are written with the short syntax; they are **shared** by all objects of the class (stored once, in the class's *prototype*), not copied into each object."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1243
+msgid "The code inside a class is always in strict mode."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1244
+msgid "A class can also be written as an expression: `const Developer = class { ... };`."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1246
+msgid "Static members, fields, getters and setters (advanced)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1287
+msgid "Class fields and `static` fields are ES2022 - check that your rule engine supports them. (Before ES2022, the old slides wrote `Person.count = 0;` after the class.)"
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1290
+msgid "Inheritance: `extends` and `super`"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1292
+msgid "A class can **extend** another one: it gets all its methods and adds or changes some. `super(...)` calls the parent's constructor (before any use of `this`); `super.method()` calls the parent's version of a method:"
+msgstr ""
+
+#. box title
+#: site/lectures/06-objects.md:1323
+msgid "Classes and rules"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1324
+msgid "Rules work on plain JSON data, and a rule is one function - most rules need no class at all. Factory functions and helpers with parameters are simpler to read and to test. Classes become useful in a bigger library - for example, one class per product with the same methods (`model()`, `firmware()`, `enclosures()`), so that the same rule can run on reports of different shapes (session 10)."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1331
+msgid "12. The details object of an alert"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1333
+msgid "`emit(id, details)` creates an alert. The details object becomes a **table** in the alert: every key is a **column**, every value a cell. So the keys are the column titles - written for people, often with spaces - and their **order** is the order of the columns."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1356
+msgid "Fixing the order of the columns"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1358
+msgid "The keys keep the order in which they were **created** (section 1). Two traps:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1360
+msgid "a key that looks like a whole number (`\"1\"`, `\"2024\"`) jumps to the **front**;"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1361
+msgid "keys added later in an `if` come **last**, wherever you meant them to be."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1363
+msgid "Some engines take the order as a separate list - many rules send `column_order: [...]` next to the details. Build it from the keys, or write it out when the order must not depend on the code:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1387
+msgid "A missing column becomes `\"\"`, so every alert of a rule has the same columns - easier to read in a table, and easier to compare between devices."
+msgstr ""
+
+#. heading 3
+#: site/lectures/06-objects.md:1390
+msgid "An optional column"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1392
+msgid "To add a column only when there is a value, build the object first and add the key in an `if` - or use spread with a condition:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1407
+msgid "Spreading `{}` adds nothing. This keeps the object in one expression - but an `if` is easier to read; choose the one your team reads more easily."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1410
+msgid "13. Reading existing rules"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1412
+msgid "First, run the rule from the start of the lecture:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1468
+msgid "Here is the same rule in an older style - `new Object()`, `obj[\"key\"] = ...`, `for...in` with `hasOwnProperty`, and `&&` chains:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1523
+msgid "**Check yourself:**"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1525
+msgid "Match the parts: which line of the old rule does the work of `failedModules`, of `get(...)`, of the destructuring, of `Object.keys(details)`?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1527
+msgid "\"no modules\": `doc.inventory.modules` is `undefined`. What does `for (var key in undefined)` do? Is that why the old rule gives no alert there?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1529
+msgid "\"no labels\": the old rule gives **no** alert, the modern rule would. Which line fails, and why does nobody see an error?"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1531
+msgid "`details[\"Device\"] = info && ... && info.json.data.system.name || \"unknown\"` - when does it give `\"unknown\"`? Is that the same as `?? \"unknown\"` at the end of `get(...)`? Think of a name that is `\"\"`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1534
+msgid "The old rule builds `columns` with `for...in`. Do `Object.keys(details)` and this loop give the same order?"
+msgstr ""
+
+#. box title
+#: site/lectures/06-objects.md:1537
+msgid "Answer"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1538
+msgid "The `for...in` loop with `hasOwnProperty` and `split` is `failedModules`; the `info && info.json && ...` chain is `get(doc, \"inventory.extended_info...\")`; `var overview = doc.overview` plus `overview.model` / `overview.serial_number` is the destructuring; the `for (var k in details)` loop is `Object.keys(details)`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1542
+msgid "`for...in` over `undefined` (or `null`) runs zero times - no error. `failed` stays empty and the rule returns: no alert, the same as the modern rule. Correct here, by luck."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1545
+msgid "`doc.inventory.labels[\"Firmware Version\"]` - `labels` is `undefined`, so reading a key of it throws a `TypeError`. The catch-all `catch` returns silently: a failed module is never reported. The modern rule uses `labels?.[\"Firmware Version\"] ?? \"\"`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1549
+msgid "When any level is missing - **or** when the name is falsy: `\"\"` gives `\"unknown\"` with `||`. `get` uses `??`, so an empty name stays `\"\"`. Decide which one you want: for a display name, `||` (treat `\"\"` as missing) is often right."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1552
+msgid "Yes - both list the own keys in the same order (section 1)."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1555
+msgid "14. Practice"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1557
+msgid "In your copy of the Homework repository, first get the new tasks:"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1564
+msgid "`data/sample-asset.json` has two new parts (`inventory.modules`, `inventory.labels`) - the pull brings them too."
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1567
+msgid "Task"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1567
+msgid "File"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1567
+msgid "What you do"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1569
+msgid "Predict 20 results: dot and brackets, missing keys, `in`, `?.`, `??`, references, spread, destructuring"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1570
+msgid "**The course project starts:** `get(obj, path, fallback)` with a string or an array path, and all the edge cases"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1571
+msgid "The dictionaries of `report-dictionary.json`: keys, values, information in the keys, counting and grouping"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1572
+msgid "The flattened export `report-export.json`: read single values, rebuild records from parallel arrays, compare with the nested document"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1573
+msgid "The old tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person"
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1575
+msgid "Summary"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1577
+msgid "Topic"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1577
+msgid "Remember"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1579
+msgid "Properties `key: value`; keys are strings; values of any type; a method is a function value"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1580
+msgid "Literal"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1580
+msgid "`{ a: 1, \"b c\": 2, [expr]: 3, name }` - quotes for keys with spaces, dashes, dots; shorthand; computed keys"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1581
+msgid "Access"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1581
+msgid "`obj.key` - written key; `obj[expr]` - calculated key; missing key -> `undefined`; writing creates; `delete` removes"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1582
+msgid "Key exists?"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1582
+msgid "`in` (also inherited), `hasOwnProperty` (older), `Object.hasOwn` (ES2022); often better: check the value"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1583
+msgid "Long paths"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1583
+msgid "One dot at a time; a key of `undefined` is a `TypeError`; `?.` stops at `undefined` / `null`; `??` gives a fallback"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1584
+msgid "Walks a path from data; array path for keys with dots; fallback instead of errors"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1585
+msgid "Dictionary"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1585
+msgid "Keys are ids; `Object.keys` / `values` / `entries`; `for...in` + `hasOwnProperty` in older code; information in the key"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1586
+msgid "Shapes"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1586
+msgid "List of records, dictionary by id, flattened `\"a.b.c\": [values]` - convert once, at the start"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1587
+msgid "Order of keys"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1587
+msgid "Integer-like keys first (sorted), then creation order - it is the column order of an alert"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1588
+msgid "Copies"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1588
+msgid "`=` shares; `{ ...obj }` copies one level; `structuredClone` copies all levels; do not change `doc`"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1589
+msgid "Spread pours out (calls, arrays, objects); rest collects (parameters, destructuring)"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1590
+msgid "Destructuring"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1590
+msgid "`const [a, b] = arr;` by position; `const { x, y: z = 0 } = obj;` by name; also in parameters"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1591
+msgid "The object before the dot at the call; lost when a method is passed on; arrows have none"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1592
+msgid "Many objects"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1592
+msgid "Factory function (best for rules), constructor with `new`, `class` with `constructor`, methods, `static`, `extends` / `super`"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1593
+msgid "Old style"
+msgstr ""
+
+#. table cell
+#: site/lectures/06-objects.md:1593
+msgid "`new Object()`, `obj[\"k\"] = v`, `for (var k in obj)` + `hasOwnProperty`, `a && a.b && a.b.c` - read it, modernise it"
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1595
+msgid "Homework"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1597
+msgid "Finish the five practice tasks - every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1598
+msgid "`06-objects/homework.js` (in the homework repository): the details object of an alert with a fixed column order, settings merged with defaults, and a rule that reads the dictionary of drives - without changing the report."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1601
+msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`). From the next session on, the library grows."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1603
+msgid "Optional: open one of your real reports and find each of the shapes of section 7. Which paths do your rules read again and again? Write them down as `get` paths."
+msgstr ""
+
+#. heading 2
+#: site/lectures/06-objects.md:1607
+msgid "Read more"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1609
+msgid "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring), [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1616
+msgid "MDN exercises: [Test your skills: Object basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Test_your_skills/Object_basics)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1617
+msgid "javascript.info: [Objects](https://javascript.info/object), [Object references and copying](https://javascript.info/object-copy), [Object methods, \"this\"](https://javascript.info/object-methods), [Destructuring assignment](https://javascript.info/destructuring-assignment), [Classes](https://javascript.info/classes)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1622
+msgid "Exercises: [JavaScript Object - Exercises](https://www.w3resource.com/javascript-exercises/javascript-object-exercises.php) (w3resource)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1623
+msgid "Video: [Modern JavaScript Tutorial #5 - Objects](https://www.youtube.com/watch?v=X0ipw1k7ygU)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1625
+msgid "**Next session:** array methods - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - and grouping thousands of records into a dictionary once, instead of searching them again and again. The course project starts for real: choose the product, the sample documents and the first helpers."
+msgstr ""

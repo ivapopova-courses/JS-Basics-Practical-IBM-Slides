@@ -115,7 +115,9 @@ msgstr "[Функции и четене на по-стар код](/lectures/05-
 
 #. table cell
 #: site/index.md:39
-msgid "Objects: deep paths, dictionaries, different data shapes"
+#, fuzzy
+#| msgid "Objects: deep paths, dictionaries, different data shapes"
+msgid "[Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects)"
 msgstr "Обекти: дълбоки пътища, dictionaries, различни форми на данните"
 
 #. table cell
@@ -137,6 +139,9 @@ msgstr "JSON, Node.js, модули, грешки, тестове, JSDoc тип�
 #: site/index.md:43
 msgid "Project review, Git workflow, wrap-up"
 msgstr "Преглед на проектите, работа с Git, обобщение"
+
+#~ msgid "Objects: deep paths, dictionaries, different data shapes"
+#~ msgstr "Обекти: дълбоки пътища, dictionaries, различни форми на данните"
 
 #~ msgid "Functions, and reading older code"
 #~ msgstr "Функции и четене на по-стар код"

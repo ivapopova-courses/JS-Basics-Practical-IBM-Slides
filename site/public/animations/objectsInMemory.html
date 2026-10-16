@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Objects in memory</title>
+<!--
+    Step-by-step animation: objects in memory - dot and bracket access, deep paths,
+    ?. and ??, dictionaries, a path helper, copies, this in a method.
+    Self-contained (no external files), so it works offline and inside an iframe.
+    Deep link: objectsInMemory.html#3 (scenario 3) or objectsInMemory.html#3.5 (scenario 3, step 5).
+    objectsInMemory.html?theme=dark forces the dark theme; #selftest walks every step.
+-->
+<style>
+:root {
+    --paper: #f3eee3;
+    --panel: #fffcf5;
+    --ink: #26221c;
+    --muted: #786f61;
+    --line: #ddd3c1;
+    --inline-code: #ece5d6;
+
+    --code-bg: #22252f;
+    --code-ink: #e9e6dd;
+    --code-num: #6c7285;
+    --code-active: #363d52;
+    --code-marker: #ffd166;
+    --code-pause: #b38cff;
+
+    --var-bg: #c4e3b8;
+    --var-border: #4f8a45;
+    --var-ink: #18330f;
+    --frame-bg: #f8f3e9;
+    --frame-border: #c9bda6;
+    --run: #b07800;
+    --run-bg: #fbe7b0;
+
+    --read: #2563c9;
+    --read-bg: #dbe7fb;
+    --write: #d66d08;
+    --write-bg: #fde5c8;
+    --err: #c4302b;
+    --err-bg: #f9d9d6;
+    --ref: #7b48c4;
+    --ref-bg: #ebe1fa;
+    --heap-bg: #fff3cf;
+    --heap-border: #c99a2e;
+    --chip-ink: #ffffff;
+
+    --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+    --sans: "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+        --code-bg: #111318; --code-active: #2c3345;
+        --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+        --frame-bg: #262830; --frame-border: #4a4d5a; --run: #ffd166; --run-bg: #4a3d14;
+        --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+        --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a; --heap-bg: #3a3220; --heap-border: #c9a24a;
+        --chip-ink: #111111;
+    }
+}
+:root[data-theme="dark"] {
+    --paper: #17181d; --panel: #202229; --ink: #ecebe6; --muted: #9a988f; --line: #363945; --inline-code: #2d3039;
+    --code-bg: #111318; --code-active: #2c3345;
+    --var-bg: #2c4a2a; --var-border: #71b066; --var-ink: #d8f3cf;
+    --frame-bg: #262830; --frame-border: #4a4d5a; --run: #ffd166; --run-bg: #4a3d14;
+    --read: #6ea2ff; --read-bg: #1f3354; --write: #ffa24d; --write-bg: #4a2e12;
+    --err: #ff6b63; --err-bg: #4a1c1a; --ref: #b38cff; --ref-bg: #33284a; --heap-bg: #3a3220; --heap-border: #c9a24a;
+    --chip-ink: #111111;
+}
+
+* { box-sizing: border-box; }
+html { font-size: clamp(11px, min(1.15vw, 2.05vh), 22px); }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+}
+.app {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: .7rem;
+    height: 100vh;
+    padding: .8rem 1rem;
+}
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; gap: 1.2rem; }
+.top h1 { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.top h1 small { display: block; font-size: .7rem; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; flex: 1; }
+.tab {
+    font: inherit; font-size: .82rem;
+    padding: .38rem .8rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--panel); color: var(--ink);
+    cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab .adv { font-size: .65rem; font-weight: 700; color: var(--ref); margin-left: .3rem; }
+.tab[aria-selected="true"] .adv { color: inherit; opacity: .75; }
+
+/* ---------- main stage ---------- */
+.stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+    gap: 1rem;
+    min-height: 0;
+}
+.left { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .7rem; min-height: 0; }
+.right { display: flex; flex-direction: column; min-height: 0; }
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .6rem;
+    padding: .6rem .8rem;
+    min-height: 0;
+}
+.panel-title {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin-bottom: .45rem;
+    font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted);
+}
+.panel-title .note { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+/* code */
+.code-panel { background: var(--code-bg); border-color: var(--line); }
+.code-panel .panel-title { color: var(--code-num); }
+.code { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 1.02rem; }
+.code li {
+    display: flex; align-items: center; gap: .8rem;
+    min-height: 1.75rem;
+    padding: .15rem .5rem;
+    border-left: 3px solid transparent; border-radius: .25rem;
+    color: var(--code-ink);
+    white-space: pre;
+    transition: background .25s, opacity .25s;
+}
+.code .ln { flex: none; width: 1.4rem; text-align: right; color: var(--code-num); }
+.code li.range { background: rgba(255, 209, 102, .07); }
+.code li.paused { background: rgba(179, 140, 255, .1); border-left: 3px dashed var(--code-pause); }
+.code li.active { background: var(--code-active); border-left: 3px solid var(--code-marker); }
+.code li.active.error { background: #4d2329; border-left-color: #ff6b63; }
+.code li.dead { opacity: .45; }
+.code li.dead .src { text-decoration: line-through; }
+.code .ltag {
+    margin-left: auto; flex: none;
+    padding: .05rem .45rem; border-radius: .3rem;
+    font-family: var(--sans); font-size: .62rem; font-weight: 700; white-space: nowrap;
+}
+.code .lt-pause { color: var(--code-pause); border: 1px dashed var(--code-pause); }
+.code .lt-dead { color: #ff8a83; border: 1px solid #ff8a83; }
+.code .k { color: #c792ea; }
+.code .s { color: #a5d986; }
+.code .n { color: #f7b267; }
+.code .c { color: #7a8299; font-style: italic; }
+.code .o { color: #82aaff; }
+.mk { border-radius: .2rem; }
+.mk.arg { background: rgba(110, 162, 255, .3); box-shadow: 0 0 0 1px rgba(110, 162, 255, .6); }
+.mk.call { background: rgba(179, 140, 255, .14); box-shadow: inset 0 -2px 0 var(--code-pause); }
+.mk.rv { padding: 0 .15rem; background: #ffa24d; color: #111111; font-weight: 700; }
+.mk.rv span { color: inherit; }
+.mk.extra { text-decoration: line-through; text-decoration-color: #ff6b63; background: rgba(255, 107, 99, .18); }
+
+/* console */
+.console-panel { display: flex; flex-direction: column; }
+.console { flex: 1; overflow: auto; font-family: var(--mono); font-size: .98rem; }
+.cline { padding: .15rem .4rem; border-bottom: 1px solid var(--line); }
+.cline .prompt { color: var(--muted); margin-right: .5rem; }
+.cline.err { color: var(--err); background: var(--err-bg); }
+.cline.more { color: var(--muted); font-style: italic; font-family: var(--sans); font-size: .82rem; }
+.console-empty { font-size: .8rem; color: var(--muted); font-style: italic; }
+
+/* ---------- call stack ---------- */
+.stack-panel { flex: 1; display: flex; flex-direction: column; }
+.stack {
+    position: relative;
+    flex: 1; min-height: 0;
+    display: flex; flex-direction: column-reverse; align-items: center; gap: .45rem;
+    padding: .2rem .3rem .5rem;
+    border-bottom: 3px solid var(--frame-border);
+    overflow: hidden;
+}
+.stack-empty { margin: auto; font-size: .85rem; font-style: italic; color: var(--muted); }
+.frame {
+    flex: none;
+    width: min(100%, 42rem);
+    padding: .35rem .7rem .45rem;
+    border: 2px solid var(--frame-border); border-radius: .6rem;
+    background: var(--frame-bg);
+    transition: box-shadow .25s, border-color .25s;
+}
+.frame.global { background: var(--heap-bg); border-color: var(--heap-border); }
+.frame.paused { border-style: dashed; border-color: var(--ref); }
+.frame.running { border-color: var(--run); box-shadow: 0 0 0 3px var(--run-bg); }
+.frame.pushed { animation: push .55s both; }
+.frame.popped { animation: popout .8s .45s both; pointer-events: none; }
+.fhead { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .6rem; }
+.fname { font-family: var(--mono); font-size: 1.08rem; font-weight: 700; }
+.flabel { font-size: .68rem; color: var(--muted); }
+.pill {
+    padding: .05rem .45rem; border-radius: .3rem;
+    font-size: .64rem; font-weight: 700; white-space: nowrap;
+}
+.st-run { background: var(--run-bg); color: var(--run); border: 1px solid var(--run); }
+.st-pause { color: var(--ref); border: 1px dashed var(--ref); }
+.st-done { color: var(--muted); border: 1px solid var(--line); }
+.faddr { margin-left: auto; color: var(--ref); background: var(--ref-bg); }
+.fbody { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .35rem 1.3rem; margin-top: .3rem; }
+.fnote { font-size: .78rem; font-style: italic; color: var(--muted); align-self: center; }
+.var { display: flex; flex-direction: column; gap: .1rem; }
+.vtop { display: flex; align-items: baseline; gap: .35rem; }
+.vname { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
+.vkind { font-size: .6rem; color: var(--muted); padding: 0 .3rem; border: 1px solid var(--line); border-radius: .25rem; background: var(--panel); }
+.vkind.def { color: var(--write); border-color: var(--write); }
+.vbox {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    min-width: 4.3rem; height: 2.2rem;
+    padding: .45rem .6rem 0;
+    border: 2px solid var(--var-border); border-radius: .45rem;
+    background: var(--var-bg); color: var(--var-ink);
+    font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+    white-space: nowrap;
+    transition: box-shadow .25s;
+}
+.vbox.fn { padding-top: 0; background: var(--ref-bg); border-color: var(--ref); color: var(--ref); }
+.vbox .type {
+    position: absolute; top: .05rem; right: .35rem;
+    font-family: var(--sans); font-size: .54rem; font-weight: 600; letter-spacing: .03em;
+    opacity: .75;
+}
+.val.t-undefined, .val.t-null { font-style: italic; font-weight: 500; opacity: .85; }
+.val.t-function { font-style: italic; font-weight: 600; }
+.uninit { font-family: var(--sans); font-size: .68rem; font-style: italic; font-weight: 500; opacity: .7; }
+.vbox.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.vbox.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.vbox.hl-new   { box-shadow: 0 0 0 3px var(--var-border); }
+.vbox.hl-miss  { border-style: dashed; box-shadow: 0 0 0 3px var(--err), 0 0 0 6px var(--err-bg); }
+.vbox.hl-error { box-shadow: 0 0 0 3px var(--err), 0 0 0 6px var(--err-bg); animation: shake .5s 1s both; }
+.vbox.changed .val { animation: pop .45s .2s both; }
+.ffoot { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .5rem; margin-top: .4rem; }
+.ck { font-size: .66rem; color: var(--muted); }
+.cv {
+    padding: .05rem .4rem; border-radius: .3rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .95rem; white-space: pre;
+}
+.cv.calc-sub { background: var(--read-bg); }
+.cv.calc-res { background: var(--write-bg); font-weight: 700; }
+.arr { width: 1.1rem; height: .7rem; color: var(--muted); flex: none; }
+.fret {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .1rem .2rem .1rem .5rem; border-radius: .4rem;
+    border: 2px solid var(--ref); background: var(--ref-bg);
+    font-size: .66rem; font-weight: 700; color: var(--ref);
+}
+.fret .rv {
+    padding: .05rem .45rem; border-radius: .3rem;
+    background: var(--ref); color: var(--chip-ink);
+    font-family: var(--mono); font-size: .95rem;
+}
+.fret.fresh { animation: pop .45s both; }
+.frame.many {
+    padding: .5rem .7rem; text-align: center;
+    border-style: dashed;
+    background: repeating-linear-gradient(0deg, var(--frame-bg) 0 .3rem, var(--panel) .3rem .6rem);
+    font-size: .82rem; color: var(--muted);
+}
+.frame.many b { font-family: var(--mono); color: var(--ink); }
+.frame.errcard {
+    border-color: var(--err); background: var(--err-bg); color: var(--err);
+    font-family: var(--mono); font-weight: 700; text-align: center;
+}
+.frame.errcard.pushed { animation: push .5s both, shake .5s .5s both; }
+.frame.errcard small { display: block; font-family: var(--sans); font-weight: 500; font-size: .72rem; }
+
+/* compact frames (header and variables on one row) */
+.compact .frame:not(.many):not(.errcard) { display: grid; grid-template-columns: 21rem minmax(0, 1fr); column-gap: 1rem; align-items: center; }
+.compact .fhead { gap: .15rem .4rem; }
+.compact .fhead .fname { flex-basis: 100%; }
+.compact .var { flex-direction: row; align-items: center; gap: .4rem; }
+.compact .faddr { margin-left: 0; }
+.compact .fbody { margin-top: 0; }
+.compact .ffoot { grid-column: 1 / -1; }
+
+/* legend */
+.legend {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.1rem;
+    margin-top: .55rem;
+    font-size: .72rem; color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.sw { width: .95rem; height: .95rem; border: 2px solid; border-radius: .25rem; }
+.sw.run { background: var(--run-bg); border-color: var(--run); }
+.sw.pause { border-style: dashed; border-color: var(--ref); }
+.sw.var { background: var(--var-bg); border-color: var(--var-border); }
+.sw.read { background: var(--read-bg); border-color: var(--read); }
+.sw.write { background: var(--write-bg); border-color: var(--write); }
+.sw.ret { background: var(--ref); border-color: var(--ref); border-radius: 50%; }
+
+/* ---------- footer ---------- */
+.bottom {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.4rem; align-items: center;
+    padding: .7rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--line); border-radius: .7rem;
+}
+.explain-meta { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+.explain-text { min-height: calc(1.12rem * 1.45 * 3); font-size: 1.12rem; line-height: 1.45; }
+.explain-text code, .explain-text kbd {
+    padding: .05rem .3rem; border-radius: .25rem;
+    background: var(--inline-code);
+    font-family: var(--mono); font-size: .92em;
+}
+.explain-text .r { color: var(--read); font-weight: 700; }
+.explain-text .w { color: var(--write); font-weight: 700; }
+.explain-text .p { color: var(--ref); font-weight: 700; }
+.explain-text.fresh { animation: fadein .35s both; }
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
+.btns { display: flex; gap: .4rem; }
+.btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem .8rem;
+    border: 1px solid var(--line); border-radius: .5rem;
+    background: var(--paper); color: var(--ink);
+    font: inherit; font-size: .9rem;
+    cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); padding-inline: 1.2rem; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn svg { width: 1rem; height: 1rem; fill: currentColor; }
+.icon-btn { padding: .45rem; }
+.progress { display: flex; gap: 3px; width: 24rem; }
+.progress button { flex: 1; height: .5rem; padding: 0; border: 0; border-radius: 2px; background: var(--line); cursor: pointer; }
+.progress button.done { background: var(--muted); }
+.progress button.cur { background: var(--write); }
+.hint { font-size: .66rem; color: var(--muted); }
+
+/* flying values */
+.fly {
+    position: fixed; z-index: 50;
+    padding: .15rem .55rem; border-radius: .45rem;
+    background: var(--read); color: var(--chip-ink);
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 .3rem .9rem rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+.fly.write { background: var(--write); }
+.fly.ret { background: var(--ref); }
+.fly.rejected { background: var(--err); }
+
+.await, .vbox.await .val, .vbox.await .type { visibility: hidden; }
+.vbox.await { visibility: visible; }
+.land { animation: land .45s both; }
+
+@keyframes push { from { opacity: 0; transform: translateY(-1.4rem); } to { opacity: 1; transform: none; } }
+@keyframes popout { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-1.6rem) scale(.96); } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+@keyframes land { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes fadein { from { opacity: 0; transform: translateY(.3rem); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition: none !important; }
+}
+
+/* narrow screens: stack everything and let the page scroll */
+@media (max-width: 900px) {
+    html { font-size: 14px; }
+    body { height: auto; overflow: auto; }
+    .app { height: auto; }
+    .top { flex-wrap: wrap; }
+    .stage { grid-template-columns: 1fr; }
+    .stack { min-height: 24rem; }
+    .code li { white-space: pre-wrap; }
+    .bottom { grid-template-columns: 1fr; }
+    .controls { align-items: stretch; }
+    .progress { width: 100%; }
+    .compact .frame:not(.many):not(.errcard) { grid-template-columns: 1fr; }
+}
+</style>
+<style>
+/* language switch (EN / BG) */
+.lang-btn { text-decoration: none; font-weight: 700; font-size: .8rem; letter-spacing: .04em; }
+.lang-btn:hover, .lang-btn:focus-visible { border-color: var(--read, currentColor); }
+</style>
+<style>
+/* ---------- functions and data: stack + heap side by side ---------- */
+.stage { grid-template-columns: minmax(0, 42fr) minmax(0, 58fr); }
+.code { font-size: .94rem; }
+.code li { overflow: hidden; }
+.right { display: grid; grid-template-columns: minmax(0, 60fr) minmax(0, 40fr); gap: .8rem; min-height: 0; }
+.frame { width: 100%; padding: .3rem .65rem .4rem; }
+.stack { gap: .35rem; }
+.fbody { margin-top: .2rem; gap: .3rem .8rem; }
+.vbox { min-width: 3.8rem; }
+.ffoot { margin-top: .3rem; }
+.fnote.scope { color: var(--read); font-weight: 600; font-style: normal; }
+.vbox.ref { min-width: 3.2rem; padding-top: .45rem; background: var(--ref-bg); border-color: var(--ref); color: var(--ref); }
+.refdot {
+    display: inline-block; width: .75rem; height: .75rem; border-radius: 50%;
+    background: var(--ref); vertical-align: middle;
+}
+.heap-panel { display: flex; flex-direction: column; }
+.heap {
+    position: relative; flex: 1; min-height: 0;
+    display: flex; flex-direction: column; gap: .6rem;
+    padding: .2rem .2rem .4rem;
+    overflow: hidden;
+}
+.heap-empty { margin: auto; font-size: .85rem; font-style: italic; color: var(--muted); text-align: center; }
+.hobj {
+    flex: none;
+    padding: .3rem .6rem .45rem;
+    border: 2px solid var(--heap-border); border-radius: .6rem;
+    background: var(--heap-bg);
+    transition: opacity .3s, box-shadow .25s;
+}
+.hobj.k-function { border-color: var(--ref); background: var(--ref-bg); }
+.hobj.fresh { animation: pop .5s both; }
+.hobj.hl-new { box-shadow: 0 0 0 3px var(--var-border); }
+.hobj.hl-read { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.hobj.garbage { opacity: .42; border-style: dashed; }
+.hhead { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .5rem; margin-bottom: .25rem; }
+.hkind { font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--heap-border); }
+.k-function .hkind { color: var(--ref); }
+.hlen { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+.hnote { font-size: .7rem; font-style: italic; color: var(--muted); }
+.st-gc { color: var(--muted); border: 1px dashed var(--muted); }
+.hcells { display: flex; flex-wrap: wrap; gap: .3rem; }
+.hcells.obj { flex-direction: column; gap: .2rem; }
+.hcell { display: flex; flex-direction: column; align-items: center; gap: .05rem; }
+.hcells.obj .hcell { flex-direction: row; gap: .5rem; }
+.hidx { font-family: var(--mono); font-size: .68rem; color: var(--muted); }
+.hkey { font-family: var(--mono); font-size: .9rem; font-weight: 700; min-width: 4.6rem; }
+.hval {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 3.4rem; min-height: 1.9rem;
+    padding: .1rem .5rem;
+    border: 2px solid var(--heap-border); border-radius: .4rem;
+    background: var(--panel);
+    font-family: var(--mono); font-size: .98rem; font-weight: 700; white-space: nowrap;
+    transition: box-shadow .25s;
+}
+.hval.hl-read  { box-shadow: 0 0 0 3px var(--read), 0 0 0 6px var(--read-bg); }
+.hval.hl-write { box-shadow: 0 0 0 3px var(--write), 0 0 0 6px var(--write-bg); }
+.hval.hl-new   { box-shadow: 0 0 0 3px var(--var-border); }
+.hempty { font-size: .78rem; font-style: italic; color: var(--muted); }
+.hsrc { display: block; font-family: var(--mono); font-size: .9rem; white-space: pre; color: var(--ink); }
+
+/* reference arrows */
+.arrows { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; overflow: visible; pointer-events: none; color: var(--ref); }
+.refpath { fill: none; stroke: currentColor; stroke-width: 2.3; opacity: .9; }
+.refpath.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .6s .25s both; }
+.refpath.weak { opacity: .35; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.sw.ref { background: var(--ref-bg); border-color: var(--ref); }
+.sw.hp { background: var(--heap-bg); border-color: var(--heap-border); }
+.legend { gap: .3rem .8rem; margin-top: .4rem; font-size: .66rem; align-items: center; flex: none; }
+.legend .sw { width: .8rem; height: .8rem; }
+
+@media (max-width: 900px) {
+    .stage { grid-template-columns: 1fr; }
+    .right { grid-template-columns: 1fr; }
+    .heap { flex: none; min-height: 14rem; }
+}
+</style>
+<style>
+.heap.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-auto-flow: row dense; align-content: start; gap: .6rem; }
+.heap.two .hobj.k-array { grid-column: 2; }
+.heap.two .hobj:not(.k-array) { grid-column: 1; }
+</style>
+<style>
+.right { grid-template-columns: minmax(0, 50fr) minmax(0, 50fr); }
+.heap.two { gap: .5rem; }
+.heap.two .hkey { min-width: 0; }
+.heap.two .hval { min-width: 2.6rem; padding: .1rem .35rem; }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <h1>Objects in memory <small>properties, deep paths, dictionaries and copies, step by step</small></h1>
+        <nav class="tabs" id="tabs" role="tablist"></nav>
+        <a class="btn lang-btn" id="langBtn" href="bg/objectsInMemory.html" hreflang="bg" lang="bg" title="Bulgarian version" aria-label="Bulgarian version">BG</a>
+        <button class="btn icon-btn" id="themeBtn" title="Light / dark theme" aria-label="Light / dark theme">
+            <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5v11a5.5 5.5 0 0 1 0-11z"/></svg>
+        </button>
+    </header>
+
+    <main class="stage" id="stage">
+        <section class="left">
+            <div class="panel code-panel">
+                <div class="panel-title"><span>Code</span><span class="note" id="lineNote"></span></div>
+                <ol class="code" id="code"></ol>
+            </div>
+            <div class="panel console-panel">
+                <div class="panel-title"><span>Console</span></div>
+                <div class="console" id="console"></div>
+            </div>
+        </section>
+        <section class="right">
+            <div class="panel stack-panel">
+                <div class="panel-title"><span>Call stack</span><span class="note" id="stackNote"></span></div>
+                <div class="stack" id="stack"></div>
+                <div class="legend">
+                    <span><i class="sw run"></i>running</span>
+                    <span><i class="sw pause"></i>paused</span>
+                    <span><i class="sw var"></i>variable</span>
+                    <span><i class="sw ref"></i>reference</span>
+                    <span><i class="sw read"></i>read</span>
+                    <span><i class="sw write"></i>write</span>
+                </div>
+            </div>
+            <div class="panel heap-panel">
+                <div class="panel-title"><span>Heap</span><span class="note">arrays, objects, functions</span></div>
+                <div class="heap" id="heap"></div>
+                <div class="legend">
+                    <span><i class="sw hp"></i>array / object</span>
+                    <span><i class="sw ref"></i>function</span>
+                </div>
+            </div>
+        </section>
+        <svg class="arrows" id="arrows" aria-hidden="true"></svg>
+    </main>
+
+    <footer class="bottom">
+        <div>
+            <div class="explain-meta" id="explainMeta"></div>
+            <div class="explain-text" id="explain" aria-live="polite"></div>
+        </div>
+        <div class="controls">
+            <div class="btns">
+                <button class="btn icon-btn" id="firstBtn" title="To the start (Home)" aria-label="To the start">
+                    <svg viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3L6 8l7 5z"/></svg>
+                </button>
+                <button class="btn" id="prevBtn" title="Back (Left arrow)">
+                    <svg viewBox="0 0 16 16"><path d="M11 3L4 8l7 5z"/></svg>Back
+                </button>
+                <button class="btn" id="playBtn" title="Auto-play (P)"></button>
+                <button class="btn primary" id="nextBtn" title="Next (Right arrow or Space)">
+                    Next<svg viewBox="0 0 16 16"><path d="M5 3l7 5-7 5z"/></svg>
+                </button>
+            </div>
+            <div class="progress" id="progress"></div>
+            <div class="hint">Keys: Left / Right arrows, Space, Home, P, 1-7</div>
+        </div>
+    </footer>
+</div>
+<div id="flyLayer"></div>
+<script>
+// ---------------------------------------------------------------------------
+// Texts of the user interface
+// ---------------------------------------------------------------------------
+const UI = {
+    running: 'running',
+    paused: 'paused',
+    pausedLine: n => `paused, line ${n}`,
+    finished: 'finished',
+    returnTo: n => `return to line ${n}`,
+    globalFrame: 'global frame',
+    noLocals: 'no local variables',
+    uninit: 'uninitialised',
+    expression: 'expression',
+    returns: 'return',
+    returnsNone: 'returns (no return)',
+    stackEmpty: 'the stack is empty',
+    frames: n => `frames: ${n}, the top one is running`,
+    heapEmpty: 'No objects yet. Arrays, objects and functions created with an expression are stored here.',
+    kinds: { array: 'array', object: 'object', function: 'function' },
+    length: n => `length ${n}`,
+    empty: 'empty',
+    garbage: 'no arrows - garbage',
+    conEmpty: '(empty)',
+    line: n => `running line ${n}`,
+    step: (k, n) => `Step ${k} of ${n}`,
+    stepN: k => `Step ${k}`,
+    play: 'Play',
+    pause: 'Pause',
+    advanced: 'advanced',
+    kindLabel: { param: 'parameter', let: 'let', const: 'const' },
+};
+
+// ---------------------------------------------------------------------------
+// Model
+//   s.frames - bottom (global) to top; each frame:
+//     { id, kind: 'global' | 'fn', title, vars: [{ name, value, type, kind }], retLine, at, calc, ret, note }
+//   s.heap   - objects in the heap: { id, kind: 'array' | 'object' | 'function', cells: [{ k, v }], src, note, garbage }
+//   a value is a literal string ('5', '"XR-210"', 'true') or a reference '@id' to a heap object
+// ---------------------------------------------------------------------------
+function typeOf(lit) {
+    if (lit === null) return null;
+    if (lit.startsWith('@')) return 'ref';
+    if (lit === 'undefined') return 'undefined';
+    if (lit === 'null') return 'null';
+    if (lit === 'true' || lit === 'false') return 'boolean';
+    if (lit === 'function') return 'function';
+    if (lit.startsWith('"')) return 'string';
+    return 'number';
+}
+const topOf = s => s.frames[s.frames.length - 1];
+const frame = (s, id) => s.frames.find(f => f.id === id);
+const fvar = (s, id, name) => frame(s, id).vars.find(v => v.name === name);
+const hobj = (s, id) => s.heap.find(o => o.id === id);
+
+// Helpers used by the scenario steps. Each one mutates the state `s`.
+function push(s, id, title, vars, from) {
+    topOf(s).at = from;
+    s.frames.push({ id, kind: 'fn', title, retLine: from, at: null, calc: null, ret: null, note: '',
+        vars: vars.map(([name, lit, k = 'param']) => ({ name, value: lit, type: typeOf(lit), kind: k })) });
+    vars.forEach(([name, lit]) => { if (lit !== null) s.hl[id + '.' + name] = 'write'; });
+}
+function pop(s) {
+    s.frames.pop();
+    if (s.frames.length) topOf(s).at = null;
+}
+function addv(s, id, name, lit, kind = 'let') {
+    frame(s, id).vars.push({ name, value: lit, type: typeOf(lit), kind });
+    if (lit !== null) s.hl[id + '.' + name] = 'write';
+}
+function setv(s, id, name, lit, hl = 'write') {
+    Object.assign(fvar(s, id, name), { value: lit, type: typeOf(lit) });
+    s.hl[id + '.' + name] = hl;
+}
+function rd(s, id, ...names) { names.forEach(n => s.hl[id + '.' + n] = 'read'); }
+function calc(s, id, src, sub = '', res = '') { frame(s, id).calc = { src, sub, res }; }
+function ret(s, id, lit, implicit = false) { frame(s, id).ret = { value: lit, implicit }; }
+function note(s, id, text) { frame(s, id).note = text; }
+function mk(s, id, line, str, cls, to) {
+    const m = s.marks.find(x => x.id === id);
+    if (m) Object.assign(m, { cls, to });
+    else s.marks.push({ id, line, str, cls, to });
+}
+function unmk(s, ...ids) { s.marks = s.marks.filter(m => !ids.includes(m.id)); }
+function log(s, text, cls = '') { s.console.push({ text, cls }); }
+// heap
+function hnew(s, id, kind, cells = [], extra = {}) {
+    s.heap.push(Object.assign({ id, kind, cells: cells.map(([k, v]) => ({ k: String(k), v })), src: '', note: '', garbage: false }, extra));
+    s.hh['o:' + id] = 'new';
+}
+function hset(s, id, k, v, hl = 'write') {
+    const o = hobj(s, id);
+    const c = o.cells.find(x => x.k === String(k));
+    if (c) c.v = v; else o.cells.push({ k: String(k), v });
+    s.hh[id + '.' + k] = hl;
+}
+function hclear(s, id) { hobj(s, id).cells = []; s.hh['o:' + id] = 'read'; }
+function hrd(s, id, ...keys) { keys.forEach(k => s.hh[id + '.' + k] = 'read'); }
+function hlo(s, id, hl = 'read') { s.hh['o:' + id] = hl; }
+function gc(s, ...ids) { ids.forEach(id => hobj(s, id).garbage = true); }
+function hdrop(s, ...ids) { s.heap = s.heap.filter(o => !ids.includes(o.id)); }
+const FN = name => [name, 'function', 'function'];
+const LET = name => [name, null, 'let'];
+const CONST = name => [name, null, 'const'];
+
+// ---------------------------------------------------------------------------
+// Scenarios
+//   step.line   - active code line (0-based, -1 = none); step.range - softly highlighted lines
+//   step.do     - changes to the state
+//   step.fly    - values that fly on screen: [from, to, text, option ('ret')]
+//                 keys: v:frame.var, h:object.key, o:object, mk:markId, calc:frame, res:frame, ret:frame, con
+//   step.reveal - elements to keep hidden until all flights land
+// ---------------------------------------------------------------------------
+const SCENARIOS = [
+{
+    tab: 'Dot or brackets',
+    globals: [CONST('prices'), CONST('fruit')],
+    code: [
+        'const prices = { apples: 2.5, "red pears": 3 };',
+        'const fruit = "apples";',
+        'console.log(prices[fruit]);         // 2.5',
+        'console.log(prices.fruit);          // ?',
+        'console.log(prices["red pears"]);   // 3',
+        'prices.plums = 4;',
+    ],
+    steps: [
+        { line: -1, text: `An <b>object</b> is a group of <b>properties</b>: each one is a <b>key</b> (a name) and a <b>value</b>. Like an array, an object lives in the <b>heap</b>, and the variable holds a <b>reference</b> to it. There are two ways to read a property: with a dot and with square brackets. Are they the same?` },
+        { line: 0, text: `The object literal creates an object with two properties. The keys are strings. <code>"red pears"</code> needs quotes because of the space; <code>apples</code> does not. prices gets the reference.`,
+          do: s => { hnew(s, 'O', 'object', [['apples', '2.5'], ['red pears', '3']]); setv(s, 'G', 'prices', '@O'); } },
+        { line: 1, text: `fruit is a string variable that holds the <b>name</b> of a key: "apples".`,
+          do: s => setv(s, 'G', 'fruit', '"apples"') },
+        { line: 2, text: `<code>prices[fruit]</code>: inside the square brackets is an <b>expression</b>. It is calculated first: JavaScript <span class="r">reads</span> the variable fruit and gets "apples".`,
+          do: s => { rd(s, 'G', 'fruit'); mk(s, 'k1', 2, 'fruit', 'rv', '"apples"'); },
+          fly: [['v:G.fruit', 'mk:k1', '"apples"']] },
+        { line: 2, text: `Then it follows the arrow of prices and looks for the key "apples" - it is there: <b>2.5</b> is printed.`,
+          do: s => { rd(s, 'G', 'prices'); hrd(s, 'O', 'apples'); log(s, '2.5'); },
+          fly: [['h:O.apples', 'con', '2.5']], reveal: ['con'] },
+        { line: 3, text: `<code>prices.fruit</code>: after a dot, the word is the key <b>itself</b>. The variable fruit is <b>not</b> read. JavaScript looks for a key named "fruit" - there is none, so the result is <b>undefined</b>. No error.`,
+          do: s => { unmk(s, 'k1'); rd(s, 'G', 'prices'); hlo(s, 'O'); calc(s, 'G', 'prices.fruit', 'no key "fruit"', 'undefined'); log(s, 'undefined'); },
+          reveal: ['res:G', 'con'] },
+        { line: 4, text: `A key with a space (or a dot, or a dash) can only be read with brackets and a string: <code>prices["red pears"]</code> - <b>3</b>. <code>prices.red pears</code> would be a syntax error.`,
+          do: s => { frame(s, 'G').calc = null; hrd(s, 'O', 'red pears'); log(s, '3'); },
+          fly: [['h:O.red pears', 'con', '3']], reveal: ['con'] },
+        { line: 5, text: `Writing to a key that does not exist <b>creates</b> it: the object gets a third property, plums: 4. (A typo in a key name is not an error either - it quietly creates a new property.)`,
+          do: s => { rd(s, 'G', 'prices'); hset(s, 'O', 'plums', '4', 'new'); } },
+        { line: -1, text: `<b>Summary:</b> <code>obj.key</code> - the key is written in the code. <code>obj[expr]</code> - the key is <b>calculated</b>: from a variable, or a string with spaces, dots or dashes (<code>"Firmware Version"</code>, <code>"12_4.20"</code>, <code>"CHK-0132"</code>). A missing key gives undefined; writing to it creates it.` },
+    ],
+},
+{
+    tab: 'A deep path',
+    globals: [CONST('doc'), CONST('level')],
+    code: [
+        'const doc = {',
+        '    inventory: { details: { level: "4.2.1.7" } }',
+        '};',
+        'const level = doc.inventory.details.level;',
+        'console.log(doc.status);          // undefined',
+        'console.log(doc.status.alias);    // ?',
+    ],
+    steps: [
+        { line: -1, text: `A report is an object of objects of objects. A long path like <code>doc.inventory.details.level</code> is read <b>one dot at a time</b>, from left to right. Let us follow it - and see what happens when one level is missing.` },
+        { line: 0, range: [0, 2], text: `A literal inside a literal: the <b>innermost</b> object is created first, then the one that holds it, then the outer one. Each outer object holds a <b>reference</b> to the inner one - an arrow. doc points to the outer object.`,
+          do: s => {
+              hnew(s, 'R', 'object', [['inventory', '@I']]);
+              hnew(s, 'I', 'object', [['details', '@D']]);
+              hnew(s, 'D', 'object', [['level', '"4.2.1.7"']]);
+              setv(s, 'G', 'doc', '@R');
+          } },
+        { line: 3, text: `<code>doc</code> - JavaScript <span class="r">reads</span> the variable and follows its arrow to the outer object.`,
+          do: s => { rd(s, 'G', 'doc'); hlo(s, 'R'); mk(s, 'p', 3, 'doc.inventory.details.level', 'call'); } },
+        { line: 3, text: `<code>.inventory</code> - in that object, the key inventory holds an arrow: follow it to the next object.`,
+          do: s => { hrd(s, 'R', 'inventory'); hlo(s, 'I'); } },
+        { line: 3, text: `<code>.details</code> - one more step down.`,
+          do: s => { hrd(s, 'I', 'details'); hlo(s, 'D'); } },
+        { line: 3, text: `<code>.level</code> - the last key holds a string: "4.2.1.7" is <span class="w">written</span> into level.`,
+          do: s => { hrd(s, 'D', 'level'); unmk(s, 'p'); setv(s, 'G', 'level', '"4.2.1.7"'); },
+          fly: [['h:D.level', 'v:G.level', '"4.2.1.7"']] },
+        { line: 4, text: `<code>doc.status</code>: the outer object has no key status - the result is <b>undefined</b>. Still no error.`,
+          do: s => { rd(s, 'G', 'doc'); hlo(s, 'R'); calc(s, 'G', 'doc.status', 'no key "status"', 'undefined'); log(s, 'undefined'); },
+          reveal: ['res:G', 'con'] },
+        { line: 5, text: `<code>doc.status.alias</code>: first <code>doc.status</code> - undefined. Then <code>.alias</code> on undefined. undefined is not an object and has no properties: <b>TypeError</b>. The program stops here.`,
+          do: s => { calc(s, 'G', 'doc.status.alias', 'undefined.alias', 'TypeError'); log(s, "TypeError: Cannot read properties of undefined (reading 'alias')", 'err'); s.err = true; },
+          reveal: ['res:G', 'con'] },
+        { line: -1, text: `<b>Summary:</b> a missing key gives undefined - one step further down is an error. In a rule, this error means no alert (or, with a catch-all try / catch, a silent miss). The next scenario shows how to stop safely at a missing level.`,
+          do: s => { frame(s, 'G').calc = null; } },
+    ],
+},
+{
+    tab: 'Safe access: ?. and ??',
+    globals: [CONST('doc'), CONST('a'), CONST('b'), CONST('c'), CONST('d')],
+    code: [
+        'const doc = { inventory: { details: { level: "4.2.1.7" } } };',
+        'const a = doc.status && doc.status.alias;',
+        'const b = doc.status?.alias;',
+        'const c = doc.status?.alias ?? "unknown";',
+        'const d = doc.inventory?.details?.level ?? "unknown";',
+        'console.log(a, b, c, d);',
+    ],
+    steps: [
+        { line: -1, text: `The same report, and the same missing status. Three ways to read <code>doc.status.alias</code> without a TypeError: the older <code>&&</code> chain, optional chaining <code>?.</code>, and <code>?.</code> with a fallback <code>??</code>.` },
+        { line: 0, text: `The report: three nested objects, as in scenario 2.`,
+          do: s => {
+              hnew(s, 'R', 'object', [['inventory', '@I']]);
+              hnew(s, 'I', 'object', [['details', '@D']]);
+              hnew(s, 'D', 'object', [['level', '"4.2.1.7"']]);
+              setv(s, 'G', 'doc', '@R');
+          } },
+        { line: 1, text: `The older form: <code>doc.status &&</code> ... - doc.status is undefined, which is <b>falsy</b>, so <code>&&</code> stops and returns it. The right side <code>doc.status.alias</code> is <b>never read</b>. a = undefined.`,
+          do: s => { rd(s, 'G', 'doc'); hlo(s, 'R'); calc(s, 'G', 'doc.status && ...', 'undefined && ...', 'undefined'); setv(s, 'G', 'a', 'undefined'); },
+          reveal: ['res:G'] },
+        { line: 2, text: `<code>?.</code> (ES2020): "if the value on the left is undefined or null, stop here and give undefined". doc.status is undefined - the chain stops. b = undefined, no error.`,
+          do: s => { rd(s, 'G', 'doc'); hlo(s, 'R'); calc(s, 'G', 'doc.status?.alias', 'undefined?.alias', 'undefined'); setv(s, 'G', 'b', 'undefined'); },
+          reveal: ['res:G'] },
+        { line: 3, text: `<code>??</code> gives the right side when the left side is undefined or null: c = "unknown". This is how a rule gets a fallback name.`,
+          do: s => { calc(s, 'G', 'undefined ?? "unknown"', '', '"unknown"'); setv(s, 'G', 'c', '"unknown"'); },
+          reveal: ['res:G'] },
+        { line: 4, text: `When every level is there, <code>?.</code> works like a plain dot: inventory, then details, then level - "4.2.1.7". <code>??</code> keeps it, because it is not undefined or null.`,
+          do: s => { rd(s, 'G', 'doc'); hrd(s, 'R', 'inventory'); hrd(s, 'I', 'details'); hrd(s, 'D', 'level'); calc(s, 'G', 'doc.inventory?.details?.level ?? "unknown"', '"4.2.1.7" ?? "unknown"', '"4.2.1.7"'); setv(s, 'G', 'd', '"4.2.1.7"'); },
+          fly: [['h:D.level', 'v:G.d', '"4.2.1.7"']], reveal: ['res:G'] },
+        { line: 5, text: `<b>undefined undefined unknown 4.2.1.7</b> is printed.`,
+          do: s => { frame(s, 'G').calc = null; rd(s, 'G', 'a', 'b', 'c', 'd'); log(s, 'undefined undefined unknown 4.2.1.7'); }, reveal: ['con'] },
+        { line: -1, text: `<b>Summary:</b> <code>a?.b</code> stops at undefined or null - not at 0, "" or false. <code>x ?? fallback</code> replaces only undefined and null. Older rules write <code>a && a.b && a.b.c</code> - it works, but it also stops at 0 and "", and it repeats the path. (<code>?.</code> and <code>??</code> are ES2020.)` },
+    ],
+},
+{
+    tab: 'A dictionary',
+    globals: [CONST('modules')],
+    code: [
+        'const modules = {',
+        '    "12_4.20": { status: "OK" },',
+        '    "47_1.07": { status: "FAILED" }',
+        '};',
+        'for (const key of Object.keys(modules)) {',
+        '    const [number, version] = key.split("_");',
+        '    console.log(number, version, modules[key].status);',
+        '}',
+    ],
+    steps: [
+        { line: -1, text: `Many reports use an object as a <b>dictionary</b>: the keys are <b>ids</b>, and you do not know them in advance. Here each key is "&lt;module number&gt;_&lt;version&gt;" - the key itself carries information.` },
+        { line: 0, range: [0, 3], text: `The dictionary: two inner objects and the outer one. The keys must be in quotes: they start with a digit and contain a dot. <code>modules.12_4.20</code> is a syntax error - only <code>modules["12_4.20"]</code> works.`,
+          do: s => {
+              hnew(s, 'M', 'object', [['12_4.20', '@A'], ['47_1.07', '@B']]);
+              hnew(s, 'A', 'object', [['status', '"OK"']]);
+              hnew(s, 'B', 'object', [['status', '"FAILED"']]);
+              setv(s, 'G', 'modules', '@M');
+          } },
+        { line: 4, text: `<code>Object.keys(modules)</code> returns a <b>new array</b> with the keys - as strings, in the order of the object.`,
+          do: s => { rd(s, 'G', 'modules'); hlo(s, 'M'); hnew(s, 'K', 'array', [[0, '"12_4.20"'], [1, '"47_1.07"']]); mk(s, 'ok', 4, 'Object.keys(modules)', 'call'); } },
+        { line: 4, text: `<code>for...of</code> walks that array: the first key is "12_4.20".`,
+          do: s => { hrd(s, 'K', 0); addv(s, 'G', 'key', '"12_4.20"', 'const'); },
+          fly: [['h:K.0', 'v:G.key', '"12_4.20"']] },
+        { line: 5, text: `<code>key.split("_")</code> gives ["12", "4.20"], and the <b>destructuring</b> <code>const [number, version] = ...</code> puts the two parts into two variables. The information was <b>in the key</b>.`,
+          do: s => { rd(s, 'G', 'key'); addv(s, 'G', 'number', '"12"', 'const'); addv(s, 'G', 'version', '"4.20"', 'const'); } },
+        { line: 6, text: `<code>modules[key]</code> - brackets, because the key is in a variable. Follow the arrow to the inner object, then <code>.status</code>: "OK". <b>12 4.20 OK</b> is printed.`,
+          do: s => { rd(s, 'G', 'modules', 'key'); hrd(s, 'M', '12_4.20'); hrd(s, 'A', 'status'); log(s, '12 4.20 OK'); }, reveal: ['con'] },
+        { line: 4, text: `The second round: key = "47_1.07". <code>const</code> is fine - every round gets <b>new</b> variables.`,
+          do: s => { hrd(s, 'K', 1); setv(s, 'G', 'key', '"47_1.07"'); setv(s, 'G', 'number', '"47"'); setv(s, 'G', 'version', '"1.07"'); },
+          fly: [['h:K.1', 'v:G.key', '"47_1.07"']] },
+        { line: 6, text: `<b>47 1.07 FAILED</b> is printed.`,
+          do: s => { rd(s, 'G', 'modules', 'key'); hrd(s, 'M', '47_1.07'); hrd(s, 'B', 'status'); log(s, '47 1.07 FAILED'); }, reveal: ['con'] },
+        { line: 7, text: `No more keys. The loop variables are gone, and nothing points to the array of keys any more: it is garbage.`,
+          do: s => { unmk(s, 'ok'); const g = frame(s, 'G'); g.vars = g.vars.filter(v => v.name === 'modules'); gc(s, 'K'); } },
+        { line: -1, text: `<b>Summary:</b> to walk a dictionary, take its keys with <code>Object.keys</code> (or the values with <code>Object.values</code>, or both with <code>Object.entries</code>) and loop with <code>for...of</code>. Read a value with <code>obj[key]</code>. Older rules write <code>for (var key in obj)</code> with <code>hasOwnProperty</code> - the same walk.`,
+          do: s => hdrop(s, 'K') },
+    ],
+},
+{
+    tab: 'A path helper: get',
+    globals: [FN('get'), CONST('doc')],
+    code: [
+        'function get(obj, path, fallback) {',
+        '    let cur = obj;',
+        '    for (const key of path) {',
+        '        if (cur == null) return fallback;   // null or undefined',
+        '        cur = cur[key];',
+        '    }',
+        '    return cur ?? fallback;',
+        '}',
+        'const doc = { modules: { "12_4.20": { version: "4.20" } } };',
+        'get(doc, ["modules", "12_4.20", "version"], "?");',
+        'get(doc, ["status", "alias"], "?");',
+    ],
+    steps: [
+        { line: -1, text: `The helper of the course project: <code>get(obj, path, fallback)</code> walks a path given as an <b>array of keys</b>. A variable cur moves down the objects, one key per round. A missing level gives the fallback - never a TypeError.` },
+        { line: 8, text: `The report: three nested objects. One key has a dot in it: "12_4.20".`,
+          do: s => {
+              hnew(s, 'R', 'object', [['modules', '@M']]);
+              hnew(s, 'M', 'object', [['12_4.20', '@V']]);
+              hnew(s, 'V', 'object', [['version', '"4.20"']]);
+              setv(s, 'G', 'doc', '@R');
+          } },
+        { line: 0, text: `The call: the path is a new array with three keys. obj gets the arrow to the report, path the arrow to the array, fallback "?".`,
+          do: s => {
+              mk(s, 'c1', 9, 'get(doc, ["modules", "12_4.20", "version"], "?")', 'call');
+              hnew(s, 'P', 'array', [[0, '"modules"'], [1, '"12_4.20"'], [2, '"version"']]);
+              push(s, 'g', 'get(doc, [...], "?")', [['obj', '@R'], ['path', '@P'], ['fallback', '"?"'], LET('cur')], 9);
+          } },
+        { line: 1, text: `<code>let cur = obj;</code> - cur starts at the top: one more arrow to the report.`,
+          do: s => setv(s, 'g', 'cur', '@R') },
+        { line: 4, text: `Key "modules": cur is an object, so <code>cur = cur["modules"]</code> - cur moves one level down.`,
+          do: s => { hrd(s, 'P', 0); addv(s, 'g', 'key', '"modules"', 'const'); hrd(s, 'R', 'modules'); setv(s, 'g', 'cur', '@M'); }, range: [2, 3] },
+        { line: 4, text: `Key "12_4.20" - with the dot inside, but it is one element of the array, so it is used as it is: cur moves to the inner object.`,
+          do: s => { hrd(s, 'P', 1); setv(s, 'g', 'key', '"12_4.20"'); hrd(s, 'M', '12_4.20'); setv(s, 'g', 'cur', '@V'); }, range: [2, 3] },
+        { line: 4, text: `Key "version": cur becomes the string "4.20".`,
+          do: s => { hrd(s, 'P', 2); setv(s, 'g', 'key', '"version"'); hrd(s, 'V', 'version'); setv(s, 'g', 'cur', '"4.20"'); },
+          fly: [['h:V.version', 'v:g.cur', '"4.20"']], range: [2, 3] },
+        { line: 6, text: `The path is done. <code>cur ?? fallback</code> - cur is not undefined or null: the function returns "4.20".`,
+          do: s => { const f = frame(s, 'g'); f.vars = f.vars.filter(v => v.name !== 'key'); rd(s, 'g', 'cur'); ret(s, 'g', '"4.20"'); }, reveal: ['ret:g'] },
+        { line: 9, text: `Back in the global code; the path array is garbage now.`,
+          do: s => { pop(s); mk(s, 'c1', 9, 'get(doc, ["modules", "12_4.20", "version"], "?")', 'rv', '"4.20"'); gc(s, 'P'); },
+          fly: [['ret:g', 'mk:c1', '"4.20"', 'ret']] },
+        { line: 0, text: `The second call asks for a path that is not in the report: ["status", "alias"].`,
+          do: s => {
+              hdrop(s, 'P'); unmk(s, 'c1');
+              mk(s, 'c2', 10, 'get(doc, ["status", "alias"], "?")', 'call');
+              hnew(s, 'Q', 'array', [[0, '"status"'], [1, '"alias"']]);
+              push(s, 'g2', 'get(doc, [...], "?")', [['obj', '@R'], ['path', '@Q'], ['fallback', '"?"'], ['cur', '@R', 'let']], 10);
+          }, range: [0, 1] },
+        { line: 4, text: `Key "status": the report has no such key - cur becomes <b>undefined</b>.`,
+          do: s => { hrd(s, 'Q', 0); addv(s, 'g2', 'key', '"status"', 'const'); hlo(s, 'R'); setv(s, 'g2', 'cur', 'undefined'); }, range: [2, 3] },
+        { line: 3, text: `Key "alias": before going down, the check <code>cur == null</code> - true for undefined and null (and only for them: the one useful case of <code>==</code>). So <code>return fallback;</code>. "?" - and no TypeError.`,
+          do: s => { hrd(s, 'Q', 1); setv(s, 'g2', 'key', '"alias"'); rd(s, 'g2', 'cur', 'fallback'); ret(s, 'g2', '"?"'); }, reveal: ['ret:g2'] },
+        { line: 10, text: `The call gives "?".`,
+          do: s => { pop(s); mk(s, 'c2', 10, 'get(doc, ["status", "alias"], "?")', 'rv', '"?"'); gc(s, 'Q'); },
+          fly: [['ret:g2', 'mk:c2', '"?"', 'ret']] },
+        { line: -1, text: `<b>Summary:</b> one loop replaces any chain of <code>?.</code>, and the path can come from data. Why an array? A string path "modules.12_4.20.version" split at the dots gives "modules", "12_4", "20", "version" - the key with the dot is cut in two. Your <code>get</code> in the practice accepts both: a string for simple paths, an array for keys with dots.`,
+          do: s => { unmk(s, 'c2'); hdrop(s, 'Q'); } },
+    ],
+},
+{
+    tab: 'Copies',
+    globals: [CONST('enc'), CONST('same'), CONST('shallow'), CONST('deep')],
+    code: [
+        'const enc = { id: "ENC-01", ports: ["P1"] };',
+        'const same = enc;',
+        'const shallow = { ...enc };',
+        'const deep = structuredClone(enc);',
+        'same.id = "ENC-09";',
+        'shallow.ports.push("P2");',
+        'deep.ports.push("P3");',
+        'console.log(enc.id, enc.ports);   // ?',
+    ],
+    steps: [
+        { line: -1, text: `Three ways to "copy" a record - and only one of them copies everything. Which changes reach the original?` },
+        { line: 0, text: `The array first, then the object that points to it. enc gets the reference.`,
+          do: s => { hnew(s, 'E', 'object', [['id', '"ENC-01"'], ['ports', '@P']]); hnew(s, 'P', 'array', [[0, '"P1"']]); setv(s, 'G', 'enc', '@E'); } },
+        { line: 1, text: `<code>const same = enc;</code> copies the <b>reference</b>: a second arrow to the <b>same</b> object. No new object is created.`,
+          do: s => { rd(s, 'G', 'enc'); setv(s, 'G', 'same', '@E'); } },
+        { line: 2, text: `<code>{ ...enc }</code> (spread) creates a <b>new object</b> and copies each property value: the string "ENC-01", and the <b>reference</b> in ports. The array is not copied - a <b>shallow</b> copy.`,
+          do: s => { rd(s, 'G', 'enc'); hlo(s, 'E'); hnew(s, 'S', 'object', [['id', '"ENC-01"'], ['ports', '@P']]); setv(s, 'G', 'shallow', '@S'); } },
+        { line: 3, text: `<code>structuredClone(enc)</code> copies <b>every level</b>: a new object <b>and</b> a new array. A <b>deep</b> copy - nothing is shared with enc. (structuredClone comes from the environment, not from the language: browsers and Node.js 17+ have it - check your rule engine.)`,
+          do: s => { rd(s, 'G', 'enc'); hlo(s, 'E'); hnew(s, 'C', 'object', [['id', '"ENC-01"'], ['ports', '@Q']]); hnew(s, 'Q', 'array', [[0, '"P1"']]); setv(s, 'G', 'deep', '@C'); } },
+        { line: 4, text: `<code>same.id = "ENC-09"</code> follows the arrow of same - to the original object. enc.id changes too.`,
+          do: s => { rd(s, 'G', 'same'); hset(s, 'E', 'id', '"ENC-09"'); } },
+        { line: 5, text: `<code>shallow.ports.push("P2")</code>: shallow is a new object, but its ports points to the <b>original</b> array. "P2" lands in enc.ports.`,
+          do: s => { rd(s, 'G', 'shallow'); hrd(s, 'S', 'ports'); hset(s, 'P', 1, '"P2"', 'new'); } },
+        { line: 6, text: `<code>deep.ports.push("P3")</code> changes only the array of the deep copy.`,
+          do: s => { rd(s, 'G', 'deep'); hrd(s, 'C', 'ports'); hset(s, 'Q', 1, '"P3"', 'new'); } },
+        { line: 7, text: `<b>ENC-09 [ 'P1', 'P2' ]</b> is printed: two of the three "copies" changed the original.`,
+          do: s => { rd(s, 'G', 'enc'); hrd(s, 'E', 'id', 'ports'); hlo(s, 'P'); log(s, "ENC-09 [ 'P1', 'P2' ]"); }, reveal: ['con'] },
+        { line: -1, text: `<b>Summary:</b> <code>=</code> copies the arrow; <code>{ ...obj }</code> and <code>[...arr]</code> copy one level; <code>structuredClone(obj)</code> copies all levels (older code: <code>JSON.parse(JSON.stringify(obj))</code>). Before you change a part of <code>doc</code>, take a deep copy - or, better, build a new value and leave doc alone.` },
+    ],
+},
+{
+    tab: 'this in a method',
+    advanced: true,
+    globals: [CONST('device'), CONST('f')],
+    code: [
+        'const device = {',
+        '    name: "LAB-DEV-01",',
+        '    describe() {',
+        '        return "Device " + this.name;',
+        '    }',
+        '};',
+        'console.log(device.describe());   // Device LAB-DEV-01',
+        'const f = device.describe;',
+        'console.log(f());                 // ? (strict mode)',
+    ],
+    steps: [
+        { line: -1, text: `<b>Advanced.</b> A <b>method</b> is a function stored in a property of an object. Inside it, <code>this</code> is the object - but which object? It is decided by the <b>call</b>, not by where the function is written.` },
+        { line: 0, range: [0, 5], text: `The object has a string property and a method. The method is a function object in the heap; the property describe holds a reference to it.`,
+          do: s => {
+              hnew(s, 'O', 'object', [['name', '"LAB-DEV-01"'], ['describe', '@F']]);
+              hnew(s, 'F', 'function', [], { src: 'describe() {\n    return "Device " + this.name;\n}' });
+              setv(s, 'G', 'device', '@O');
+          } },
+        { line: 6, text: `<code>device.describe()</code>: read the property (a function), then call it. Because the call has <b>device</b> before the dot, the new frame gets <code>this</code> = an arrow to device.`,
+          do: s => { mk(s, 'c1', 6, 'device.describe()', 'call'); rd(s, 'G', 'device'); hrd(s, 'O', 'describe'); push(s, 'd', 'describe()', [['this', '@O', 'this']], 6); } },
+        { line: 3, text: `<code>this.name</code> follows this to the object: "LAB-DEV-01". The method returns "Device LAB-DEV-01".`,
+          do: s => { rd(s, 'd', 'this'); hrd(s, 'O', 'name'); calc(s, 'd', '"Device " + this.name', '"Device " + "LAB-DEV-01"', '"Device LAB-DEV-01"'); ret(s, 'd', '"Device LAB-DEV-01"'); },
+          reveal: ['res:d', 'ret:d'] },
+        { line: 6, text: `It is printed.`,
+          do: s => { pop(s); mk(s, 'c1', 6, 'device.describe()', 'rv', '"Device LAB-DEV-01"'); log(s, 'Device LAB-DEV-01'); },
+          fly: [['ret:d', 'mk:c1', '"Device LAB-DEV-01"', 'ret']], reveal: ['con'] },
+        { line: 7, text: `<code>const f = device.describe;</code> - no brackets: f gets the reference to the <b>same function</b>. The function does not remember device.`,
+          do: s => { unmk(s, 'c1'); rd(s, 'G', 'device'); hrd(s, 'O', 'describe'); setv(s, 'G', 'f', '@F'); } },
+        { line: 3, text: `<code>f()</code> - a call with <b>nothing before the dot</b>. In strict mode (classes, modules, the practice files) this is <b>undefined</b>.`,
+          do: s => { mk(s, 'c2', 8, 'f()', 'call'); rd(s, 'G', 'f'); push(s, 'd2', 'f()', [['this', 'undefined', 'this']], 8); } },
+        { line: 3, text: `<code>this.name</code> on undefined - <b>TypeError</b>. The same happens when a method is passed as a callback: <code>list.forEach(device.describe)</code>.`,
+          do: s => { rd(s, 'd2', 'this'); log(s, "TypeError: Cannot read properties of undefined (reading 'name')", 'err'); s.err = true; }, reveal: ['con'] },
+        { line: -1, text: `<b>Summary:</b> <code>this</code> is the object <b>before the dot</b> at the moment of the call. Pass a method with its object: <code>() => device.describe()</code>. Arrow functions have no <code>this</code> of their own, so do not write methods as arrows. For rules, plain data objects and helper functions with parameters are simpler - methods matter in classes and libraries.`,
+          do: s => { pop(s); unmk(s, 'c2'); } },
+    ],
+},
+];
+
+// ---------------------------------------------------------------------------
+// State replay: state[i] is the state after step i
+// ---------------------------------------------------------------------------
+function computeStates(sc) {
+    const globalFrame = { id: 'G', kind: 'global', title: 'global', at: null, calc: null, ret: null, note: '',
+        vars: sc.globals.map(([name, lit, kind]) => ({ name, value: lit, type: typeOf(lit), kind })) };
+    let s = { line: -1, range: null, frames: [globalFrame], heap: [], marks: [], console: [], hl: {}, hh: {}, err: false };
+    return sc.steps.map(step => {
+        s = JSON.parse(JSON.stringify(s));
+        s.hl = {}; s.hh = {}; s.err = false;
+        s.line = step.line;
+        s.range = step.range || null;
+        if (step.do) step.do(s);
+        return s;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const FLY_MS = 820, STAGGER = 200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ICON_ARR = '<svg class="arr" viewBox="0 0 22 12"><path d="M1 6H19M14 1.5L20 6L14 10.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg>';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>';
+
+function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+const TOKENS = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|`[^`]*`)|\b(function|return|if|for|of|in|let|const|var|typeof|null|undefined|true|false|this|new)\b|(\b\d+(?:\.\d+)?\b)|\b(console)\b/g;
+function highlight(line) {
+    let out = '', last = 0;
+    line.replace(TOKENS, (m, c, str, k, n, o, idx) => {
+        out += esc(line.slice(last, idx));
+        const cls = c ? 'c' : str ? 's' : k ? 'k' : n ? 'n' : 'o';
+        out += `<span class="${cls}">${esc(m)}</span>`;
+        last = idx + m.length;
+        return m;
+    });
+    return out + esc(line.slice(last));
+}
+
+// split a code line into plain and marked segments; a mark may replace its text (a returned value)
+function renderLine(text, marks) {
+    let segs = [{ t: text }];
+    for (const m of marks) {
+        const i = segs.findIndex(g => !g.m && g.t.includes(m.str));
+        if (i < 0) continue;
+        const g = segs[i], at = g.t.indexOf(m.str);
+        segs.splice(i, 1, { t: g.t.slice(0, at) }, { t: m.to !== undefined ? m.to : m.str, m }, { t: g.t.slice(at + m.str.length) });
+    }
+    return segs.map(g => g.m
+        ? `<span class="mk ${g.m.cls}" data-mk="${g.m.id}">${highlight(g.t)}</span>`
+        : highlight(g.t)).join('');
+}
+
+function renderCode(sc, s) {
+    const paused = {};
+    const t = topOf(s);
+    s.frames.forEach(f => { if (f !== t && f.at !== null) paused[f.at] = (paused[f.at] || 0) + 1; });
+    $('#code').innerHTML = sc.code.map((l, i) => {
+        const cls = [];
+        if (i === s.line) cls.push('active');
+        if (i === s.line && s.err) cls.push('error');
+        if (paused[i]) cls.push('paused');
+        if (s.range && i >= s.range[0] && i <= s.range[1]) cls.push('range');
+        const tag = paused[i] ? `<span class="ltag lt-pause">${UI.paused}${paused[i] > 1 ? ' x' + paused[i] : ''}</span>` : '';
+        const marks = s.marks.filter(m => m.line === i);
+        return `<li class="${cls.join(' ')}"><span class="ln">${i + 1}</span><span class="src">${renderLine(l, marks)}</span>${tag}</li>`;
+    }).join('');
+    $('#lineNote').textContent = s.line >= 0 ? UI.line(s.line + 1) : '';
+}
+
+function valHTML(lit) {
+    const type = typeOf(lit);
+    if (type === 'ref') return `<span class="refdot" data-ref="${lit.slice(1)}"></span>`;
+    return `<span class="val t-${type}">${esc(lit)}</span>`;
+}
+
+function varHTML(f, v, s, prevF, targets) {
+    const key = f.id + '.' + v.name;
+    const cls = ['vbox'];
+    if (v.type === 'function') cls.push('fn');
+    if (v.type === 'ref') cls.push('ref');
+    if (s.hl[key]) cls.push('hl-' + s.hl[key]);
+    const pv = prevF && prevF.vars.find(x => x.name === v.name);
+    if (pv && pv.value !== v.value && !targets.has('v:' + key)) cls.push('changed');
+    const val = v.value === null
+        ? `<span class="val uninit">${UI.uninit}</span>`
+        : valHTML(v.value) + (v.type === 'function' ? '' : `<span class="type">${v.type}</span>`);
+    const kind = UI.kindLabel[v.kind] ? `<span class="vkind">${UI.kindLabel[v.kind]}</span>` : '';
+    return `<div class="var" data-v="${esc(v.name)}"><div class="vtop"><span class="vname">${esc(v.name)}</span>${kind}</div><div class="${cls.join(' ')}">${val}</div></div>`;
+}
+
+function frameHTML(f, s, o) {
+    const anim = o.ghost ? ' popped' : o.pushed ? ' pushed' : '';
+    const isG = f.kind === 'global';
+    const cls = ['frame'];
+    if (isG) cls.push('global');
+    if (!o.ghost) cls.push(o.top ? 'running' : 'paused');
+    const status = o.ghost ? `<span class="pill st-done">${UI.finished}</span>`
+        : o.top ? `<span class="pill st-run">${UI.running}</span>`
+        : `<span class="pill st-pause">${f.at !== null ? UI.pausedLine(f.at + 1) : UI.paused}</span>`;
+    const head = isG
+        ? `<span class="fname">global</span><span class="flabel">${UI.globalFrame}</span>${status}`
+        : `<span class="fname">${esc(f.title)}</span>${status}<span class="pill faddr">${UI.returnTo(f.retLine + 1)}</span>`;
+    let body = f.vars.map(v => varHTML(f, v, s, o.prevF, o.targets)).join('');
+    if (!f.vars.length) body = `<span class="fnote">${UI.noLocals}</span>`;
+    if (f.note) body += `<span class="fnote scope">${esc(f.note)}</span>`;
+    let foot = '';
+    if (f.calc || f.ret) {
+        const c = f.calc;
+        const calcHTML = c ? `<span class="ck">${UI.expression}</span><code class="cv">${esc(c.src)}</code>`
+            + (c.sub ? ICON_ARR + `<code class="cv calc-sub">${esc(c.sub)}</code>` : '')
+            + (c.res ? ICON_ARR + `<code class="cv calc-res">${esc(c.res)}</code>` : '') : '';
+        const freshRet = f.ret && !(o.prevF && o.prevF.ret);
+        const retHTML = f.ret ? `<span class="fret${freshRet ? ' fresh' : ''}">${f.ret.implicit ? UI.returnsNone : UI.returns}<code class="rv">${esc(f.ret.value)}</code></span>` : '';
+        foot = `<div class="ffoot">${calcHTML}${retHTML}</div>`;
+    }
+    return `<div class="${cls.join(' ')}${anim}" data-f="${f.id}"><div class="fhead">${head}</div><div class="fbody">${body}</div>${foot}</div>`;
+}
+
+function renderStack(sc, s, prev, step) {
+    const box = $('#stack');
+    box.classList.toggle('compact', !!sc.compact);
+    const targets = new Set(prev && step.fly ? step.fly.map(f => f[1]) : []);
+    const t = topOf(s);
+    let html = s.frames.map(f => {
+        const prevF = prev && prev.frames.find(x => x.id === f.id && x.title === f.title);
+        return frameHTML(f, s, { top: f === t, pushed: !!prev && !prevF, prevF, targets });
+    }).join('');
+    if (prev) {
+        const gone = prev.frames.filter(f => !s.frames.some(x => x.id === f.id && x.title === f.title));
+        html += gone.map(f => frameHTML(f, prev, { ghost: true, targets })).join('');
+    }
+    box.innerHTML = html;
+    $('#stackNote').textContent = s.frames.length ? UI.frames(s.frames.length) : UI.stackEmpty;
+}
+
+function heapCellHTML(o, c, s) {
+    const hl = s.hh[o.id + '.' + c.k];
+    const v = `<span class="hval${hl ? ' hl-' + hl : ''}">${valHTML(c.v)}</span>`;
+    return o.kind === 'array'
+        ? `<div class="hcell" data-k="${esc(c.k)}"><span class="hidx">${esc(c.k)}</span>${v}</div>`
+        : `<div class="hcell" data-k="${esc(c.k)}"><span class="hkey">${esc(c.k)}</span>${v}</div>`;
+}
+
+function renderHeap(s, prev) {
+    const box = $('#heap');
+    // many objects: objects on the left, arrays on the right, so the arrows stay short
+    box.classList.toggle('two', s.heap.length > 4);
+    if (!s.heap.length) { box.innerHTML = `<div class="heap-empty">${UI.heapEmpty}</div>`; return; }
+    box.innerHTML = s.heap.map(o => {
+        const cls = ['hobj', 'k-' + o.kind];
+        if (o.garbage) cls.push('garbage');
+        const hl = s.hh['o:' + o.id];
+        if (hl) cls.push('hl-' + hl);
+        if (prev && !prev.heap.some(x => x.id === o.id)) cls.push('fresh');
+        let head = `<span class="hkind">${UI.kinds[o.kind]}</span>`;
+        if (o.kind === 'array') head += `<span class="hlen">${UI.length(o.cells.length)}</span>`;
+        if (o.note) head += `<span class="hnote">${esc(o.note)}</span>`;
+        if (o.garbage) head += `<span class="pill st-gc">${UI.garbage}</span>`;
+        let body;
+        if (o.kind === 'function') body = `<code class="hsrc">${highlight(o.src).replace(/\n/g, '<br>')}</code>`;
+        else if (!o.cells.length) body = `<span class="hempty">${UI.empty}</span>`;
+        else body = `<div class="hcells ${o.kind === 'array' ? 'harr' : 'obj'}">${o.cells.map(c => heapCellHTML(o, c, s)).join('')}</div>`;
+        return `<div class="${cls.join(' ')}" data-o="${o.id}"><div class="hhead">${head}</div>${body}</div>`;
+    }).join('');
+}
+
+function renderConsole(s) {
+    const box = $('#console');
+    box.innerHTML = s.console.length
+        ? s.console.map(l => `<div class="cline ${l.cls}"><span class="prompt">&gt;</span>${esc(l.text)}</div>`).join('')
+        : `<div class="console-empty">${UI.conEmpty}</div>`;
+    box.scrollTop = box.scrollHeight;
+}
+
+// ---------------------------------------------------------------------------
+// Reference arrows: from every dot to its object in the heap. The paths follow the
+// layout for a while after each step, because frames slide in and out.
+// ---------------------------------------------------------------------------
+let arrowList = [], arrowTimer = null;
+function buildArrows(s, animate) {
+    const svg = $('#arrows');
+    let html = '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>';
+    arrowList = [];
+    $$('.refdot').forEach((dot, i) => {
+        if (dot.closest('.popped')) return;
+        const tgt = $(`#heap .hobj[data-o="${dot.dataset.ref}"]`);
+        if (!tgt) return;
+        const box = dot.closest('.vbox, .hval');
+        const fresh = animate && box && /hl-(write|new)/.test(box.className);
+        const weak = !!dot.closest('.garbage');
+        html += `<path class="refpath${fresh ? ' draw' : ''}${weak ? ' weak' : ''}" data-i="${i}" pathLength="1" marker-end="url(#ah)" d=""/>`;
+        arrowList.push({ dot, tgt, i });
+    });
+    svg.innerHTML = html;
+    updateArrows();
+    clearInterval(arrowTimer);
+    const until = performance.now() + 1500;
+    arrowTimer = setInterval(() => { updateArrows(); if (performance.now() > until) clearInterval(arrowTimer); }, 30);
+}
+function updateArrows() {
+    const base = $('#stage').getBoundingClientRect();
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    for (const a of arrowList) {
+        const p = $(`#arrows path[data-i="${a.i}"]`);
+        if (!p) continue;
+        const d = a.dot.getBoundingClientRect(), t = a.tgt.getBoundingClientRect();
+        const x1 = d.left + d.width / 2 - base.left, y1 = d.top + d.height / 2 - base.top;
+        const ty = t.top + Math.min(t.height / 2, 1.3 * rem) - base.top;
+        let path;
+        if (t.left > d.right + 8) {
+            const x2 = t.left - base.left - 2;
+            const dx = Math.max(30, (x2 - x1) / 2);
+            path = `M${x1} ${y1} C${x1 + dx} ${y1}, ${x2 - dx} ${ty}, ${x2} ${ty}`;
+        } else {
+            // inside the heap: loop out on the right side and come back into the object
+            const x2 = t.right - base.left + 2;
+            const xo = Math.max(x1, x2) + 2.2 * rem;
+            path = `M${x1} ${y1} C${xo} ${y1}, ${xo} ${ty}, ${x2} ${ty}`;
+        }
+        p.setAttribute('d', path);
+    }
+}
+window.addEventListener('resize', updateArrows);
+
+// ---------------------------------------------------------------------------
+// Flying values
+// ---------------------------------------------------------------------------
+function resolve(key) {
+    if (key === 'con') return $('#console .cline:last-child');
+    const i = key.indexOf(':');
+    const kind = key.slice(0, i), rest = key.slice(i + 1);
+    if (kind === 'mk') return $(`#code [data-mk="${rest}"]`);
+    if (kind === 'o') return $(`#heap .hobj[data-o="${rest}"] .hhead`);
+    const dot = rest.indexOf('.');
+    if (kind === 'v') return $(`#stack .frame[data-f="${rest.slice(0, dot)}"]:not(.popped) .var[data-v="${rest.slice(dot + 1)}"] .vbox`);
+    if (kind === 'h') return $(`#heap .hobj[data-o="${rest.slice(0, dot)}"] .hcell[data-k="${rest.slice(dot + 1)}"] .hval`);
+    const sel = { calc: '.calc-sub', res: '.calc-res', ret: '.fret .rv' }[kind];
+    return sel ? $(`#stack .frame[data-f="${rest}"] ${sel}`) : null;
+}
+
+function bump(el) {
+    el.classList.remove('land');
+    void el.offsetWidth;
+    el.classList.add('land');
+}
+
+function playFlights(step, tk) {
+    const flights = step.fly || [];
+    if (reduceMotion) return;
+    const layer = $('#flyLayer');
+    const pending = new Map();
+    const revealEls = (step.reveal || []).map(resolve).filter(Boolean);
+    revealEls.forEach(el => el.classList.add('await'));
+    if (!flights.length) { revealEls.forEach(el => { el.classList.remove('await'); bump(el); }); return; }
+
+    const plan = flights.map(([from, to, text, opt], i) => {
+        const src = resolve(from), dst = resolve(to);
+        const awaits = !!dst && (to !== 'con' || !revealEls.includes(dst));
+        if (awaits) {
+            dst.classList.add('await');
+            pending.set(dst, (pending.get(dst) || 0) + 1);
+        }
+        return { src, dst, to, text, opt, i, awaits };
+    });
+
+    let left = plan.length;
+    for (const p of plan) {
+        const finish = () => {
+            if (tk !== token) return;
+            if (p.awaits) {
+                const c = pending.get(p.dst) - 1;
+                pending.set(p.dst, c);
+                if (c === 0) { p.dst.classList.remove('await'); bump(p.dst); }
+            }
+            if (--left === 0) revealEls.forEach(el => { el.classList.remove('await'); bump(el); });
+        };
+        if (!p.src || !p.dst) { finish(); continue; }
+
+        const a = p.src.getBoundingClientRect(), b = p.dst.getBoundingClientRect();
+        const chip = document.createElement('div');
+        chip.className = 'fly ' + (p.opt === 'ret' ? 'ret' : /^[vh]:/.test(p.to) ? 'write' : 'read');
+        chip.textContent = p.text;
+        layer.appendChild(chip);
+        const w = chip.offsetWidth, h = chip.offsetHeight;
+        const x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2;
+        const dx = b.left + b.width / 2 - w / 2 - x0, dy = b.top + b.height / 2 - h / 2 - y0;
+        const lift = Math.min(90, 30 + Math.hypot(dx, dy) * .15);
+        chip.style.left = x0 + 'px';
+        chip.style.top = y0 + 'px';
+        const anim = chip.animate([
+            { transform: 'translate(0,0) scale(.85)', opacity: 0 },
+            { transform: 'translate(0,0) scale(1)', opacity: 1, offset: .12 },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) scale(1.15)`, opacity: 1, offset: .55 },
+            { transform: `translate(${dx}px,${dy}px) scale(1)`, opacity: 1 },
+        ], { duration: FLY_MS, delay: p.i * STAGGER, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'both' });
+        anim.onfinish = () => { chip.remove(); finish(); };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+let scIdx = 0, stepIdx = 0, states = [], playing = false, autoTimer = null, token = 0;
+
+function render(animate) {
+    const sc = SCENARIOS[scIdx];
+    const step = sc.steps[stepIdx];
+    const s = states[stepIdx];
+    const prev = animate && stepIdx > 0 ? states[stepIdx - 1] : null;
+    const tk = ++token;
+    $('#flyLayer').innerHTML = '';
+
+    renderCode(sc, s);
+    renderStack(sc, s, prev, step);
+    renderHeap(s, prev);
+    renderConsole(s);
+    buildArrows(s, !!prev);
+
+    const N = sc.steps.length;
+    $('#explainMeta').textContent = UI.step(stepIdx + 1, N);
+    const ex = $('#explain');
+    ex.innerHTML = step.text;
+    ex.classList.remove('fresh'); void ex.offsetWidth; ex.classList.add('fresh');
+
+    $('#progress').innerHTML = sc.steps.map((_, i) =>
+        `<button class="${i < stepIdx ? 'done' : i === stepIdx ? 'cur' : ''}" data-i="${i}" title="${UI.stepN(i + 1)}" aria-label="${UI.stepN(i + 1)}"></button>`).join('');
+    $('#firstBtn').disabled = $('#prevBtn').disabled = stepIdx === 0;
+    $('#nextBtn').disabled = stepIdx === N - 1;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE + UI.pause : ICON_PLAY + UI.play;
+    try { history.replaceState(null, '', '#' + (scIdx + 1) + (stepIdx ? '.' + (stepIdx + 1) : '')); } catch (e) { /* file:// in some browsers */ }
+
+    if (prev) requestAnimationFrame(() => { if (tk === token) playFlights(step, tk); });
+    scheduleAuto();
+}
+
+function goto(i, animate = false) {
+    const N = SCENARIOS[scIdx].steps.length;
+    stepIdx = Math.max(0, Math.min(N - 1, i));
+    render(animate);
+}
+function next() {
+    if (stepIdx < SCENARIOS[scIdx].steps.length - 1) goto(stepIdx + 1, true);
+    else setPlaying(false);
+}
+function prev() { goto(stepIdx - 1); }
+
+function setPlaying(on) {
+    playing = on;
+    $('#playBtn').innerHTML = playing ? ICON_PAUSE + UI.pause : ICON_PLAY + UI.play;
+    if (playing && stepIdx === SCENARIOS[scIdx].steps.length - 1) goto(0);
+    else if (playing) next();
+    else clearTimeout(autoTimer);
+}
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (!playing) return;
+    const sc = SCENARIOS[scIdx];
+    if (stepIdx >= sc.steps.length - 1) { playing = false; $('#playBtn').innerHTML = ICON_PLAY + UI.play; return; }
+    const len = sc.steps[stepIdx].text.replace(/<[^>]+>/g, '').length;
+    autoTimer = setTimeout(next, Math.min(10000, Math.max(2800, 1200 + len * 40)));
+}
+
+function selectScenario(i, step = 0) {
+    scIdx = Math.max(0, Math.min(SCENARIOS.length - 1, i));
+    states = computeStates(SCENARIOS[scIdx]);
+    document.querySelectorAll('.tab').forEach((t, j) => t.setAttribute('aria-selected', j === scIdx));
+    playing = false;
+    goto(step);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+$('#tabs').innerHTML = SCENARIOS.map((sc, i) =>
+    `<button class="tab" role="tab" data-i="${i}">${i + 1}. ${esc(sc.tab)}${sc.advanced ? `<span class="adv">${UI.advanced}</span>` : ''}</button>`).join('');
+$('#tabs').addEventListener('click', e => {
+    const t = e.target.closest('.tab');
+    if (t) selectScenario(+t.dataset.i);
+});
+$('#progress').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { setPlaying(false); goto(+b.dataset.i); }
+});
+$('#nextBtn').addEventListener('click', next);
+$('#prevBtn').addEventListener('click', () => { setPlaying(false); prev(); });
+$('#firstBtn').addEventListener('click', () => { setPlaying(false); goto(0); });
+$('#playBtn').addEventListener('click', () => setPlaying(!playing));
+// keep focus off the buttons, so Space always means "next step"
+document.querySelectorAll('.btn, .tab').forEach(b => b.addEventListener('mousedown', e => e.preventDefault()));
+
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const onButton = document.activeElement && document.activeElement.tagName === 'BUTTON';
+    if (onButton && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); setPlaying(false); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); setPlaying(false); goto(0); }
+    else if (e.key === 'p' || e.key === 'P') setPlaying(!playing);
+    else if (/^[1-9]$/.test(e.key) && +e.key <= SCENARIOS.length) selectScenario(+e.key - 1);
+});
+
+$('#themeBtn').addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.dataset.theme
+        ? root.dataset.theme === 'dark'
+        : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    try { localStorage.setItem('objectsInMemoryTheme', root.dataset.theme); } catch (e) { /* storage blocked */ }
+});
+try {
+    const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('objectsInMemoryTheme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+} catch (e) { /* storage blocked */ }
+
+// Self-test (#selftest): render every step and check that all flight endpoints, marks,
+// reveal targets and arrow targets exist, and that nothing overflows its panel.
+function selfTest() {
+    const errors = [];
+    const fits = (el, what) => {
+        if (el.scrollHeight > el.clientHeight + 2) errors.push(`${what}: overflow ${el.scrollHeight - el.clientHeight}px`);
+    };
+    SCENARIOS.forEach((sc, i) => {
+        selectScenario(i);
+        sc.steps.forEach((step, j) => {
+            const where = `#${i + 1}.${j + 1}`;
+            try { goto(j); } catch (e) { errors.push(`${where}: ${e.message}`); return; }
+            const s = states[j];
+            s.marks.forEach(m => { if (!$(`#code [data-mk="${m.id}"]`)) errors.push(`${where}: mark ${m.id} not found`); });
+            (step.fly || []).forEach(([a, b]) => {
+                // ret flights start from the popped frame, which is drawn only when animating
+                if (!a.startsWith('ret:') && !resolve(a)) errors.push(`${where}: no source ${a}`);
+                if (!resolve(b)) errors.push(`${where}: no target ${b}`);
+            });
+            (step.reveal || []).forEach(k => { if (!resolve(k)) errors.push(`${where}: no reveal ${k}`); });
+            $$('.refdot').forEach(d => { if (!$(`#heap .hobj[data-o="${d.dataset.ref}"]`)) errors.push(`${where}: no heap object ${d.dataset.ref}`); });
+            fits($('#stack'), where + ' stack');
+            fits($('#heap'), where + ' heap');
+            fits($('.code-panel'), where + ' code');
+            fits($('.app'), where + ' page');
+            if (document.documentElement.scrollHeight > innerHeight + 1) errors.push(`${where}: page taller than window`);
+        });
+    });
+    const out = document.createElement('pre');
+    out.id = 'selftest';
+    out.textContent = errors.length ? 'SELFTEST FAIL\n' + errors.join('\n') : 'SELFTEST OK';
+    document.body.appendChild(out);
+}
+
+function fromHash() {
+    if (location.hash === '#selftest') { selfTest(); return; }
+    const [a, b] = location.hash.slice(1).split('.');
+    selectScenario((parseInt(a, 10) || 1) - 1, (parseInt(b, 10) || 1) - 1);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+</script>
+<script>
+// language switch: keep the current scenario / step (#N.M) and theme
+(function () {
+    var a = document.getElementById('langBtn');
+    if (!a) return;
+    var base = a.getAttribute('href');
+    a.addEventListener('click', function () {
+        var t = document.documentElement.dataset.theme;
+        a.href = base + (t === 'light' || t === 'dark' ? '?theme=' + t : '') + location.hash;
+    });
+})();
+</script>
+</body>
+</html>
