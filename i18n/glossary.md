@@ -85,6 +85,7 @@ Written in Latin letters, without quotes or backticks. Plural in English
 | device | устройство |
 | document | документ |
 | sample (data, rule, document) | примерен |
+| example JSON document (the `doc` of the examples) | примерният JSON документ |
 | session | занятие |
 | lecture | лекция |
 | practice, practice task | упражнение, задача за упражнение |

@@ -1,7 +1,7 @@
 # Practical JavaScript Basics - Slides (course site)
 
 The lectures of the course "Practical JavaScript Basics": 10 sessions of 4 academic hours,
-JavaScript on real-world JSON data (a sample device report and a
+JavaScript on real-world JSON data (an example JSON document and a
 check rule over it).
 
 Live site: https://ivapopova-courses.github.io/JS-Basics-Practical-IBM-Slides/
@@ -42,7 +42,7 @@ npm run build        # static site in site/.vitepress/dist (for GitHub Pages)
   tab at the window edge - click it to show the panel again. Double-click the
   edge to reset. Remembered per browser.
 - **Run / Edit / Reset** under the examples: the code runs in the browser; the
-  sample device report is available as `doc`.
+  example JSON document is available as `doc`.
 
 ## Layout
 
@@ -60,7 +60,7 @@ site/                          the course site (VitePress)
                                LangSwitch.vue (the EN / BG button)
     bg/                        GENERATED Bulgarian pages (git-ignored, see i18n/)
 i18n/                          translations: bg/*.po, the generator, translator guide, glossary
-data/sample-asset.json         MADE-UP sample device report (same file as in Homework/data/)
+data/sample-asset.json         MADE-UP example JSON document (same file as in Homework/data/)
 ```
 
 Practice files are in the Homework repository; students run

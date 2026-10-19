@@ -95,8 +95,8 @@ msgstr "`versionBelow(a, b)` все още е готовата helper функц
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:74
-msgid "The sample report now has two lists: `doc.inventory.features` (strings) and `doc.inventory.enclosures` (objects). In [section 11](#_11-reading-existing-rules) you run this rule, and read the same rule in the older style."
-msgstr "Примерният отчет вече има два списъка: `doc.inventory.features` (strings) и `doc.inventory.enclosures` (обекти). В [раздел 11](#_11-reading-existing-rules) ще изпълните това правило и ще прочетете същото правило в по-стария стил."
+msgid "The example JSON document now has two lists: `doc.inventory.features` (strings) and `doc.inventory.enclosures` (objects). In [section 11](#_11-reading-existing-rules) you run this rule, and read the same rule in the older style."
+msgstr "Примерният JSON документ вече има два списъка: `doc.inventory.features` (strings) и `doc.inventory.enclosures` (обекти). В [раздел 11](#_11-reading-existing-rules) ще изпълните това правило и ще прочетете същото правило в по-стария стил."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:79
@@ -1532,3 +1532,6 @@ msgstr "Eloquent JavaScript (4-то издание): [Data Structures: Objects a
 #: site/lectures/04-arrays-and-records.md:1814
 msgid "**Next session:** functions. The helpers you used ready-made - `versionBelow`, `asList`, `capitalize` - you write yourself, and you learn to read the older `function (x) { ... }` code in existing rules."
 msgstr "**Следващото занятие:** функции. Helper функциите, които използвахте готови - `versionBelow`, `asList`, `capitalize` - ще напишете сами и ще се научите да четете по-стария код `function (x) { ... }` в съществуващите правила."
+
+#~ msgid "The sample report now has two lists: `doc.inventory.features` (strings) and `doc.inventory.enclosures` (objects). In [section 11](#_11-reading-existing-rules) you run this rule, and read the same rule in the older style."
+#~ msgstr "Примерният отчет вече има два списъка: `doc.inventory.features` (strings) и `doc.inventory.enclosures` (обекти). В [раздел 11](#_11-reading-existing-rules) ще изпълните това правило и ще прочетете същото правило в по-стария стил."

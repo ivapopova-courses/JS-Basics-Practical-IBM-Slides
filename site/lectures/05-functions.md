@@ -271,7 +271,7 @@ console.log(sumOfSquares(2, 3));      // 4 + 9 = 13
 the stack grows on every call and shrinks on every return.
 :::
 
-On the device report, a helper takes the report as a parameter:
+On the example JSON document, a helper takes the document as a parameter:
 
 ```js run
 function getModel(doc) {
@@ -2182,7 +2182,7 @@ function rule(doc) {  // never change this line
     }
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);
 
 console.log("a second report:");
@@ -2312,7 +2312,7 @@ function rule(doc) {  // never change this line
     });
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);
 
 console.log("a second report:");

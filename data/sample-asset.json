@@ -1,5 +1,5 @@
 {
-  "_note": "MADE-UP sample for the course. All names, ids and values are invented; only the shape is typical of a device report.",
+  "_note": "MADE-UP example JSON document for the course. All names, ids and values are invented; only the shape is typical of the JSON a device sends.",
   "status": {
     "device_alias": "D7F3A9C21E40B815",
     "epoch": "1791770402"

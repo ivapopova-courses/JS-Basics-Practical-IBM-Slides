@@ -295,8 +295,8 @@ msgstr "**Стекът на извикванията:** [4. Вложени из�
 
 #. paragraph
 #: site/lectures/05-functions.md:274
-msgid "On the device report, a helper takes the report as a parameter:"
-msgstr "В отчета на устройството helper функцията получава отчета като параметър:"
+msgid "On the example JSON document, a helper takes the document as a parameter:"
+msgstr "В примерния JSON документ helper функцията получава документа като параметър:"
 
 #. paragraph
 #: site/lectures/05-functions.md:288
@@ -2152,3 +2152,6 @@ msgstr "Видео: [Learn JavaScript ARROW FUNCTIONS in 8 minutes](https://www.
 #: site/lectures/05-functions.md:2423
 msgid "**Next session:** objects. Deep paths and keys with dots, dictionaries keyed by ids, the same data as an array in one report and as an object in another - and your first version of `get(doc, path, fallback)` for the course project."
 msgstr "**Следващото занятие:** обекти. Дълбоки пътища и ключове с точки, речници с ключове id, едни и същи данни като array в един отчет и като обект в друг - и първата ви версия на `get(doc, path, fallback)` за курсовия проект."
+
+#~ msgid "On the device report, a helper takes the report as a parameter:"
+#~ msgstr "В отчета на устройството helper функцията получава отчета като параметър:"

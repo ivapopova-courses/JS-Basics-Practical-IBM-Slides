@@ -90,8 +90,8 @@ msgstr "`get` е първата helper функция на **курсовия п
 
 #. paragraph
 #: site/lectures/06-objects.md:83
-msgid "The sample report now has two new parts: `doc.inventory.modules` (a dictionary with keys like `\"12_4.20\"`) and `doc.inventory.labels` (keys with spaces). In [section 13](#_13-reading-existing-rules) you run this rule, and read an older rule that does the same work."
-msgstr "Примерният отчет вече има две нови части: `doc.inventory.modules` (dictionary с ключове като `\"12_4.20\"`) и `doc.inventory.labels` (ключове с интервали). В [раздел 13](#_13-reading-existing-rules) ще изпълните това правило и ще прочетете по-старо правило, което върши същата работа."
+msgid "The example JSON document now has two new parts: `doc.inventory.modules` (a dictionary with keys like `\"12_4.20\"`) and `doc.inventory.labels` (keys with spaces). In [section 13](#_13-reading-existing-rules) you run this rule, and read an older rule that does the same work."
+msgstr "Примерният JSON документ вече има две нови части: `doc.inventory.modules` (dictionary с ключове като `\"12_4.20\"`) и `doc.inventory.labels` (ключове с интервали). В [раздел 13](#_13-reading-existing-rules) ще изпълните това правило и ще прочетете по-старо правило, което върши същата работа."
 
 #. paragraph
 #: site/lectures/06-objects.md:88
@@ -1517,3 +1517,6 @@ msgstr "Видео: [Modern JavaScript Tutorial #5 - Objects](https://www.youtub
 #: site/lectures/06-objects.md:1625
 msgid "**Next session:** array methods - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - and grouping thousands of records into a dictionary once, instead of searching them again and again. The course project starts for real: choose the product, the sample documents and the first helpers."
 msgstr "**Следващото занятие:** методи на arrays - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - и групиране на хиляди записи в dictionary веднъж, вместо да ги търсите отново и отново. Курсовият проект започва истински: изберете продукта, примерните документи и първите helper функции."
+
+#~ msgid "The sample report now has two new parts: `doc.inventory.modules` (a dictionary with keys like `\"12_4.20\"`) and `doc.inventory.labels` (keys with spaces). In [section 13](#_13-reading-existing-rules) you run this rule, and read an older rule that does the same work."
+#~ msgstr "Примерният отчет вече има две нови части: `doc.inventory.modules` (dictionary с ключове като `\"12_4.20\"`) и `doc.inventory.labels` (ключове с интервали). В [раздел 13](#_13-reading-existing-rules) ще изпълните това правило и ще прочетете по-старо правило, което върши същата работа."

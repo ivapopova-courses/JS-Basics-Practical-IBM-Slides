@@ -1080,8 +1080,8 @@ msgstr "Най-бързият начин: натиснете **Run** под ко
 
 #. paragraph
 #: site/lectures/01-getting-started.md:493
-msgid "`console.log(...)` prints its value - our main tool to see what a program does. `doc` is the sample device report; it is ready in every example on this site."
-msgstr "`console.log(...)` отпечатва стойността си - основният ни инструмент, за да видим какво прави една програма. `doc` е примерният отчет на устройство; той е готов във всеки пример на този сайт."
+msgid "`console.log(...)` prints its value - our main tool to see what a program does. `doc` is the example JSON document; it is ready in every example on this site."
+msgstr "`console.log(...)` отпечатва стойността си - основният ни инструмент, за да видим какво прави една програма. `doc` е примерният JSON документ; той е готов във всеки пример на този сайт."
 
 #. heading 3
 #: site/lectures/01-getting-started.md:496
@@ -1537,6 +1537,9 @@ msgstr "Engine-ът: [V8](https://v8.dev/)"
 #: site/lectures/01-getting-started.md:735
 msgid "**Next session:** variables, types and operators - `let` and `const`, numbers and strings, and turning the strings of a report into numbers."
 msgstr "**Следващото занятие:** variables, типове и оператори - `let` и `const`, числа и strings и превръщане на strings от отчета в числа."
+
+#~ msgid "`console.log(...)` prints its value - our main tool to see what a program does. `doc` is the sample device report; it is ready in every example on this site."
+#~ msgstr "`console.log(...)` отпечатва стойността си - основният ни инструмент, за да видим какво прави една програма. `doc` е примерният отчет на устройство; той е готов във всеки пример на този сайт."
 
 #~ msgid "<span>Session 1</span>"
 #~ msgstr "<span>Занятие 1</span>"

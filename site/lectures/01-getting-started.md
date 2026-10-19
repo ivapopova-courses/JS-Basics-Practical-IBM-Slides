@@ -491,7 +491,7 @@ console.log("The model is " + doc.overview.model);
 ```
 
 `console.log(...)` prints its value - our main tool to see what a program does.
-`doc` is the sample device report; it is ready in every example on this site.
+`doc` is the example JSON document; it is ready in every example on this site.
 
 ### In the browser
 

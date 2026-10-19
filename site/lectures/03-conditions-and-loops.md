@@ -723,7 +723,7 @@ function rule(doc) {
     emit(doc.status.device_alias, { model: model, check: "remote login enabled" });
 }
 
-rule(doc);                          // the sample report: an alert
+rule(doc);                          // the example JSON document: an alert
 rule({ overview: { model: "XR-100" } });   // other model: nothing
 rule({});                           // no overview: nothing, and no error
 ```
@@ -1250,7 +1250,7 @@ function rule(doc) {
                  "Action": action, "Remote login": login });
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);              // firmware 4.2.1.7 is OK - no alert
 
 console.log("an older device:");
@@ -1327,7 +1327,7 @@ function rule(doc) {  // the engine calls rule(doc) - keep this line as it is
     emit(name, details);
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);
 
 console.log("an older device:");

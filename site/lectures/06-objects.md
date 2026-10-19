@@ -80,7 +80,7 @@ function rule(doc) {          // the engine calls rule(doc) - keep this line
 
 - `get` is the first helper of the **course project**: the practice task 2 makes it
   robust, and your library grows from it in the next sessions.
-- The sample report now has two new parts: `doc.inventory.modules` (a dictionary
+- The example JSON document now has two new parts: `doc.inventory.modules` (a dictionary
   with keys like `"12_4.20"`) and `doc.inventory.labels` (keys with spaces). In
   [section 13](#_13-reading-existing-rules) you run this rule, and read an older
   rule that does the same work.
@@ -1457,7 +1457,7 @@ function rule(doc) {
     });
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);
 
 console.log("no modules:");
@@ -1507,7 +1507,7 @@ function rule(doc) {  // never change this line
     }
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);
 
 console.log("no modules:");

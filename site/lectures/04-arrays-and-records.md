@@ -71,7 +71,7 @@ function rule(doc) {
 
 - `versionBelow(a, b)` is still the ready-made helper from lecture 3; we write our
   own in session 5.
-- The sample report now has two lists: `doc.inventory.features` (strings) and
+- The example JSON document now has two lists: `doc.inventory.features` (strings) and
   `doc.inventory.enclosures` (objects). In
   [section 11](#_11-reading-existing-rules) you run this rule, and read the same
   rule in the older style.
@@ -1623,7 +1623,7 @@ function rule(doc) {
     });
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);
 
 console.log("all enclosures fine:");
@@ -1698,7 +1698,7 @@ function rule(doc) {  // the engine calls rule(doc) - keep this line as it is
     emit(name, details);
 }
 
-console.log("sample report:");
+console.log("example JSON document:");
 rule(doc);
 
 console.log("enclosures sent as a string:");
