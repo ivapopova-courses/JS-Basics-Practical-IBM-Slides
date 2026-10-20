@@ -471,9 +471,10 @@ Each file explains the task at the top. Write your code between the
 
 ## Homework
 
-1. Finish the four practice tasks - every check must print `OK`.
-2. `02-variables-and-types/homework.js` (in the homework repository): a remote login summary from the
+1. `02-variables-and-types/homework.js` (in the homework repository): a remote login summary from the
    `remote_login_*` values.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. Optional: take a JSON document you know (anonymised) and try the same
    conversions on it.
 

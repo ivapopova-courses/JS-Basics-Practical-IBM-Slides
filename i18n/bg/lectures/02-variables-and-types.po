@@ -725,20 +725,23 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:474
-msgid "Finish the four practice tasks - every check must print `OK`."
-msgstr "Довършете четирите задачи за упражнение - всяка проверка трябва да извежда `OK`."
-
-#. paragraph
-#: site/lectures/02-variables-and-types.md:475
 msgid "`02-variables-and-types/homework.js` (in the homework repository): a remote login summary from the `remote_login_*` values."
 msgstr "`02-variables-and-types/homework.js` (в homework repository): обобщение за отдалечения вход от стойностите `remote_login_*`."
 
 #. paragraph
-#: site/lectures/02-variables-and-types.md:477
+#: site/lectures/02-variables-and-types.md:476
+msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/02-variables-and-types.md:478
 msgid "Optional: take a JSON document you know (anonymised) and try the same conversions on it."
 msgstr "По желание: вземете JSON документ, който познавате (анонимизиран), и опитайте същите преобразувания върху него."
 
 #. paragraph
-#: site/lectures/02-variables-and-types.md:480
+#: site/lectures/02-variables-and-types.md:481
 msgid "**Next session:** comparisons, logical operators, conditions and loops - and the `if` of the sample rule."
 msgstr "**Следващото занятие:** сравнения, логически оператори, условия и loops - и `if` от примерното правило."
+
+#~ msgid "Finish the four practice tasks - every check must print `OK`."
+#~ msgstr "Довършете четирите задачи за упражнение - всяка проверка трябва да извежда `OK`."
