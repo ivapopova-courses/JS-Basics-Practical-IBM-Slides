@@ -47,3 +47,6 @@
   .vp-doc div[class*='language-'][data-fold='folded']::after,
   .code-fold-toggle { display: none; }
 }
+
+/* RunCode.vue: the output label in Bulgarian */
+html[lang^='bg'] .run-code-output::before { content: '\0418\0437\0445\043E\0434'; }

@@ -53,12 +53,8 @@ export function setupCodeFold() {
     clearTimeout(timer)
     timer = setTimeout(scan, 50)
   }
-  const start = () => {
-    scan()
-    new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true })
-  }
-  // start after the page is hydrated: changing the server-rendered HTML before that
-  // would confuse Vue
-  if (document.readyState === 'complete') setTimeout(start)
-  else window.addEventListener('load', start)
+  // called from the theme's onMounted (index.js): changing the server-rendered HTML
+  // before Vue has hydrated it would confuse Vue
+  scan()
+  new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true })
 }
