@@ -977,6 +977,14 @@ for (let i = 0; i < version.length; i++) {
 }
 ```
 
+::: info A string is still a primitive
+In lecture 2 a string was a primitive - one simple value, not an object.
+Yet here it has `.length` and `[0]`, like an object with properties.
+JavaScript does this for you behind the scenes; how it works is in
+lecture 8 ("Primitive wrappers"). For now: you can **read** characters
+by index, but you cannot change them - `version[0] = "5"` does nothing.
+:::
+
 Count the parts of a version (dots + 1):
 
 ```js run
