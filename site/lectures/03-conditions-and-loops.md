@@ -1424,9 +1424,10 @@ Each file explains the task at the top. Write your code between the
 
 ## Homework
 
-1. Finish the five practice tasks - every check must print `OK`.
-2. `03-conditions-and-loops/homework.js` (in the homework repository): a status
+1. `03-conditions-and-loops/homework.js` (in the homework repository): a status
    text for two settings, and the first position where two versions differ.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. Optional: take one of your own rules and list every condition in it. For each:
    which documents does it let through? Is there a `==`, `|| ""` or `== false` that
    could surprise you?

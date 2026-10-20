@@ -1295,40 +1295,43 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:1427
-msgid "Finish the five practice tasks - every check must print `OK`."
-msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да извежда `OK`."
-
-#. paragraph
-#: site/lectures/03-conditions-and-loops.md:1428
 msgid "`03-conditions-and-loops/homework.js` (in the homework repository): a status text for two settings, and the first position where two versions differ."
 msgstr "`03-conditions-and-loops/homework.js` (в homework repository): текст за състоянието на две настройки и първата позиция, на която две версии се различават."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1430
+#: site/lectures/03-conditions-and-loops.md:1429
+msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/03-conditions-and-loops.md:1431
 msgid "Optional: take one of your own rules and list every condition in it. For each: which documents does it let through? Is there a `==`, `|| \"\"` or `== false` that could surprise you?"
 msgstr "По желание: вземете едно от собствените си правила и избройте всяко условие в него. За всяко: кои документи пропуска? Има ли `==`, `|| \"\"` или `== false`, които биха могли да ви изненадат?"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:1434
+#: site/lectures/03-conditions-and-loops.md:1435
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1436
+#: site/lectures/03-conditions-and-loops.md:1437
 msgid "MDN: [Equality comparisons and sameness](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness), [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), [Nullish coalescing `??`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing), [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration)"
 msgstr "MDN: [Equality comparisons and sameness](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness), [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), [Nullish coalescing `??`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing), [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1441
+#: site/lectures/03-conditions-and-loops.md:1442
 msgid "Eloquent JavaScript (4th edition): [Values, Types, and Operators](https://eloquentjavascript.net/01_values.html), [Program Structure](https://eloquentjavascript.net/02_program_structure.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Values, Types, and Operators](https://eloquentjavascript.net/01_values.html), [Program Structure](https://eloquentjavascript.net/02_program_structure.html)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1443
+#: site/lectures/03-conditions-and-loops.md:1444
 msgid "You Don't Know JS Yet: [Equal...ish](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md#equalish)"
 msgstr "You Don't Know JS Yet: [Equal...ish](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md#equalish)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1445
+#: site/lectures/03-conditions-and-loops.md:1446
 msgid "**Next session:** arrays - lists of models, drives and records. The `model !== \"XR-210\" && model !== \"XR-220\"` of today's rule becomes an allow-list: `![\"XR-210\", \"XR-220\"].includes(model)`."
 msgstr "**Следващото занятие:** arrays - списъци от модели, дискове и записи. `model !== \"XR-210\" && model !== \"XR-220\"` от днешното правило става allow-list: `![\"XR-210\", \"XR-220\"].includes(model)`."
+
+#~ msgid "Finish the five practice tasks - every check must print `OK`."
+#~ msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да извежда `OK`."

@@ -1307,10 +1307,11 @@ lines; the checks at the bottom print `OK` or `FAIL`.
 
 ## Homework
 
-1. Finish the five practice tasks - every check must print `OK`.
-2. `08-strings-regex-dates/homework.js` (in the homework repository): parse the
+1. `08-strings-regex-dates/homework.js` (in the homework repository): parse the
    firmware string of the records export, the age of every module of the
    dictionary report, and a report line with formatted numbers and dates.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. **Course project:** add `normalizeVersion` (for the formats of **your**
    product) and a date parser for its timestamp formats to `library.js`. Collect
    real examples of every format in a comment above each helper.

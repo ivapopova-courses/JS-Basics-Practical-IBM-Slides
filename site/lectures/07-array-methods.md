@@ -1565,10 +1565,11 @@ lines; the checks at the bottom print `OK` or `FAIL`.
 
 ## Homework
 
-1. Finish the five practice tasks - every check must print `OK`.
-2. `07-array-methods/homework.js` (in the homework repository): outdated modules
+1. `07-array-methods/homework.js` (in the homework repository): outdated modules
    from a dictionary, sorted; a pool report from the record list; and an index for
    a whole set of lookups.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. **Course project:** create your repository (section 12) with `library.js`,
    `try.js` and two or three anonymised sample documents. Put in your `get`,
    `compareVersions`, `versionBelow` and `groupBy`, export them, and run `try.js`.

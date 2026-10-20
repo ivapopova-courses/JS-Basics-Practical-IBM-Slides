@@ -1075,11 +1075,12 @@ Each file explains the task at the top. Tasks 2 and 4 have two files: in the
 
 ## Homework
 
-1. Finish the five practice tasks - every check must print `OK`.
-2. `10-tests-types-git/` (in the homework repository): write `fleetSummary` - a summary
+1. `10-tests-types-git/` (in the homework repository): write `fleetSummary` - a summary
    of a fleet of reports that uses something from every lecture - in
    `homework-fleet.js`, and at least three tests for it in `homework.test.js`. Check
    both with `node 10-tests-types-git/homework.js`.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. **Course project - for the review:**
    - JSDoc for every exported helper, a `types.js` with the typedefs of your product,
      `// @ts-check` in every file;

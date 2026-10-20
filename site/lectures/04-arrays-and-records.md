@@ -1790,10 +1790,11 @@ lines; the checks at the bottom print `OK` or `FAIL`.
 
 ## Homework
 
-1. Finish the five practice tasks - every check must print `OK`.
-2. `04-arrays-and-records/homework.js` (in the homework repository): the names in
+1. `04-arrays-and-records/homework.js` (in the homework repository): the names in
    a packed firmware string, alert lines from three lists, and the empty pools in
    the records export.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. Optional: take one of your own rules and find every array in it. Where does
    each one come from (the report, `split`, the rule itself)? Is there an
    `indexOf(...) !== -1` or a `for...in` over an array you would modernise? Does

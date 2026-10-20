@@ -1466,11 +1466,12 @@ lines; the checks at the bottom print `OK` or `FAIL`.
 
 ## Homework
 
-1. Finish the five practice tasks - every check must print `OK`.
-2. `09-json-node-modules-errors/homework.js` (in the homework repository): load all
+1. `09-json-node-modules-errors/homework.js` (in the homework repository): load all
    reports of a folder with `fs/promises` and `Promise.all`, a `fetchJson` that checks
    the status (tested with a fake `fetch`), and a summary of the runner's alerts and
    errors.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. **Course project:** make `library.js` a clean CommonJS module, add `run-rule.js`
    (practice task 5) to your repository, and run one of your real rules (with an
    anonymised sample) locally. Add `package.json` with a script `"run-rule"`.

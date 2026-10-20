@@ -37,8 +37,16 @@ The whole document, with a map of its parts and tips on how to print it:
 The practice tasks and the homework are in the **Homework repository**:
 https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework
 
-Each lecture has a folder there (`02-variables-and-types/`, ...), with the tasks in
-`practice/` and the homework in `homework.js`. 
+Each lecture has a folder there (`02-variables-and-types/`, ...) with two kinds of
+tasks:
+
+- **Practice tasks** (`practice/task1-....js`, ...): short exercises, one topic
+  each, in the order of the lecture. We start them in class. Finish the rest at
+  home if you can - later tasks and the course project reuse them.
+- **Homework** (`homework.js`): one larger task that puts the topics of the
+  lecture together, on data shaped like real reports. Do it before the next
+  session - we go through it together at the start.
+
 ### Set it up once
 
 You do this only once, at the start of the course. It takes about 15 minutes.

@@ -1500,43 +1500,46 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1793
-msgid "Finish the five practice tasks - every check must print `OK`."
-msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
-
-#. paragraph
-#: site/lectures/04-arrays-and-records.md:1794
 msgid "`04-arrays-and-records/homework.js` (in the homework repository): the names in a packed firmware string, alert lines from three lists, and the empty pools in the records export."
 msgstr "`04-arrays-and-records/homework.js` (в homework repository): имената в пакетиран string с firmware нива, редове за alert от три списъка и празните pools в експорта със записи."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1797
+#: site/lectures/04-arrays-and-records.md:1796
+msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/04-arrays-and-records.md:1798
 msgid "Optional: take one of your own rules and find every array in it. Where does each one come from (the report, `split`, the rule itself)? Is there an `indexOf(...) !== -1` or a `for...in` over an array you would modernise? Does the rule change an array of `doc`?"
 msgstr "По желание: вземете едно от вашите правила и намерете всеки array в него. Откъде идва всеки (от отчета, от `split`, от самото правило)? Има ли `indexOf(...) !== -1` или `for...in` върху array, които бихте модернизирали? Променя ли правилото array от `doc`?"
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1802
+#: site/lectures/04-arrays-and-records.md:1803
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1804
+#: site/lectures/04-arrays-and-records.md:1805
 msgid "MDN: [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [Indexed collections](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections), [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split), [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
 msgstr "MDN: [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [Indexed collections](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections), [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split), [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1809
+#: site/lectures/04-arrays-and-records.md:1810
 msgid "javascript.info: [Arrays](https://javascript.info/array), [Array methods](https://javascript.info/array-methods) (the first part; the rest is session 7)"
 msgstr "javascript.info: [Arrays](https://javascript.info/array), [Array methods](https://javascript.info/array-methods) (първата част; останалото е в занятие 7)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1812
+#: site/lectures/04-arrays-and-records.md:1813
 msgid "Eloquent JavaScript (4th edition): [Data Structures: Objects and Arrays](https://eloquentjavascript.net/04_data.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Data Structures: Objects and Arrays](https://eloquentjavascript.net/04_data.html)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1814
+#: site/lectures/04-arrays-and-records.md:1815
 msgid "**Next session:** functions. The helpers you used ready-made - `versionBelow`, `asList`, `capitalize` - you write yourself, and you learn to read the older `function (x) { ... }` code in existing rules."
 msgstr "**Следващото занятие:** функции. Helper функциите, които използвахте готови - `versionBelow`, `asList`, `capitalize` - ще напишете сами и ще се научите да четете по-стария код `function (x) { ... }` в съществуващите правила."
+
+#~ msgid "Finish the five practice tasks - every check must print `OK`."
+#~ msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
 
 #~ msgid "(This page shows a hole as an empty place between two commas. Node.js writes `<1 empty item>`.)"
 #~ msgstr "(Тази страница показва празното място като нищо между две запетаи. Node.js пише `<1 empty item>`.)"

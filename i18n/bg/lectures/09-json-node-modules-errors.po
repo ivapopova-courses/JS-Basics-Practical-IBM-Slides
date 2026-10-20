@@ -1520,55 +1520,58 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1469
-msgid "Finish the five practice tasks - every check must print `OK`."
-msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
-
-#. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1470
 msgid "`09-json-node-modules-errors/homework.js` (in the homework repository): load all reports of a folder with `fs/promises` and `Promise.all`, a `fetchJson` that checks the status (tested with a fake `fetch`), and a summary of the runner's alerts and errors."
 msgstr "`09-json-node-modules-errors/homework.js` (в homework repository): зареждане на всички отчети от папка с `fs/promises` и `Promise.all`, `fetchJson`, който проверява статуса (тестван с фалшив `fetch`), и обобщение на alerts и грешките от runner-а."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1474
+#: site/lectures/09-json-node-modules-errors.md:1473
+msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:1475
 msgid "**Course project:** make `library.js` a clean CommonJS module, add `run-rule.js` (practice task 5) to your repository, and run one of your real rules (with an anonymised sample) locally. Add `package.json` with a script `\"run-rule\"`."
 msgstr "**Курсов проект:** направете `library.js` чист CommonJS модул, добавете `run-rule.js` (задача 5 за упражнение) в repository-то си и изпълнете локално едно от истинските си правила (с анонимизиран примерен документ). Добавете `package.json` със script `\"run-rule\"`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1477
+#: site/lectures/09-json-node-modules-errors.md:1478
 msgid "Optional: find a rule of yours with a catch-all `try`. Which errors could it hide? Rewrite it with guard clauses and run both versions on your samples."
 msgstr "По желание: намерете ваше правило с `try`, който хваща всичко. Какви грешки би могъл да скрие? Пренапишете го с guard clauses и изпълнете двете версии върху примерните си документи."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1480
+#: site/lectures/09-json-node-modules-errors.md:1481
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1482
+#: site/lectures/09-json-node-modules-errors.md:1483
 msgid "MDN: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify), [Control flow and error handling](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling), [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises), [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
 msgstr "MDN: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify), [Control flow and error handling](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling), [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises), [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1492
+#: site/lectures/09-json-node-modules-errors.md:1493
 msgid "Node.js: [Introduction to Node.js](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs), [Reading files](https://nodejs.org/en/learn/manipulating-files/reading-files-with-nodejs), [Modules: CommonJS](https://nodejs.org/api/modules.html), [Modules: ECMAScript modules](https://nodejs.org/api/esm.html), [An introduction to the npm package manager](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager), [The Node.js event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)"
 msgstr "Node.js: [Introduction to Node.js](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs), [Reading files](https://nodejs.org/en/learn/manipulating-files/reading-files-with-nodejs), [Modules: CommonJS](https://nodejs.org/api/modules.html), [Modules: ECMAScript modules](https://nodejs.org/api/esm.html), [An introduction to the npm package manager](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager), [The Node.js event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1498
+#: site/lectures/09-json-node-modules-errors.md:1499
 msgid "javascript.info: [JSON methods](https://javascript.info/json), [Error handling](https://javascript.info/error-handling), [Modules](https://javascript.info/modules-intro), [Promises, async/await](https://javascript.info/async)"
 msgstr "javascript.info: [JSON methods](https://javascript.info/json), [Error handling](https://javascript.info/error-handling), [Modules](https://javascript.info/modules-intro), [Promises, async/await](https://javascript.info/async)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1502
+#: site/lectures/09-json-node-modules-errors.md:1503
 msgid "Tools: [JSONLint](https://jsonlint.com/), [JavaScript Visualizer 9000](https://www.jsv9000.app/)"
 msgstr "Инструменти: [JSONLint](https://jsonlint.com/), [JavaScript Visualizer 9000](https://www.jsv9000.app/)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1503
+#: site/lectures/09-json-node-modules-errors.md:1504
 msgid "Video: [Everything You Need to Know About Node.js Event Loop](https://www.youtube.com/watch?v=PNa9OMajw9w) (Bert Belder)"
 msgstr "Видео: [Everything You Need to Know About Node.js Event Loop](https://www.youtube.com/watch?v=PNa9OMajw9w) (Bert Belder)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1505
+#: site/lectures/09-json-node-modules-errors.md:1506
 msgid "**Next session:** tests with `node:test`, JSDoc types and `// @ts-check`, a linter, the Git workflow with branches and pull requests - and the review of your course project."
 msgstr "**Следващото занятие:** тестове с `node:test`, JSDoc типове и `// @ts-check`, linter, работа с Git с branches и pull requests - и прегледът на вашия курсов проект."
+
+#~ msgid "Finish the five practice tasks - every check must print `OK`."
+#~ msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

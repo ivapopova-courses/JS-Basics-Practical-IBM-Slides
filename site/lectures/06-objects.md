@@ -1595,10 +1595,11 @@ node 06-objects/practice/task1-predict.js
 
 ## Homework
 
-1. Finish the five practice tasks - every check must print `OK`.
-2. `06-objects/homework.js` (in the homework repository): the details object of an
+1. `06-objects/homework.js` (in the homework repository): the details object of an
    alert with a fixed column order, settings merged with defaults, and a rule that
    reads the dictionary of drives - without changing the report.
+2. The practice tasks you did not finish in class - recommended, as later tasks
+   and the course project reuse them. Every check must print `OK`.
 3. **Course project:** keep your `get` from practice task 2 in a file of your own
    (for example `library.js`). From the next session on, the library grows.
 4. Optional: open one of your real reports and find each of the shapes of section

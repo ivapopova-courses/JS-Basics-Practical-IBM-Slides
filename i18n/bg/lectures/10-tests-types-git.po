@@ -1385,85 +1385,88 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:1078
-msgid "Finish the five practice tasks - every check must print `OK`."
-msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
-
-#. paragraph
-#: site/lectures/10-tests-types-git.md:1079
 msgid "`10-tests-types-git/` (in the homework repository): write `fleetSummary` - a summary of a fleet of reports that uses something from every lecture - in `homework-fleet.js`, and at least three tests for it in `homework.test.js`. Check both with `node 10-tests-types-git/homework.js`."
 msgstr "`10-tests-types-git/` (в homework repository): напишете `fleetSummary` - обобщение на група отчети, което използва по нещо от всяка лекция - в `homework-fleet.js` и поне три теста за нея в `homework.test.js`. Проверете и двете с `node 10-tests-types-git/homework.js`."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1083
+#: site/lectures/10-tests-types-git.md:1082
+msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/10-tests-types-git.md:1084
 msgid "**Course project - for the review:**"
 msgstr "**Курсов проект - за прегледа:**"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1084
+#: site/lectures/10-tests-types-git.md:1085
 msgid "JSDoc for every exported helper, a `types.js` with the typedefs of your product, `// @ts-check` in every file;"
 msgstr "JSDoc за всяка експортирана helper функция, `types.js` с typedefs на вашия продукт, `// @ts-check` във всеки файл;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1086
+#: site/lectures/10-tests-types-git.md:1087
 msgid "tests with `node:test` for the library and for one rule (`npm test`);"
 msgstr "тестове с `node:test` за библиотеката и за едно правило (`npm test`);"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1087
+#: site/lectures/10-tests-types-git.md:1088
 msgid "one existing rule rewritten with the library, with the same alerts on the samples;"
 msgstr "едно съществуващо правило, пренаписано с библиотеката, със същите alerts върху примерните документи;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1088
+#: site/lectures/10-tests-types-git.md:1089
 msgid "a README with an example per helper;"
 msgstr "README с пример за всяка helper функция;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1089
+#: site/lectures/10-tests-types-git.md:1090
 msgid "open a pull request and invite the trainer as a reviewer. Use the checklist `10-tests-types-git/project-checklist.md`."
 msgstr "отворете pull request и поканете преподавателя като reviewer. Използвайте контролния списък `10-tests-types-git/project-checklist.md`."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1091
+#: site/lectures/10-tests-types-git.md:1092
 msgid "Optional: add ESLint to the project, run it on two of your existing rules, and count what it finds."
 msgstr "По желание: добавете ESLint в проекта, изпълнете го върху две от съществуващите си правила и пребройте какво намира."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:1094
+#: site/lectures/10-tests-types-git.md:1095
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1096
+#: site/lectures/10-tests-types-git.md:1097
 msgid "Node.js: [Test runner](https://nodejs.org/api/test.html), [Assert](https://nodejs.org/api/assert.html), [Mocking in tests](https://nodejs.org/en/learn/test-runner/mocking)"
 msgstr "Node.js: [Test runner](https://nodejs.org/api/test.html), [Assert](https://nodejs.org/api/assert.html), [Mocking in tests](https://nodejs.org/en/learn/test-runner/mocking)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1099
+#: site/lectures/10-tests-types-git.md:1100
 msgid "JSDoc and types: [JSDoc Reference (TypeScript handbook)](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html), [Type Checking JavaScript Files](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), [JavaScript in VS Code](https://code.visualstudio.com/docs/languages/javascript), [jsconfig.json](https://code.visualstudio.com/docs/languages/jsconfig), [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)"
 msgstr "JSDoc и типове: [JSDoc Reference (TypeScript handbook)](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html), [Type Checking JavaScript Files](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), [JavaScript in VS Code](https://code.visualstudio.com/docs/languages/javascript), [jsconfig.json](https://code.visualstudio.com/docs/languages/jsconfig), [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1104
+#: site/lectures/10-tests-types-git.md:1105
 msgid "Tools: [ESLint - Getting started](https://eslint.org/docs/latest/use/getting-started), [Prettier](https://prettier.io/docs/), [ESLint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)"
 msgstr "Инструменти: [ESLint - Getting started](https://eslint.org/docs/latest/use/getting-started), [Prettier](https://prettier.io/docs/), [ESLint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1107
+#: site/lectures/10-tests-types-git.md:1108
 msgid "Git: [Pro Git - Git Branching](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell), [About pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests), [Resolving a merge conflict on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github), [GitHub Pages](https://pages.github.com/)"
 msgstr "Git: [Pro Git - Git Branching](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell), [About pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests), [Resolving a merge conflict on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github), [GitHub Pages](https://pages.github.com/)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1111
+#: site/lectures/10-tests-types-git.md:1112
 msgid "javascript.info: [Automated testing with Mocha](https://javascript.info/testing-mocha) (the ideas are the same for `node:test`)"
 msgstr "javascript.info: [Automated testing with Mocha](https://javascript.info/testing-mocha) (идеите са същите за `node:test`)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1112
+#: site/lectures/10-tests-types-git.md:1113
 msgid "Videos: [Git Tutorial for Beginners: Command-Line Fundamentals](https://www.youtube.com/watch?v=HVsySz-h9r4), [GitHub Tutorial for Beginners](https://www.youtube.com/watch?v=0fKg7e37bQE)"
 msgstr "Видеа: [Git Tutorial for Beginners: Command-Line Fundamentals](https://www.youtube.com/watch?v=HVsySz-h9r4), [GitHub Tutorial for Beginners](https://www.youtube.com/watch?v=0fKg7e37bQE)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1115
+#: site/lectures/10-tests-types-git.md:1116
 msgid "**This was the last session.** Thank you for the questions and the work. Keep the library growing - one helper, one test, one rule at a time."
 msgstr "**Това беше последното занятие.** Благодаря за въпросите и за работата. Нека библиотеката продължава да расте - по една helper функция, един тест, едно правило наведнъж."
+
+#~ msgid "Finish the five practice tasks - every check must print `OK`."
+#~ msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

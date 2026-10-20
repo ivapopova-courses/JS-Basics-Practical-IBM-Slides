@@ -1455,55 +1455,58 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1310
-msgid "Finish the five practice tasks - every check must print `OK`."
-msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
-
-#. paragraph
-#: site/lectures/08-strings-regex-dates.md:1311
 msgid "`08-strings-regex-dates/homework.js` (in the homework repository): parse the firmware string of the records export, the age of every module of the dictionary report, and a report line with formatted numbers and dates."
 msgstr "`08-strings-regex-dates/homework.js` (в homework repository): разчитане на string-а с firmware от експорта със записи, възрастта на всеки модул от отчета с dictionaries и ред от отчет с форматирани числа и дати."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1314
+#: site/lectures/08-strings-regex-dates.md:1313
+msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:1315
 msgid "**Course project:** add `normalizeVersion` (for the formats of **your** product) and a date parser for its timestamp formats to `library.js`. Collect real examples of every format in a comment above each helper."
 msgstr "**Курсов проект:** добавете в `library.js` `normalizeVersion` (за форматите на **вашия** продукт) и функция за разчитане на форматите на времената му. Съберете истински примери за всеки формат в коментар над всяка helper функция."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1317
+#: site/lectures/08-strings-regex-dates.md:1318
 msgid "Optional: find every regular expression in your rules. Paste each into regex101 and write a one-line comment that says what it matches."
 msgstr "По желание: намерете всеки regular expression във вашите правила. Поставете всеки в regex101 и напишете коментар от един ред, който казва с какво съвпада."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1320
+#: site/lectures/08-strings-regex-dates.md:1321
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1322
+#: site/lectures/08-strings-regex-dates.md:1323
 msgid "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Regular expressions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions), [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet), [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math), [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), [Standard built-in objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)"
 msgstr "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Regular expressions (ръководство)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions), [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet), [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math), [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), [Standard built-in objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1329
+#: site/lectures/08-strings-regex-dates.md:1330
 msgid "javascript.info: [Strings](https://javascript.info/string), [Regular expressions](https://javascript.info/regular-expressions), [Date and time](https://javascript.info/date), [Numbers](https://javascript.info/number), [Methods of primitives](https://javascript.info/primitives-methods)"
 msgstr "javascript.info: [Strings](https://javascript.info/string), [Regular expressions](https://javascript.info/regular-expressions), [Date and time](https://javascript.info/date), [Numbers](https://javascript.info/number), [Methods of primitives](https://javascript.info/primitives-methods)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1334
+#: site/lectures/08-strings-regex-dates.md:1335
 msgid "Tools: [regex101.com](https://regex101.com/) - test and explain patterns"
 msgstr "Инструменти: [regex101.com](https://regex101.com/) - изпробване и обяснение на шаблони"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1335
+#: site/lectures/08-strings-regex-dates.md:1336
 msgid "Encodings: [The Absolute Minimum Every Software Developer Must Know About Unicode](https://tonsky.me/blog/unicode/) (Nikita Prokopov)"
 msgstr "Кодировки: [The Absolute Minimum Every Software Developer Must Know About Unicode](https://tonsky.me/blog/unicode/) (Nikita Prokopov)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1336
+#: site/lectures/08-strings-regex-dates.md:1337
 msgid "Old reading: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
 msgstr "Стара статия: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1338
+#: site/lectures/08-strings-regex-dates.md:1339
 msgid "**Next session:** JSON, Node.js, modules and errors - read sample documents from files, turn your `library.js` into a real module, handle errors without hiding them, fetch JSON from a web API, and run a rule locally on a folder of reports."
 msgstr "**Следващото занятие:** JSON, Node.js, модули и грешки - четене на примерни документи от файлове, превръщане на `library.js` в истински модул, обработка на грешки, без да се крият, изтегляне на JSON от уеб API и локално изпълнение на правило върху папка с отчети."
+
+#~ msgid "Finish the five practice tasks - every check must print `OK`."
+#~ msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

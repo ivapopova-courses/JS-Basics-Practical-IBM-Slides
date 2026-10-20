@@ -1470,58 +1470,61 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/06-objects.md:1598
-msgid "Finish the five practice tasks - every check must print `OK`."
-msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
-
-#. paragraph
-#: site/lectures/06-objects.md:1599
 msgid "`06-objects/homework.js` (in the homework repository): the details object of an alert with a fixed column order, settings merged with defaults, and a rule that reads the dictionary of drives - without changing the report."
 msgstr "`06-objects/homework.js` (в homework repository): обектът с детайли на alert с фиксиран ред на колоните, настройки, обединени със стойности по подразбиране, и правило, което чете dictionary от дискове - без да променя отчета."
 
 #. paragraph
-#: site/lectures/06-objects.md:1602
+#: site/lectures/06-objects.md:1601
+msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
+msgstr ""
+
+#. paragraph
+#: site/lectures/06-objects.md:1603
 msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`). From the next session on, the library grows."
 msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`). От следващото занятие нататък библиотеката расте."
 
 #. paragraph
-#: site/lectures/06-objects.md:1604
+#: site/lectures/06-objects.md:1605
 msgid "Optional: open one of your real reports and find each of the shapes of section 7. Which paths do your rules read again and again? Write them down as `get` paths."
 msgstr "По желание: отворете един от вашите истински отчети и намерете всяка от формите от раздел 7. Кои пътища правилата ви четат отново и отново? Запишете ги като пътища за `get`."
 
 #. heading 2
-#: site/lectures/06-objects.md:1608
+#: site/lectures/06-objects.md:1609
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/06-objects.md:1610
+#: site/lectures/06-objects.md:1611
 msgid "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring), [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 msgstr "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring), [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1617
+#: site/lectures/06-objects.md:1618
 msgid "MDN exercises: [Test your skills: Object basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Test_your_skills/Object_basics)"
 msgstr "Упражнения в MDN: [Test your skills: Object basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Test_your_skills/Object_basics)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1618
+#: site/lectures/06-objects.md:1619
 msgid "javascript.info: [Objects](https://javascript.info/object), [Object references and copying](https://javascript.info/object-copy), [Object methods, \"this\"](https://javascript.info/object-methods), [Destructuring assignment](https://javascript.info/destructuring-assignment), [Classes](https://javascript.info/classes)"
 msgstr "javascript.info: [Objects](https://javascript.info/object), [Object references and copying](https://javascript.info/object-copy), [Object methods, \"this\"](https://javascript.info/object-methods), [Destructuring assignment](https://javascript.info/destructuring-assignment), [Classes](https://javascript.info/classes)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1623
+#: site/lectures/06-objects.md:1624
 msgid "Exercises: [JavaScript Object - Exercises](https://www.w3resource.com/javascript-exercises/javascript-object-exercises.php) (w3resource)"
 msgstr "Упражнения: [JavaScript Object - Exercises](https://www.w3resource.com/javascript-exercises/javascript-object-exercises.php) (w3resource)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1624
+#: site/lectures/06-objects.md:1625
 msgid "Video: [Modern JavaScript Tutorial #5 - Objects](https://www.youtube.com/watch?v=X0ipw1k7ygU)"
 msgstr "Видео: [Modern JavaScript Tutorial #5 - Objects](https://www.youtube.com/watch?v=X0ipw1k7ygU)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1626
+#: site/lectures/06-objects.md:1627
 msgid "**Next session:** array methods - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - and grouping thousands of records into a dictionary once, instead of searching them again and again. The course project starts for real: choose the product, the sample documents and the first helpers."
 msgstr "**Следващото занятие:** методи на arrays - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - и групиране на хиляди записи в dictionary веднъж, вместо да ги търсите отново и отново. Курсовият проект започва истински: изберете продукта, примерните документи и първите helper функции."
+
+#~ msgid "Finish the five practice tasks - every check must print `OK`."
+#~ msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
 
 #~ msgid "The last line is a common bug: a typo in a key **creates** a property instead of changing one. `// @ts-check` (session 9) can catch it."
 #~ msgstr "Последният ред е чест бъг: правописна грешка в ключа **създава** property, вместо да промени съществуващо. `// @ts-check` (занятие 9) може да го хване."
