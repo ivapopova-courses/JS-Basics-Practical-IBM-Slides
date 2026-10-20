@@ -16,8 +16,8 @@ device (`doc`) and a check rule.
 
 ## Sessions
 
-| Session | Date | Topic |
-|---------|------|-------|
+|  | Date   | Topic |
+|---------|--------|-------|
 | 1 | Tue 06.10 | [Getting started](/lectures/01-getting-started): course setup, how a program runs, what a variable is |
 | 2 | Wed 14.10 | [Variables, types and operators](/lectures/02-variables-and-types) |
 | 3 | Wed 21.10 | [Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops) |
