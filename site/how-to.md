@@ -29,6 +29,9 @@ All names and values in it are invented; only the shape is typical of
 the JSON a device sends.
 :::
 
+The whole document, with a map of its parts and tips on how to print it:
+[The example JSON document](./example-document).
+
 ## Practice in VSCode
 
 The practice tasks and the homework are in the **Homework repository**:

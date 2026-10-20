@@ -6,6 +6,7 @@ title: 5. Functions, and reading older code
 
 <div class="lecture-meta">
   <span>Session 5</span><span>practice: <code>05-functions/</code> in the homework repository</span>
+  <span><a href="../example-document"><code>doc</code>: the example JSON document</a></span>
 </div>
 
 **Today you will learn to:**
@@ -122,7 +123,7 @@ inputs.
   `versionBelow(level, "4.2")` reads better than ten lines of `split` and loops.
 - **Better structure**: a long rule becomes a few short steps.
 - **Easier to test**: a small function with clear inputs and one result can be
-  checked on its own (session 9).
+  checked on its own (session 10).
 
 Here is the problem functions solve. The same version check, copied three times:
 

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Practical JavaScript Basics\n"
 "Language-Team: \n"
 "Last-Translator: Claude (claude-opus-5-5)\n"
-"PO-Revision-Date: 2026-10-16\n"
+"PO-Revision-Date: 2026-10-20\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,8 +50,8 @@ msgstr "5. Функции"
 
 #. table cell
 #: site/project.md:14
-msgid "`versionBelow(a, b)` - compare version strings"
-msgstr "`versionBelow(a, b)` - сравняване на версии, записани като strings"
+msgid "`compareVersions(a, b)` and `versionBelow(a, b)` - compare version strings"
+msgstr "`compareVersions(a, b)` и `versionBelow(a, b)` - сравняване на версии, записани като strings"
 
 #. table cell
 #: site/project.md:15
@@ -70,8 +70,8 @@ msgstr "7. Методи на arrays"
 
 #. table cell
 #: site/project.md:16
-msgid "group a list of records into an object, build an index; **kickoff**: your own repository, a chosen product, sample documents"
-msgstr "групиране на списък от записи в обект, изграждане на индекс; **старт**: ваше собствено repository, избран продукт, примерни документи"
+msgid "**kickoff**: your own repository, a chosen product, sample documents, `library.js`; helpers that group a list of records and build an index"
+msgstr "**старт**: ваше собствено repository, избран продукт, примерни документи, `library.js`; helper функции, които групират списък от записи и изграждат индекс"
 
 #. table cell
 #: site/project.md:17
@@ -80,28 +80,28 @@ msgstr "8. Strings, regex, дати"
 
 #. table cell
 #: site/project.md:17
-msgid "normalise versions in any format; parse dates and keys"
-msgstr "нормализиране на версии във всякакъв формат; разчитане (parse) на дати и ключове"
+msgid "normalise versions in any format; parse dates and keys with a regular expression"
+msgstr "нормализиране на версии във всякакъв формат; разчитане (parse) на дати и ключове с regular expression"
 
 #. table cell
 #: site/project.md:18
-msgid "9. JSON, modules, tests"
-msgstr "9. JSON, модули, тестове"
+msgid "9. JSON, modules, errors"
+msgstr "9. JSON, модули, грешки"
 
 #. table cell
 #: site/project.md:18
-msgid "a local runner with a fake `emit`; tests with `node:test`; JSDoc types for the product's JSON"
-msgstr "локален runner с фалшив `emit`; тестове с `node:test`; JSDoc типове за JSON на продукта"
+msgid "the library as a CommonJS module; a local runner that runs a rule on a folder of sample documents with a fake `emit`; clear errors for bad input"
+msgstr "библиотеката като CommonJS модул; локален runner, който изпълнява правило върху папка с примерни документи с фалшив `emit`; ясни грешки при лоши входни данни"
 
 #. table cell
 #: site/project.md:19
-msgid "10. Review"
-msgstr "10. Преглед"
+msgid "10. Tests, types, review"
+msgstr "10. Тестове, типове, преглед"
 
 #. table cell
 #: site/project.md:19
-msgid "presentation and code review"
-msgstr "представяне и code review"
+msgid "tests with `node:test`; JSDoc types for the product's JSON; a README; presentation and code review"
+msgstr "тестове с `node:test`; JSDoc типове за JSON на продукта; README; представяне и code review"
 
 #. heading 2
 #: site/project.md:21
@@ -110,35 +110,74 @@ msgstr "Какво се предава"
 
 #. paragraph
 #: site/project.md:23
-msgid "A CommonJS module for the product (`<product>.js`) with documented helpers."
-msgstr "CommonJS модул за продукта (`<product>.js`) с документирани helper функции."
+msgid "A CommonJS module for the product (`<product>.js`, or `library.js`) with documented helpers."
+msgstr "CommonJS модул за продукта (`<product>.js` или `library.js`) с документирани helper функции."
 
 #. paragraph
-#: site/project.md:24
+#: site/project.md:25
 msgid "Tests with `node:test` on anonymised sample documents."
 msgstr "Тестове с `node:test` върху анонимизирани примерни документи."
 
 #. paragraph
-#: site/project.md:25
+#: site/project.md:26
 msgid "Two or three existing rules rewritten with the library."
 msgstr "Две или три съществуващи правила, пренаписани с библиотеката."
 
 #. paragraph
-#: site/project.md:26
+#: site/project.md:27
 msgid "A README with examples for other users."
 msgstr "README с примери за другите потребители."
 
 #. paragraph
-#: site/project.md:27
+#: site/project.md:28
 msgid "JSDoc types (`@typedef`) for the product's JSON, checked with `// @ts-check`."
 msgstr "JSDoc типове (`@typedef`) за JSON на продукта, проверени с `// @ts-check`."
 
+#. paragraph
+#: site/project.md:30
+msgid "The minimum for the review: items 1, 2 and one rewritten rule. Items 3 - 5 can grow after the course."
+msgstr "Минимумът за прегледа: точки 1, 2 и едно пренаписано правило. Точки 3 - 5 могат да се доразвият след курса."
+
+#. heading 2
+#: site/project.md:33
+msgid "The repository"
+msgstr "Repository-то"
+
+#. paragraph
+#: site/project.md:35
+msgid "A suggested layout (lecture 7 sets it up, lectures 9 and 10 fill it):"
+msgstr "Предложена структура (лекция 7 я създава, лекции 9 и 10 я попълват):"
+
 #. box title
-#: site/project.md:29
+#: site/project.md:50
 msgid "Choices to make"
 msgstr "Какво трябва да изберете"
 
 #. paragraph
-#: site/project.md:30
+#: site/project.md:51
 msgid "Which product comes first, and which helpers are needed most. Collect examples of rules that are hard to write today."
 msgstr "Кой продукт е първи и кои helper функции трябват най-много. Съберете примери за правила, които днес се пишат трудно."
+
+#~ msgid "`versionBelow(a, b)` - compare version strings"
+#~ msgstr "`versionBelow(a, b)` - сравняване на версии, записани като strings"
+
+#~ msgid "group a list of records into an object, build an index; **kickoff**: your own repository, a chosen product, sample documents"
+#~ msgstr "групиране на списък от записи в обект, изграждане на индекс; **старт**: ваше собствено repository, избран продукт, примерни документи"
+
+#~ msgid "normalise versions in any format; parse dates and keys"
+#~ msgstr "нормализиране на версии във всякакъв формат; разчитане (parse) на дати и ключове"
+
+#~ msgid "9. JSON, modules, tests"
+#~ msgstr "9. JSON, модули, тестове"
+
+#~ msgid "a local runner with a fake `emit`; tests with `node:test`; JSDoc types for the product's JSON"
+#~ msgstr "локален runner с фалшив `emit`; тестове с `node:test`; JSDoc типове за JSON на продукта"
+
+#~ msgid "10. Review"
+#~ msgstr "10. Преглед"
+
+#~ msgid "presentation and code review"
+#~ msgstr "представяне и code review"
+
+#~ msgid "A CommonJS module for the product (`<product>.js`) with documented helpers."
+#~ msgstr "CommonJS модул за продукта (`<product>.js`) с документирани helper функции."

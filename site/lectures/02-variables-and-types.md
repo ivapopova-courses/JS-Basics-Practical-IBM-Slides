@@ -6,6 +6,7 @@ title: 2. Variables, types and operators
 
 <div class="lecture-meta">
   <span>Session 2</span><span>practice: <code>02-variables-and-types/</code> in the homework repository</span>
+  <span><a href="../example-document"><code>doc</code>: the example JSON document</a></span>
 </div>
 
 **Today you will learn to:**

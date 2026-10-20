@@ -6,6 +6,7 @@ title: 6. Objects, deep paths and data shapes
 
 <div class="lecture-meta">
   <span>Session 6</span><span>practice: <code>06-objects/</code> in the homework repository</span>
+  <span><a href="../example-document"><code>doc</code>: the example JSON document</a></span>
 </div>
 
 **Today you will learn to:**
@@ -340,7 +341,7 @@ console.log(enc);
 ```
 
 The last line is a common bug: a typo in a key **creates** a property instead of
-changing one. `// @ts-check` (session 9) can catch it.
+changing one. `// @ts-check` (session 10) can catch it.
 
 ### Does the key exist?
 

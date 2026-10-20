@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Practical JavaScript Basics\n"
 "Language-Team: \n"
 "Last-Translator: Claude (claude-opus-5-5)\n"
-"PO-Revision-Date: 2026-10-16\n"
+"PO-Revision-Date: 2026-10-20\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,8 +30,8 @@ msgstr "Правило за мониторинг, написано на JavaScri
 
 #. front matter: text
 #: site/index.md:12
-msgid "First lectures"
-msgstr "Първите лекции"
+msgid "Start the course"
+msgstr "Започнете курса"
 
 #. front matter: text
 #: site/index.md:15
@@ -120,23 +120,38 @@ msgstr "[Обекти: дълбоки пътища, dictionaries, различн
 
 #. table cell
 #: site/index.md:40
-msgid "Array methods: transforming and grouping data; project kickoff"
-msgstr "Методи на arrays: трансформиране и групиране на данни; старт на проекта"
+msgid "[Array methods: transforming, grouping and indexing data](/lectures/07-array-methods); project kickoff"
+msgstr "[Методи на arrays: трансформиране, групиране и индексиране на данни](/lectures/07-array-methods); старт на проекта"
 
 #. table cell
 #: site/index.md:41
-msgid "Strings, regular expressions, dates and numbers"
-msgstr "Strings, regular expressions, дати и числа"
+msgid "[Strings, regular expressions, dates and numbers](/lectures/08-strings-regex-dates)"
+msgstr "[Strings, regular expressions, дати и числа](/lectures/08-strings-regex-dates)"
 
 #. table cell
 #: site/index.md:42
-msgid "JSON, Node.js, modules, errors, tests, JSDoc types"
-msgstr "JSON, Node.js, модули, грешки, тестове, JSDoc типове"
+msgid "[JSON, Node.js, modules and errors; running rules locally](/lectures/09-json-node-modules-errors)"
+msgstr "[JSON, Node.js, модули и грешки; локално изпълнение на правила](/lectures/09-json-node-modules-errors)"
 
 #. table cell
 #: site/index.md:43
-msgid "Project review, Git workflow, wrap-up"
-msgstr "Преглед на проектите, работа с Git, обобщение"
+msgid "[Tests, JSDoc types and code quality; Git workflow; project review](/lectures/10-tests-types-git)"
+msgstr "[Тестове, JSDoc типове и качество на кода; работа с Git; преглед на проекта](/lectures/10-tests-types-git)"
+
+#~ msgid "First lectures"
+#~ msgstr "Първите лекции"
+
+#~ msgid "Array methods: transforming and grouping data; project kickoff"
+#~ msgstr "Методи на arrays: трансформиране и групиране на данни; старт на проекта"
+
+#~ msgid "Strings, regular expressions, dates and numbers"
+#~ msgstr "Strings, regular expressions, дати и числа"
+
+#~ msgid "JSON, Node.js, modules, errors, tests, JSDoc types"
+#~ msgstr "JSON, Node.js, модули, грешки, тестове, JSDoc типове"
+
+#~ msgid "Project review, Git workflow, wrap-up"
+#~ msgstr "Преглед на проектите, работа с Git, обобщение"
 
 #~ msgid "Objects: deep paths, dictionaries, different data shapes"
 #~ msgstr "Обекти: дълбоки пътища, dictionaries, различни форми на данните"

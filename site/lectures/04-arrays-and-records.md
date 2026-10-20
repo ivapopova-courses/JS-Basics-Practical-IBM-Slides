@@ -6,6 +6,7 @@ title: 4. Arrays and lists of records
 
 <div class="lecture-meta">
   <span>Session 4</span><span>practice: <code>04-arrays-and-records/</code> in the homework repository</span>
+  <span><a href="../example-document"><code>doc</code>: the example JSON document</a></span>
 </div>
 
 **Today you will learn to:**
@@ -220,13 +221,12 @@ The element is written there, and the places in between become **empty**
 ```js run
 let arr = [2, 4, 6];
 arr[4] = 8;
-console.log(arr);           // Node.js: [ 2, 4, 6, <1 empty item>, 8 ]
+console.log(arr);           // [ 2, 4, 6, <1 empty item>, 8 ]
 console.log(arr.length);    // 5
 console.log(arr[3]);        // undefined
 ```
 
-(This page shows a hole as an empty place between two commas. Node.js writes
-`<1 empty item>`.)
+(`<1 empty item>` is how Node.js and this page show a hole.)
 
 ### The last element
 
@@ -260,7 +260,7 @@ console.log(arr.length);     // 3
 
 // make the array longer: the new places are empty
 arr.length = 5;
-console.log(arr);            // Node.js: [ 2, 4, 6, <2 empty items> ]
+console.log(arr);            // [ 2, 4, 6, <2 empty items> ]
 
 // make it shorter: the elements at the end are deleted
 arr.length = 2;
@@ -318,7 +318,7 @@ if (arr.lenght) {              // lenght, not length
 `undefined` - falsy. The correct check `if (arr.length)` prints
 `Non-empty array`. (Why there is no error - section 4 and session 6.) Your editor
 helps here: VSCode underlines unknown properties when the file starts with
-`// @ts-check` (session 9).
+`// @ts-check` (session 10).
 
 ### Empty or not?
 

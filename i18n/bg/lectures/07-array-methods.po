@@ -1,0 +1,1424 @@
+# Translation of site/lectures/07-array-methods.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: \n"
+"PO-Revision-Date: 2026-10-20\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/lectures/07-array-methods.md\n"
+
+#. front matter: title
+#: site/lectures/07-array-methods.md:2
+msgid "7. Array methods"
+msgstr "7. Методи на arrays"
+
+#. heading 1
+#: site/lectures/07-array-methods.md:5
+msgid "7. Array methods: transforming, grouping and indexing data"
+msgstr "7. Методи на arrays: трансформиране, групиране и индексиране на данни"
+
+#. html
+#: site/lectures/07-array-methods.md:8
+msgid "<span>Session 7</span><span>practice: <code>07-array-methods/</code> in the homework repository</span>"
+msgstr "<span>Занятие 7</span><span>упражнения: <code>07-array-methods/</code> в homework repository</span>"
+
+#. html
+#: site/lectures/07-array-methods.md:9
+msgid "<span><a href=\"../example-document\"><code>doc</code>: the example JSON document</a></span>"
+msgstr "<span><a href=\"../example-document\"><code>doc</code>: примерният JSON документ</a></span>"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:12
+msgid "**Today you will learn to:**"
+msgstr "**Днес ще се научите да:**"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:14
+msgid "replace the loops of lecture 4 with array methods: `forEach`, `map`, `filter`, `find`, `findIndex`, `some`, `every` and `reduce`;"
+msgstr "заменяте loops от лекция 4 с методи на arrays: `forEach`, `map`, `filter`, `find`, `findIndex`, `some`, `every` и `reduce`;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:16
+msgid "write the callbacks of these methods - with the element, the index and the array as arguments;"
+msgstr "пишете callbacks за тези методи - с елемента, индекса и array-я като аргументи;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:18
+msgid "sort numbers, strings, versions and records with `sort` and `toSorted` - also by several keys - without changing the report;"
+msgstr "сортирате числа, strings, версии и записи със `sort` и `toSorted` - и по няколко ключа - без да променяте отчета;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:20
+msgid "chain methods (`filter(...).map(...).join(...)`), flatten lists with `flat` and `flatMap`, and decide when a plain loop is clearer;"
+msgstr "свързвате методи във верига (`filter(...).map(...).join(...)`), сплесквате списъци с `flat` и `flatMap` и решавате кога обикновеният loop е по-ясен;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:22
+msgid "group a long list of records into a nested object, the way your library helpers do;"
+msgstr "групирате дълъг списък от записи във вложен обект - така, както правят helper функциите на вашата библиотека;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:24
+msgid "build an **index** once (an object or a `Map`) instead of searching thousands of records again and again, and find unique values with a `Set`;"
+msgstr "изграждате **индекс** веднъж (обект или `Map`), вместо да търсите в хиляди записи отново и отново, и намирате уникални стойности със `Set`;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:26
+msgid "print records as a table with `console.table`;"
+msgstr "отпечатвате записи като таблица с `console.table`;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:27
+msgid "read the older callbacks of existing rules: `function (x) { return ...; }`, `forEach` with `push`;"
+msgstr "четете по-старите callbacks в съществуващи правила: `function (x) { return ...; }`, `forEach` с `push`;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:29
+msgid "start the course project: the repository, the sample documents and `library.js`."
+msgstr "започнете курсовия проект: repository-то, примерните документи и `library.js`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:32
+msgid "Where this fits in the sample check rule - today's rule answers several questions about the enclosures, each with **one method**. The number in each comment is the section of this lecture:"
+msgstr "Къде е мястото на тази тема в примерното правило за проверка - днешното правило отговаря на няколко въпроса за enclosures, всеки с **един метод**. Числото във всеки коментар е разделът от тази лекция:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:95
+msgid "Every question - \"which ones?\", \"is there any?\", \"what is the lowest?\", \"in which order?\", \"how many of each kind?\" - is one line. The loops are still there, but inside the methods."
+msgstr "Всеки въпрос - \"кои?\", \"има ли поне един?\", \"кое е най-ниското?\", \"в какъв ред?\", \"колко от всеки вид?\" - е един ред. Loops все още са там, но вътре в методите."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:98
+msgid "`groupBy` is a helper for your **course library**; the modern built-in `Object.groupBy` does the same ([section 9](#_9-grouping-records))."
+msgstr "`groupBy` е helper функция за вашата **курсова библиотека**; модерният вграден `Object.groupBy` прави същото ([раздел 9](#_9-grouping-records))."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:100
+msgid "In [section 11](#_11-reading-existing-rules) you run this rule, and read an older rule that does the same work - with two hidden bugs."
+msgstr "В [раздел 11](#_11-reading-existing-rules) ще изпълните това правило и ще прочетете по-старо правило, което върши същата работа - с два скрити бъга."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:103
+msgid "Lectures 4 and 5 built the parts: loops over arrays, and functions that take a function (callbacks). Today the two meet: arrays have methods that run your callback for every element."
+msgstr "Лекции 4 и 5 изградиха частите: loops върху arrays и функции, които приемат функция (callbacks). Днес двете се срещат: arrays имат методи, които изпълняват вашия callback за всеки елемент."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:107
+msgid "1. From loops to methods"
+msgstr "1. От loops към методи"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:109
+msgid "Lecture 4 asked three questions of a list of records - find, count, collect - with three loops. Lecture 5 wrote helpers that take a callback: `customFilter`, `customMap`, `countIf`. Arrays have such helpers **built in**:"
+msgstr "Лекция 4 зададе три въпроса към списък от записи - намери, преброй, събери - с три loops. Лекция 5 написа helper функции, които приемат callback: `customFilter`, `customMap`, `countIf`. Arrays имат такива helper функции **вградени**:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:130
+msgid "The method walks the array; your callback answers **one question about one element**. You say *what* you want, not *how* to walk."
+msgstr "Методът обхожда array-я; вашият callback отговаря на **един въпрос за един елемент**. Вие казвате *какво* искате, а не *как* да се обходи."
+
+#. table cell
+#: site/lectures/07-array-methods.md:133
+msgid "Method"
+msgstr "Метод"
+
+#. table cell
+#: site/lectures/07-array-methods.md:133
+msgid "The callback answers"
+msgstr "Callback-ът отговаря на"
+
+#. table cell
+#: site/lectures/07-array-methods.md:133
+msgid "Returns"
+msgstr "Връща"
+
+#. table cell
+#: site/lectures/07-array-methods.md:133
+msgid "Changes the array?"
+msgstr "Променя ли array-я?"
+
+#. table cell
+#: site/lectures/07-array-methods.md:135
+msgid "(does something with the element)"
+msgstr "(прави нещо с елемента)"
+
+#. table cell
+#: site/lectures/07-array-methods.md:135 site/lectures/07-array-methods.md:136 site/lectures/07-array-methods.md:137 site/lectures/07-array-methods.md:138 site/lectures/07-array-methods.md:139 site/lectures/07-array-methods.md:140
+msgid "no"
+msgstr "не"
+
+#. table cell
+#: site/lectures/07-array-methods.md:136
+msgid "\"what is the new value for this element?\""
+msgstr "\"каква е новата стойност за този елемент?\""
+
+#. table cell
+#: site/lectures/07-array-methods.md:136
+msgid "a new array, same length"
+msgstr "нов array със същата дължина"
+
+#. table cell
+#: site/lectures/07-array-methods.md:137
+msgid "\"keep this element?\" (`true` / `false`)"
+msgstr "\"да запазя ли този елемент?\" (`true` / `false`)"
+
+#. table cell
+#: site/lectures/07-array-methods.md:137
+msgid "a new array with the elements that pass"
+msgstr "нов array с елементите, които минават"
+
+#. table cell
+#: site/lectures/07-array-methods.md:138
+msgid "\"is this the one?\""
+msgstr "\"този ли е?\""
+
+#. table cell
+#: site/lectures/07-array-methods.md:138
+msgid "the first match / its index (`undefined` / `-1`)"
+msgstr "първото съвпадение / неговия индекс (`undefined` / `-1`)"
+
+#. table cell
+#: site/lectures/07-array-methods.md:139
+msgid "\"does this element pass?\""
+msgstr "\"минава ли този елемент?\""
+
+#. table cell
+#: site/lectures/07-array-methods.md:140
+msgid "\"what is the result so far, with this element?\""
+msgstr "\"какъв е резултатът досега, с този елемент?\""
+
+#. table cell
+#: site/lectures/07-array-methods.md:140
+msgid "one value"
+msgstr "една стойност"
+
+#. table cell
+#: site/lectures/07-array-methods.md:141
+msgid "\"which of these two comes first?\" (a number)"
+msgstr "\"кой от двата е пръв?\" (число)"
+
+#. table cell
+#: site/lectures/07-array-methods.md:141
+msgid "the **same** array, sorted"
+msgstr "**същия** array, сортиран"
+
+#. table cell
+#: site/lectures/07-array-methods.md:141
+msgid "**yes**"
+msgstr "**да**"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:143
+msgid "All of them are old enough for any rule engine (ES5, 2009; `find` and `findIndex` ES2015) - except a few newer ones, marked in the sections below."
+msgstr "Всички те са достатъчно стари за всеки rule engine (ES5, 2009; `find` и `findIndex` - ES2015) - освен няколко по-нови, отбелязани в разделите по-долу."
+
+#. box title
+#: site/lectures/07-array-methods.md:146
+msgid "Animations"
+msgstr "Анимации"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:147
+msgid "**Functions are values:** [3. Callbacks](../animations/functionsAsValues.html#3){target=\"_blank\"}; **Functions and data:** [5. A callback, call by call](../animations/functionsAndData.html#5){target=\"_blank\"}"
+msgstr "**Функциите са стойности:** [3. Callbacks](../animations/functionsAsValues.html#3){target=\"_blank\"}; **Функциите и данните:** [5. Callback, извикване по извикване](../animations/functionsAndData.html#5){target=\"_blank\"}"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:151
+msgid "The arguments of the callback"
+msgstr "Аргументите на callback-а"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:153
+msgid "The method calls your callback with **three** arguments: the element, its index and the whole array. Most callbacks need only the first one - a function may ignore the rest (lecture 5):"
+msgstr "Методът извиква вашия callback с **три** аргумента: елемента, неговия индекс и целия array. На повечето callbacks им трябва само първият - функцията може да пренебрегне останалите (лекция 5):"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:167
+msgid "The callback is written as an arrow function or as a classic function expression - both work the same here. Older rules use the classic form:"
+msgstr "Callback-ът се пише като arrow function или като класически function expression - тук двете работят еднакво. По-старите правила използват класическата форма:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:179
+msgid "Look at the data first: `console.table`"
+msgstr "Първо погледнете данните: `console.table`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:181
+msgid "Before you write a method chain, look at the records. `console.table` prints a list of objects as a table - one row per record, one column per key:"
+msgstr "Преди да напишете верига от методи, погледнете записите. `console.table` отпечатва списък от обекти като таблица - един ред за всеки запис, една колона за всеки ключ:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:191
+msgid "It works in Node.js and in the browser console too. A dictionary (an object of objects, lecture 6) prints with its keys as the row names:"
+msgstr "Работи и в Node.js, и в конзолата на браузъра. Dictionary (обект от обекти, лекция 6) се отпечатва с ключовете си като имена на редовете:"
+
+#. heading 2
+#: site/lectures/07-array-methods.md:198
+msgid "2. `forEach` - do something with every element"
+msgstr "2. `forEach` - направи нещо с всеки елемент"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:200
+msgid "`forEach` calls the callback once for each element, in order. It is a `for...of` loop written as a method:"
+msgstr "`forEach` извиква callback-а по веднъж за всеки елемент, по ред. Това е `for...of` loop, написан като метод:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:223
+msgid "`forEach` returns **nothing** (`undefined`). It is for **side effects**: printing, adding to a total, pushing into another array."
+msgstr "`forEach` не връща **нищо** (`undefined`). Той е за **странични ефекти**: отпечатване, добавяне към сума, добавяне в друг array."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:226
+msgid "An old task - the total of the sales:"
+msgstr "Стара задача - общата сума на продажбите:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:240
+msgid "What `forEach` cannot do"
+msgstr "Какво `forEach` не може"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:256
+msgid "To stop at the first match, use `find` or `some` (section 5) - or a `for...of` loop with `break`."
+msgstr "За да спрете при първото съвпадение, използвайте `find` или `some` (раздел 5) - или `for...of` loop с `break`."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:259
+msgid "Changing the elements"
+msgstr "Промяна на елементите"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:261
+msgid "Another old task: add `isAdmin` to every user. `forEach` can change the objects in the array:"
+msgstr "Още една стара задача: добавете `isAdmin` към всеки потребител. `forEach` може да промени обектите в array-я:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:277
+msgid "This changes the original objects - for the objects of `doc` that is exactly what a rule must **not** do (lectures 5 and 6). `map` (next section) builds new objects instead and leaves the input as it was."
+msgstr "Това променя оригиналните обекти - а за обектите на `doc` точно това правилото **не** трябва да прави (лекции 5 и 6). `map` (следващият раздел) вместо това изгражда нови обекти и оставя входните данни непроменени."
+
+#. box title
+#: site/lectures/07-array-methods.md:281
+msgid "`forEach` + `push` = `map` or `filter`"
+msgstr "`forEach` + `push` = `map` или `filter`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:282
+msgid "Older rules often build a new array like this: `var ids = []; list.forEach(function (e) { ids.push(e.id); });`. That is `map`: `const ids = list.map(e => e.id);`. And `forEach` with an `if` before the `push` is `filter`."
+msgstr "По-старите правила често изграждат нов array така: `var ids = []; list.forEach(function (e) { ids.push(e.id); });`. Това е `map`: `const ids = list.map(e => e.id);`. А `forEach` с `if` преди `push` е `filter`."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:288
+msgid "3. `map` - a new array, one result per element"
+msgstr "3. `map` - нов array, по един резултат за всеки елемент"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:290
+msgid "`map` calls the callback for every element and puts what the callback **returns** into a new array. The new array has the **same length**; the original does not change."
+msgstr "`map` извиква callback-а за всеки елемент и слага това, което callback-ът **връща**, в нов array. Новият array има **същата дължина**; оригиналът не се променя."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:306
+msgid "The same with a classic function - note the `return`:"
+msgstr "Същото с класическа функция - обърнете внимание на `return`:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:316
+msgid "With the index (the second argument):"
+msgstr "С индекса (вторият аргумент):"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:324
+msgid "Two old tasks on a list of cities - the names only, and each name changed with a dictionary (lecture 6):"
+msgstr "Две стари задачи върху списък от градове - само имената, и всяко име, сменено чрез dictionary (лекция 6):"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:344
+msgid "`map` on the report"
+msgstr "`map` върху отчета"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:364
+msgid "The last example is the clean version of the `isAdmin` task: **new** objects with the extra key, and the input untouched:"
+msgstr "Последният пример е чистата версия на задачата с `isAdmin`: **нови** обекти с допълнителния ключ, а входните данни - непокътнати:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:377
+msgid "A dictionary has no `map`, but `Object.entries` turns it into an array of `[key, value]` pairs (lecture 6):"
+msgstr "Dictionary няма `map`, но `Object.entries` го превръща в array от двойки `[key, value]` (лекция 6):"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:386
+msgid "Two traps"
+msgstr "Два капана"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:398
+msgid "The second trap explains why existing rules write `.map(function (x) { return parseInt(x, 10) || 0; })` and not `.map(parseInt)`: `parseInt(\"2\", 1)` and `parseInt(\"3\", 2)` are `NaN` - base 1 does not exist, and \"3\" is not a digit in base 2."
+msgstr "Вторият капан обяснява защо съществуващите правила пишат `.map(function (x) { return parseInt(x, 10) || 0; })`, а не `.map(parseInt)`: `parseInt(\"2\", 1)` и `parseInt(\"3\", 2)` са `NaN` - основа 1 не съществува, а \"3\" не е цифра в основа 2."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:403
+msgid "4. `filter` - the elements that pass"
+msgstr "4. `filter` - елементите, които минават"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:405
+msgid "`filter` calls the callback for every element and keeps the element when the callback returns a **truthy** value. The result is a new array - shorter, or equally long, or empty."
+msgstr "`filter` извиква callback-а за всеки елемент и запазва елемента, когато callback-ът върне **truthy** стойност. Резултатът е нов array - по-къс, или със същата дължина, или празен."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:420
+msgid "The old task - the cities with more than 340,000 people:"
+msgstr "Старата задача - градовете с повече от 340 000 жители:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:434
+msgid "`filter` on the report"
+msgstr "`filter` върху отчета"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:453
+msgid "`[, m]` skips the first element of the pair - array destructuring with a hole (lecture 6)."
+msgstr "`[, m]` прескача първия елемент на двойката - array destructuring с дупка (лекция 6)."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:456
+msgid "`filter(Boolean)`: drop the empty values"
+msgstr "`filter(Boolean)`: махнете празните стойности"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:458
+msgid "`Boolean` is a function too: `Boolean(x)` is `true` for truthy values. As a callback it drops `\"\"`, `undefined`, `null` - and also `0` and `false`:"
+msgstr "`Boolean` също е функция: `Boolean(x)` е `true` за truthy стойности. Като callback тя маха `\"\"`, `undefined`, `null` - но също и `0` и `false`:"
+
+#. box title
+#: site/lectures/07-array-methods.md:469
+msgid "Instead of `splice` in a loop"
+msgstr "Вместо `splice` в loop"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:470
+msgid "Lecture 4 showed the bug of `splice` while walking forwards ([Array methods 7](../animations/arrayMethods.html#7){target=\"_blank\"}). `filter` does not change the array: build a new one with the elements you **keep**: `const left = list.filter(x => x.state !== \"removed\");`"
+msgstr "Лекция 4 показа бъга със `splice` при обхождане напред ([Методи на arrays 7](../animations/arrayMethods.html#7){target=\"_blank\"}). `filter` не променя array-я: изградете нов с елементите, които **запазвате**: `const left = list.filter(x => x.state !== \"removed\");`"
+
+#. heading 2
+#: site/lectures/07-array-methods.md:476
+msgid "5. `find`, `findIndex`, `some` and `every`"
+msgstr "5. `find`, `findIndex`, `some` и `every`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:478
+msgid "These methods **stop early**: as soon as the answer is known, the rest of the array is not visited."
+msgstr "Тези методи **спират рано**: щом отговорът стане ясен, останалата част от array-я не се обхожда."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:481
+msgid "`find` and `findIndex`"
+msgstr "`find` и `findIndex`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:483
+msgid "`find` returns the **first element** for which the callback is truthy - or `undefined` when there is none. `findIndex` returns its **index** - or `-1`."
+msgstr "`find` връща **първия елемент**, за който callback-ът е truthy - или `undefined`, когато няма такъв. `findIndex` връща неговия **индекс** - или `-1`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:502
+msgid "On the report - **check** the result before you use it:"
+msgstr "Върху отчета - **проверете** резултата, преди да го използвате:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:515
+msgid "`findLast` and `findLastIndex` search from the **end** (ES2023 - check that your rule engine supports them):"
+msgstr "`findLast` и `findLastIndex` търсят от **края** (ES2023 - проверете дали вашият rule engine ги поддържа):"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:524
+msgid "`some` and `every`"
+msgstr "`some` и `every`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:526
+msgid "`some` - is there **at least one** element that passes? (OR over all elements)"
+msgstr "`some` - има ли **поне един** елемент, който минава? (ИЛИ върху всички елементи)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:527
+msgid "`every` - do **all** elements pass? (AND over all elements)"
+msgstr "`every` - минават ли **всички** елементи? (И върху всички елементи)"
+
+#. box title
+#: site/lectures/07-array-methods.md:540
+msgid "An empty array"
+msgstr "Празен array"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:541
+msgid "`[].some(...)` is `false` - there is no element that passes. `[].every(...)` is **`true`** - there is no element that fails. A rule that checks `enclosures.every(enc => enc.state === \"normal\")` on a report **without** enclosures says \"all normal\". If \"no enclosures\" is suspicious, check the length first."
+msgstr "`[].some(...)` е `false` - няма елемент, който да минава. `[].every(...)` е **`true`** - няма елемент, който да не минава. Правило, което проверява `enclosures.every(enc => enc.state === \"normal\")` върху отчет **без** enclosures, казва \"всички са нормални\". Ако \"няма enclosures\" е подозрително, първо проверете дължината."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:554
+msgid "`includes` or `some`?"
+msgstr "`includes` или `some`?"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:556
+msgid "`includes` (lecture 4) compares with `===` - for **exact values**. `some` takes a **condition**:"
+msgstr "`includes` (лекция 4) сравнява с `===` - за **точни стойности**. `some` приема **условие**:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:567
+msgid "Finding a value in the record list"
+msgstr "Търсене на стойност в списъка от записи"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:569
+msgid "The key / value records of lecture 4, with `find`:"
+msgstr "Записите ключ / стойност от лекция 4, с `find`:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:582
+msgid "One `find` is fine. A `find` **inside** a loop over thousands of records is the slow pattern of lecture 4 - [section 10](#_10-indexes-map-and-set) builds an index instead."
+msgstr "Един `find` е наред. `find` **вътре** в loop върху хиляди записи е бавният модел от лекция 4 - [раздел 10](#_10-indexes-map-and-set) вместо това изгражда индекс."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:586
+msgid "6. `reduce` - many values into one"
+msgstr "6. `reduce` - много стойности в една"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:588
+msgid "`reduce` walks the array and carries one value from element to element - the **accumulator**. The callback gets the accumulator so far and the current element, and returns the **new** accumulator. At the end, `reduce` returns the last accumulator."
+msgstr "`reduce` обхожда array-я и пренася една стойност от елемент на елемент - **акумулатора**. Callback-ът получава акумулатора досега и текущия елемент и връща **новия** акумулатор. Накрая `reduce` връща последния акумулатор."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:611
+msgid "**accumulator** - the value returned by the previous call (the first time: the initial value);"
+msgstr "**accumulator** - стойността, върната от предишното извикване (първия път: началната стойност);"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:613
+msgid "**current** - the element being processed;"
+msgstr "**current** - елементът, който се обработва;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:614
+msgid "**initialValue** - optional: the start value of the accumulator. Without it, the accumulator starts with the **first** element, and the callback starts at the **second**:"
+msgstr "**initialValue** - по желание: началната стойност на акумулатора. Без нея акумулаторът започва с **първия** елемент, а callback-ът започва от **втория**:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:631
+msgid "This is the accumulator of lecture 4 (`let sum = 0; for (...) sum += x;`) as a method."
+msgstr "Това е акумулаторът от лекция 4 (`let sum = 0; for (...) sum += x;`) като метод."
+
+#. box title
+#: site/lectures/07-array-methods.md:634
+msgid "Animation"
+msgstr "Анимация"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:635
+msgid "**Algorithms with arrays:** [3. Sum of the elements](../animations/arrayAlgorithms.html#3){target=\"_blank\"} - the same idea with a loop"
+msgstr "**Алгоритми с arrays:** [3. Сума на елементите](../animations/arrayAlgorithms.html#3){target=\"_blank\"} - същата идея с loop"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:639
+msgid "Always give an initial value"
+msgstr "Винаги давайте начална стойност"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:650
+msgid "Without an initial value, `reduce` on an empty array throws a `TypeError`. A list from a report can be empty - so give the initial value, unless you have checked the length first. (The sample rule at the top can skip it: it returned before, when there were no enclosures.)"
+msgstr "Без начална стойност `reduce` върху празен array хвърля `TypeError`. Списък от отчет може да е празен - затова давайте началната стойност, освен ако преди това не сте проверили дължината. (Примерното правило в началото може да я пропусне: то вече е приключило, когато няма enclosures.)"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:655
+msgid "The sum of the even numbers"
+msgstr "Сумата на четните числа"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:657
+msgid "An old example - with `reduce` only, and with `filter` + `reduce`:"
+msgstr "Стар пример - само с `reduce` и с `filter` + `reduce`:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:671
+msgid "`reduce` on the report"
+msgstr "`reduce` върху отчета"
+
+#. box title
+#: site/lectures/07-array-methods.md:696
+msgid "When not to use `reduce`"
+msgstr "Кога да не използвате `reduce`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:697
+msgid "`reduce` can do almost anything - and that is its problem: a long `reduce` is hard to read. For a sum, a maximum or a count it is fine. When the callback grows beyond a few lines, a `for...of` loop or a helper with a name is usually clearer. `reduceRight` is the same as `reduce`, from the last element to the first."
+msgstr "`reduce` може почти всичко - и точно това е проблемът му: дългият `reduce` се чете трудно. За сума, максимум или броене е подходящ. Когато callback-ът порасне над няколко реда, `for...of` loop или helper функция с име обикновено са по-ясни. `reduceRight` е същото като `reduce`, от последния елемент към първия."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:703
+msgid "7. Sorting: `sort` and `toSorted`"
+msgstr "7. Сортиране: `sort` и `toSorted`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:705
+msgid "`sort` puts the elements in order **in place** - it changes the array - and returns the same array."
+msgstr "`sort` подрежда елементите **на място** - променя array-я - и връща същия array."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:708
+msgid "Without a compare function: as strings"
+msgstr "Без функция за сравнение: като strings"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:716
+msgid "Without a compare function, `sort` turns the elements into **strings** and sorts them by their character codes - like the string comparison of lecture 3. `\"13\"` comes before `\"4\"`, because `\"1\"` comes before `\"4\"`. Strings with capital letters come before small ones:"
+msgstr "Без функция за сравнение `sort` превръща елементите в **strings** и ги сортира по кодовете на символите - като сравнението на strings от лекция 3. `\"13\"` е преди `\"4\"`, защото `\"1\"` е преди `\"4\"`. Strings с главни букви са преди тези с малки:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:726
+msgid "The versions are in the wrong order too: `\"10.1\"` first, `\"2.9\"` last."
+msgstr "И версиите са в грешен ред: `\"10.1\"` е първа, `\"2.9\"` - последна."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:728
+msgid "The compare function"
+msgstr "Функцията за сравнение"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:730
+msgid "`sort(compareFn)` calls `compareFn(a, b)` for pairs of elements. The **sign** of the number it returns decides the order:"
+msgstr "`sort(compareFn)` извиква `compareFn(a, b)` за двойки елементи. **Знакът** на числото, което тя връща, решава реда:"
+
+#. table cell
+#: site/lectures/07-array-methods.md:733
+msgid "`compareFn(a, b)` returns"
+msgstr "`compareFn(a, b)` връща"
+
+#. table cell
+#: site/lectures/07-array-methods.md:733 site/lectures/07-array-methods.md:1230
+msgid "Order"
+msgstr "Ред"
+
+#. table cell
+#: site/lectures/07-array-methods.md:735
+msgid "a negative number"
+msgstr "отрицателно число"
+
+#. table cell
+#: site/lectures/07-array-methods.md:735
+msgid "`a` comes **before** `b`"
+msgstr "`a` е **преди** `b`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:736
+msgid "a positive number"
+msgstr "положително число"
+
+#. table cell
+#: site/lectures/07-array-methods.md:736
+msgid "`a` comes **after** `b`"
+msgstr "`a` е **след** `b`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:737
+msgid "`a` and `b` keep their order"
+msgstr "`a` и `b` запазват реда си"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:739
+msgid "For numbers, `a - b` gives exactly that:"
+msgstr "За числа `a - b` дава точно това:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:749
+msgid "For strings, `localeCompare` returns a negative number, `0` or a positive number:"
+msgstr "За strings `localeCompare` връща отрицателно число, `0` или положително число:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:757
+msgid "For versions, `compareVersions` of lecture 5 **is** a compare function - it returns `-1`, `0` or `1`:"
+msgstr "За версии `compareVersions` от лекция 5 **е** функция за сравнение - тя връща `-1`, `0` или `1`:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:776
+msgid "Sorting records"
+msgstr "Сортиране на записи"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:778
+msgid "Records are sorted by one of their keys. The old task - the cities by population, highest first:"
+msgstr "Записите се сортират по някой от ключовете си. Старата задача - градовете по население, най-голямото първо:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:792
+msgid "An old homework writes one compare function for **any** key:"
+msgstr "Старо домашно пише една функция за сравнение за **всеки** ключ:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:809
+msgid "The priorities are sorted as text: \"high\" < \"low\" < \"medium\". To sort them by meaning, map each one to a number first: `const rank = { high: 0, medium: 1, low: 2 };` and compare `rank[a.priority] - rank[b.priority]`."
+msgstr "Приоритетите се сортират като текст: \"high\" < \"low\" < \"medium\". За да ги сортирате по смисъл, първо превърнете всеки в число: `const rank = { high: 0, medium: 1, low: 2 };` и сравнявайте `rank[a.priority] - rank[b.priority]`."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:813
+msgid "Several keys"
+msgstr "Няколко ключа"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:815
+msgid "Sort by the first key; when it is equal (the result is `0`), use the second. `||` does it in one line: `0` is falsy, so `||` moves on to the next comparison. An old task - books by `id`, then by title:"
+msgstr "Сортирайте по първия ключ; когато той е равен (резултатът е `0`), използвайте втория. `||` прави това на един ред: `0` е falsy, затова `||` преминава към следващото сравнение. Стара задача - книги по `id`, после по заглавие:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:831
+msgid "On the report - enclosures by type, then by firmware (lowest first), then by id:"
+msgstr "Върху отчета - enclosures по тип, после по firmware (най-ниският първи), после по id:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:852
+msgid "Since ES2019 `sort` is **stable**: elements that compare as equal keep their original order."
+msgstr "От ES2019 `sort` е **стабилен**: елементите, които се сравняват като равни, запазват първоначалния си ред."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:855
+msgid "`sort` changes the array - sort a copy"
+msgstr "`sort` променя array-я - сортирайте копие"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:870
+msgid "`[...arr].sort(...)` or `arr.slice().sort(...)` - copy, then sort. Works everywhere."
+msgstr "`[...arr].sort(...)` или `arr.slice().sort(...)` - копирайте, после сортирайте. Работи навсякъде."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:872
+msgid "`arr.toSorted(...)` - the same in one step (ES2023 - check that your rule engine supports it). Its brothers: `toReversed()`, `toSpliced()`, `with(index, value)`."
+msgstr "`arr.toSorted(...)` - същото с една стъпка (ES2023 - проверете дали вашият rule engine го поддържа). Неговите братя: `toReversed()`, `toSpliced()`, `with(index, value)`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:874
+msgid "**Never** `sort` an array of `doc` in place - the rest of the rule (and other helpers) would see the report in a different order."
+msgstr "**Никога** не прилагайте `sort` на място върху array от `doc` - останалата част от правилото (и другите helper функции) ще виждат отчета в друг ред."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:877
+msgid "`reverse` reverses the array in place; `toReversed` (ES2023) returns a reversed copy."
+msgstr "`reverse` обръща array-я на място; `toReversed` (ES2023) връща обърнато копие."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:880
+msgid "The boolean compare function - a bug in older code"
+msgstr "Функция за сравнение, която връща boolean - бъг в по-стария код"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:891
+msgid "`a > b` returns `true` or `false`, which become `1` and `0` - never a negative number. Some engines sorted such arrays by luck; in today's Node.js and Chrome the array above stays as it is. If you find `sort(function (a, b) { return a > b; })` in a rule, it is a bug."
+msgstr "`a > b` връща `true` или `false`, които стават `1` и `0` - никога отрицателно число. Някои engines сортираха такива arrays по случайност; в днешните Node.js и Chrome array-ят по-горе си остава какъвто е. Ако намерите `sort(function (a, b) { return a > b; })` в правило, това е бъг."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:896
+msgid "8. Chaining, `flat` and `flatMap` - and when a loop is clearer"
+msgstr "8. Вериги, `flat` и `flatMap` - и кога loop е по-ясен"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:898 site/lectures/07-array-methods.md:1558
+msgid "Chains"
+msgstr "Вериги"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:900
+msgid "`map` and `filter` return arrays - so you can call the next method on the result right away. Write one method per line:"
+msgstr "`map` и `filter` връщат arrays - затова можете веднага да извикате следващия метод върху резултата. Пишете по един метод на ред:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:911
+msgid "Read a chain from top to bottom: each line takes the array of the line above. Two old homework tasks as chains:"
+msgstr "Четете веригата отгоре надолу: всеки ред взема array-я от реда над него. Две стари задачи от домашно като вериги:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:928
+msgid "The other old tasks of this kind are in practice task 5."
+msgstr "Другите стари задачи от този вид са в задача 5 за упражнение."
+
+#. box title
+#: site/lectures/07-array-methods.md:930
+msgid "Debugging a chain"
+msgstr "Отстраняване на грешки във верига"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:931
+msgid "When a chain gives a wrong result, cut it: put the first two lines into a variable and print it, then add the next line. Or print inside a callback: `.map(enc => { console.log(enc); return enc.id; })`."
+msgstr "Когато веригата дава грешен резултат, разрежете я: сложете първите два реда в variable и я отпечатайте, после добавете следващия ред. Или отпечатайте вътре в callback-а: `.map(enc => { console.log(enc); return enc.id; })`."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:936
+msgid "`flat` and `flatMap` (ES2019)"
+msgstr "`flat` и `flatMap` (ES2019)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:938
+msgid "`flat` turns an array of arrays into one array. `flatMap` is `map` followed by `flat` - useful when each element gives **several** values:"
+msgstr "`flat` превръща array от arrays в един array. `flatMap` е `map`, последван от `flat` - полезно, когато всеки елемент дава **няколко** стойности:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:954
+msgid "`flatMap` can also **drop** an element: return `[]` for it."
+msgstr "`flatMap` може и да **махне** елемент: върнете `[]` за него."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:956
+msgid "`Array.from` with a function"
+msgstr "`Array.from` с функция"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:958
+msgid "`Array.from` (lecture 4) takes a second argument: a `map` callback. With `{ length: n }` it builds an array of `n` computed elements:"
+msgstr "`Array.from` (лекция 4) приема втори аргумент: `map` callback. С `{ length: n }` изгражда array от `n` изчислени елемента:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:966
+msgid "(`_` is a common name for a parameter the function does not use.)"
+msgstr "(`_` е обичайно име за параметър, който функцията не използва.)"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:968
+msgid "When a loop is clearer"
+msgstr "Кога loop е по-ясен"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:970
+msgid "Methods are short and clear for **one** question at a time. A `for...of` loop is often better when:"
+msgstr "Методите са кратки и ясни за **един** въпрос наведнъж. `for...of` loop често е по-добър, когато:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:973
+msgid "you need to **stop early** in a way `find` / `some` cannot express, or skip with complex conditions;"
+msgstr "трябва да **спрете рано** по начин, който `find` / `some` не могат да изразят, или да прескачате при сложни условия;"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:975
+msgid "you compute **several results in one pass** (a count, a list and a maximum at once);"
+msgstr "изчислявате **няколко резултата с едно обхождане** (брой, списък и максимум наведнъж);"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:977
+msgid "the array is very large and the chain walks it several times - each method is one more pass over all elements (for a few thousand records this rarely matters);"
+msgstr "array-ят е много голям и веригата го обхожда няколко пъти - всеки метод е още едно обхождане на всички елементи (за няколко хиляди записа това рядко има значение);"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:980
+msgid "the callback becomes long - a long `reduce` especially."
+msgstr "callback-ът става дълъг - особено дългият `reduce`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:995
+msgid "(`enc.firmware < lowest` compares strings - fine for `\"2.10\"` and `\"2.14\"`, but not for `\"2.9\"`. In a real rule, use `compareVersions`.)"
+msgstr "(`enc.firmware < lowest` сравнява strings - наред е за `\"2.10\"` и `\"2.14\"`, но не и за `\"2.9\"`. В истинско правило използвайте `compareVersions`.)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:998
+msgid "Choose what your team reads most easily. Both are correct; mixing is fine."
+msgstr "Изберете това, което екипът ви чете най-лесно. И двете са правилни; смесването е наред."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1000
+msgid "9. Grouping records"
+msgstr "9. Групиране на записи"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1002
+msgid "The record list of lecture 4 has one record per value - 79 records in `report-records.json`, thousands in a real export:"
+msgstr "Списъкът от записи от лекция 4 има по един запис за всяка стойност - 79 записа в `report-records.json`, хиляди в истински експорт:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1019
+msgid "A rule wants to ask \"what is the firmware of ENC-04?\" or \"which enclosures are there?\". **Grouping** turns the flat list into an object: one key per group, and the records of the group in an array."
+msgstr "Правилото иска да попита \"какъв е firmware на ENC-04?\" или \"какви enclosures има?\". **Групирането** превръща плоския списък в обект: един ключ за всяка група и записите на групата в array."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1023
+msgid "Four ways to write the same grouping"
+msgstr "Четири начина да се напише едно и също групиране"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1025
+msgid "An old advanced task compared several solutions. All four give `{ \"Global Resources\": [...], \"Enclosures\": [...], \"Pools\": [...] }`:"
+msgstr "Стара advanced задача сравняваше няколко решения. И четирите дават `{ \"Global Resources\": [...], \"Enclosures\": [...], \"Pools\": [...] }`:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1065
+msgid "The **loop** and **`forEach`** versions are the easiest to read."
+msgstr "Версиите с **loop** и с **`forEach`** се четат най-лесно."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1066
+msgid "**`reduce`** keeps it in one expression - common in modern code."
+msgstr "**`reduce`** го държи в един израз - често в модерния код."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1067
+msgid "**`Object.groupBy`** is the shortest. It is new (ES2024, Node.js 21+): check that your rule engine supports it. Its result has no prototype, so Node.js prints it as `[Object: null prototype] { ... }` - it works like any other object, it only has no inherited keys such as `toString`."
+msgstr "**`Object.groupBy`** е най-краткият. Той е нов (ES2024, Node.js 21+): проверете дали вашият rule engine го поддържа. Резултатът му няма prototype, затова Node.js го отпечатва като `[Object: null prototype] { ... }` - работи като всеки друг обект, само няма наследени ключове като `toString`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1072
+msgid "The old task also had a \"short\" form: `acc[r.group] = (acc[r.group] || []).concat(r);`. It works, but `concat` builds a **new** array for every record and copies the old one into it - with thousands of records that is much slower than `push`."
+msgstr "Старата задача имаше и \"кратка\" форма: `acc[r.group] = (acc[r.group] || []).concat(r);`. Работи, но `concat` създава **нов** array за всеки запис и копира стария в него - с хиляди записи това е много по-бавно от `push`."
+
+#. box title
+#: site/lectures/07-array-methods.md:1077
+msgid "`groupBy` in your library"
+msgstr "`groupBy` във вашата библиотека"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1078
+msgid "Your rule engine may not have `Object.groupBy`. A small helper - the sample rule at the top has one - works everywhere: `groupBy(list, keyOf)`, where `keyOf` is a callback that returns the key of a record. Put it into `library.js` (section 12)."
+msgstr "Вашият rule engine може да няма `Object.groupBy`. Малка helper функция - примерното правило в началото има такава - работи навсякъде: `groupBy(list, keyOf)`, където `keyOf` е callback, който връща ключа на записа. Сложете я в `library.js` (раздел 12)."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1083
+msgid "Two levels: group, then item"
+msgstr "Две нива: група, после item"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1085
+msgid "For a record list, one level is not enough: you want `nested[\"Enclosures\"][\"ENC-04\"][\"Firmware\"]` - the record list read like the nested JSON document of lecture 6:"
+msgstr "За списък от записи едно ниво не стига: искате `nested[\"Enclosures\"][\"ENC-04\"][\"Firmware\"]` - списъкът от записи да се чете като вложения JSON документ от лекция 6:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1115
+msgid "Walk the list **once**, and every later question is a direct lookup. The `get(nested, [\"Enclosures\", \"ENC-04\", \"Firmware\"])` of lecture 6 works on the result too. This is what library helpers for record exports do: group once, then read by path."
+msgstr "Обходете списъка **веднъж** и всеки следващ въпрос е директно търсене. `get(nested, [\"Enclosures\", \"ENC-04\", \"Firmware\"])` от лекция 6 работи и върху резултата. Точно това правят helper функциите на библиотеките за експорти от записи: групират веднъж, после четат по път."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1120
+msgid "Counting per group"
+msgstr "Броене по групи"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1122
+msgid "With the groups ready, counting is `Object.entries` + `map`:"
+msgstr "Когато групите са готови, броенето е `Object.entries` + `map`:"
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1131
+msgid "10. Indexes: `Map` and `Set`"
+msgstr "10. Индекси: `Map` и `Set`"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1133
+msgid "An index: look up instead of searching"
+msgstr "Индекс: търсене по ключ вместо обхождане"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1135
+msgid "\"For every enclosure, find its state\" - with `find` inside `map`, each lookup walks the whole list again. An **index** is an object built in one pass, keyed by what you look up:"
+msgstr "\"За всеки enclosure намери състоянието му\" - с `find` вътре в `map` всяко търсене обхожда целия списък отново. **Индексът** е обект, изграден с едно обхождане, с ключ това, по което търсите:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1158
+msgid "With 9,500 records and 100 lookups, the slow version makes up to 950,000 comparisons; the index makes 9,500 steps once, and then each lookup is immediate. Try it - the times differ on every computer, the ratio does not:"
+msgstr "С 9 500 записа и 100 търсения бавната версия прави до 950 000 сравнения; индексът прави 9 500 стъпки веднъж и после всяко търсене е мигновено. Опитайте - времената са различни на всеки компютър, съотношението не е:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1184
+msgid "A trap of objects as indexes"
+msgstr "Капан при обекти като индекси"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1186
+msgid "A plain object **inherits** keys like `constructor` and `toString` (lecture 6). If an id happens to be one of them, the index lies:"
+msgstr "Обикновеният обект **наследява** ключове като `constructor` и `toString` (лекция 6). Ако някое id случайно съвпадне с тях, индексът лъже:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1200
+msgid "`Object.create(null)` - or a `Map` - avoids it. (`Object.groupBy` returns such an object.)"
+msgstr "`Object.create(null)` - или `Map` - избягва това. (`Object.groupBy` връща точно такъв обект.)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1205
+msgid "A `Map` is a collection of key / value pairs made for lookups:"
+msgstr "`Map` е колекция от двойки ключ / стойност, направена за търсене:"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1227
+msgid "Object as an index"
+msgstr "Обект като индекс"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1229
+msgid "Keys"
+msgstr "Ключове"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1229
+msgid "strings (numbers become strings)"
+msgstr "strings (числата стават strings)"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1229
+msgid "any value - also numbers, objects"
+msgstr "всяка стойност - също числа, обекти"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1230
+msgid "integer-like keys first, then creation order (lecture 6)"
+msgstr "първо ключовете, които приличат на цели числа, после реда на създаване (лекция 6)"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1230
+msgid "always the order of insertion"
+msgstr "винаги реда на добавяне"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1231
+msgid "Size"
+msgstr "Размер"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1232
+msgid "Inherited keys"
+msgstr "Наследени ключове"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1232
+msgid "yes (`constructor`, ...) unless `Object.create(null)`"
+msgstr "да (`constructor`, ...), освен с `Object.create(null)`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1232
+msgid "none"
+msgstr "няма"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1233
+msgid "JSON"
+msgstr "JSON"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1233
+msgid "`JSON.stringify` works"
+msgstr "`JSON.stringify` работи"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1233
+msgid "prints `{}` - convert with `Object.fromEntries(map)`"
+msgstr "отпечатва `{}` - преобразувайте с `Object.fromEntries(map)`"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1235
+msgid "For an index inside a rule, both work. Use `Map` when keys are not plain strings or when ids could clash with inherited keys; use an object when the result goes into JSON (an alert, a file)."
+msgstr "За индекс в правило и двете работят. Използвайте `Map`, когато ключовете не са обикновени strings или когато id-тата могат да съвпаднат с наследени ключове; използвайте обект, когато резултатът отива в JSON (alert, файл)."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1249
+msgid "`Set`: unique values"
+msgstr "`Set`: уникални стойности"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1251
+msgid "A `Set` holds each value **once**:"
+msgstr "`Set` пази всяка стойност **веднъж**:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1269
+msgid "The older way to remove duplicates is `list.filter((x, i, arr) => arr.indexOf(x) === i)` - \"keep the first occurrence\". It walks the array again for every element; `[...new Set(list)]` is shorter and faster."
+msgstr "По-старият начин да се махнат повторенията е `list.filter((x, i, arr) => arr.indexOf(x) === i)` - \"запази първото срещане\". Той обхожда array-я отново за всеки елемент; `[...new Set(list)]` е по-кратко и по-бързо."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1274
+msgid "`Set` and `Map` are ES2015 - available everywhere. ES2025 added set operations (`union`, `intersection`, `difference`, ...) - check that your rule engine supports them before you use them."
+msgstr "`Set` и `Map` са ES2015 - има ги навсякъде. ES2025 добави операции с множества (`union`, `intersection`, `difference`, ...) - проверете дали вашият rule engine ги поддържа, преди да ги използвате."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1278
+msgid "11. Reading existing rules"
+msgstr "11. Четене на съществуващи правила"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1280
+msgid "First, run the rule from the start of the lecture:"
+msgstr "Първо изпълнете правилото от началото на лекцията:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1353
+msgid "Here is a rule in the older style that does the same work - `var`, `function (x)` callbacks, `forEach` with `push`, `for...in`, a catch-all `try`:"
+msgstr "Ето правило в по-стария стил, което върши същата работа - `var`, callbacks като `function (x)`, `forEach` с `push`, `for...in`, `try`, който хваща всичко:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1415
+msgid "**Check yourself:**"
+msgstr "**Проверете се:**"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1417
+msgid "Match the parts: which lines of the old rule do the work of `filter`, of the `notNormal` list, of `groupBy`, of `Object.entries(...).map(...)`?"
+msgstr "Свържете частите: кои редове на старото правило вършат работата на `filter`, на списъка `notNormal`, на `groupBy`, на `Object.entries(...).map(...)`?"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1419
+msgid "For the second report the modern rule reports `ENC-02 (2.9); ENC-03 (2.12)`, the old rule only `ENC-03 (2.12)`. Which line misses ENC-02, and why? (Lecture 3.)"
+msgstr "За втория отчет модерното правило докладва `ENC-02 (2.9); ENC-03 (2.12)`, а старото - само `ENC-03 (2.12)`. Кой ред пропуска ENC-02 и защо? (Лекция 3.)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1421
+msgid "`outdated.sort(function (a, b) { return a.firmware > b.firmware; })` - what is wrong with it? Does it change `doc`?"
+msgstr "`outdated.sort(function (a, b) { return a.firmware > b.firmware; })` - какво не е наред? Променя ли `doc`?"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1423
+msgid "The old rule has no \"Lowest firmware\". Write it with `reduce` and `compareVersions`, in one line."
+msgstr "Старото правило няма \"Lowest firmware\". Напишете го с `reduce` и `compareVersions`, на един ред."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1425
+msgid "A report has `enclosures: []`. What does each rule do? And a report **without** `enclosures`?"
+msgstr "Отчет има `enclosures: []`. Какво прави всяко от правилата? А отчет **без** `enclosures`?"
+
+#. box title
+#: site/lectures/07-array-methods.md:1428
+msgid "Answer"
+msgstr "Отговор"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1429
+msgid "`encs.filter(function (e) { ... })` is the `filter`; the first `forEach` with `push` is `filter` + `map` (the `notNormal` list); the second `forEach` with `hasOwnProperty` is `groupBy`; the `for...in` loop with `push` is `Object.entries(byType).map(...)`."
+msgstr "`encs.filter(function (e) { ... })` е `filter`; първият `forEach` с `push` е `filter` + `map` (списъкът `notNormal`); вторият `forEach` с `hasOwnProperty` е `groupBy`; `for...in` loop-ът с `push` е `Object.entries(byType).map(...)`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1433
+msgid "`encs.filter(function (e) { return e.firmware < \"2.14\"; })` compares **strings**, character by character: `\"2.12\" < \"2.14\"` is `true` (`\"2\"` < `\"4\"` at position 3), but `\"2.9\" < \"2.14\"` is `false` (`\"9\"` > `\"1\"` at position 2) - although version 2.9 is lower than 2.14. The modern rule compares the parts as numbers with `compareVersions`. Nothing fails, so nobody notices: one outdated enclosure is silently missing from the alert."
+msgstr "`encs.filter(function (e) { return e.firmware < \"2.14\"; })` сравнява **strings**, символ по символ: `\"2.12\" < \"2.14\"` е `true` (`\"2\"` < `\"4\"` на позиция 3), но `\"2.9\" < \"2.14\"` е `false` (`\"9\"` > `\"1\"` на позиция 2) - макар че версия 2.9 е по-ниска от 2.14. Модерното правило сравнява частите като числа с `compareVersions`. Нищо не гърми, затова никой не забелязва: един остарял enclosure тихо липсва от alert-а."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1439
+msgid "The callback returns `true` / `false`, never a negative number - the order is not reliable (section 7). It does not change `doc`: `filter` made a new array, and `sort` changes only that one. `encs.sort(...)` would change `doc`."
+msgstr "Callback-ът връща `true` / `false`, никога отрицателно число - редът не е надежден (раздел 7). Не променя `doc`: `filter` създаде нов array и `sort` променя само него. `encs.sort(...)` би променил `doc`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1442
+msgid "`const lowest = encs.map(e => e.firmware).reduce((low, fw) => (compareVersions(fw, low) < 0 ? fw : low));` - safe here, because the rule already returned when there were no enclosures (or give an initial value)."
+msgstr "`const lowest = encs.map(e => e.firmware).reduce((low, fw) => (compareVersions(fw, low) < 0 ? fw : low));` - тук е безопасно, защото правилото вече е приключило, когато няма enclosures (или дайте начална стойност)."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1445
+msgid "`[]`: both return without an alert - nothing is outdated, nothing is not normal. Without `enclosures`: the old rule calls `undefined.filter` - a `TypeError`, swallowed by the `catch`: no alert and no error. The modern rule uses `?? []` and also gives no alert - but on purpose, and a real bug elsewhere would still show as an error."
+msgstr "`[]`: и двете приключват без alert - нищо не е остаряло, нищо не е в ненормално състояние. Без `enclosures`: старото правило извиква `undefined.filter` - `TypeError`, погълнат от `catch`: нито alert, нито грешка. Модерното правило използва `?? []` и също не дава alert - но нарочно, а истински бъг другаде пак би се показал като грешка."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1452
+msgid "12. The course project: kickoff"
+msgstr "12. Курсовият проект: старт"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1454
+msgid "From today the helpers you write go into **your own repository** - the start of the course project ([Course project](/project))."
+msgstr "От днес helper функциите, които пишете, отиват във **вашето собствено repository** - началото на курсовия проект ([Курсов проект](/project))."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1457
+msgid "1. Choose"
+msgstr "1. Изберете"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1459
+msgid "**The product**: one product whose reports you know well."
+msgstr "**Продукта**: един продукт, чиито отчети познавате добре."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1460
+msgid "**Two or three sample documents**: anonymised reports of that product - no real customer names, serials or addresses in the repository."
+msgstr "**Два или три примерни документа**: анонимизирани отчети на този продукт - без истински имена на клиенти, серийни номера или адреси в repository-то."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1462
+msgid "**The rules**: two or three existing rules of that product that are hard to read or that repeat code. The project rewrites them with the library."
+msgstr "**Правилата**: две или три съществуващи правила за този продукт, които се четат трудно или повтарят код. Проектът ги пренаписва с библиотеката."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1465
+msgid "2. Set up the repository"
+msgstr "2. Създайте repository-то"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1467
+msgid "Create an empty repository on GitHub (private), clone it, and add the folders:"
+msgstr "Създайте празно repository в GitHub (private), клонирайте го и добавете папките:"
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1478
+msgid "3. `library.js`: the helpers you already have"
+msgstr "3. `library.js`: helper функциите, които вече имате"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1480
+msgid "Copy in the helpers of lectures 5 - 7 (your own versions from the practice tasks): `compareVersions`, `versionBelow`, `get`, `groupBy` - and today's index helper. The last lines **export** them, so that other files can use them:"
+msgstr "Копирайте helper функциите от лекции 5 - 7 (вашите версии от задачите за упражнение): `compareVersions`, `versionBelow`, `get`, `groupBy` - и днешната helper функция за индекс. Последните редове ги **експортират**, за да могат други файлове да ги използват:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1496
+msgid "and use them from another file, with `require` - the same way every practice task loads `check.js`, and the same way your rules load `require(\"library.js\")`:"
+msgstr "и ги използвайте от друг файл с `require` - по същия начин, по който всяка задача за упражнение зарежда `check.js`, и по същия начин, по който правилата ви зареждат `require(\"library.js\")`:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1509
+msgid "`module.exports` and `require` are explained in lecture 9 - today, use them as a recipe. Commit and push."
+msgstr "`module.exports` и `require` се обясняват в лекция 9 - днес ги използвайте като рецепта. Направете commit и push."
+
+#. heading 3
+#: site/lectures/07-array-methods.md:1512
+msgid "4. Plan the first helpers"
+msgstr "4. Планирайте първите helper функции"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1514
+msgid "Look at your rules and your sample documents, and write down:"
+msgstr "Разгледайте правилата и примерните си документи и запишете:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1516
+msgid "the paths you read again and again - each one can become a small helper (`firmwareVersion(doc)`, `deviceName(doc)`);"
+msgstr "пътищата, които четете отново и отново - всеки от тях може да стане малка helper функция (`firmwareVersion(doc)`, `deviceName(doc)`);"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1518
+msgid "the shape of the lists in your product's reports - a list of records, a dictionary, a flattened export (lecture 6) - and which helper turns it into something easy to read (`nestRecords`, `asList`, an index);"
+msgstr "формата на списъците в отчетите на вашия продукт - списък от записи, dictionary, сплескан експорт (лекция 6) - и коя helper функция ги превръща в нещо лесно за четене (`nestRecords`, `asList`, индекс);"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1521
+msgid "the version formats of your product (lecture 8 normalises them)."
+msgstr "форматите на версиите на вашия продукт (лекция 8 ги нормализира)."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1523
+msgid "Lectures 8 - 10 add version and date parsing, a local rule runner with a fake `emit`, tests and JSDoc types."
+msgstr "Лекции 8 - 10 добавят разчитане на версии и дати, локален runner за правила с фалшив `emit`, тестове и JSDoc типове."
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1526
+msgid "13. Practice"
+msgstr "13. Упражнения"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1528
+msgid "In your copy of the Homework repository, first get the new tasks:"
+msgstr "Във вашето копие на Homework repository първо изтеглете новите задачи:"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1535
+msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
+msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
+
+#. table cell
+#: site/lectures/07-array-methods.md:1538
+msgid "Task"
+msgstr "Задача"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1538
+msgid "File"
+msgstr "Файл"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1538
+msgid "What you do"
+msgstr "Какво правите"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1540
+msgid "Predict 20 results: `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort`, `flat`, `Set`"
+msgstr "Предвидете 20 резултата: `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort`, `flat`, `Set`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1541
+msgid "Questions about the enclosures, one method each: ids, outdated, first not normal, all normal?, lowest firmware, a summary text"
+msgstr "Въпроси за enclosures, всеки с един метод: id-та, остарели, първият ненормален, всички ли са нормални?, най-ниският firmware, обобщителен текст"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1542
+msgid "Sort numbers, names, versions and records - by several keys, without changing the input"
+msgstr "Сортиране на числа, имена, версии и записи - по няколко ключа, без да се променят входните данни"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1543
+msgid "The 79 records of `report-records.json`: group, nest by group and item, an index, unique values, totals"
+msgstr "79-те записа от `report-records.json`: групиране, влагане по група и item, индекс, уникални стойности, суми"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1544
+msgid "The old tasks with `map`, `filter`, `reduce`, `find` and `sort`: cities, todos, products, books"
+msgstr "Старите задачи с `map`, `filter`, `reduce`, `find` и `sort`: градове, todos, продукти, книги"
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1546
+msgid "Summary"
+msgstr "Обобщение"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1548
+msgid "Topic"
+msgstr "Тема"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1548
+msgid "Remember"
+msgstr "Запомнете"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1550
+msgid "Callbacks"
+msgstr "Callbacks"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1550
+msgid "The method calls your function with `(element, index, array)`; arrow or `function` - both work"
+msgstr "Методът извиква вашата функция с `(element, index, array)`; arrow или `function` - и двете работят"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1551
+msgid "Side effects only; returns `undefined`; no `break`"
+msgstr "Само странични ефекти; връща `undefined`; без `break`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1552
+msgid "A new array, same length - one returned value per element; `({ ... })` for objects; not `.map(parseInt)`"
+msgstr "Нов array със същата дължина - по една върната стойност за всеки елемент; `({ ... })` за обекти; не `.map(parseInt)`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1553
+msgid "A new array with the elements whose callback is truthy; `.length` counts; `filter(Boolean)` drops empty values"
+msgstr "Нов array с елементите, чийто callback е truthy; `.length` брои; `filter(Boolean)` маха празните стойности"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1554
+msgid "The first match / its index; `undefined` / `-1` when none - check before use"
+msgstr "Първото съвпадение / неговия индекс; `undefined` / `-1`, когато няма - проверявайте преди употреба"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1555
+msgid "At least one / all; stop early; `[].every(...)` is `true`"
+msgstr "Поне един / всички; спират рано; `[].every(...)` е `true`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1556
+msgid "Accumulator from element to element; always give the initial value"
+msgstr "Акумулатор от елемент на елемент; винаги давайте начална стойност"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1557
+msgid "In place; without a compare function sorts as strings; `a - b`, `localeCompare`, `compareVersions`; several keys with `\\|\\|`; sort a copy (`[...arr]`, `toSorted`)"
+msgstr "На място; без функция за сравнение сортира като strings; `a - b`, `localeCompare`, `compareVersions`; няколко ключа с `\\|\\|`; сортирайте копие (`[...arr]`, `toSorted`)"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1558
+msgid "One method per line; each line takes the array above; cut it to debug"
+msgstr "По един метод на ред; всеки ред взема array-я отгоре; разрежете веригата, за да намерите грешката"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1559
+msgid "Flatten nested lists; `flatMap` for elements that give several values"
+msgstr "Сплескват вложени списъци; `flatMap` за елементи, които дават няколко стойности"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1560
+msgid "Grouping"
+msgstr "Групиране"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1560
+msgid "One pass into `{ key: [records] }`; loop, `reduce` or `Object.groupBy` (ES2024); two levels for record lists"
+msgstr "Едно обхождане до `{ key: [records] }`; loop, `reduce` или `Object.groupBy` (ES2024); две нива за списъци от записи"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1561
+msgid "Index"
+msgstr "Индекс"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1561
+msgid "Build once, look up many times; object (watch inherited keys) or `Map`"
+msgstr "Изградете веднъж, търсете много пъти; обект (внимавайте с наследените ключове) или `Map`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1562
+msgid "Unique values; `new Set(list)`, `size`, `has`, `[...set]`"
+msgstr "Уникални стойности; `new Set(list)`, `size`, `has`, `[...set]`"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1563
+msgid "Records as a table - look at the data first"
+msgstr "Записи като таблица - първо погледнете данните"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1564
+msgid "Old style"
+msgstr "Стар стил"
+
+#. table cell
+#: site/lectures/07-array-methods.md:1564
+msgid "`function (x) { return ...; }`, `forEach` + `push`, string comparisons of versions, boolean compare functions - read it, modernise it"
+msgstr "`function (x) { return ...; }`, `forEach` + `push`, сравняване на версии като strings, функции за сравнение, връщащи boolean - четете го, модернизирайте го"
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1566
+msgid "Homework"
+msgstr "Домашно"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1568
+msgid "Finish the five practice tasks - every check must print `OK`."
+msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1569
+msgid "`07-array-methods/homework.js` (in the homework repository): outdated modules from a dictionary, sorted; a pool report from the record list; and an index for a whole set of lookups."
+msgstr "`07-array-methods/homework.js` (в homework repository): остарели модули от dictionary, сортирани; отчет за pools от списъка от записи; и индекс за цял набор от търсения."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1572
+msgid "**Course project:** create your repository (section 12) with `library.js`, `try.js` and two or three anonymised sample documents. Put in your `get`, `compareVersions`, `versionBelow` and `groupBy`, export them, and run `try.js`."
+msgstr "**Курсов проект:** създайте своето repository (раздел 12) с `library.js`, `try.js` и два или три анонимизирани примерни документа. Сложете в него своите `get`, `compareVersions`, `versionBelow` и `groupBy`, експортирайте ги и изпълнете `try.js`."
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1575
+msgid "Optional: take one of your rules and find every loop in it. Which could be a method? Which should stay a loop?"
+msgstr "По желание: вземете едно от правилата си и намерете всеки loop в него. Кой би могъл да е метод? Кой трябва да остане loop?"
+
+#. heading 2
+#: site/lectures/07-array-methods.md:1578
+msgid "Read more"
+msgstr "Още за четене"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1580
+msgid "MDN: [Array methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#instance_methods), [map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), [reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce), [sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), [find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy), [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set), [console.table()](https://developer.mozilla.org/en-US/docs/Web/API/console/table_static)"
+msgstr "MDN: [Методи на Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#instance_methods), [map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), [reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce), [sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), [find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy), [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set), [console.table()](https://developer.mozilla.org/en-US/docs/Web/API/console/table_static)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1590
+msgid "javascript.info: [Array methods](https://javascript.info/array-methods), [Map and Set](https://javascript.info/map-set)"
+msgstr "javascript.info: [Array methods](https://javascript.info/array-methods), [Map and Set](https://javascript.info/map-set)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1592
+msgid "Eloquent JavaScript (4th edition): [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
+msgstr "Eloquent JavaScript (4-то издание): [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1593
+msgid "Exercises: [JavaScript array exercises](https://www.w3resource.com/javascript-exercises/javascript-array-exercises.php) (w3resource)"
+msgstr "Упражнения: [JavaScript array exercises](https://www.w3resource.com/javascript-exercises/javascript-array-exercises.php) (w3resource)"
+
+#. paragraph
+#: site/lectures/07-array-methods.md:1595
+msgid "**Next session:** strings, regular expressions, dates and numbers - clean the version formats of your products, read the patterns in existing rules, and turn the many date formats of the reports into dates you can compare."
+msgstr "**Следващото занятие:** strings, regular expressions, дати и числа - изчистване на форматите на версиите на вашите продукти, четене на шаблоните в съществуващи правила и превръщане на многото формати на дати в отчетите в дати, които можете да сравнявате."

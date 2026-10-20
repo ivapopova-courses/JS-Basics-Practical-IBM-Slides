@@ -15,7 +15,7 @@ export default await withLocales(defineCourse({
   trainerDir: '../trainer',
   nav: [
     { text: 'Agenda', link: '/agenda' },
-    { text: 'Lectures', link: '/lectures/06-objects' },
+    { text: 'Lectures', link: '/lectures/01-getting-started' },
     { text: 'Project', link: '/project' }
   ],
   sidebar: [
@@ -25,6 +25,7 @@ export default await withLocales(defineCourse({
         { text: 'Home', link: '/' },
         { text: 'Agenda', link: '/agenda' },
         { text: 'How to use these pages', link: '/how-to' },
+        { text: 'Example JSON document', link: '/example-document' },
         { text: 'Course project', link: '/project' },
         { text: 'Animations', link: '/under-the-hood' }
       ]
@@ -37,7 +38,11 @@ export default await withLocales(defineCourse({
         { text: '3. Conditions and loops', link: '/lectures/03-conditions-and-loops' },
         { text: '4. Arrays and lists of records', link: '/lectures/04-arrays-and-records' },
         { text: '5. Functions, older code', link: '/lectures/05-functions' },
-        { text: '6. Objects and data shapes', link: '/lectures/06-objects' }
+        { text: '6. Objects and data shapes', link: '/lectures/06-objects' },
+        { text: '7. Array methods', link: '/lectures/07-array-methods' },
+        { text: '8. Strings, regex, dates', link: '/lectures/08-strings-regex-dates' },
+        { text: '9. JSON, Node.js, modules', link: '/lectures/09-json-node-modules-errors' },
+        { text: '10. Tests, types, Git', link: '/lectures/10-tests-types-git' }
       ]
     }
   ],

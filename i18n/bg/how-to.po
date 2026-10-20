@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Practical JavaScript Basics\n"
 "Language-Team: \n"
 "Last-Translator: Claude (claude-opus-5-5)\n"
-"PO-Revision-Date: 2026-10-16\n"
+"PO-Revision-Date: 2026-10-20\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,347 +63,348 @@ msgstr "Примерният JSON документ е измислен"
 msgid "All names and values in it are invented; only the shape is typical of the JSON a device sends."
 msgstr "Всички имена и стойности в него са измислени; само структурата е типична за JSON-а, който изпраща едно устройство."
 
-#. heading 2
+#. paragraph
 #: site/how-to.md:32
+msgid "The whole document, with a map of its parts and tips on how to print it: [The example JSON document](./example-document)."
+msgstr "Целият документ, с карта на частите му и съвети как да го отпечатате: [Примерният JSON документ](./example-document)."
+
+#. heading 2
+#: site/how-to.md:35
 msgid "Practice in VSCode"
 msgstr "Упражнения във VSCode"
 
 #. paragraph
-#: site/how-to.md:34
+#: site/how-to.md:37
 msgid "The practice tasks and the homework are in the **Homework repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework"
 msgstr "Задачите за упражнение и домашните са в **Homework repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework"
 
 #. paragraph
-#: site/how-to.md:37
-#, fuzzy
-#| msgid "Each lecture has a folder there (`02-variables-and-types/`, ...), with the tasks in `practice/` and the homework in `homework.js`. New folders are added before each session."
+#: site/how-to.md:40
 msgid "Each lecture has a folder there (`02-variables-and-types/`, ...), with the tasks in `practice/` and the homework in `homework.js`."
-msgstr "Там всяка лекция има своя папка (`02-variables-and-types/`, ...), със задачите в `practice/` и домашното в `homework.js`. Нови папки се добавят преди всяко занятие."
+msgstr "Там всяка лекция има своя папка (`02-variables-and-types/`, ...), със задачите в `practice/` и домашното в `homework.js`."
 
 #. heading 3
-#: site/how-to.md:39
+#: site/how-to.md:42
 msgid "Set it up once"
 msgstr "Еднократна настройка"
 
 #. paragraph
-#: site/how-to.md:41
+#: site/how-to.md:44
 msgid "You do this only once, at the start of the course. It takes about 15 minutes. If you already did it in session 1, go to [step 6](#_6-check-the-result) and check that everything is right."
-msgstr ""
+msgstr "Това се прави само веднъж, в началото на курса, и отнема около 15 минути. Ако вече сте го направили в занятие 1, отидете на [стъпка 6](#_6-check-the-result) и проверете, че всичко е наред."
 
 #. paragraph
-#: site/how-to.md:45
+#: site/how-to.md:48
 msgid "**The idea.** A *repository* (or *repo*) is a project folder whose history Git keeps. In this course you work with three copies of the Homework repository:"
-msgstr ""
-
-#. paragraph
-#: site/how-to.md:59
-msgid "**`upstream`** is the course repository. Everybody can read it, but only the trainer can change it. You only **pull** from it - this is how you get the new tasks."
-msgstr ""
+msgstr "**Идеята.** *Repository* (или *repo*) е папка на проект, чиято история пази Git. В този курс работите с три копия на Homework repository:"
 
 #. paragraph
 #: site/how-to.md:62
-msgid "**`origin`** is your own repository. You **push** your solutions to it, so they are saved online and you can open them from any computer."
-msgstr ""
+msgid "**`upstream`** is the course repository. Everybody can read it, but only the trainer can change it. You only **pull** from it - this is how you get the new tasks."
+msgstr "**`upstream`** е repository-то на курса. Всеки може да го чете, но само преподавателят може да го променя. Вие само **изтегляте** (pull) от него - така получавате новите задачи."
 
 #. paragraph
 #: site/how-to.md:65
-msgid "`upstream` and `origin` are only short names for the two web addresses (Git calls them *remotes*), so that you do not have to type the full address every time."
-msgstr ""
+msgid "**`origin`** is your own repository. You **push** your solutions to it, so they are saved online and you can open them from any computer."
+msgstr "**`origin`** е вашето собствено repository. Вие **качвате** (push) решенията си в него, така че те са запазени онлайн и можете да ги отворите от всеки компютър."
 
-#. heading 4
+#. paragraph
 #: site/how-to.md:68
+msgid "`upstream` and `origin` are only short names for the two web addresses (Git calls them *remotes*), so that you do not have to type the full address every time."
+msgstr "`upstream` и `origin` са само кратки имена на двата уеб адреса (Git ги нарича *remotes*), за да не пишете всеки път пълния адрес."
+
+#. heading 4
+#: site/how-to.md:71
 msgid "1. Check the tools"
-msgstr ""
+msgstr "1. Проверете инструментите"
 
 #. paragraph
-#: site/how-to.md:70
+#: site/how-to.md:73
 msgid "You need a GitHub account (https://github.com/signup), and Git, Node.js and VSCode installed (see [lecture 1, section 2](/lectures/01-getting-started#_2-setting-up-the-environment)). Open VSCode, then **Terminal > New Terminal**, and type:"
-msgstr ""
+msgstr "Трябват ви акаунт в GitHub (https://github.com/signup) и инсталирани Git, Node.js и VSCode (вижте [лекция 1, раздел 2](/lectures/01-getting-started#_2-setting-up-the-environment)). Отворете VSCode, после **Terminal > New Terminal**, и напишете:"
 
 #. paragraph
-#: site/how-to.md:79
-msgid "If one of them says *command not found* or *is not recognized*, install that tool, then close and open VSCode again."
-msgstr ""
-
-#. heading 4
 #: site/how-to.md:82
-msgid "2. Tell Git who you are"
-msgstr ""
-
-#. paragraph
-#: site/how-to.md:84
-msgid "Git writes your name and email into every commit (every saved version). Skip this step if you did it in session 1: `git config user.name` then prints your name."
-msgstr ""
-
-#. paragraph
-#: site/how-to.md:92
-msgid "Use the same email as in your GitHub account."
-msgstr ""
+msgid "If one of them says *command not found* or *is not recognized*, install that tool, then close and open VSCode again."
+msgstr "Ако някоя от тях отговори *command not found* или *is not recognized*, инсталирайте съответния инструмент, после затворете и отворете отново VSCode."
 
 #. heading 4
-#: site/how-to.md:94
-msgid "3. Create your own repository on GitHub"
-msgstr ""
+#: site/how-to.md:85
+msgid "2. Tell Git who you are"
+msgstr "2. Кажете на Git кои сте"
 
 #. paragraph
-#: site/how-to.md:96
-msgid "Sign in to https://github.com."
-msgstr ""
+#: site/how-to.md:87
+msgid "Git writes your name and email into every commit (every saved version). Skip this step if you did it in session 1: `git config user.name` then prints your name."
+msgstr "Git записва името и имейла ви във всеки commit (всяка запазена версия). Пропуснете тази стъпка, ако сте я направили в занятие 1: тогава `git config user.name` отпечатва името ви."
 
 #. paragraph
+#: site/how-to.md:95
+msgid "Use the same email as in your GitHub account."
+msgstr "Използвайте същия имейл като в акаунта си в GitHub."
+
+#. heading 4
 #: site/how-to.md:97
-msgid "Click **+** (top right), then **New repository**."
-msgstr ""
-
-#. paragraph
-#: site/how-to.md:98
-msgid "**Repository name**: for example `js-basics-homework`."
-msgstr ""
+msgid "3. Create your own repository on GitHub"
+msgstr "3. Създайте свое repository в GitHub"
 
 #. paragraph
 #: site/how-to.md:99
-msgid "Choose **Private** (only you can see it) or **Public**."
-msgstr ""
+msgid "Sign in to https://github.com."
+msgstr "Влезте в https://github.com."
 
 #. paragraph
 #: site/how-to.md:100
-msgid "Leave everything else as it is: **no** README, **no** `.gitignore`, **no** licence. The repository must be **empty** - otherwise step 5 fails."
-msgstr ""
+msgid "Click **+** (top right), then **New repository**."
+msgstr "Натиснете **+** (горе вдясно), после **New repository**."
+
+#. paragraph
+#: site/how-to.md:101
+msgid "**Repository name**: for example `js-basics-homework`."
+msgstr "**Repository name**: например `js-basics-homework`."
 
 #. paragraph
 #: site/how-to.md:102
-msgid "Click **Create repository**."
-msgstr ""
+msgid "Choose **Private** (only you can see it) or **Public**."
+msgstr "Изберете **Private** (само вие го виждате) или **Public**."
 
 #. paragraph
 #: site/how-to.md:103
+msgid "Leave everything else as it is: **no** README, **no** `.gitignore`, **no** licence. The repository must be **empty** - otherwise step 5 fails."
+msgstr "Оставете всичко останало както е: **без** README, **без** `.gitignore`, **без** лиценз. Repository-то трябва да е **празно** - иначе стъпка 5 няма да успее."
+
+#. paragraph
+#: site/how-to.md:105
+msgid "Click **Create repository**."
+msgstr "Натиснете **Create repository**."
+
+#. paragraph
+#: site/how-to.md:106
 msgid "GitHub shows a page with a web address like `https://github.com/your-user/js-basics-homework.git`. Copy it (the copy button next to it). You need it in step 4."
-msgstr ""
+msgstr "GitHub показва страница с уеб адрес като `https://github.com/your-user/js-basics-homework.git`. Копирайте го (бутонът за копиране до него). Трябва ви в стъпка 4."
 
 #. heading 4
-#: site/how-to.md:107
+#: site/how-to.md:110
 msgid "4. Download the course repository and connect your own"
-msgstr ""
+msgstr "4. Изтеглете repository-то на курса и свържете своето"
 
 #. paragraph
-#: site/how-to.md:109
+#: site/how-to.md:112
 msgid "In VSCode, open the folder where you keep the course (**File > Open Folder**, for example `JS_Basics_Course`), then open a terminal (**Terminal > New Terminal**). Type the commands below **one at a time** and press Enter after each."
-msgstr ""
+msgstr "Във VSCode отворете папката, в която държите курса (**File > Open Folder**, например `JS_Basics_Course`), после отворете терминал (**Terminal > New Terminal**). Пишете командите по-долу **една по една** и натискайте Enter след всяка."
 
 #. paragraph
-#: site/how-to.md:113
+#: site/how-to.md:116
 msgid "Download the course repository (this creates the folder `JS-Basics-Practical-IBM-Homework`):"
-msgstr ""
+msgstr "Изтеглете repository-то на курса (това създава папката `JS-Basics-Practical-IBM-Homework`):"
 
 #. paragraph
-#: site/how-to.md:120
+#: site/how-to.md:123
 msgid "Go into the new folder - all the next commands must run there:"
-msgstr ""
+msgstr "Влезте в новата папка - всички следващи команди трябва да се изпълнят там:"
 
 #. paragraph
-#: site/how-to.md:126
+#: site/how-to.md:129
 msgid "After a clone, Git names the repository you cloned from `origin`. Rename it to `upstream`, because it is the course repository, not yours:"
-msgstr ""
+msgstr "След clone Git нарича repository-то, от което сте клонирали, `origin`. Преименувайте го на `upstream`, защото това е repository-то на курса, а не вашето:"
 
 #. paragraph
-#: site/how-to.md:133
+#: site/how-to.md:136
 msgid "Add your own repository as `origin`. Paste **your** address from step 3 instead of the example one:"
-msgstr ""
+msgstr "Добавете своето repository като `origin`. Поставете **вашия** адрес от стъпка 3 вместо примерния:"
 
 #. box title
-#: site/how-to.md:140
+#: site/how-to.md:143
 msgid "Paste in the terminal"
-msgstr ""
+msgstr "Поставяне в терминала"
 
 #. paragraph
-#: site/how-to.md:141
+#: site/how-to.md:144
 msgid "In the VSCode terminal, paste with `Ctrl+V` (or right-click). In other terminals on Linux, use `Ctrl+Shift+V`."
-msgstr ""
+msgstr "В терминала на VSCode поставяте с `Ctrl+V` (или десен бутон). В други терминали под Linux използвайте `Ctrl+Shift+V`."
 
 #. heading 4
-#: site/how-to.md:145
+#: site/how-to.md:148
 msgid "5. Send everything to your repository (the first push)"
-msgstr ""
-
-#. paragraph
-#: site/how-to.md:151
-msgid "This copies the files to your repository on GitHub. `-u origin main` makes Git remember the place: from now on a plain `git push` is enough."
-msgstr ""
+msgstr "5. Изпратете всичко в своето repository (първият push)"
 
 #. paragraph
 #: site/how-to.md:154
+msgid "This copies the files to your repository on GitHub. `-u origin main` makes Git remember the place: from now on a plain `git push` is enough."
+msgstr "Това копира файловете във вашето repository в GitHub. `-u origin main` кара Git да запомни мястото: оттук нататък стига обикновено `git push`."
+
+#. paragraph
+#: site/how-to.md:157
 msgid "The first time, GitHub asks you to sign in:"
-msgstr ""
+msgstr "Първия път GitHub ви моли да влезете:"
 
 #. paragraph
-#: site/how-to.md:156
+#: site/how-to.md:159
 msgid "**In VSCode or on Windows**, a window opens: choose to sign in with the browser and allow the access."
-msgstr ""
+msgstr "**Във VSCode или под Windows** се отваря прозорец: изберете вход през браузъра и разрешете достъпа."
 
 #. paragraph
-#: site/how-to.md:158
+#: site/how-to.md:161
 msgid "**If the terminal asks for a Username and a Password**, type your GitHub user name, and as the password a **personal access token** - GitHub does not accept your normal password here. Create the token on GitHub: your picture (top right) **> Settings > Developer settings > Personal access tokens > Tokens (classic) > Generate new token (classic)**, tick **repo**, click **Generate token**, and copy it. The terminal shows nothing while you paste the token - this is normal, press Enter. Keep the token secret, like a password."
-msgstr ""
+msgstr "**Ако терминалът поиска Username и Password**, напишете потребителското си име в GitHub, а за парола - **personal access token**: GitHub не приема обичайната ви парола тук. Създайте token-а в GitHub: снимката ви (горе вдясно) **> Settings > Developer settings > Personal access tokens > Tokens (classic) > Generate new token (classic)**, отметнете **repo**, натиснете **Generate token** и го копирайте. Терминалът не показва нищо, докато поставяте token-а - това е нормално, натиснете Enter. Пазете token-а в тайна, като парола."
 
 #. heading 4
-#: site/how-to.md:166
+#: site/how-to.md:169
 msgid "6. Check the result"
-msgstr ""
+msgstr "6. Проверете резултата"
 
 #. paragraph
-#: site/how-to.md:168
+#: site/how-to.md:171
 msgid "Still in the `JS-Basics-Practical-IBM-Homework` folder:"
-msgstr ""
+msgstr "Все още в папката `JS-Basics-Practical-IBM-Homework`:"
 
 #. paragraph
-#: site/how-to.md:174
+#: site/how-to.md:177
 msgid "You should see four lines like these - `origin` with **your** address, `upstream` with the course address:"
-msgstr ""
+msgstr "Трябва да видите четири реда като тези - `origin` с **вашия** адрес, `upstream` с адреса на курса:"
 
 #. paragraph
-#: site/how-to.md:184
+#: site/how-to.md:187
 msgid "Also open your repository on GitHub (refresh the page): you should see the lecture folders there."
-msgstr ""
+msgstr "Отворете и своето repository в GitHub (опреснете страницата): трябва да видите папките на лекциите там."
 
 #. heading 4
-#: site/how-to.md:187
-#, fuzzy
-#| msgid "Open the folder in VSCode."
+#: site/how-to.md:190
 msgid "7. Open the folder in VSCode"
-msgstr "Отворете папката във VSCode."
+msgstr "7. Отворете папката във VSCode"
 
 #. paragraph
-#: site/how-to.md:189
+#: site/how-to.md:192
 msgid "**File > Open Folder** and choose `JS-Basics-Practical-IBM-Homework` (the folder itself, not the folder above it). Always open this folder when you work on the tasks: then the terminal starts in the right place."
-msgstr ""
+msgstr "**File > Open Folder** и изберете `JS-Basics-Practical-IBM-Homework` (самата папка, не папката над нея). Винаги отваряйте тази папка, когато работите по задачите: тогава терминалът започва на правилното място."
 
 #. box title
-#: site/how-to.md:193
+#: site/how-to.md:196
 msgid "Something went wrong?"
-msgstr ""
-
-#. paragraph
-#: site/how-to.md:194
-msgid "**`fatal: destination path 'JS-Basics-Practical-IBM-Homework' already exists`** - you cloned it before. Run `cd JS-Basics-Practical-IBM-Homework` and continue with `git remote -v` (step 6) to see what is still missing."
-msgstr ""
+msgstr "Нещо не се получи?"
 
 #. paragraph
 #: site/how-to.md:197
-msgid "**`fatal: not a git repository`** - the terminal is not in the repository folder. Run `cd JS-Basics-Practical-IBM-Homework`, or open that folder in VSCode (step 7) and open a new terminal."
-msgstr ""
+msgid "**`fatal: destination path 'JS-Basics-Practical-IBM-Homework' already exists`** - you cloned it before. Run `cd JS-Basics-Practical-IBM-Homework` and continue with `git remote -v` (step 6) to see what is still missing."
+msgstr "**`fatal: destination path 'JS-Basics-Practical-IBM-Homework' already exists`** - вече сте го клонирали. Изпълнете `cd JS-Basics-Practical-IBM-Homework` и продължете с `git remote -v` (стъпка 6), за да видите какво още липсва."
 
 #. paragraph
 #: site/how-to.md:200
-msgid "**`error: remote origin already exists`** - you already added `origin`. If its address is wrong (check with `git remote -v`), fix it: `git remote set-url origin https://github.com/your-user/your-repo.git`"
-msgstr ""
+msgid "**`fatal: not a git repository`** - the terminal is not in the repository folder. Run `cd JS-Basics-Practical-IBM-Homework`, or open that folder in VSCode (step 7) and open a new terminal."
+msgstr "**`fatal: not a git repository`** - терминалът не е в папката на repository-то. Изпълнете `cd JS-Basics-Practical-IBM-Homework` или отворете тази папка във VSCode (стъпка 7) и отворете нов терминал."
 
 #. paragraph
 #: site/how-to.md:203
-msgid "**`error: remote upstream already exists`** or **`No such remote 'origin'`** after `git remote rename` - the rename is already done. Continue with the next command."
-msgstr ""
+msgid "**`error: remote origin already exists`** - you already added `origin`. If its address is wrong (check with `git remote -v`), fix it: `git remote set-url origin https://github.com/your-user/your-repo.git`"
+msgstr "**`error: remote origin already exists`** - вече сте добавили `origin`. Ако адресът му е грешен (проверете с `git remote -v`), поправете го: `git remote set-url origin https://github.com/your-user/your-repo.git`"
 
 #. paragraph
 #: site/how-to.md:206
+msgid "**`error: remote upstream already exists`** or **`No such remote 'origin'`** after `git remote rename` - the rename is already done. Continue with the next command."
+msgstr "**`error: remote upstream already exists`** или **`No such remote 'origin'`** след `git remote rename` - преименуването вече е направено. Продължете със следващата команда."
+
+#. paragraph
+#: site/how-to.md:209
 msgid "**`! [rejected] ... (fetch first)`** on push - your GitHub repository is not empty (it was created with a README). The easiest fix: delete that repository on GitHub (**Settings**, at the bottom: **Delete this repository**), create it again without a README (step 3) and run `git push -u origin main` again."
-msgstr ""
+msgstr "**`! [rejected] ... (fetch first)`** при push - вашето repository в GitHub не е празно (създадено е с README). Най-лесната поправка: изтрийте това repository в GitHub (**Settings**, най-долу: **Delete this repository**), създайте го отново без README (стъпка 3) и изпълнете пак `git push -u origin main`."
 
 #. paragraph
-#: site/how-to.md:210
+#: site/how-to.md:213
 msgid "**`Repository not found`** on push - the address of `origin` has a typo, or you signed in with another GitHub account. Check the address with `git remote -v`."
-msgstr ""
+msgstr "**`Repository not found`** при push - адресът на `origin` има правописна грешка или сте влезли с друг акаунт в GitHub. Проверете адреса с `git remote -v`."
 
 #. paragraph
-#: site/how-to.md:212
+#: site/how-to.md:215
 msgid "**`Password authentication is not supported`** - you typed your GitHub password. Use a personal access token instead (step 5)."
-msgstr ""
+msgstr "**`Password authentication is not supported`** - написали сте паролата си за GitHub. Използвайте вместо нея personal access token (стъпка 5)."
 
 #. heading 3
-#: site/how-to.md:216
+#: site/how-to.md:219
 msgid "Work on a task"
 msgstr "Работа по задача"
 
 #. paragraph
-#: site/how-to.md:218
+#: site/how-to.md:221
 msgid "Open the terminal (`` Ctrl+` ``) in the repository root and run a task:"
 msgstr "Отворете терминала (`` Ctrl+` ``) в основната папка на repository-то и пуснете задача:"
 
 #. paragraph
-#: site/how-to.md:224
+#: site/how-to.md:227
 msgid "Every task checks your code and prints `OK` or `FAIL` for each check and ends with a line like `5 of 7 checks passed`."
 msgstr "Всяка задача проверява кода ви, извежда `OK` или `FAIL` за всяка проверка и завършва с ред като `5 of 7 checks passed`."
 
 #. paragraph
-#: site/how-to.md:227
+#: site/how-to.md:230
 msgid "Save your work in your own repository:"
 msgstr "Запазете работата си във вашето repository:"
 
 #. heading 3
-#: site/how-to.md:235
+#: site/how-to.md:238
 msgid "Get the new tasks"
 msgstr "Как да получите новите задачи"
 
 #. paragraph
-#: site/how-to.md:237
+#: site/how-to.md:240
 msgid "Before each session, commit your work, then:"
 msgstr "Преди всяко занятие направете commit на работата си, а след това:"
 
 #. paragraph
-#: site/how-to.md:243
+#: site/how-to.md:246
 msgid "The new lecture folders appear next to your work. Existing files are not changed, so there are no conflicts."
 msgstr "Новите папки на лекциите се появяват до вашата работа. Съществуващите файлове не се променят, затова няма конфликти."
 
 #. heading 2
-#: site/how-to.md:246
+#: site/how-to.md:249
 msgid "Code from the lessons"
 msgstr "Кодът от занятията"
 
 #. paragraph
-#: site/how-to.md:248
+#: site/how-to.md:251
 msgid "The code written during the lessons is in the **Labs repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Labs"
 msgstr "Кодът, писан по време на занятията, е в **Labs repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Labs"
 
 #. paragraph
-#: site/how-to.md:251
+#: site/how-to.md:254
 msgid "Clone it once, and after each lesson run `git pull` in it to get the new code. Do not write your own code there - use the Homework repository for that."
 msgstr "Клонирайте го веднъж и след всяко занятие пускайте `git pull` в него, за да получите новия код. Не пишете свой код там - за това е Homework repository."
 
 #. heading 2
-#: site/how-to.md:260
+#: site/how-to.md:263
 msgid "Animations"
 msgstr "Анимации"
 
 #. paragraph
-#: site/how-to.md:262
+#: site/how-to.md:265
 msgid "Some sections have an **Animation** box with links. Each link opens a step-by-step animation in a new tab: it shows what JavaScript does under the hood (memory, the order of calculation, the path through a loop). Use the Right / Left arrow keys to step forward and back. All animations, by session: [Animations](/under-the-hood)."
 msgstr "Някои раздели имат кутия **Анимация** с линкове. Всеки линк отваря в нов таб анимация стъпка по стъпка: тя показва какво прави JavaScript \"под капака\" (паметта, реда на изчисляване, пътя през един loop). Със стрелките надясно / наляво вървите напред и назад. Всички анимации, подредени по занятия: [Анимации](/under-the-hood)."
 
 #. heading 2
-#: site/how-to.md:268
+#: site/how-to.md:271
 msgid "Find things"
 msgstr "Как да намерите нещо"
 
 #. paragraph
-#: site/how-to.md:270
+#: site/how-to.md:273
 msgid "The search box (top left, or `Ctrl+K`) searches all lectures."
 msgstr "Полето за търсене (горе вляво или `Ctrl+K`) търси във всички лекции."
 
 #. paragraph
-#: site/how-to.md:271
+#: site/how-to.md:274
 msgid "The list on the right side of a lecture (\"In this lecture\") jumps to a section."
 msgstr "Списъкът вдясно на всяка лекция (\"На тази страница\") води директно до избран раздел."
 
 #. paragraph
-#: site/how-to.md:272
+#: site/how-to.md:275
 msgid "The moon / sun switch at the top changes between dark and light mode."
 msgstr "Превключвателят луна / слънце горе сменя тъмния и светлия режим."
 
 #. paragraph
-#: site/how-to.md:273
+#: site/how-to.md:276
 msgid "The **EN / BG** button next to it opens the same page in English or in Bulgarian."
 msgstr "Бутонът **EN / BG** до него отваря същата страница на английски или на български."
 
 #. paragraph
-#: site/how-to.md:274
+#: site/how-to.md:277
 msgid "The navigation on the left and the \"In this lecture\" column on the right can be made narrower or wider, in any step: drag their inner edge (it turns blue under the mouse), or click the edge and use the Left / Right arrow keys (16 px a step, with Shift 64 px). At 0 the panel is hidden and a small tab stays at the edge of the window - click it to show the panel again. Double-click the edge to go back to the default width."
 msgstr "Навигацията вляво и колоната \"На тази страница\" вдясно могат да се стесняват и разширяват на произволна стъпка: плъзнете вътрешния им ръб (под мишката той става син) или щракнете върху ръба и използвайте стрелките наляво / надясно (16 px на стъпка, с Shift - 64 px). При 0 панелът се скрива и на ръба на прозореца остава малко езиче - щракнете го, за да се покаже панелът отново. Двоен клик върху ръба връща ширината по подразбиране."
 

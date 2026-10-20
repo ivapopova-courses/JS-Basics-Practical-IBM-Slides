@@ -23,1307 +23,1312 @@ msgstr "3. Сравнения, логика, условия и loops"
 msgid "<span>Session 3</span><span>practice: <code>03-conditions-and-loops/</code> in the homework repository</span>"
 msgstr "<span>Занятие 3</span><span>упражнения: <code>03-conditions-and-loops/</code> в homework repository</span>"
 
+#. html
+#: site/lectures/03-conditions-and-loops.md:9
+msgid "<span><a href=\"../example-document\"><code>doc</code>: the example JSON document</a></span>"
+msgstr "<span><a href=\"../example-document\"><code>doc</code>: примерният JSON документ</a></span>"
+
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:11
+#: site/lectures/03-conditions-and-loops.md:12
 msgid "**Today you will learn to:**"
 msgstr "**Днес ще се научите да:**"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:13
+#: site/lectures/03-conditions-and-loops.md:14
 msgid "compare values with `===`, `!==`, `<`, `>=` ... and avoid the traps of `==`;"
 msgstr "сравнявате стойности с `===`, `!==`, `<`, `>=` ... и да избягвате капаните на `==`;"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:14
+#: site/lectures/03-conditions-and-loops.md:15
 msgid "understand why `\"4.10\" < \"4.2\"` is `true`, and what that means for versions;"
 msgstr "разбирате защо `\"4.10\" < \"4.2\"` е `true` и какво означава това за версиите;"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:15
+#: site/lectures/03-conditions-and-loops.md:16
 msgid "combine conditions with `&&`, `||` and `!`;"
 msgstr "комбинирате условия с `&&`, `||` и `!`;"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:16
+#: site/lectures/03-conditions-and-loops.md:17
 msgid "know which values are *truthy* and *falsy*, and give defaults with `||` and `??`;"
 msgstr "знаете кои стойности са *truthy* и *falsy* и да задавате стойности по подразбиране с `||` и `??`;"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:17
+#: site/lectures/03-conditions-and-loops.md:18
 msgid "make decisions with `if` / `else`, `switch` and the ternary operator `? :`;"
 msgstr "вземате решения с `if` / `else`, `switch` и тернарния оператор `? :`;"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:18
+#: site/lectures/03-conditions-and-loops.md:19
 msgid "stop a rule early when data is missing (a *guard clause*);"
 msgstr "спирате правилото рано, когато липсват данни (*guard clause*);"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:19
+#: site/lectures/03-conditions-and-loops.md:20
 msgid "repeat work with `for`, `while` and `do...while`, and control loops with `break` and `continue`;"
 msgstr "повтаряте действия с `for`, `while` и `do...while` и да управлявате loops с `break` и `continue`;"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:21
+#: site/lectures/03-conditions-and-loops.md:22
 msgid "read the conditions in existing rules, which are often written in an older style."
 msgstr "четете условията в съществуващи правила, които често са написани в по-стар стил."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:23
+#: site/lectures/03-conditions-and-loops.md:24
 msgid "Where this fits in the sample check rule - after today you can read and write all of it. Every part uses one of today's topics - the number in the comment is the section of this lecture:"
 msgstr "Къде е мястото на тази тема в примерното правило за проверка - след днешното занятие можете да го четете и пишете цялото. Всяка част използва някоя от днешните теми - числото в коментара е разделът от тази лекция:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:78
+#: site/lectures/03-conditions-and-loops.md:79
 msgid "`versionBelow(a, b)` is a ready-made helper for now - we write our own in session 5."
 msgstr "`versionBelow(a, b)` засега е готова helper функция - собствена ще напишем в занятие 5."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:80
+#: site/lectures/03-conditions-and-loops.md:81
 msgid "`?.` (optional chaining) is a preview: it stops at a missing level instead of throwing an error. More in section 5 and in session 6."
 msgstr "`?.` (optional chaining) е поглед напред: спира при липсващо ниво, вместо да хвърли грешка. Повече в раздел 5 и в занятие 6."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:82
+#: site/lectures/03-conditions-and-loops.md:83
 msgid "In [section 11](#_11-reading-existing-rules) you run this rule, and read the same rule written in the older style that many existing rules use."
 msgstr "В [раздел 11](#_11-reading-existing-rules) ще изпълните това правило и ще прочетете същото правило, написано в по-стария стил, който използват много от съществуващите правила."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:85
+#: site/lectures/03-conditions-and-loops.md:86
 msgid "Almost every rule is a chain of decisions like these: \"is the data there?\", \"is it the right model?\", \"is the firmware too old?\". Getting the conditions exactly right is the most important skill in rule writing."
 msgstr "Почти всяко правило е верига от решения като тези: \"има ли данни?\", \"това ли е моделът?\", \"твърде стар ли е firmware-ът?\". Точните условия са най-важното умение при писането на правила."
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:89
+#: site/lectures/03-conditions-and-loops.md:90
 msgid "1. Comparison operators"
 msgstr "1. Оператори за сравнение"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:91
+#: site/lectures/03-conditions-and-loops.md:92
 msgid "A comparison asks a question about two values. The answer is **always a boolean**: `true` or `false`."
 msgstr "Сравнението задава въпрос за две стойности. Отговорът е **винаги boolean**: `true` или `false`."
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:94 site/lectures/03-conditions-and-loops.md:251
+#: site/lectures/03-conditions-and-loops.md:95 site/lectures/03-conditions-and-loops.md:252
 msgid "Operator"
 msgstr "Оператор"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:94
+#: site/lectures/03-conditions-and-loops.md:95
 msgid "Meaning"
 msgstr "Значение"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:94
+#: site/lectures/03-conditions-and-loops.md:95
 msgid "Example"
 msgstr "Пример"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:94
+#: site/lectures/03-conditions-and-loops.md:95
 msgid "Result"
 msgstr "Резултат"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:96
+#: site/lectures/03-conditions-and-loops.md:97
 msgid "strictly equal (same type and value)"
 msgstr "строго равно (същият тип и стойност)"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:97
+#: site/lectures/03-conditions-and-loops.md:98
 msgid "strictly not equal"
 msgstr "строго различно"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:98
+#: site/lectures/03-conditions-and-loops.md:99
 msgid "loosely equal (converts types first)"
 msgstr "нестрого равно (първо преобразува типовете)"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:99
+#: site/lectures/03-conditions-and-loops.md:100
 msgid "loosely not equal"
 msgstr "нестрого различно"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:100
+#: site/lectures/03-conditions-and-loops.md:101
 msgid "greater than"
 msgstr "по-голямо от"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:101
+#: site/lectures/03-conditions-and-loops.md:102
 msgid "less than"
 msgstr "по-малко от"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:102
+#: site/lectures/03-conditions-and-loops.md:103
 msgid "greater than or equal"
 msgstr "по-голямо или равно"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:103
+#: site/lectures/03-conditions-and-loops.md:104
 msgid "less than or equal"
 msgstr "по-малко или равно"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:120
+#: site/lectures/03-conditions-and-loops.md:121
 msgid "`===` vs `==`"
 msgstr "`===` срещу `==`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:122
+#: site/lectures/03-conditions-and-loops.md:123
 msgid "`==` first **converts** the two values to the same type, then compares. The conversion rules are long and surprising:"
 msgstr "`==` първо **преобразува** двете стойности до един и същ тип и след това ги сравнява. Правилата за преобразуване са дълги и изненадващи:"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:135
+#: site/lectures/03-conditions-and-loops.md:136
 msgid "Use `===` and `!==`"
 msgstr "Използвайте `===` и `!==`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:136
+#: site/lectures/03-conditions-and-loops.md:137
 msgid "They never convert. What you see is what is compared. All comparisons in the course use `===` / `!==`. The one `==` worth knowing is below."
 msgstr "Те никога не преобразуват. Сравнява се точно това, което виждате. Всички сравнения в курса използват `===` / `!==`. Единственото `==`, което си струва да знаете, е по-долу."
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:140 site/lectures/03-conditions-and-loops.md:243 site/lectures/03-conditions-and-loops.md:386 site/lectures/03-conditions-and-loops.md:499 site/lectures/03-conditions-and-loops.md:628 site/lectures/03-conditions-and-loops.md:799 site/lectures/03-conditions-and-loops.md:841 site/lectures/03-conditions-and-loops.md:875 site/lectures/03-conditions-and-loops.md:936 site/lectures/03-conditions-and-loops.md:1026 site/lectures/03-conditions-and-loops.md:1107 site/lectures/03-conditions-and-loops.md:1135 site/lectures/03-conditions-and-loops.md:1185
+#: site/lectures/03-conditions-and-loops.md:141 site/lectures/03-conditions-and-loops.md:244 site/lectures/03-conditions-and-loops.md:387 site/lectures/03-conditions-and-loops.md:500 site/lectures/03-conditions-and-loops.md:629 site/lectures/03-conditions-and-loops.md:800 site/lectures/03-conditions-and-loops.md:842 site/lectures/03-conditions-and-loops.md:876 site/lectures/03-conditions-and-loops.md:937 site/lectures/03-conditions-and-loops.md:1027 site/lectures/03-conditions-and-loops.md:1108 site/lectures/03-conditions-and-loops.md:1136 site/lectures/03-conditions-and-loops.md:1186
 msgid "Animation"
 msgstr "Анимация"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:141
+#: site/lectures/03-conditions-and-loops.md:142
 msgid "**Types, comparisons and logic:** [3. `==` and `===`](../animations/coercionAndLogic.html#3){target=\"_blank\"}"
 msgstr "**Типове, сравнения и логика:** [3. `==` и `===`](../animations/coercionAndLogic.html#3){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:144
+#: site/lectures/03-conditions-and-loops.md:145
 msgid "The one useful `==`: `null` and `undefined`"
 msgstr "Единственото полезно `==`: `null` и `undefined`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:146
+#: site/lectures/03-conditions-and-loops.md:147
 msgid "`null == undefined` is `true`, and `null` / `undefined` are not loosely equal to anything else. So `value == null` means \"`value` is `null` **or** `undefined`\":"
 msgstr "`null == undefined` е `true`, а `null` / `undefined` не са нестрого равни на нищо друго. Затова `value == null` означава \"`value` е `null` **или** `undefined`\":"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:158
+#: site/lectures/03-conditions-and-loops.md:159
 msgid "You will see both forms in existing rules, and both are correct. In new code, choose one form and use it everywhere."
 msgstr "В съществуващите правила ще видите и двете форми, и двете са правилни. В нов код изберете едната форма и я използвайте навсякъде."
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:161
+#: site/lectures/03-conditions-and-loops.md:162
 msgid "`NaN` is not equal to anything"
 msgstr "`NaN` не е равно на нищо"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:170
+#: site/lectures/03-conditions-and-loops.md:171
 msgid "Comparing decimals"
 msgstr "Сравняване на дробни числа"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:178
+#: site/lectures/03-conditions-and-loops.md:179
 msgid "Objects are compared by reference"
 msgstr "Обектите се сравняват по референция"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:179
+#: site/lectures/03-conditions-and-loops.md:180
 msgid "`{} === {}` and `[] === []` are `false`: two objects are equal only if they are **the same object**. More in session 6."
 msgstr "`{} === {}` и `[] === []` са `false`: два обекта са равни само ако са **един и същ обект**. Повече в занятие 6."
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:183
+#: site/lectures/03-conditions-and-loops.md:184
 msgid "Animations"
 msgstr "Анимации"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:184
+#: site/lectures/03-conditions-and-loops.md:185
 msgid "**Numbers in memory:** [4. 0.1 + 0.2](../animations/numbersInMemory.html#4){target=\"_blank\"}, [6. NaN and Infinity](../animations/numbersInMemory.html#6){target=\"_blank\"}"
 msgstr "**Числата в паметта:** [4. 0.1 + 0.2](../animations/numbersInMemory.html#4){target=\"_blank\"}, [6. NaN и Infinity](../animations/numbersInMemory.html#6){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:187
+#: site/lectures/03-conditions-and-loops.md:188
 msgid "2. Comparing strings"
 msgstr "2. Сравняване на strings"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:189
+#: site/lectures/03-conditions-and-loops.md:190
 msgid "Two strings are compared **character by character**, by the character codes (Unicode). This is called *lexicographic* order - like in a dictionary:"
 msgstr "Два strings се сравняват **символ по символ**, по кодовете на символите (Unicode). Това се нарича *лексикографски* ред - като в речник:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:202
+#: site/lectures/03-conditions-and-loops.md:203
 msgid "If one string is a prefix of the other, the shorter one is smaller."
 msgstr "Ако единият string е начало на другия, по-късият е по-малък."
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:204
+#: site/lectures/03-conditions-and-loops.md:205
 msgid "Why `\"4.10\" < \"4.2\"` is `true`"
 msgstr "Защо `\"4.10\" < \"4.2\"` е `true`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:206
+#: site/lectures/03-conditions-and-loops.md:207
 msgid "Versions are strings. Compared as strings, they give **wrong** answers:"
 msgstr "Версиите са strings. Сравнени като strings, те дават **грешни** отговори:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:214
+#: site/lectures/03-conditions-and-loops.md:215
 msgid "A version must be compared **part by part, as numbers**: 4 = 4, then 10 > 2. We write such a helper, `versionBelow(a, b)`, in session 5. Until then the practice tasks give it to you ready-made."
 msgstr "Версията трябва да се сравнява **част по част, като числа**: 4 = 4, после 10 > 2. Такава helper функция, `versionBelow(a, b)`, ще напишем в занятие 5. Дотогава задачите за упражнение ви я дават готова."
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:218
+#: site/lectures/03-conditions-and-loops.md:219
 msgid "Mixed types"
 msgstr "Смесени типове"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:219
+#: site/lectures/03-conditions-and-loops.md:220
 msgid "When one side is a number, the string is converted to a number: `\"10\" > 9` is `true`, but `\"10\" > \"9\"` is `false`. And `\"abc\" < 5` and `\"abc\" >= 5` are both `false` (`NaN`). Convert first, then compare."
 msgstr "Когато едната страна е number, string-ът се преобразува в number: `\"10\" > 9` е `true`, но `\"10\" > \"9\"` е `false`. А `\"abc\" < 5` и `\"abc\" >= 5` са `false` и двете (`NaN`). Първо преобразувайте, после сравнявайте."
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:224
+#: site/lectures/03-conditions-and-loops.md:225
 msgid "Upper and lower case"
 msgstr "Главни и малки букви"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:226
+#: site/lectures/03-conditions-and-loops.md:227
 msgid "`===` is case-sensitive. JSON values are not always written the same way, so compare in one case. `toLowerCase()` gives the same text in lower case (more string methods in session 8):"
 msgstr "`===` различава малки и главни букви. Стойностите в JSON не винаги са написани по един и същ начин, затова сравнявайте в един регистър. `toLowerCase()` дава същия текст с малки букви (повече методи на strings в занятие 8):"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:236
+#: site/lectures/03-conditions-and-loops.md:237
 msgid "Natural order (preview)"
 msgstr "Естествен ред (поглед напред)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:237
+#: site/lectures/03-conditions-and-loops.md:238
 msgid "`\"4.10\".localeCompare(\"4.2\", undefined, { numeric: true })` gives `1` (bigger), because it reads digit groups as numbers. Useful for sorting (session 7), but our version formats vary too much (`4.2.1.7-B00`, `42107-C00`), so for rules we write our own comparison."
 msgstr "`\"4.10\".localeCompare(\"4.2\", undefined, { numeric: true })` дава `1` (по-голямо), защото чете групите от цифри като числа. Полезно е за сортиране (занятие 7), но нашите формати на версиите са твърде различни (`4.2.1.7-B00`, `42107-C00`), затова за правилата пишем собствено сравнение."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:244
+#: site/lectures/03-conditions-and-loops.md:245
 msgid "**Types, comparisons and logic:** [4. Comparing strings](../animations/coercionAndLogic.html#4){target=\"_blank\"}"
 msgstr "**Типове, сравнения и логика:** [4. Сравняване на strings](../animations/coercionAndLogic.html#4){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:247
+#: site/lectures/03-conditions-and-loops.md:248
 msgid "3. Logical operators"
 msgstr "3. Логически оператори"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:249
+#: site/lectures/03-conditions-and-loops.md:250
 msgid "Logical operators combine conditions:"
 msgstr "Логическите оператори комбинират условия:"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:251
+#: site/lectures/03-conditions-and-loops.md:252
 msgid "Name"
 msgstr "Име"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:251
+#: site/lectures/03-conditions-and-loops.md:252
 msgid "`true` when"
 msgstr "`true`, когато"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:253
+#: site/lectures/03-conditions-and-loops.md:254
 msgid "AND"
 msgstr "И (AND)"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:253
+#: site/lectures/03-conditions-and-loops.md:254
 msgid "both are true"
 msgstr "и двете са истина"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:254
+#: site/lectures/03-conditions-and-loops.md:255
 msgid "OR"
 msgstr "ИЛИ (OR)"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:254
+#: site/lectures/03-conditions-and-loops.md:255
 msgid "at least one is true"
 msgstr "поне едното е истина"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:255
+#: site/lectures/03-conditions-and-loops.md:256
 msgid "NOT"
 msgstr "НЕ (NOT)"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:255
+#: site/lectures/03-conditions-and-loops.md:256
 msgid "`a` is false"
 msgstr "`a` е неистина"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:257
+#: site/lectures/03-conditions-and-loops.md:258
 msgid "The truth table (T - true, F - false):"
 msgstr "Таблицата на истинност (T - true, F - false):"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:266
+#: site/lectures/03-conditions-and-loops.md:267
 msgid "`&&` and `||` take two operands; `!` takes one (it is *unary*)."
 msgstr "`&&` и `||` имат два операнда; `!` има един (той е *унарен*)."
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:286
+#: site/lectures/03-conditions-and-loops.md:287
 msgid "Precedence and parentheses"
 msgstr "Приоритет и скоби"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:288
+#: site/lectures/03-conditions-and-loops.md:289
 msgid "`!` is applied first, then `&&`, then `||` - like `*` before `+`:"
 msgstr "Първо се прилага `!`, после `&&`, после `||` - както `*` преди `+`:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:296
+#: site/lectures/03-conditions-and-loops.md:297
 msgid "When a condition mixes `&&` and `||`, **always** add parentheses - for the reader, not only for JavaScript:"
 msgstr "Когато едно условие смесва `&&` и `||`, **винаги** слагайте скоби - заради читателя, не само заради JavaScript:"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:303
+#: site/lectures/03-conditions-and-loops.md:304
 msgid "Turning a condition around (De Morgan)"
 msgstr "Обръщане на условие (De Morgan)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:305
+#: site/lectures/03-conditions-and-loops.md:306
 msgid "To write \"**not** (A and B)\", flip each part and change `&&` to `||`:"
 msgstr "За да напишете \"**не** (A и B)\", обърнете всяка част и сменете `&&` с `||`:"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:307
+#: site/lectures/03-conditions-and-loops.md:308
 msgid "This"
 msgstr "Това"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:307
+#: site/lectures/03-conditions-and-loops.md:308
 msgid "is the same as"
 msgstr "е същото като"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:312
+#: site/lectures/03-conditions-and-loops.md:313
 msgid "You need this for guard clauses (section 6): \"stop if the model is neither XR-210 nor XR-220\" is `if (model !== \"XR-210\" && model !== \"XR-220\") return;`."
 msgstr "Това ви трябва за guard clauses (раздел 6): \"спри, ако моделът не е нито XR-210, нито XR-220\" е `if (model !== \"XR-210\" && model !== \"XR-220\") return;`."
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:315
+#: site/lectures/03-conditions-and-loops.md:316
 msgid "4. Truthy and falsy"
 msgstr "4. Truthy и falsy"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:317
+#: site/lectures/03-conditions-and-loops.md:318
 msgid "`if (...)`, `!`, `&&` and `||` accept **any** value, not only booleans. The value is then treated as `true` or `false`. These eight values are **falsy**:"
 msgstr "`if (...)`, `!`, `&&` и `||` приемат **всякаква** стойност, не само booleans. Тогава стойността се третира като `true` или `false`. Тези осем стойности са **falsy**:"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:320
+#: site/lectures/03-conditions-and-loops.md:321
 msgid "Type"
 msgstr "Тип"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:320
+#: site/lectures/03-conditions-and-loops.md:321
 msgid "Falsy values"
 msgstr "Falsy стойности"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:322
+#: site/lectures/03-conditions-and-loops.md:323
 msgid "boolean"
 msgstr "boolean"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:323
+#: site/lectures/03-conditions-and-loops.md:324
 msgid "number"
 msgstr "number"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:323
+#: site/lectures/03-conditions-and-loops.md:324
 msgid "`0`, `-0`, `NaN` (and `0n`, a bigint)"
 msgstr "`0`, `-0`, `NaN` (и `0n`, който е bigint)"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:324
+#: site/lectures/03-conditions-and-loops.md:325
 msgid "string"
 msgstr "string"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:324
+#: site/lectures/03-conditions-and-loops.md:325
 msgid "`\"\"` (the empty string)"
 msgstr "`\"\"` (празният string)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:327
+#: site/lectures/03-conditions-and-loops.md:328
 msgid "**Everything else is truthy** - including `\"0\"`, `\"false\"`, `\"no\"`, `\" \"`, `[]` and `{}`."
 msgstr "**Всичко останало е truthy** - включително `\"0\"`, `\"false\"`, `\"no\"`, `\" \"`, `[]` и `{}`."
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:340
+#: site/lectures/03-conditions-and-loops.md:341
 msgid "`\"no\"` is truthy"
 msgstr "`\"no\"` е truthy"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:341
+#: site/lectures/03-conditions-and-loops.md:342
 msgid "The report stores yes / no settings as text: `\"remote_login_enabled\": \"yes\"`, `\"remote_login_pwd_set\": \"no\"`. `if (doc.inventory.details.remote_login_pwd_set)` is true for `\"no\"` too - every non-empty string is truthy. Compare with the value you mean: `=== \"yes\"`."
 msgstr "Отчетът пази настройките да / не като текст: `\"remote_login_enabled\": \"yes\"`, `\"remote_login_pwd_set\": \"no\"`. `if (doc.inventory.details.remote_login_pwd_set)` е true и за `\"no\"` - всеки непразен string е truthy. Сравнявайте със стойността, която имате предвид: `=== \"yes\"`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:357
+#: site/lectures/03-conditions-and-loops.md:358
 msgid "Truthy checks are good for one question: \"is there a value at all?\" `if (doc.overview)` means \"the document has an `overview` part\"."
 msgstr "Truthy проверките са добри за един въпрос: \"има ли изобщо стойност?\" `if (doc.overview)` означава \"документът има част `overview`\"."
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:360
+#: site/lectures/03-conditions-and-loops.md:361
 msgid "Comparing with `true` / `false`"
 msgstr "Сравняване с `true` / `false`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:362
+#: site/lectures/03-conditions-and-loops.md:363
 msgid "Existing rules often contain lines like `if (present == false)` or `if (list.includes(x) !== true)` (`includes` on arrays comes in session 4). They work when the value is a real boolean, but `== false` converts: it also matches `0`, `\"\"` and even `\"0\"` - which is truthy!"
 msgstr "В съществуващите правила често има редове като `if (present == false)` или `if (list.includes(x) !== true)` (`includes` за arrays идва в занятие 4). Те работят, когато стойността е истински boolean, но `== false` преобразува: съвпада и с `0`, `\"\"` и дори с `\"0\"` - който е truthy!"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:374
+#: site/lectures/03-conditions-and-loops.md:375
 msgid "Write it shorter and safer:"
 msgstr "Пишете го по-кратко и по-безопасно:"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:376
+#: site/lectures/03-conditions-and-loops.md:377
 msgid "Instead of"
 msgstr "Вместо"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:376
+#: site/lectures/03-conditions-and-loops.md:377
 msgid "Write"
 msgstr "Пишете"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:378
+#: site/lectures/03-conditions-and-loops.md:379
 msgid "`if (!present)` or `if (present === false)`"
 msgstr "`if (!present)` или `if (present === false)`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:382
+#: site/lectures/03-conditions-and-loops.md:383
 msgid "When you modernise a rule, check what the value can be. `!present` is also true for `null` and `undefined`, `present == false` is not. Usually `!present` is what the rule meant (\"not there or not set\"), but it is a change."
 msgstr "Когато модернизирате правило, проверете какво може да бъде стойността. `!present` е true и за `null` и `undefined`, а `present == false` не е. Обикновено `!present` е това, което правилото е имало предвид (\"липсва или не е зададено\"), но все пак е промяна."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:387
+#: site/lectures/03-conditions-and-loops.md:388
 msgid "**Types, comparisons and logic:** [5. Truthy and falsy](../animations/coercionAndLogic.html#5){target=\"_blank\"}"
 msgstr "**Типове, сравнения и логика:** [5. Truthy и falsy](../animations/coercionAndLogic.html#5){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:390
+#: site/lectures/03-conditions-and-loops.md:391
 msgid "5. Short-circuit evaluation and defaults"
 msgstr "5. Short-circuit изчисляване и стойности по подразбиране"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:392
+#: site/lectures/03-conditions-and-loops.md:393
 msgid "`&&` and `||` stop as soon as the answer is known - this is called **short-circuit evaluation**. And they do not return `true` / `false`, but **one of the two operands**:"
 msgstr "`&&` и `||` спират веднага щом отговорът е ясен - това се нарича **short-circuit evaluation**. И те не връщат `true` / `false`, а **единия от двата операнда**:"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:396
+#: site/lectures/03-conditions-and-loops.md:397
 msgid "Expression"
 msgstr "Израз"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:396
+#: site/lectures/03-conditions-and-loops.md:397
 msgid "Returns"
 msgstr "Връща"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:398
+#: site/lectures/03-conditions-and-loops.md:399
 msgid "`a` if `a` is truthy, otherwise `b`"
 msgstr "`a`, ако `a` е truthy, иначе `b`"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:399
+#: site/lectures/03-conditions-and-loops.md:400
 msgid "`a` if `a` is falsy, otherwise `b`"
 msgstr "`a`, ако `a` е falsy, иначе `b`"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:413
+#: site/lectures/03-conditions-and-loops.md:414
 msgid "`||` for defaults"
 msgstr "`||` за стойности по подразбиране"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:415
+#: site/lectures/03-conditions-and-loops.md:416
 msgid "The sample rule uses `||` for a **fallback**: if the system name is missing or empty, use the device alias:"
 msgstr "Примерното правило използва `||` за **fallback**: ако името на системата липсва или е празно, използва alias-а на устройството:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:427
+#: site/lectures/03-conditions-and-loops.md:428
 msgid "Existing rules use it all the time:"
 msgstr "Съществуващите правила го използват постоянно:"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:435
+#: site/lectures/03-conditions-and-loops.md:436
 msgid "`&&` as a guard"
 msgstr "`&&` като пазач (guard)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:437
+#: site/lectures/03-conditions-and-loops.md:438
 msgid "The right side runs **only** if the left side is truthy. Older rules use it to check every level of a path before reading the next one:"
 msgstr "Дясната страна се изпълнява **само** ако лявата е truthy. По-старите правила го използват, за да проверят всяко ниво на един път, преди да прочетат следващото:"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:450
+#: site/lectures/03-conditions-and-loops.md:451
 msgid "The trap: `||` replaces `0` and `\"\"` too"
 msgstr "Капанът: `||` заменя и `0`, и `\"\"`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:452
+#: site/lectures/03-conditions-and-loops.md:453
 msgid "`||` replaces **every** falsy value. Sometimes `0`, `\"\"` or `false` is a real answer:"
 msgstr "`||` заменя **всяка** falsy стойност. Понякога `0`, `\"\"` или `false` е истински отговор:"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:461
+#: site/lectures/03-conditions-and-loops.md:462
 msgid "`??` - the nullish coalescing operator (ES2020)"
 msgstr "`??` - nullish coalescing операторът (ES2020)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:463
+#: site/lectures/03-conditions-and-loops.md:464
 msgid "`a ?? b` returns `b` **only** when `a` is `null` or `undefined`:"
 msgstr "`a ?? b` връща `b` **само** когато `a` е `null` или `undefined`:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:474
+#: site/lectures/03-conditions-and-loops.md:475
 msgid "Use `??` when `0`, `\"\"` or `false` are valid values."
 msgstr "Използвайте `??`, когато `0`, `\"\"` или `false` са валидни стойности."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:475
+#: site/lectures/03-conditions-and-loops.md:476
 msgid "Use `||` when an empty value should also get the default."
 msgstr "Използвайте `||`, когато и празна стойност трябва да получи стойността по подразбиране."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:478
+#: site/lectures/03-conditions-and-loops.md:479
 msgid "`a || b ?? c` is a syntax error. Mixing `??` with `||` or `&&` needs parentheses: `(a || b) ?? c`."
 msgstr "`a || b ?? c` е синтактична грешка. Смесването на `??` с `||` или `&&` изисква скоби: `(a || b) ?? c`."
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:482
+#: site/lectures/03-conditions-and-loops.md:483
 msgid "Logical assignment (ES2021)"
 msgstr "Логическо присвояване (ES2021)"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:494
+#: site/lectures/03-conditions-and-loops.md:495
 msgid "ES2021+"
 msgstr "ES2021+"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:495
+#: site/lectures/03-conditions-and-loops.md:496
 msgid "Check that your rule engine supports `??=`, `||=` and `&&=` before you use them in a rule. `??` itself is ES2020, like `?.`."
 msgstr "Проверете дали вашият rule engine поддържа `??=`, `||=` и `&&=`, преди да ги използвате в правило. Самият `??` е ES2020, като `?.`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:500
+#: site/lectures/03-conditions-and-loops.md:501
 msgid "**Types, comparisons and logic:** [6. Short-circuit: `&&` and `||`](../animations/coercionAndLogic.html#6){target=\"_blank\"}"
 msgstr "**Типове, сравнения и логика:** [6. Short-circuit: `&&` и `||`](../animations/coercionAndLogic.html#6){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:503
+#: site/lectures/03-conditions-and-loops.md:504
 msgid "6. Conditional statements"
 msgstr "6. Условни конструкции"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:553
+#: site/lectures/03-conditions-and-loops.md:554
 msgid "`x % 2` works, but `x % 2 !== 0` says what we mean. Prefer explicit conditions. (Not `x % 2 === 1`: for negative numbers `-3 % 2` is `-1`.)"
 msgstr "`x % 2` работи, но `x % 2 !== 0` казва какво имаме предвид. Предпочитайте явни условия. (Не `x % 2 === 1`: за отрицателни числа `-3 % 2` е `-1`.)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:568
+#: site/lectures/03-conditions-and-loops.md:569
 msgid "It always starts with `if`."
 msgstr "Винаги започва с `if`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:569
+#: site/lectures/03-conditions-and-loops.md:570
 msgid "Then zero or more `else if` blocks."
 msgstr "След това нула или повече блока `else if`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:570
+#: site/lectures/03-conditions-and-loops.md:571
 msgid "`else` comes last. It is optional, but usually a good idea: it catches the case you did not think of."
 msgstr "`else` е последен. Не е задължителен, но обикновено е добра идея: хваща случая, за който не сте се сетили."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:572
+#: site/lectures/03-conditions-and-loops.md:573
 msgid "Only the **first** matching block runs."
 msgstr "Изпълнява се само **първият** блок, чието условие е изпълнено."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:574
+#: site/lectures/03-conditions-and-loops.md:575
 msgid "**Find the bug** - the code is valid JavaScript, but it gives wrong answers:"
 msgstr "**Намерете бъга** - кодът е валиден JavaScript, но дава грешни отговори:"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:589 site/lectures/03-conditions-and-loops.md:1069 site/lectures/03-conditions-and-loops.md:1358
+#: site/lectures/03-conditions-and-loops.md:590 site/lectures/03-conditions-and-loops.md:1070 site/lectures/03-conditions-and-loops.md:1359
 msgid "Answer"
 msgstr "Отговор"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:590
+#: site/lectures/03-conditions-and-loops.md:591
 msgid "The order. 25 is `> 12`, so the first block runs and `\"adult\"` is never reached. Check the **strictest** condition first: `age > 18`, then `age > 12`."
 msgstr "Редът. 25 е `> 12`, затова се изпълнява първият блок и до `\"adult\"` никога не се стига. Проверявайте първо **най-строгото** условие: `age > 18`, после `age > 12`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:594
+#: site/lectures/03-conditions-and-loops.md:595
 msgid "The same matters for firmware levels. A level below the minimum is also below the recommended level, so the minimum is checked first:"
 msgstr "Същото важи и за firmware levels. Ниво под минималното е и под препоръчителното, затова първо се проверява минималното:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:626
+#: site/lectures/03-conditions-and-loops.md:627
 msgid "Change `current` to `\"4.2.0.5\"` and `\"4.10.0.0\"` and run again."
 msgstr "Сменете `current` на `\"4.2.0.5\"` и на `\"4.10.0.0\"` и изпълнете отново."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:629
+#: site/lectures/03-conditions-and-loops.md:630
 msgid "**Loops step by step:** [1. `if` / `else if`](../animations/loopsStepByStep.html#1){target=\"_blank\"}"
 msgstr "**Loops стъпка по стъпка:** [1. `if` / `else if`](../animations/loopsStepByStep.html#1){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:632
+#: site/lectures/03-conditions-and-loops.md:633
 msgid "Two conditions, four answers"
 msgstr "Две условия, четири отговора"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:634
+#: site/lectures/03-conditions-and-loops.md:635
 msgid "A common case: two yes / no facts give four messages. Check \"both\" first:"
 msgstr "Чест случай: два факта да / не дават четири съобщения. Проверете първо \"и двете\":"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:653
+#: site/lectures/03-conditions-and-loops.md:654
 msgid "A missing key is not `\"\"`"
 msgstr "Липсващ ключ не е `\"\"`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:654
+#: site/lectures/03-conditions-and-loops.md:655
 msgid "If the report has no `ntp_ip_address` key at all, the value is `undefined`, and `undefined !== \"\"` is `true` - the code above says \"reported\". Think about which values mean \"not reported\" (`undefined`, `null`, `\"\"`?) and check all of them. The homework asks exactly this."
 msgstr "Ако в отчета изобщо няма ключ `ntp_ip_address`, стойността е `undefined`, а `undefined !== \"\"` е `true` - кодът по-горе казва \"reported\". Помислете кои стойности означават \"не е докладвано\" (`undefined`, `null`, `\"\"`?) и проверете всички. Домашното пита точно това."
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:660
+#: site/lectures/03-conditions-and-loops.md:661
 msgid "Blocks and braces"
 msgstr "Блокове и фигурни скоби"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:662
+#: site/lectures/03-conditions-and-loops.md:663
 msgid "`{ }` groups statements into a **block**. With one statement the braces may be left out, and you will see that in rules:"
 msgstr "`{ }` групира statements в **блок**. При един statement скобите могат да се пропуснат и ще го видите в правилата:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:670
+#: site/lectures/03-conditions-and-loops.md:671
 msgid "That is fine for a short `return` on the same line. Everywhere else, write the braces - adding a second line later without them is a classic bug:"
 msgstr "Това е добре за кратък `return` на същия ред. Навсякъде другаде пишете скобите - добавянето на втори ред по-късно без тях е класически бъг:"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:679
+#: site/lectures/03-conditions-and-loops.md:680
 msgid "Guard clauses: stop early"
 msgstr "Guard clauses: спрете рано"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:681
+#: site/lectures/03-conditions-and-loops.md:682
 msgid "A rule does nothing for most documents. Instead of nesting `if` inside `if`, check what is **wrong** first and `return` (stop the rule) right away:"
 msgstr "Едно правило не прави нищо за повечето документи. Вместо да влагате `if` в `if`, проверете първо какво **не е наред** и направете `return` (спрете правилото) веднага:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:706
+#: site/lectures/03-conditions-and-loops.md:707
 msgid "`return` ends the function. Functions come in session 5 - for now, read `return` in a rule as \"stop here, no alert\"."
 msgstr "`return` приключва функцията. Функциите идват в занятие 5 - засега четете `return` в правило като \"спри тук, без alert\"."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:733
+#: site/lectures/03-conditions-and-loops.md:734
 msgid "`switch` compares **one value** with several fixed values. It is an alternative to a long `if...else if` chain of `===` checks:"
 msgstr "`switch` сравнява **една стойност** с няколко фиксирани стойности. Това е алтернатива на дълга верига `if...else if` от проверки с `===`:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:750
+#: site/lectures/03-conditions-and-loops.md:751
 msgid "The value is compared with each `case` using `===` (strict)."
 msgstr "Стойността се сравнява с всеки `case` чрез `===` (строго)."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:751
+#: site/lectures/03-conditions-and-loops.md:752
 msgid "At a match, the code runs **until a `break`**."
 msgstr "При съвпадение кодът се изпълнява **до `break`**."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:752
+#: site/lectures/03-conditions-and-loops.md:753
 msgid "`default` runs when no `case` matches. Write it last."
 msgstr "`default` се изпълнява, когато нито един `case` не съвпада. Пишете го последен."
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:776
+#: site/lectures/03-conditions-and-loops.md:777
 msgid "Forgotten `break`"
 msgstr "Забравен `break`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:777
+#: site/lectures/03-conditions-and-loops.md:778
 msgid "Without `break`, the code \"falls through\" into the next case:"
 msgstr "Без `break` кодът \"пропада\" в следващия case:"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:794
+#: site/lectures/03-conditions-and-loops.md:795
 msgid "`switch` is strict"
 msgstr "`switch` е строг"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:795
+#: site/lectures/03-conditions-and-loops.md:796
 msgid "`switch (\"1\") { case 1: ... }` does **not** match: `\"1\" === 1` is false. Convert the JSON string first: `switch (Number(count))`."
 msgstr "`switch (\"1\") { case 1: ... }` **не** съвпада: `\"1\" === 1` е false. Първо преобразувайте string-а от JSON: `switch (Number(count))`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:800
+#: site/lectures/03-conditions-and-loops.md:801
 msgid "**Loops step by step:** [7. `switch` without `break` (advanced)](../animations/loopsStepByStep.html#7){target=\"_blank\"}"
 msgstr "**Loops стъпка по стъпка:** [7. `switch` без `break` (advanced)](../animations/loopsStepByStep.html#7){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:803
+#: site/lectures/03-conditions-and-loops.md:804
 msgid "8. The conditional (ternary) operator"
 msgstr "8. Условният (тернарен) оператор"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:809
+#: site/lectures/03-conditions-and-loops.md:810
 msgid "The only operator with three operands. Unlike `if`, it **returns a value**, so it can be assigned, passed or put into a template string. These two are the same:"
 msgstr "Единственият оператор с три операнда. За разлика от `if`, той **връща стойност**, затова може да се присвои, да се подаде или да се сложи в template string. Тези два варианта са еднакви:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:826
+#: site/lectures/03-conditions-and-loops.md:827
 msgid "With the report:"
 msgstr "С отчета:"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:837
+#: site/lectures/03-conditions-and-loops.md:838
 msgid "One ternary is fine, two are too many"
 msgstr "Един тернарен оператор е добре, два са твърде много"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:838
+#: site/lectures/03-conditions-and-loops.md:839
 msgid "`a ? b : c ? d : e` is valid, but hard to read. Use `if...else if` instead."
 msgstr "`a ? b : c ? d : e` е валидно, но трудно за четене. Вместо това използвайте `if...else if`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:842
+#: site/lectures/03-conditions-and-loops.md:843
 msgid "**Types, comparisons and logic:** [7. Ternary operator (advanced)](../animations/coercionAndLogic.html#7){target=\"_blank\"}"
 msgstr "**Типове, сравнения и логика:** [7. Тернарен оператор (advanced)](../animations/coercionAndLogic.html#7){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:845
+#: site/lectures/03-conditions-and-loops.md:846
 msgid "9. Statements and expressions"
 msgstr "9. Statements и expressions"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:847
+#: site/lectures/03-conditions-and-loops.md:848
 msgid "JavaScript code is made of two kinds of pieces:"
 msgstr "Кодът на JavaScript се състои от два вида части:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:849
+#: site/lectures/03-conditions-and-loops.md:850
 msgid "An **expression** produces a **value**. It can stand wherever a value is expected."
 msgstr "**Expression** произвежда **стойност**. Може да стои навсякъде, където се очаква стойност."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:851
+#: site/lectures/03-conditions-and-loops.md:852
 msgid "A **statement** **does** something, but has no value: declarations, `if`, `switch`, `return`, and the loops of the next section (`for`, `while`)."
 msgstr "**Statement** **прави** нещо, но няма стойност: декларации, `if`, `switch`, `return` и loops от следващия раздел (`for`, `while`)."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:867
+#: site/lectures/03-conditions-and-loops.md:868
 msgid "This is why the ternary works inside a template string and `if` does not:"
 msgstr "Ето защо тернарният оператор работи в template string, а `if` - не:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:876
+#: site/lectures/03-conditions-and-loops.md:877
 msgid "**How an expression is evaluated:** [6. Statement vs expression (advanced)](../animations/expressionEvaluation.html#6){target=\"_blank\"}"
 msgstr "**Как се изчислява един израз:** [6. Statement срещу expression (advanced)](../animations/expressionEvaluation.html#6){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:879
+#: site/lectures/03-conditions-and-loops.md:880
 msgid "10. Loops"
 msgstr "10. Loops"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:881
+#: site/lectures/03-conditions-and-loops.md:882
 msgid "A loop repeats a block of code. In rules you loop over the parts of a version, the characters of a string, and (from session 4) over lists of drives, nodes and records."
 msgstr "Loop повтаря блок от код. В правилата обхождаме с loop частите на една версия, символите на един string и (от занятие 4) списъци от дискове, nodes и записи."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:893
+#: site/lectures/03-conditions-and-loops.md:894
 msgid "The steps:"
 msgstr "Стъпките:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:895
+#: site/lectures/03-conditions-and-loops.md:896
 msgid "`init` runs **once**, first."
 msgstr "`init` се изпълнява **веднъж**, най-напред."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:896
+#: site/lectures/03-conditions-and-loops.md:897
 msgid "`condition` is checked: if true, the block runs; if false, the loop ends."
 msgstr "Проверява се `condition`: ако е true, блокът се изпълнява; ако е false, loop-ът приключва."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:897
+#: site/lectures/03-conditions-and-loops.md:898
 msgid "`update` runs after the block (usually `i++`)."
 msgstr "`update` се изпълнява след блока (обикновено `i++`)."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:898
+#: site/lectures/03-conditions-and-loops.md:899
 msgid "Back to step 2."
 msgstr "Обратно към стъпка 2."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:906
+#: site/lectures/03-conditions-and-loops.md:907
 msgid "The even numbers from 2 to 10:"
 msgstr "Четните числа от 2 до 10:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:914
+#: site/lectures/03-conditions-and-loops.md:915
 msgid "Building names of slots or drives:"
 msgstr "Съставяне на имена на слотове или дискове:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:922
+#: site/lectures/03-conditions-and-loops.md:923
 msgid "Counting down:"
 msgstr "Обратно броене:"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:930
+#: site/lectures/03-conditions-and-loops.md:931
 msgid "`var` in old rules"
 msgstr "`var` в стари правила"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:931
+#: site/lectures/03-conditions-and-loops.md:932
 msgid "Existing rules often write `for (var i = 0; ...)`. It works the same here, but `i` still exists after the loop. Write `let` in new code; the difference is explained in session 5."
 msgstr "Съществуващите правила често пишат `for (var i = 0; ...)`. Тук работи по същия начин, но `i` продължава да съществува след loop-а. В нов код пишете `let`; разликата е обяснена в занятие 5."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:937
+#: site/lectures/03-conditions-and-loops.md:938
 msgid "**Loops step by step:** [2. The `for` loop](../animations/loopsStepByStep.html#2){target=\"_blank\"}"
 msgstr "**Loops стъпка по стъпка:** [2. Loop-ът `for`](../animations/loopsStepByStep.html#2){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:940
+#: site/lectures/03-conditions-and-loops.md:941
 msgid "Loops over a string"
 msgstr "Loops върху string"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:942
+#: site/lectures/03-conditions-and-loops.md:943
 msgid "A string has a **length** and each character has a **position** (index), starting from 0:"
 msgstr "Един string има **дължина** (length) и всеки символ има **позиция** (индекс), като се брои от 0:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:957
+#: site/lectures/03-conditions-and-loops.md:958
 msgid "Count the parts of a version (dots + 1):"
 msgstr "Пребройте частите на една версия (точките + 1):"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:970
+#: site/lectures/03-conditions-and-loops.md:971
 msgid "`for...of` (ES2015) gives the characters directly, when you do not need the index:"
 msgstr "`for...of` (ES2015) дава директно символите, когато не ви трябва индексът:"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:982
+#: site/lectures/03-conditions-and-loops.md:983
 msgid "Drawing a tree: nested loops"
 msgstr "Рисуване на елха: вложени loops"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:984
+#: site/lectures/03-conditions-and-loops.md:985
 msgid "A loop inside a loop. `\"*\".repeat(n)` gives `n` stars:"
 msgstr "Loop в loop. `\"*\".repeat(n)` дава `n` звездички:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1014
+#: site/lectures/03-conditions-and-loops.md:1015
 msgid "The same with two real nested loops - each row builds its stars one by one:"
 msgstr "Същото с два истински вложени loops - всеки ред съставя звездичките си една по една:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1027
+#: site/lectures/03-conditions-and-loops.md:1028
 msgid "**Loops step by step:** [6. Nested loops (advanced)](../animations/loopsStepByStep.html#6){target=\"_blank\"}"
 msgstr "**Loops стъпка по стъпка:** [6. Вложени loops (advanced)](../animations/loopsStepByStep.html#6){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1038
+#: site/lectures/03-conditions-and-loops.md:1039
 msgid "The condition is checked **before** each round. Something in the block must change it, otherwise the loop never ends:"
 msgstr "Условието се проверява **преди** всеки кръг. Нещо в блока трябва да го промени, иначе loop-ът никога не свършва:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1049
+#: site/lectures/03-conditions-and-loops.md:1050
 msgid "This example is better as a `for` (see above): the number of rounds is known. Use `while` when you do **not** know in advance how many rounds are needed:"
 msgstr "Този пример е по-добър като `for` (вижте по-горе): броят на кръговете е известен. Използвайте `while`, когато **не** знаете предварително колко кръга ще трябват:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1067
+#: site/lectures/03-conditions-and-loops.md:1068
 msgid "**Check yourself:** could you write the same logic with a `for` loop?"
 msgstr "**Проверете се:** бихте ли написали същата логика с `for` loop?"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1070
+#: site/lectures/03-conditions-and-loops.md:1071
 msgid "Yes. The first guess goes into `init`, the new guess into `update`:"
 msgstr "Да. Първото предположение отива в `init`, новото предположение - в `update`:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1080
+#: site/lectures/03-conditions-and-loops.md:1081
 msgid "Every `while` can be written as a `for` with empty `init` and `update`: `for (; condition; ) { ... }`. Choose the one that reads better - here `while`."
 msgstr "Всеки `while` може да се напише като `for` с празни `init` и `update`: `for (; condition; ) { ... }`. Изберете този, който се чете по-добре - тук това е `while`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1084
+#: site/lectures/03-conditions-and-loops.md:1085
 msgid "With the report - find all dots with `indexOf`, which returns the position of a text in a string, or `-1` if it is not there:"
 msgstr "С отчета - намерете всички точки с `indexOf`, който връща позицията на текст в string или `-1`, ако текстът го няма:"
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:1100
+#: site/lectures/03-conditions-and-loops.md:1101
 msgid "`indexOf(...) !== -1` in old rules"
 msgstr "`indexOf(...) !== -1` в стари правила"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1101
+#: site/lectures/03-conditions-and-loops.md:1102
 msgid "`platform.indexOf(\"virtual\") !== -1` means \"`platform` contains `virtual`\". The modern form is `platform.includes(\"virtual\")` (ES2015). And `model.indexOf(\"XR-\") === 0` means \"starts with\" - today `model.startsWith(\"XR-\")`."
 msgstr "`platform.indexOf(\"virtual\") !== -1` означава \"`platform` съдържа `virtual`\". Модерната форма е `platform.includes(\"virtual\")` (ES2015). А `model.indexOf(\"XR-\") === 0` означава \"започва с\" - днес `model.startsWith(\"XR-\")`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1108
+#: site/lectures/03-conditions-and-loops.md:1109
 msgid "**Loops step by step:** [3. `while` and the endless loop](../animations/loopsStepByStep.html#3){target=\"_blank\"}"
 msgstr "**Loops стъпка по стъпка:** [3. `while` и безкрайният loop](../animations/loopsStepByStep.html#3){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1113
+#: site/lectures/03-conditions-and-loops.md:1114
 msgid "Like `while`, but the condition is checked **after** the block - so the block runs **at least once**:"
 msgstr "Като `while`, но условието се проверява **след** блока - затова блокът се изпълнява **поне веднъж**:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1133
+#: site/lectures/03-conditions-and-loops.md:1134
 msgid "`do...while` is rare in rules; recognise it when you see it."
 msgstr "`do...while` се среща рядко в правилата; разпознавайте го, когато го видите."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1136
+#: site/lectures/03-conditions-and-loops.md:1137
 msgid "**Loops step by step:** [4. `do...while`](../animations/loopsStepByStep.html#4){target=\"_blank\"}"
 msgstr "**Loops стъпка по стъпка:** [4. `do...while`](../animations/loopsStepByStep.html#4){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/03-conditions-and-loops.md:1139
+#: site/lectures/03-conditions-and-loops.md:1140
 msgid "`break` and `continue`"
 msgstr "`break` и `continue`"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1141
+#: site/lectures/03-conditions-and-loops.md:1142
 msgid "`break` - leave the loop **now**."
 msgstr "`break` - излез от loop-а **веднага**."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1142
+#: site/lectures/03-conditions-and-loops.md:1143
 msgid "`continue` - skip the rest of **this round**, go to the next one."
 msgstr "`continue` - прескочи останалата част от **този кръг** и мини към следващия."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1144
+#: site/lectures/03-conditions-and-loops.md:1145
 msgid "Cut the version out of the firmware level - stop at the first space:"
 msgstr "Изрежете версията от firmware level - спрете при първия интервал:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1160
+#: site/lectures/03-conditions-and-loops.md:1161
 msgid "Keep only digits and dots - skip everything else:"
 msgstr "Запазете само цифрите и точките - прескочете всичко останало:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1176
+#: site/lectures/03-conditions-and-loops.md:1177
 msgid "The output shows that cleaning data needs care: skipping `-` glued two parts together. In session 8 we do this properly with regular expressions."
 msgstr "Резултатът показва, че почистването на данни иска внимание: прескачането на `-` слепи две части. В занятие 8 ще направим това както трябва, с regular expressions."
 
 #. box title
-#: site/lectures/03-conditions-and-loops.md:1179
+#: site/lectures/03-conditions-and-loops.md:1180
 msgid "Endless loops"
 msgstr "Безкрайни loops"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1180
+#: site/lectures/03-conditions-and-loops.md:1181
 msgid "If the condition never becomes false, the page or the rule hangs. In the browser, close the tab; in the terminal, press `Ctrl+C`. Before you run a `while`, ask: what changes the condition?"
 msgstr "Ако условието никога не стане false, страницата или правилото увисва. В браузъра затворете таба; в терминала натиснете `Ctrl+C`. Преди да пуснете `while`, запитайте се: какво променя условието?"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1186
+#: site/lectures/03-conditions-and-loops.md:1187
 msgid "**Loops step by step:** [5. `break` and `continue`](../animations/loopsStepByStep.html#5){target=\"_blank\"}"
 msgstr "**Loops стъпка по стъпка:** [5. `break` и `continue`](../animations/loopsStepByStep.html#5){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:1189
+#: site/lectures/03-conditions-and-loops.md:1190
 msgid "11. Reading existing rules"
 msgstr "11. Четене на съществуващи правила"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1191
+#: site/lectures/03-conditions-and-loops.md:1192
 msgid "First, run the rule from the start of the lecture. `emit` is a fake here: it only prints the alert."
 msgstr "Първо изпълнете правилото от началото на лекцията. Тук `emit` е фалшива: само извежда alert-а."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1267
+#: site/lectures/03-conditions-and-loops.md:1268
 msgid "Change the firmware level of the older device to `\"4.2.0.5 (build 420.5)\"`, then to `\"\"`, and run again. Which lines decide the result each time?"
 msgstr "Сменете firmware level на по-старото устройство на `\"4.2.0.5 (build 420.5)\"`, после на `\"\"`, и изпълнете отново. Кои редове решават резултата всеки път?"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1270
+#: site/lectures/03-conditions-and-loops.md:1271
 msgid "Many existing rules are written in an older style (before ES2015). Here is **the same rule** in that style - you need to read it with ease, and decide when to modernise it:"
 msgstr "Много съществуващи правила са написани в по-стар стил (преди ES2015). Ето **същото правило** в този стил - трябва да можете да го четете с лекота и да решите кога да го модернизирате:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1344
+#: site/lectures/03-conditions-and-loops.md:1345
 msgid "**Check yourself:**"
 msgstr "**Проверете се:**"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1346
+#: site/lectures/03-conditions-and-loops.md:1347
 msgid "List the differences you see between the two versions. Which ones change only the style, and which could change the result?"
 msgstr "Избройте разликите, които виждате между двете версии. Кои променят само стила и кои биха могли да променят резултата?"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1348
+#: site/lectures/03-conditions-and-loops.md:1349
 msgid "What does `info && info.json && info.json.data && info.json.data.system && info.json.data.system.name || doc.status.device_alias` return when `extended_info` is `{}`? And when `extended_info` is missing?"
 msgstr "Какво връща `info && info.json && info.json.data && info.json.data.system && info.json.data.system.name || doc.status.device_alias`, когато `extended_info` е `{}`? А когато `extended_info` липсва?"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1350
+#: site/lectures/03-conditions-and-loops.md:1351
 msgid "The two rules are **not** exactly the same. Look at the model in the second call: `\"xr-210\"`, in lower case. Which rule creates an alert for it, and why? Run the modern rule with that document to check."
 msgstr "Двете правила **не** са напълно еднакви. Вижте модела във второто извикване: `\"xr-210\"`, с малки букви. Кое правило създава alert за него и защо? Изпълнете модерното правило с този документ, за да проверите."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1353
+#: site/lectures/03-conditions-and-loops.md:1354
 msgid "The old rule uses `|| \"\"` for `level`, the new one `?? \"\"`. Can that make a difference here?"
 msgstr "Старото правило използва `|| \"\"` за `level`, новото - `?? \"\"`. Може ли това да промени нещо тук?"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1355
+#: site/lectures/03-conditions-and-loops.md:1356
 msgid "Both rules start with a guard clause. Is it enough? Find a small document that makes **both** rules stop with an error. How would you fix the guard?"
 msgstr "И двете правила започват с guard clause. Достатъчна ли е? Намерете малък документ, при който **и двете** правила спират с грешка. Как бихте поправили guard clause-а?"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1359
+#: site/lectures/03-conditions-and-loops.md:1360
 msgid "Style only: `var` -> `const` / `let`; `==` / `!=` -> `===` / `!==` (here both sides are strings, so the result is the same); `charAt(i)` -> `for...of`; `== true` -> nothing; `new Object()` + `details[\"...\"] = ...` -> an object literal; a ternary instead of the `switch`; the `&&` chain -> `?.`. Could change the result: `String(...)` and `.toUpperCase()` around the model (question 3), and `||` vs `??` (question 4)."
 msgstr "Само стил: `var` -> `const` / `let`; `==` / `!=` -> `===` / `!==` (тук и двете страни са strings, затова резултатът е същият); `charAt(i)` -> `for...of`; `== true` -> нищо; `new Object()` + `details[\"...\"] = ...` -> обектен литерал; тернарен оператор вместо `switch`; веригата с `&&` -> `?.`. Могат да променят резултата: `String(...)` и `.toUpperCase()` около модела (въпрос 3) и `||` срещу `??` (въпрос 4)."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1365
+#: site/lectures/03-conditions-and-loops.md:1366
 msgid "`doc.status.device_alias` in both cases: `info.json` is `undefined` (falsy), so the `&&` chain stops and returns `undefined`, and `||` takes the alias. When `extended_info` is missing, `info` itself is `undefined` - same result. Note: `&&` is evaluated before `||`."
 msgstr "`doc.status.device_alias` и в двата случая: `info.json` е `undefined` (falsy), затова веригата с `&&` спира и връща `undefined`, а `||` взема alias-а. Когато `extended_info` липсва, самото `info` е `undefined` - същият резултат. Обърнете внимание: `&&` се изчислява преди `||`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1369
+#: site/lectures/03-conditions-and-loops.md:1370
 msgid "Only the old one: it upper-cases the model first, so `\"xr-210\"` becomes `\"XR-210\"`. The modern rule compares the model as it is and stops. Whether that is a bug or a feature depends on the data - if the JSON can contain lower-case models, the modern rule should normalise too."
 msgstr "Само старото: то първо прави модела с главни букви, затова `\"xr-210\"` става `\"XR-210\"`. Модерното правило сравнява модела както е и спира. Дали това е бъг или полезно поведение, зависи от данните - ако JSON може да съдържа модели с малки букви, модерното правило също трябва да нормализира."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1373
+#: site/lectures/03-conditions-and-loops.md:1374
 msgid "Not for strings: `\"\" || \"\"` and `\"\" ?? \"\"` are both `\"\"`. It matters only if `firmware_level` were not a string - for example the number `0`: the old rule turns it into `\"\"` and stops; the new one keeps `0`, and `for...of` over a number is an error. The old `String(...)` is a good habit: convert first, then loop."
 msgstr "Не и за strings: `\"\" || \"\"` и `\"\" ?? \"\"` са `\"\"` и двете. Има значение само ако `firmware_level` не е string - например number `0`: старото правило го превръща в `\"\"` и спира; новото запазва `0`, а `for...of` върху number е грешка. Старото `String(...)` е добър навик: първо преобразувайте, после обхождайте."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1378
+#: site/lectures/03-conditions-and-loops.md:1379
 msgid "No. The guard checks `overview` and `inventory`, but the rules also read `doc.inventory.details` and (when there is no system name) `doc.status`. For example `{ overview: { model: \"XR-210\" }, inventory: {}, status: { device_alias: \"X\" } }` passes the guard, and then `doc.inventory.details.firmware_level` is an error: `details` is `undefined`. Fix: check every part you read without `?.`: `if (!doc.overview || !doc.inventory || !doc.inventory.details || !doc.status) return;` (or, in the modern style, `if (!doc.overview || !doc.inventory?.details || !doc.status) return;`)."
 msgstr "Не. Guard clause-ът проверява `overview` и `inventory`, но правилата четат също `doc.inventory.details` и (когато няма име на системата) `doc.status`. Например `{ overview: { model: \"XR-210\" }, inventory: {}, status: { device_alias: \"X\" } }` минава през guard clause-а и след това `doc.inventory.details.firmware_level` е грешка: `details` е `undefined`. Поправка: проверете всяка част, която четете без `?.`: `if (!doc.overview || !doc.inventory || !doc.inventory.details || !doc.status) return;` (или в модерния стил `if (!doc.overview || !doc.inventory?.details || !doc.status) return;`)."
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:1388
+#: site/lectures/03-conditions-and-loops.md:1389
 msgid "12. Practice"
 msgstr "12. Упражнения"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1390
+#: site/lectures/03-conditions-and-loops.md:1391
 msgid "In your copy of the Homework repository, first get the new tasks:"
 msgstr "Във вашето копие на Homework repository първо вземете новите задачи:"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1397
+#: site/lectures/03-conditions-and-loops.md:1398
 msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
 msgstr "Всеки файл обяснява задачата в началото си. Пишете кода си между редовете `your code`; проверките най-долу извеждат `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1400
+#: site/lectures/03-conditions-and-loops.md:1401
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1400
+#: site/lectures/03-conditions-and-loops.md:1401
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1400
+#: site/lectures/03-conditions-and-loops.md:1401
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1402
+#: site/lectures/03-conditions-and-loops.md:1403
 msgid "Predict 18 comparisons and logical expressions, then check yourself"
 msgstr "Предвидете 18 сравнения и логически изрази, после проверете"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1403
+#: site/lectures/03-conditions-and-loops.md:1404
 msgid "Classify a firmware level (`if...else if`) and choose the action text (`switch`)"
 msgstr "Класифицирайте firmware level (`if...else if`) и изберете текста на действието (`switch`)"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1404
+#: site/lectures/03-conditions-and-loops.md:1405
 msgid "The condition of the sample rule, with guard clauses for missing data"
 msgstr "Условието на примерното правило, с guard clauses за липсващи данни"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1405
+#: site/lectures/03-conditions-and-loops.md:1406
 msgid "Cut, count and clean versions with loops, `break` and `continue`"
 msgstr "Изрязване, броене и почистване на версии с loops, `break` и `continue`"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1406
+#: site/lectures/03-conditions-and-loops.md:1407
 msgid "`\\|\\|` or `??` - show missing values without losing `0` and `false`"
 msgstr "`\\|\\|` или `??` - показване на липсващи стойности, без да се губят `0` и `false`"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:1408
+#: site/lectures/03-conditions-and-loops.md:1409
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1410
+#: site/lectures/03-conditions-and-loops.md:1411
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1410
+#: site/lectures/03-conditions-and-loops.md:1411
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1412
+#: site/lectures/03-conditions-and-loops.md:1413
 msgid "Comparisons"
 msgstr "Сравнения"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1412
+#: site/lectures/03-conditions-and-loops.md:1413
 msgid "Always a boolean. Use `===` / `!==`; `== null` only for \"null or undefined\""
 msgstr "Винаги boolean. Използвайте `===` / `!==`; `== null` само за \"null или undefined\""
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1413
+#: site/lectures/03-conditions-and-loops.md:1414
 msgid "Strings"
 msgstr "Strings"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1413
+#: site/lectures/03-conditions-and-loops.md:1414
 msgid "Compared character by character: `\"4.10\" < \"4.2\"` is `true`. Compare versions part by part"
 msgstr "Сравняват се символ по символ: `\"4.10\" < \"4.2\"` е `true`. Сравнявайте версиите част по част"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1414
+#: site/lectures/03-conditions-and-loops.md:1415
 msgid "Logic"
 msgstr "Логика"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1414
+#: site/lectures/03-conditions-and-loops.md:1415
 msgid "`&&`, `\\|\\|`, `!`; parentheses when mixing; `!(a && b)` is `!a \\|\\| !b`"
 msgstr "`&&`, `\\|\\|`, `!`; скоби при смесване; `!(a && b)` е `!a \\|\\| !b`"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1415
+#: site/lectures/03-conditions-and-loops.md:1416
 msgid "Truthy / falsy"
 msgstr "Truthy / falsy"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1415
+#: site/lectures/03-conditions-and-loops.md:1416
 msgid "Falsy: `false`, `0`, `NaN`, `\"\"`, `null`, `undefined`. `\"no\"` and `\"0\"` are truthy"
 msgstr "Falsy: `false`, `0`, `NaN`, `\"\"`, `null`, `undefined`. `\"no\"` и `\"0\"` са truthy"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1416
+#: site/lectures/03-conditions-and-loops.md:1417
 msgid "Defaults"
 msgstr "Стойности по подразбиране"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1416
+#: site/lectures/03-conditions-and-loops.md:1417
 msgid "`a \\|\\| b` replaces every falsy value; `a ?? b` only `null` / `undefined`"
 msgstr "`a \\|\\| b` заменя всяка falsy стойност; `a ?? b` - само `null` / `undefined`"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1417
+#: site/lectures/03-conditions-and-loops.md:1418
 msgid "Strictest condition first; only the first match runs; guard clauses with `return`"
 msgstr "Първо най-строгото условие; изпълнява се само първото съвпадение; guard clauses с `return`"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1418
+#: site/lectures/03-conditions-and-loops.md:1419
 msgid "One value, `===`, `break` after each case, `default` last"
 msgstr "Една стойност, `===`, `break` след всеки case, `default` накрая"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1419
+#: site/lectures/03-conditions-and-loops.md:1420
 msgid "Ternary"
 msgstr "Тернарен оператор"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1419
+#: site/lectures/03-conditions-and-loops.md:1420
 msgid "`cond ? a : b` returns a value; one level only"
 msgstr "`cond ? a : b` връща стойност; само едно ниво"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1420
+#: site/lectures/03-conditions-and-loops.md:1421
 msgid "Loops"
 msgstr "Loops"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1420
+#: site/lectures/03-conditions-and-loops.md:1421
 msgid "`for` when the count is known, `while` when not, `do...while` at least once"
 msgstr "`for`, когато броят е известен, `while`, когато не е, `do...while` - поне веднъж"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1421
+#: site/lectures/03-conditions-and-loops.md:1422
 msgid "Leave the loop / skip to the next round"
 msgstr "Излизане от loop-а / прескачане към следващия кръг"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1422
+#: site/lectures/03-conditions-and-loops.md:1423
 msgid "Old style"
 msgstr "Стар стил"
 
 #. table cell
-#: site/lectures/03-conditions-and-loops.md:1422
+#: site/lectures/03-conditions-and-loops.md:1423
 msgid "`var`, `== false`, `indexOf(...) !== -1`, `a && a.b` - read it, write the modern form"
 msgstr "`var`, `== false`, `indexOf(...) !== -1`, `a && a.b` - четете го, пишете модерната форма"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:1424
+#: site/lectures/03-conditions-and-loops.md:1425
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1426
+#: site/lectures/03-conditions-and-loops.md:1427
 msgid "Finish the five practice tasks - every check must print `OK`."
 msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да извежда `OK`."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1427
+#: site/lectures/03-conditions-and-loops.md:1428
 msgid "`03-conditions-and-loops/homework.js` (in the homework repository): a status text for two settings, and the first position where two versions differ."
 msgstr "`03-conditions-and-loops/homework.js` (в homework repository): текст за състоянието на две настройки и първата позиция, на която две версии се различават."
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1429
+#: site/lectures/03-conditions-and-loops.md:1430
 msgid "Optional: take one of your own rules and list every condition in it. For each: which documents does it let through? Is there a `==`, `|| \"\"` or `== false` that could surprise you?"
 msgstr "По желание: вземете едно от собствените си правила и избройте всяко условие в него. За всяко: кои документи пропуска? Има ли `==`, `|| \"\"` или `== false`, които биха могли да ви изненадат?"
 
 #. heading 2
-#: site/lectures/03-conditions-and-loops.md:1433
+#: site/lectures/03-conditions-and-loops.md:1434
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1435
+#: site/lectures/03-conditions-and-loops.md:1436
 msgid "MDN: [Equality comparisons and sameness](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness), [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), [Nullish coalescing `??`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing), [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration)"
 msgstr "MDN: [Equality comparisons and sameness](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness), [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), [Nullish coalescing `??`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing), [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1440
+#: site/lectures/03-conditions-and-loops.md:1441
 msgid "Eloquent JavaScript (4th edition): [Values, Types, and Operators](https://eloquentjavascript.net/01_values.html), [Program Structure](https://eloquentjavascript.net/02_program_structure.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Values, Types, and Operators](https://eloquentjavascript.net/01_values.html), [Program Structure](https://eloquentjavascript.net/02_program_structure.html)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1442
+#: site/lectures/03-conditions-and-loops.md:1443
 msgid "You Don't Know JS Yet: [Equal...ish](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md#equalish)"
 msgstr "You Don't Know JS Yet: [Equal...ish](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch2.md#equalish)"
 
 #. paragraph
-#: site/lectures/03-conditions-and-loops.md:1444
+#: site/lectures/03-conditions-and-loops.md:1445
 msgid "**Next session:** arrays - lists of models, drives and records. The `model !== \"XR-210\" && model !== \"XR-220\"` of today's rule becomes an allow-list: `![\"XR-210\", \"XR-220\"].includes(model)`."
 msgstr "**Следващото занятие:** arrays - списъци от модели, дискове и записи. `model !== \"XR-210\" && model !== \"XR-220\"` от днешното правило става allow-list: `![\"XR-210\", \"XR-220\"].includes(model)`."

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Practical JavaScript Basics\n"
 "Language-Team: \n"
 "Last-Translator: Claude (claude-opus-5-5)\n"
-"PO-Revision-Date: 2026-10-16\n"
+"PO-Revision-Date: 2026-10-20\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,6 +55,11 @@ msgstr "Как да ползвате тези страници"
 
 #. side menu
 #: site/.vitepress/config.mjs
+msgid "Example JSON document"
+msgstr "Примерният JSON документ"
+
+#. side menu
+#: site/.vitepress/config.mjs
 msgid "Course project"
 msgstr "Курсов проект"
 
@@ -92,3 +97,23 @@ msgstr "5. Функции, по-стар код"
 #: site/.vitepress/config.mjs
 msgid "6. Objects and data shapes"
 msgstr "6. Обекти и форми на данните"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "7. Array methods"
+msgstr "7. Методи на arrays"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "8. Strings, regex, dates"
+msgstr "8. Strings, regex, дати"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "9. JSON, Node.js, modules"
+msgstr "9. JSON, Node.js, модули"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "10. Tests, types, Git"
+msgstr "10. Тестове, типове, Git"

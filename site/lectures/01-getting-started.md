@@ -6,6 +6,7 @@ title: 1. Getting started
 
 <div class="lecture-meta">
   <span>Session 1</span><span>practice: set up your tools and the homework repository</span>
+  <span><a href="../example-document"><code>doc</code>: the example JSON document</a></span>
 </div>
 
 **Today you will learn to:**
@@ -70,10 +71,10 @@ nested JSON documents safely.
 | 4 | Arrays and lists of records |
 | 5 | Functions, and reading older code |
 | 6 | Objects: deep paths, dictionaries, data shapes |
-| 7 | Array methods, grouping; project kickoff |
+| 7 | Array methods: transforming, grouping and indexing data; project kickoff |
 | 8 | Strings, regular expressions, dates and numbers |
-| 9 | JSON, Node.js, modules, errors, tests, JSDoc types |
-| 10 | Project review, Git workflow, wrap-up |
+| 9 | JSON, Node.js, modules and errors; running rules locally |
+| 10 | Tests, JSDoc types and code quality; Git workflow; project review |
 
 Every example is shown on the kind of data you work with: the JSON report of one
 device (`doc`) and a check rule. The reports in this course are **made up** - the
@@ -492,6 +493,9 @@ console.log("The model is " + doc.overview.model);
 
 `console.log(...)` prints its value - our main tool to see what a program does.
 `doc` is the example JSON document; it is ready in every example on this site.
+
+The whole document, with a map of its parts, is on the page
+[The example JSON document](../example-document).
 
 ### In the browser
 

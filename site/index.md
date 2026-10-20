@@ -9,7 +9,7 @@ hero:
     alt: A monitoring rule in JavaScript
   actions:
     - theme: brand
-      text: First lectures
+      text: Start the course
       link: /lectures/01-getting-started
     - theme: alt
       text: Agenda
@@ -37,10 +37,10 @@ features:
 | 4 | [Arrays and lists of records](/lectures/04-arrays-and-records) |
 | 5 | [Functions, and reading older code](/lectures/05-functions) |
 | 6 | [Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects) |
-| 7 | Array methods: transforming and grouping data; project kickoff |
-| 8 | Strings, regular expressions, dates and numbers |
-| 9 | JSON, Node.js, modules, errors, tests, JSDoc types |
-| 10 | Project review, Git workflow, wrap-up |
+| 7 | [Array methods: transforming, grouping and indexing data](/lectures/07-array-methods); project kickoff |
+| 8 | [Strings, regular expressions, dates and numbers](/lectures/08-strings-regex-dates) |
+| 9 | [JSON, Node.js, modules and errors; running rules locally](/lectures/09-json-node-modules-errors) |
+| 10 | [Tests, JSDoc types and code quality; Git workflow; project review](/lectures/10-tests-types-git) |
 
 <style>
 .VPHome .vp-doc { max-width: 1152px; margin: 48px auto 0; padding: 0 24px; }

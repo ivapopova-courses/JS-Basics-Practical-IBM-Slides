@@ -16,18 +16,18 @@ device (`doc`) and a check rule.
 
 ## Sessions
 
-| Session | Topic |
-|---------|-------|
-| 1 | [Getting started](/lectures/01-getting-started): course setup, how a program runs, what a variable is |
-| 2 | [Variables, types and operators](/lectures/02-variables-and-types) |
-| 3 | [Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops) |
-| 4 | [Arrays and lists of records](/lectures/04-arrays-and-records) |
-| 5 | [Functions, and reading older code](/lectures/05-functions) |
-| 6 | [Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects) |
-| 7 | Array methods: transforming and grouping data; project kickoff |
-| 8 | Strings, regular expressions, dates and numbers |
-| 9 | JSON, Node.js, modules, errors, tests, JSDoc types |
-| 10 | Project review, Git workflow, wrap-up |
+| Session | Date | Topic |
+|---------|------|-------|
+| 1 | Tue 06.10 | [Getting started](/lectures/01-getting-started): course setup, how a program runs, what a variable is |
+| 2 | Wed 14.10 | [Variables, types and operators](/lectures/02-variables-and-types) |
+| 3 | Wed 21.10 | [Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops) |
+| 4 | Fri 23.10 | [Arrays and lists of records](/lectures/04-arrays-and-records) |
+| 5 | Wed 28.10 | [Functions, and reading older code](/lectures/05-functions) |
+| 6 | Fri 30.10 | [Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects) |
+| 7 | Wed 04.11 | [Array methods: transforming, grouping and indexing data](/lectures/07-array-methods); project kickoff |
+| 8 | Fri 06.11 | [Strings, regular expressions, dates and numbers](/lectures/08-strings-regex-dates) |
+| 9 | Wed 11.11 | [JSON, Node.js, modules and errors; running rules locally](/lectures/09-json-node-modules-errors) |
+| 10 | Fri 13.11 | [Tests, JSDoc types and code quality; Git workflow; project review](/lectures/10-tests-types-git) |
 
 ## Session details
 
@@ -94,52 +94,62 @@ device (`doc`) and a check rule.
 - **Practice:** `get(doc, path, fallback)` with the path as a string **or** an
   array; the details object for `emit`, with its columns in a fixed order.
 
-### 7. Array methods: transforming and grouping data
+### 7. Array methods: transforming, grouping and indexing data
 
-- `forEach`, `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` /
-  `toSorted`.
-- Chaining methods; when a plain loop is clearer.
+- `forEach`, `map`, `filter`, `find` / `findIndex` / `findLast`, `some`, `every`,
+  `reduce`; `flat` and `flatMap`.
+- Sorting: `sort` with a compare function, `toSorted`; numbers, strings, versions,
+  several keys.
+- Chaining methods; when a plain loop is clearer; `console.table` for records.
 - Turning a list of records into a nested object (group by resource, then by
   keyword); building an index once instead of searching thousands of records again
-  and again (`Object.groupBy`, `Map`).
-- The order of the alert columns, from the keys of the details object.
-- **Project kickoff:** choose the product, the sample documents, the first helpers,
-  set up the repository.
+  and again (`Object.groupBy`, `Map`); unique values with `Set`.
+- Reading the older forms: `function (x) { ... }` callbacks, `forEach` with `push`.
+- **Project kickoff:** choose the product and the sample documents, set up the
+  repository, start `library.js` with the first helpers.
 - **Practice:** outdated elements; group records; sort devices by firmware level.
 
 ### 8. Strings, regular expressions, dates and numbers
 
 - `String` methods: `trim`, `toLowerCase`, `startsWith`, `endsWith`, `includes`,
-  `slice`, `padStart`, `replaceAll`.
-- Regular expressions: `test`, `match` and capture groups, `replace` with the `g`
-  flag, the `i` flag; reading the patterns in existing rules.
+  `slice`, `padStart`, `replaceAll`, ...; text encoding: Unicode, UTF-8, line
+  endings.
+- Regular expressions: `test`, `match` and capture groups, `matchAll`, `replace`
+  with the `g` flag, the `i` flag; reading the patterns in existing rules.
 - Versions in many formats (`4.2.1.7-B00`, `42107-C00`, `XR420_117`): normalise
   and compare - one shared helper instead of a copy in every rule.
 - Dates: EPOCH seconds and milliseconds; parsing the date formats found in
-  reports; `Date`, comparing and subtracting dates.
-- `Number`, `parseInt`, `Math` (`max`, `min`, `round`, `floor`).
+  reports; `Date`, time zones, comparing and subtracting dates.
+- `Number`, `parseInt`, `toFixed`, `Math` (`max`, `min`, `round`, `floor`, ...).
 - **Practice:** clean and compare versions; parse keys like `"31_2.07"`; the age of
   a report from different date formats.
 
-### 9. JSON, Node.js, modules, errors, tests
+### 9. JSON, Node.js, modules and errors; running rules locally
 
-- JSON: `JSON.parse`, `JSON.stringify`; reading sample documents with `fs`.
+- JSON: the format, `JSON.parse`, `JSON.stringify`; what JSON cannot hold;
+  reading sample documents with `fs`.
+- Node.js and npm: `process`, `package.json`, built-in modules, the `console`
+  object.
 - Modules: CommonJS (`require` / `module.exports`, as a shared `library.js`) and ES
   modules (`import` / `export`).
-- Errors: `try` / `catch`, `throw`; why a `catch` that only returns hides bugs;
-  defensive code for missing or odd data.
-- Running a rule locally: a fake `emit()` and the sample documents.
-- Testing with `node:test` and `assert` on sample documents and edge cases.
+- Errors: `try` / `catch` / `finally`, `throw`, the error types; why a `catch` that
+  only returns hides bugs; defensive code for missing or odd data.
+- Code that waits: promises, `async` / `await`, and `fetch` - JSON from a web API.
+- Running a rule locally: a fake `emit()` and a folder of sample documents.
+- **Practice:** JSON round trips; a module; errors with a clear message; a local
+  rule runner.
+
+### 10. Tests, JSDoc types and code quality; Git workflow; project review
+
+- Testing with `node:test` and `assert`: helpers, edge cases, whole rules on
+  sample documents.
 - Documenting helpers for other users: JSDoc, and types for a product's JSON with
   `@typedef` and `// @ts-check` (editor checks and autocomplete, no build step).
-- **Practice:** a local runner, tests and JSDoc types for the course library.
-
-### 10. Project review and wrap-up
-
-- Present the library: helpers, rules rewritten with it, tests.
-- Code review; the Git workflow with branches and pull requests.
+- A linter (ESLint) and a formatter: finding bugs before the code runs.
+- The Git workflow: branches, merging, conflicts, pull requests and code review.
 - From one product to the next: a shared core plus a module per product.
-- Q&A, next steps and resources.
+- **Project review:** present the library - helpers, rules rewritten with it,
+  tests; Q&A, next steps and resources.
 
 ## Homework
 

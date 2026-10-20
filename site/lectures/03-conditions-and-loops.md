@@ -6,6 +6,7 @@ title: 3. Comparisons, logic, conditions and loops
 
 <div class="lecture-meta">
   <span>Session 3</span><span>practice: <code>03-conditions-and-loops/</code> in the homework repository</span>
+  <span><a href="../example-document"><code>doc</code>: the example JSON document</a></span>
 </div>
 
 **Today you will learn to:**
