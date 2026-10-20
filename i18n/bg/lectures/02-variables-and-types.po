@@ -600,8 +600,8 @@ msgstr "8. Упражнения"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:444
-msgid "Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-in-vscode); before the session: `git pull upstream main`) and run the tasks from the terminal, in the repository root:"
-msgstr "Отворете във VSCode вашето копие на [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) (първия път: вижте [Как да ползвате тези страници](/how-to#practice-in-vscode); преди занятието: `git pull upstream main`) и пускайте задачите от терминала, в основната папка на repository-то:"
+msgid "Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-and-homework); before the session: `git pull upstream main`) and run the tasks from the terminal, in the repository root:"
+msgstr "Отворете във VSCode вашето копие на [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) (първия път: вижте [Как да ползвате тези страници](/how-to#practice-and-homework); преди занятието: `git pull upstream main`) и пускайте задачите от терминала, в основната папка на repository-то:"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:450

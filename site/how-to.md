@@ -32,7 +32,7 @@ the JSON a device sends.
 The whole document, with a map of its parts and tips on how to print it:
 [The example JSON document](./example-document).
 
-## Practice and Homeworks in VSCode {#practice-in-vscode}
+## Practice and Homeworks in VSCode {#practice-and-homework}
 
 The practice tasks and the homework are in the **Homework repository**:
 https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework
