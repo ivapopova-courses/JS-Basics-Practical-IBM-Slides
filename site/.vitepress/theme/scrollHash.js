@@ -52,6 +52,22 @@ function pagePath(page, site) {
 
 // `data`: useData(), from the theme's setup (index.js)
 export function setupScrollHash({ page, site }) {
+  // a page opened with a #section (a link, a reload): VitePress measures where the
+  // section is before codeFold.js has folded the long blocks above it, and scrolls
+  // there in the next frame - too far, as the folding has moved the section up. So
+  // scroll to it again after that frame, and once more when the fonts are in (they
+  // reflow the text too), unless the reader has scrolled in between.
+  const hash = location.hash
+  if (hash) {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      scrollToHash(hash)
+      const y = window.scrollY
+      document.fonts.ready.then(() => {
+        if (window.scrollY === y && location.hash === hash) scrollToHash(hash)
+      })
+    }))
+  }
+
   let pending = false
   window.addEventListener('scroll', () => {
     if (pending) return
