@@ -626,11 +626,13 @@ export async function withLocales(config, { footerMessage = '' } = {}) {
     searchLocales[lang] = { translations: L.search }
   }
   config.themeConfig.search = { provider: 'local', options: { ...config.themeConfig.search?.options, locales: searchLocales } }
-  // the language button takes the place of VitePress' language menu (next to the theme switch)
+  // the language button takes the place of VitePress' language menu (next to the theme switch)...
   const vite = (config.vite ??= {})
   const resolve = (vite.resolve ??= {})
   const alias = Array.isArray(resolve.alias) ? resolve.alias : Object.entries(resolve.alias || {}).map(([find, replacement]) => ({ find, replacement }))
   alias.push({ find: /^.*\/VPNavBarTranslations\.vue$/, replacement: path.join(SITE, '.vitepress/theme/LangSwitch.vue') })
+  // ...and in the phone menu: VitePress' links there would drop the #section
+  alias.push({ find: /^.*\/VPNavScreenTranslations\.vue$/, replacement: path.join(SITE, '.vitepress/theme/LangSwitchScreen.vue') })
   resolve.alias = alias
   vite.plugins = [...(vite.plugins || []), devRebuild()]
   return config

@@ -2,8 +2,13 @@
 // EN / BG button next to the theme switch. It replaces VitePress' language menu
 // (alias in i18n/i18n.mjs) and opens the same page, at the same section, in the
 // other language. The translated pages are generated: see i18n/README.md.
+// On phones it is hidden in the bar and shown in the menu instead: LangSwitchScreen.vue
+// (in place of VitePress' VPNavScreenTranslations, whose links drop the #section).
 import { computed } from 'vue'
 import { useData, useRouter, withBase } from 'vitepress'
+import { scrollToHash } from './scrollHash.js'
+
+defineProps({ screen: Boolean })  // true: in the phone menu (always shown)
 
 const { site, page, localeIndex } = useData()
 const router = useRouter()
@@ -26,15 +31,26 @@ function linkTo(lang) {
   return withBase('/' + rel.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, ''))
 }
 
+const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve))
+
 // a button, not a link: VitePress handles link clicks itself and would drop the #section
-function go(lang) {
+async function go(lang) {
   if (lang.key === localeIndex.value) return
-  router.go(linkTo(lang) + window.location.hash)
+  const hash = window.location.hash
+  await router.go(linkTo(lang) + hash)
+  if (!hash) return
+  // VitePress has scrolled to the section, but the first Bulgarian page loads the
+  // Cyrillic font only now; the text reflows and the section moves down. Scroll to
+  // it again once the fonts are in (the address bar keeps up: scrollHash.js).
+  await nextFrame()
+  await nextFrame()
+  await document.fonts.ready
+  scrollToHash(hash)
 }
 </script>
 
 <template>
-  <div v-if="langs.length > 1" class="lang-switch" role="group" aria-label="Language / Език">
+  <div v-if="langs.length > 1" class="lang-switch" :class="{ screen }" role="group" aria-label="Language / Език">
     <button
       v-for="l in langs"
       :key="l.key"
@@ -73,6 +89,11 @@ function go(lang) {
 }
 /* phones: no room in the bar - the language list is in the menu (hamburger) */
 @media (max-width: 767px) {
-  .lang-switch { display: none; }
+  .lang-switch:not(.screen) { display: none; }
+}
+.lang-switch.screen button {
+  font-size: 13px;
+  line-height: 22px;
+  padding: 0 12px;
 }
 </style>

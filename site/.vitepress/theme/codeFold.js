@@ -48,13 +48,11 @@ function scan(root = document) {
 }
 
 export function setupCodeFold() {
-  let timer = null
-  const schedule = () => {
-    clearTimeout(timer)
-    timer = setTimeout(scan, 50)
-  }
   // called from the theme's onMounted (index.js): changing the server-rendered HTML
   // before Vue has hydrated it would confuse Vue
   scan()
-  new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true })
+  // fold at once, not after a delay: after client-side navigation (a link, the EN / BG
+  // button, Back) VitePress scrolls to the #section or the saved position right
+  // after rendering, and blocks folded later would move the page away from there
+  new MutationObserver(() => scan()).observe(document.body, { childList: true, subtree: true })
 }
