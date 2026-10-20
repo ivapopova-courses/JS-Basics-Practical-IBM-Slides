@@ -178,6 +178,8 @@ console.log(majors1, majors2);      // [ '4', '4' ] [ '4', '4' ]
 
 ### Look at the data first: `console.table`
 
+MDN: [console.table()](https://developer.mozilla.org/en-US/docs/Web/API/console/table_static)
+
 Before you write a method chain, look at the records. `console.table` prints a list
 of objects as a table - one row per record, one column per key:
 
@@ -196,6 +198,8 @@ console.table(doc.inventory.modules);
 ```
 
 ## 2. `forEach` - do something with every element
+
+MDN: [Array.prototype.forEach()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
 
 `forEach` calls the callback once for each element, in order. It is a `for...of`
 loop written as a method:
@@ -286,6 +290,8 @@ is `filter`.
 :::
 
 ## 3. `map` - a new array, one result per element
+
+MDN: [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
 
 `map` calls the callback for every element and puts what the callback **returns**
 into a new array. The new array has the **same length**; the original does not
@@ -402,6 +408,8 @@ The second trap explains why existing rules write
 
 ## 4. `filter` - the elements that pass
 
+MDN: [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+
 `filter` calls the callback for every element and keeps the element when the
 callback returns a **truthy** value. The result is a new array - shorter, or
 equally long, or empty.
@@ -474,6 +482,8 @@ does not change the array: build a new one with the elements you **keep**:
 :::
 
 ## 5. `find`, `findIndex`, `some` and `every`
+
+MDN: [Array.prototype.find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [Array.prototype.findIndex()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex), [Array.prototype.some()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some), [Array.prototype.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
 
 These methods **stop early**: as soon as the answer is known, the rest of the array
 is not visited.
@@ -584,6 +594,8 @@ slow pattern of lecture 4 - [section 10](#_10-indexes-map-and-set) builds an ind
 instead.
 
 ## 6. `reduce` - many values into one
+
+MDN: [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce)
 
 `reduce` walks the array and carries one value from element to element - the
 **accumulator**. The callback gets the accumulator so far and the current element,
@@ -701,6 +713,8 @@ beyond a few lines, a `for...of` loop or a helper with a name is usually clearer
 :::
 
 ## 7. Sorting: `sort` and `toSorted`
+
+MDN: [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), [Array.prototype.toSorted()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted)
 
 `sort` puts the elements in order **in place** - it changes the array - and
 returns the same array.
@@ -935,6 +949,8 @@ variable and print it, then add the next line. Or print inside a callback:
 
 ### `flat` and `flatMap` (ES2019)
 
+MDN: [Array.prototype.flat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat), [Array.prototype.flatMap()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap)
+
 `flat` turns an array of arrays into one array. `flatMap` is `map` followed by
 `flat` - useful when each element gives **several** values:
 
@@ -954,6 +970,8 @@ console.log(consoles.flatMap(r => r.value.split(";")));  // [ 'CON-01', 'CON-02'
 `flatMap` can also **drop** an element: return `[]` for it.
 
 ### `Array.from` with a function
+
+MDN: [Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
 
 `Array.from` (lecture 4) takes a second argument: a `map` callback. With
 `{ length: n }` it builds an array of `n` computed elements:
@@ -998,6 +1016,8 @@ for `"2.9"`. In a real rule, use `compareVersions`.)
 Choose what your team reads most easily. Both are correct; mixing is fine.
 
 ## 9. Grouping records
+
+MDN: [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy)
 
 The record list of lecture 4 has one record per value - 79 records in
 `report-records.json`, thousands in a real export:
@@ -1202,6 +1222,8 @@ object.)
 
 ### `Map`
 
+MDN: [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+
 A `Map` is a collection of key / value pairs made for lookups:
 
 ```js run
@@ -1247,6 +1269,8 @@ console.log(byType.get("HDD-12").map(enc => enc.id));    // [ 'ENC-03', 'ENC-04'
 ```
 
 ### `Set`: unique values
+
+MDN: [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
 
 A `Set` holds each value **once**:
 

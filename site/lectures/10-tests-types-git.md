@@ -135,6 +135,8 @@ counts and reports. Node.js has this built in: `node:test` and `node:assert`.
 
 ## 2. `assert`: the checks
 
+Node.js: [Assert](https://nodejs.org/api/assert.html)
+
 The module `node:assert/strict` has functions that throw an `AssertionError` when a
 check fails:
 
@@ -191,6 +193,8 @@ console.log(sameContent([1, 2], [2, 1]));               // false - arrays keep t
 ```
 
 ## 3. `node:test`: the test runner
+
+Node.js: [Test runner](https://nodejs.org/api/test.html)
 
 ```js
 // test/library.test.js
@@ -410,6 +414,8 @@ used by colleagues, that is the documentation they actually read. And with
 
 ### The type syntax
 
+TypeScript: [JSDoc Reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)
+
 JSDoc types use the type syntax of TypeScript:
 
 | Type | Means |
@@ -599,6 +605,8 @@ function badEnclosures(list: Enclosure[]): Enclosure[] {
 ## 8. A linter and a formatter
 
 ### ESLint: suspicious code
+
+ESLint: [Rules Reference](https://eslint.org/docs/latest/rules/)
 
 A **linter** reads your code - without running it - and reports likely bugs and
 breaks of the team's rules: an unused variable, a typo in a global name, `==`

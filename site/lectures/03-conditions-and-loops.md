@@ -120,6 +120,8 @@ console.log(model !== "XR-210");    // true
 
 ### `===` vs `==`
 
+MDN: [Strict equality (===)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality), [Equality (==)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality)
+
 `==` first **converts** the two values to the same type, then compares. The
 conversion rules are long and surprising:
 
@@ -247,6 +249,8 @@ our own comparison.
 
 ## 3. Logical operators
 
+MDN: [Logical AND (&&)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND), [Logical OR (||)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR), [Logical NOT (!)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_NOT)
+
 Logical operators combine conditions:
 
 | Operator | Name | `true` when |
@@ -286,6 +290,8 @@ console.log(!(model === "XR-210" || model === "XR-220"));      // false
 
 ### Precedence and parentheses
 
+MDN: [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence)
+
 `!` is applied first, then `&&`, then `||` - like `*` before `+`:
 
 ```js run
@@ -314,6 +320,8 @@ You need this for guard clauses (section 6): "stop if the model is neither XR-21
 nor XR-220" is `if (model !== "XR-210" && model !== "XR-220") return;`.
 
 ## 4. Truthy and falsy
+
+MDN: [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)
 
 `if (...)`, `!`, `&&` and `||` accept **any** value, not only booleans. The value
 is then treated as `true` or `false`. These eight values are **falsy**:
@@ -461,6 +469,8 @@ console.log(failedDrives ?? "Not reported");   // 0 - right
 
 ### `??` - the nullish coalescing operator (ES2020)
 
+MDN: [Nullish coalescing operator (??)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
+
 `a ?? b` returns `b` **only** when `a` is `null` or `undefined`:
 
 | `a` | `a \|\| "x"` | `a ?? "x"` |
@@ -482,6 +492,8 @@ console.log(failedDrives ?? "Not reported");   // 0 - right
 
 ### Logical assignment (ES2021)
 
+MDN: [Logical OR assignment (||=)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR_assignment), [Nullish coalescing assignment (??=)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)
+
 ```js run
 let status;
 status ??= "Not reported";     // status = status ?? "Not reported"
@@ -502,6 +514,8 @@ rule. `??` itself is ES2020, like `?.`.
 :::
 
 ## 6. Conditional statements
+
+MDN: [if...else](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else)
 
 ### `if`
 
@@ -731,6 +745,8 @@ rule({});                           // no overview: nothing, and no error
 
 ## 7. `switch`
 
+MDN: [switch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch)
+
 `switch` compares **one value** with several fixed values. It is an alternative to
 a long `if...else if` chain of `===` checks:
 
@@ -803,6 +819,8 @@ the JSON string first: `switch (Number(count))`.
 
 ## 8. The conditional (ternary) operator
 
+MDN: [Conditional (ternary) operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator)
+
 ```js
 condition ? valueIfTrue : valueIfFalse
 ```
@@ -845,6 +863,8 @@ console.log(`remote login: ${enabled ? "on" : "off"}`);
 
 ## 9. Statements and expressions
 
+MDN: [Statements and declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements), [Expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators)
+
 JavaScript code is made of two kinds of pieces:
 
 - An **expression** produces a **value**. It can stand wherever a value is
@@ -878,6 +898,8 @@ console.log(`auth: ${enabled ? "on" : "off"}`);     // fine
 :::
 
 ## 10. Loops
+
+MDN: [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration), [for](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for), [while](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/while)
 
 A loop repeats a block of code. In rules you loop over the parts of a version, the
 characters of a string, and (from session 4) over lists of drives, nodes and

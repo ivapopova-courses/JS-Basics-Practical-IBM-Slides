@@ -140,1331 +140,1351 @@ msgstr "2. `assert`: проверките"
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:138
+msgid "Node.js: [Assert](https://nodejs.org/api/assert.html)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/10-tests-types-git.md:140
 msgid "The module `node:assert/strict` has functions that throw an `AssertionError` when a check fails:"
 msgstr "Модулът `node:assert/strict` има функции, които хвърлят `AssertionError`, когато проверката не мине:"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:141
+#: site/lectures/10-tests-types-git.md:143
 msgid "Function"
 msgstr "Функция"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:141
+#: site/lectures/10-tests-types-git.md:143
 msgid "Passes when"
 msgstr "Минава, когато"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:143
+#: site/lectures/10-tests-types-git.md:145
 msgid "`actual === expected` (in the strict module)"
 msgstr "`actual === expected` (в strict модула)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:145
+#: site/lectures/10-tests-types-git.md:147
 msgid "same structure and values - objects and arrays compared **by content**, key order ignored"
 msgstr "същата структура и стойности - обекти и arrays се сравняват **по съдържание**, редът на ключовете няма значение"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:146
+#: site/lectures/10-tests-types-git.md:148
 msgid "`value` is truthy"
 msgstr "`value` е truthy"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:147
+#: site/lectures/10-tests-types-git.md:149
 msgid "the text matches the regular expression"
 msgstr "текстът съвпада с regular expression-а"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:148
+#: site/lectures/10-tests-types-git.md:150
 msgid "`fn()` throws (optionally: this type or message)"
 msgstr "`fn()` хвърля грешка (по желание: от този тип или с това съобщение)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:149
+#: site/lectures/10-tests-types-git.md:151
 msgid "the promise rejects (with `await`)"
 msgstr "promise-ът се отхвърля (с `await`)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:164
+#: site/lectures/10-tests-types-git.md:166
 msgid "Use **`node:assert/strict`**: there `equal` and `deepEqual` compare strictly (`===`, no type conversion). The plain `node:assert` has older, loose versions - `assert.equal(\"1\", 1)` passes there."
 msgstr "Използвайте **`node:assert/strict`**: там `equal` и `deepEqual` сравняват строго (`===`, без преобразуване на типове). Обикновеният `node:assert` има по-стари, нестроги версии - там `assert.equal(\"1\", 1)` минава."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:167
+#: site/lectures/10-tests-types-git.md:169
 msgid "`deepEqual` replaces the `JSON.stringify(a) === JSON.stringify(b)` of the practice files: it ignores the order of the keys and shows **what** differs."
 msgstr "`deepEqual` заменя `JSON.stringify(a) === JSON.stringify(b)` от файловете за упражнение: не се интересува от реда на ключовете и показва **какво** се различава."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:169
+#: site/lectures/10-tests-types-git.md:171
 msgid "Every function takes a last, optional argument: a message for the failure - `assert.ok(alerts.length > 0, \"expected an alert for lab-dev-02\")`."
 msgstr "Всяка функция приема последен, незадължителен аргумент: съобщение при неуспех - `assert.ok(alerts.length > 0, \"expected an alert for lab-dev-02\")`."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:172
+#: site/lectures/10-tests-types-git.md:174
 msgid "Why `deepEqual` and not `JSON.stringify`? The same data with the keys in another order gives two different texts:"
 msgstr "Защо `deepEqual`, а не `JSON.stringify`? Едни и същи данни с ключовете в друг ред дават два различни текста:"
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:193
+#: site/lectures/10-tests-types-git.md:195
 msgid "3. `node:test`: the test runner"
 msgstr "3. `node:test`: test runner-ът"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:218
+#: site/lectures/10-tests-types-git.md:197
+msgid "Node.js: [Test runner](https://nodejs.org/api/test.html)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/10-tests-types-git.md:222
 msgid "Run all tests of the project from its root folder:"
 msgstr "Изпълнете всички тестове на проекта от основната му папка:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:224
+#: site/lectures/10-tests-types-git.md:228
 msgid "Node.js finds the test files by their names - files in a `test/` folder, and files named `*.test.js`, `*-test.js`, `*_test.js` - and runs every test. It prints one line per test (a check mark or a cross), then a summary and the details of every failure (the symbols are left out here):"
 msgstr "Node.js намира файловете с тестове по имената им - файлове в папка `test/` и файлове с имена `*.test.js`, `*-test.js`, `*_test.js` - и изпълнява всеки тест. Отпечатва по един ред за всеки тест (отметка или кръстче), после обобщение и подробностите за всеки неуспех (символите тук са пропуснати):"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:244
+#: site/lectures/10-tests-types-git.md:248
 msgid "When a test fails, `node --test` ends with exit code 1 - a CI pipeline (an automatic check on every push) sees the failure."
 msgstr "Когато тест не мине, `node --test` завършва с exit code 1 - CI pipeline (автоматична проверка при всеки push) вижда неуспеха."
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:249
+#: site/lectures/10-tests-types-git.md:253
 msgid "a group of tests, for a structured report (`it` is another name for `test`)"
 msgstr "група от тестове, за подреден отчет (`it` е друго име на `test`)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:250
+#: site/lectures/10-tests-types-git.md:254
 msgid "skipped / planned tests, shown in the summary"
 msgstr "пропуснати / планирани тестове, показани в обобщението"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:251
+#: site/lectures/10-tests-types-git.md:255
 msgid "code that runs before / after the tests (load a file once; reset a list)"
 msgstr "код, който се изпълнява преди / след тестовете (зареждане на файл веднъж; нулиране на списък)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:252
+#: site/lectures/10-tests-types-git.md:256
 msgid "runs the tests again on every save"
 msgstr "изпълнява тестовете отново при всяко записване"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:253
+#: site/lectures/10-tests-types-git.md:257
 msgid "only one file"
 msgstr "само един файл"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:254
+#: site/lectures/10-tests-types-git.md:258
 msgid "also shows which lines the tests never ran"
 msgstr "показва и кои редове тестовете никога не са изпълнили"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:256
+#: site/lectures/10-tests-types-git.md:260
 msgid "With `\"scripts\": { \"test\": \"node --test\" }` in `package.json`, the command is `npm test` - the same in every project."
 msgstr "С `\"scripts\": { \"test\": \"node --test\" }` в `package.json` командата е `npm test` - една и съща във всеки проект."
 
 #. box title
-#: site/lectures/10-tests-types-git.md:259
+#: site/lectures/10-tests-types-git.md:263
 msgid "Older test tools"
 msgstr "По-стари инструменти за тестове"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:260
+#: site/lectures/10-tests-types-git.md:264
 msgid "Many projects use the npm packages Jest, Mocha or Vitest. Their `test` / `describe` / `expect` look almost the same. `node:test` (stable since Node.js 20) needs no installation - enough for a library like yours."
 msgstr "Много проекти използват npm пакетите Jest, Mocha или Vitest. Техните `test` / `describe` / `expect` изглеждат почти същите. `node:test` (стабилен от Node.js 20) не изисква инсталация - достатъчен е за библиотека като вашата."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:265
+#: site/lectures/10-tests-types-git.md:269
 msgid "4. What to test"
 msgstr "4. Какво да тестваме"
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:267
+#: site/lectures/10-tests-types-git.md:271
 msgid "Edge cases"
 msgstr "Гранични случаи"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:269
+#: site/lectures/10-tests-types-git.md:273
 msgid "Most bugs hide at the edges. For every helper, think through this list:"
 msgstr "Повечето бъгове се крият по краищата. За всяка helper функция минете през този списък:"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:271
+#: site/lectures/10-tests-types-git.md:275
 msgid "Case"
 msgstr "Случай"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:271
+#: site/lectures/10-tests-types-git.md:275
 msgid "Example for `compareVersions` / `get`"
 msgstr "Пример за `compareVersions` / `get`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:273
+#: site/lectures/10-tests-types-git.md:277
 msgid "the normal case"
 msgstr "нормалният случай"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:273
+#: site/lectures/10-tests-types-git.md:277
 msgid "`\"4.2.1.7\"` vs `\"4.2.1.10\"`"
 msgstr "`\"4.2.1.7\"` срещу `\"4.2.1.10\"`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:274
+#: site/lectures/10-tests-types-git.md:278
 msgid "**missing** input"
 msgstr "**липсващи** входни данни"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:274
+#: site/lectures/10-tests-types-git.md:278
 msgid "`undefined`, `null`, a missing level of the report"
 msgstr "`undefined`, `null`, липсващо ниво в отчета"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:275
+#: site/lectures/10-tests-types-git.md:279
 msgid "**empty** input"
 msgstr "**празни** входни данни"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:276
+#: site/lectures/10-tests-types-git.md:280
 msgid "the **wrong type**"
 msgstr "**грешен тип**"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:276
+#: site/lectures/10-tests-types-git.md:280
 msgid "a number `2.14` instead of `\"2.14\"`, one object instead of a list"
 msgstr "число `2.14` вместо `\"2.14\"`, един обект вместо списък"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:277
+#: site/lectures/10-tests-types-git.md:281
 msgid "**odd formats**"
 msgstr "**странни формати**"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:278
+#: site/lectures/10-tests-types-git.md:282
 msgid "**boundaries**"
 msgstr "**граници**"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:278
+#: site/lectures/10-tests-types-git.md:282
 msgid "equal values, the first and the last element, `0`"
 msgstr "равни стойности, първият и последният елемент, `0`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:279
+#: site/lectures/10-tests-types-git.md:283
 msgid "values that look empty but are not"
 msgstr "стойности, които изглеждат празни, но не са"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:281
+#: site/lectures/10-tests-types-git.md:285
 msgid "One idea per test, and a name that reads like a sentence: `\"treats a missing part as 0\"`. When it fails, the name says what is broken."
 msgstr "Една идея на тест и име, което се чете като изречение: `\"treats a missing part as 0\"`. Когато тестът не мине, името казва какво е счупено."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:283
+#: site/lectures/10-tests-types-git.md:287
 msgid "Small test data **in** the test (a tiny report of three keys) is easier to read than a big file. Use the sample reports for the realistic cases."
 msgstr "Малки тестови данни **в самия** тест (мъничък отчет с три ключа) се четат по-лесно от голям файл. Използвайте примерните отчети за реалистичните случаи."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:285
+#: site/lectures/10-tests-types-git.md:289
 msgid "When you fix a bug, first write a test that **fails** because of it - then fix the code, and watch the test pass."
 msgstr "Когато поправяте бъг, първо напишете тест, който **не минава** заради него - после поправете кода и вижте как тестът минава."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:288
+#: site/lectures/10-tests-types-git.md:292
 msgid "Testing a rule"
 msgstr "Тестване на правило"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:290
+#: site/lectures/10-tests-types-git.md:294
 msgid "A rule does not return a value - it calls `emit`. Give it a fake `emit` that records the calls (lecture 9), then check the records. `node:test` has a ready-made recorder, `mock.fn()`:"
 msgstr "Правилото не връща стойност - то извиква `emit`. Дайте му фалшив `emit`, който записва извикванията (лекция 9), после проверете записаното. `node:test` има готов записвач, `mock.fn()`:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:329
+#: site/lectures/10-tests-types-git.md:333
 msgid "The idea of `mock.fn()`, on this site - a function that remembers how it was called:"
 msgstr "Идеята на `mock.fn()`, на този сайт - функция, която помни как е била извикана:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:358
+#: site/lectures/10-tests-types-git.md:362
 msgid "To make the runner usable in tests, `run-rule.js` exports its functions and runs the folder only when it is started directly:"
 msgstr "За да може runner-ът да се използва в тестове, `run-rule.js` експортира функциите си и обхожда папката само когато е стартиран директно:"
 
 #. box title
-#: site/lectures/10-tests-types-git.md:367
+#: site/lectures/10-tests-types-git.md:371
 msgid "The bugs of lectures 7 - 9 as tests"
 msgstr "Бъговете от лекции 7 - 9 като тестове"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:368
+#: site/lectures/10-tests-types-git.md:372
 msgid "Every silent bug of the older rules in this course is a test case: `\"2.9\"` vs `\"2.14\"` compared as text (lecture 7), a model with a space (lecture 8), a missing `status` swallowed by a catch-all `try` (lecture 9). A test suite with these cases protects all your rules at once."
 msgstr "Всеки тих бъг на по-старите правила в този курс е тестов случай: `\"2.9\"` срещу `\"2.14\"`, сравнени като текст (лекция 7), модел с интервал (лекция 8), липсващ `status`, погълнат от `try`, който хваща всичко (лекция 9). Набор от тестове с тези случаи пази всичките ви правила наведнъж."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:374
+#: site/lectures/10-tests-types-git.md:378
 msgid "5. JSDoc: documentation that tools read"
 msgstr "5. JSDoc: документация, която инструментите четат"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:376
+#: site/lectures/10-tests-types-git.md:380
 msgid "A **JSDoc** comment starts with `/**` and stands right before a function (or a variable, a class). Its `@` tags describe the parameters and the result:"
 msgstr "**JSDoc** коментарът започва с `/**` и стои точно преди функция (или variable, клас). Неговите `@` тагове описват параметрите и резултата:"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:396
+#: site/lectures/10-tests-types-git.md:400
 msgid "Tag"
 msgstr "Таг"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:396
+#: site/lectures/10-tests-types-git.md:400
 msgid "Says"
 msgstr "Казва"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:398
+#: site/lectures/10-tests-types-git.md:402
 msgid "(the first text)"
 msgstr "(първият текст)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:398
+#: site/lectures/10-tests-types-git.md:402
 msgid "what the function does - one or two sentences"
 msgstr "какво прави функцията - едно-две изречения"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:399
+#: site/lectures/10-tests-types-git.md:403
 msgid "one parameter: its type and meaning"
 msgstr "един параметър: неговият тип и смисъл"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:400
+#: site/lectures/10-tests-types-git.md:404
 msgid "an optional parameter; `[name=default]` with its default"
 msgstr "незадължителен параметър; `[name=default]` със стойността му по подразбиране"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:401
+#: site/lectures/10-tests-types-git.md:405
 msgid "the result"
 msgstr "резултатът"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:402
+#: site/lectures/10-tests-types-git.md:406
 msgid "when it throws"
 msgstr "кога хвърля грешка"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:403
+#: site/lectures/10-tests-types-git.md:407
 msgid "a short usage example"
 msgstr "кратък пример за използване"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:404
+#: site/lectures/10-tests-types-git.md:408
 msgid "do not use any more - and what to use instead"
 msgstr "да не се използва повече - и какво да се използва вместо това"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:406
+#: site/lectures/10-tests-types-git.md:410
 msgid "**Why bother?** In VSCode, the comment appears when someone hovers over `get` or types `get(` - with the parameter names, types and the example. For a shared library used by colleagues, that is the documentation they actually read. And with `// @ts-check` (section 7), the types are **checked**."
 msgstr "**Защо си струва?** Във VSCode коментарът се появява, когато някой задържи мишката над `get` или напише `get(` - с имената на параметрите, типовете и примера. За обща библиотека, използвана от колеги, това е документацията, която те наистина четат. А с `// @ts-check` (раздел 7) типовете се **проверяват**."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:411
+#: site/lectures/10-tests-types-git.md:415
 msgid "The type syntax"
 msgstr "Синтаксисът на типовете"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:413
+#: site/lectures/10-tests-types-git.md:417
+msgid "TypeScript: [JSDoc Reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/10-tests-types-git.md:419
 msgid "JSDoc types use the type syntax of TypeScript:"
 msgstr "Типовете в JSDoc използват синтаксиса за типове на TypeScript:"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:415
+#: site/lectures/10-tests-types-git.md:421
 msgid "Type"
 msgstr "Тип"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:415
+#: site/lectures/10-tests-types-git.md:421
 msgid "Means"
 msgstr "Означава"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:417
+#: site/lectures/10-tests-types-git.md:423
 msgid "the primitive types (lecture 2)"
 msgstr "примитивните типове (лекция 2)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:418
+#: site/lectures/10-tests-types-git.md:424
 msgid "`string[]` or `Array<string>`"
 msgstr "`string[]` или `Array<string>`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:418
+#: site/lectures/10-tests-types-git.md:424
 msgid "an array of strings"
 msgstr "array от strings"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:419
+#: site/lectures/10-tests-types-git.md:425
 msgid "an object with these keys"
 msgstr "обект с тези ключове"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:420
+#: site/lectures/10-tests-types-git.md:426
 msgid "one of these values (a **union**)"
 msgstr "една от тези стойности (**union**)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:421
+#: site/lectures/10-tests-types-git.md:427
 msgid "a string, or `undefined`"
 msgstr "string или `undefined`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:422
+#: site/lectures/10-tests-types-git.md:428
 msgid "a dictionary: string keys, number values (lecture 6)"
 msgstr "dictionary: ключове strings, стойности числа (лекция 6)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:423
+#: site/lectures/10-tests-types-git.md:429
 msgid "a function: its parameters and its result"
 msgstr "функция: нейните параметри и резултат"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:424
+#: site/lectures/10-tests-types-git.md:430
 msgid "`*` or `any`"
 msgstr "`*` или `any`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:424
+#: site/lectures/10-tests-types-git.md:430
 msgid "anything - no checks; `unknown` - anything, but check before use"
 msgstr "каквото и да е - без проверки; `unknown` - каквото и да е, но се проверява преди употреба"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:425
+#: site/lectures/10-tests-types-git.md:431
 msgid "a function that returns nothing"
 msgstr "функция, която не връща нищо"
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:427
+#: site/lectures/10-tests-types-git.md:433
 msgid "6. Types for the report: `@typedef`"
 msgstr "6. Типове за отчета: `@typedef`"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:429
+#: site/lectures/10-tests-types-git.md:435
 msgid "`@typedef` gives a name to the **shape** of an object - the keys and their types. For a product's JSON, it is a map of the report that the editor understands:"
 msgstr "`@typedef` дава име на **формата** на обект - ключовете и техните типове. За JSON на един продукт това е карта на отчета, която редакторът разбира:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:462
+#: site/lectures/10-tests-types-git.md:468
 msgid "`[name]` marks an **optional** property - like `?.` in the code, it says \"may be missing\"."
 msgstr "`[name]` отбелязва **незадължително** property - като `?.` в кода, казва \"може да липсва\"."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:464
+#: site/lectures/10-tests-types-git.md:470
 msgid "Write the types for the parts your helpers read - not necessarily every one of hundreds of keys. Start with the paths of section 4 of lecture 6 that your rules use most."
 msgstr "Пишете типовете за частите, които helper функциите ви четат - не непременно за всеки от стотиците ключове. Започнете с пътищата от раздел 4 на лекция 6, които правилата ви използват най-често."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:467
+#: site/lectures/10-tests-types-git.md:473
 msgid "The examples after the `-` (`\"ENC-01\"`, `\"12_4.20\"`) are worth a lot: the next person sees the format without opening a report."
 msgstr "Примерите след `-` (`\"ENC-01\"`, `\"12_4.20\"`) струват много: следващият човек вижда формата, без да отваря отчет."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:470
+#: site/lectures/10-tests-types-git.md:476
 msgid "Types in another file"
 msgstr "Типове в друг файл"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:472
+#: site/lectures/10-tests-types-git.md:478
 msgid "Keep the typedefs of a product in one file and use them everywhere with `import(...)` - this works in CommonJS files too, it is only read by the editor:"
 msgstr "Пазете typedefs на един продукт в един файл и ги използвайте навсякъде с `import(...)` - това работи и в CommonJS файлове, чете го само редакторът:"
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:483
+#: site/lectures/10-tests-types-git.md:489
 msgid "Generic helpers: `@template`"
 msgstr "Generic helper функции: `@template`"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:485
+#: site/lectures/10-tests-types-git.md:491
 msgid "A helper like `groupBy` works for lists of **any** type. `@template T` is a placeholder for \"the type of the elements\" - the editor then knows that grouping enclosures gives enclosures:"
 msgstr "Helper функция като `groupBy` работи за списъци от **всякакъв** тип. `@template T` е заместител за \"типа на елементите\" - тогава редакторът знае, че групирането на enclosures дава enclosures:"
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:500
+#: site/lectures/10-tests-types-git.md:506
 msgid "Telling the editor a type: casts"
 msgstr "Как да кажем на редактора типа: cast"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:502
+#: site/lectures/10-tests-types-git.md:508
 msgid "`JSON.parse` returns `any` - the editor cannot know what is in the file. A cast in parentheses says it:"
 msgstr "`JSON.parse` връща `any` - редакторът не може да знае какво има във файла. Cast в скоби го казва:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:509
+#: site/lectures/10-tests-types-git.md:515
 msgid "The cast changes nothing at runtime - if the file has another shape, the code still fails. Check the important parts (lecture 9) where the data comes in."
 msgstr "Cast-ът не променя нищо по време на изпълнение - ако файлът има друга форма, кодът пак ще гръмне. Проверявайте важните части (лекция 9) там, където данните влизат."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:512
+#: site/lectures/10-tests-types-git.md:518
 msgid "TypeScript also has ready **utility types** that work in JSDoc: `Partial<Report>` (every key optional), `Pick<Enclosure, \"id\" | \"state\">` (only these keys), `Omit<Enclosure, \"id\">` (all keys but these)."
 msgstr "TypeScript има и готови **utility types**, които работят в JSDoc: `Partial<Report>` (всеки ключ незадължителен), `Pick<Enclosure, \"id\" | \"state\">` (само тези ключове), `Omit<Enclosure, \"id\">` (всички ключове без тези)."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:516
+#: site/lectures/10-tests-types-git.md:522
 msgid "7. `// @ts-check`: the editor checks your types"
 msgstr "7. `// @ts-check`: редакторът проверява типовете ви"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:518
+#: site/lectures/10-tests-types-git.md:524
 msgid "VSCode has the TypeScript checker built in. Put `// @ts-check` on the **first line** of a JavaScript file, and the editor checks the file while you type - using your JSDoc types and what it can work out by itself:"
 msgstr "VSCode има вградена проверка на TypeScript. Сложете `// @ts-check` на **първия ред** на JavaScript файл и редакторът проверява файла, докато пишете - с вашите JSDoc типове и с това, което може да разбере сам:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:544
+#: site/lectures/10-tests-types-git.md:550
 msgid "Each of these is a real bug - and none of them is found by running the rule on a report where everything is fine. The editor finds them **before** the code runs."
 msgstr "Всяко от тези е истински бъг - и нито едно не се открива, като изпълните правилото върху отчет, в който всичко е наред. Редакторът ги намира, **преди** кодът да се изпълни."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:547
+#: site/lectures/10-tests-types-git.md:553
 msgid "The checks happen only in the editor - the file stays plain JavaScript, and the rule engine runs it as before. Nothing to install, no build step."
 msgstr "Проверките стават само в редактора - файлът остава обикновен JavaScript и rule engine-ът го изпълнява както преди. Нищо за инсталиране, без build стъпка."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:549
+#: site/lectures/10-tests-types-git.md:555
 msgid "When the checker is wrong (it can be, with very dynamic code), you can say so for one line with `// @ts-expect-error` and a reason - better than `// @ts-ignore`, because it complains when the error is gone."
 msgstr "Когато проверката греши (може да се случи при много динамичен код), можете да го кажете за един ред с `// @ts-expect-error` и причина - по-добре от `// @ts-ignore`, защото се оплаква, когато грешката изчезне."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:552
+#: site/lectures/10-tests-types-git.md:558
 msgid "To check **every** file of the project, add a `jsconfig.json` to the root folder:"
 msgstr "За да проверявате **всеки** файл в проекта, добавете `jsconfig.json` в основната папка:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:565
+#: site/lectures/10-tests-types-git.md:571
 msgid "The same checks on the command line (for example in a CI pipeline) need the TypeScript package: `npx tsc --noEmit -p jsconfig.json` (TypeScript 7 checks JSDoc the same way)."
 msgstr "Същите проверки от командния ред (например в CI pipeline) изискват пакета TypeScript: `npx tsc --noEmit -p jsconfig.json` (TypeScript 7 проверява JSDoc по същия начин)."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:569
+#: site/lectures/10-tests-types-git.md:575
 msgid "Static and dynamic types"
 msgstr "Статични и динамични типове"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:571
+#: site/lectures/10-tests-types-git.md:577
 msgid "JavaScript is **dynamically** typed (lecture 1): a variable can hold any value, and a wrong type is noticed only when the code runs - or never. In **statically** typed languages (Java, C#, Go - and TypeScript), the types are known before the program runs, and the compiler checks them. The benefits:"
 msgstr "JavaScript е **динамично** типизиран (лекция 1): една variable може да съдържа всякаква стойност и грешният тип се забелязва чак при изпълнението - или никога. В **статично** типизираните езици (Java, C#, Go - и TypeScript) типовете са известни, преди програмата да се изпълни, и компилаторът ги проверява. Ползите:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:576
+#: site/lectures/10-tests-types-git.md:582
 msgid "many errors are found **early** - while typing, not in production;"
 msgstr "много грешки се откриват **рано** - докато пишете, а не в production;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:577
+#: site/lectures/10-tests-types-git.md:583
 msgid "the editor can **complete** names and show the documentation (IntelliSense);"
 msgstr "редакторът може да **допълва** имената и да показва документацията (IntelliSense);"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:578
+#: site/lectures/10-tests-types-git.md:584
 msgid "the types **document** the code - very useful in a team."
 msgstr "типовете **документират** кода - много полезно в екип."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:580
+#: site/lectures/10-tests-types-git.md:586
 msgid "**TypeScript** is JavaScript plus a static type syntax: `.ts` files with types written in the code (`function add(x: number, y: number): number`), interfaces and generics. A compiler (`tsc`) checks them and turns the files into plain JavaScript. Rules for your engine must be plain JavaScript files without a build step - so the course uses the same type system **through JSDoc comments**. If one day you move to TypeScript, your typedefs translate almost one to one (`@typedef` becomes `interface` or `type`)."
 msgstr "**TypeScript** е JavaScript плюс статичен синтаксис за типове: `.ts` файлове с типове, записани в кода (`function add(x: number, y: number): number`), interfaces и generics. Компилатор (`tsc`) ги проверява и превръща файловете в обикновен JavaScript. Правилата за вашия engine трябва да са обикновени JavaScript файлове без build стъпка - затова курсът използва същата система от типове **чрез JSDoc коментари**. Ако някой ден преминете към TypeScript, typedefs ви се превеждат почти едно към едно (`@typedef` става `interface` или `type`)."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:599
+#: site/lectures/10-tests-types-git.md:605
 msgid "8. A linter and a formatter"
 msgstr "8. Linter и formatter"
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:601
+#: site/lectures/10-tests-types-git.md:607
 msgid "ESLint: suspicious code"
 msgstr "ESLint: подозрителен код"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:603
+#: site/lectures/10-tests-types-git.md:609
+msgid "ESLint: [Rules Reference](https://eslint.org/docs/latest/rules/)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/10-tests-types-git.md:611
 msgid "A **linter** reads your code - without running it - and reports likely bugs and breaks of the team's rules: an unused variable, a typo in a global name, `==` instead of `===`, `var`. **ESLint** is the standard linter for JavaScript."
 msgstr "**Linter**-ът чете кода ви - без да го изпълнява - и докладва вероятни бъгове и нарушения на правилата на екипа: неизползвана variable, правописна грешка в глобално име, `==` вместо `===`, `var`. **ESLint** е стандартният linter за JavaScript."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:607
+#: site/lectures/10-tests-types-git.md:615
 msgid "Install it into the project as a dev dependency (lecture 9), and add a configuration file:"
 msgstr "Инсталирайте го в проекта като dev dependency (лекция 9) и добавете конфигурационен файл:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:637
+#: site/lectures/10-tests-types-git.md:645
 msgid "Run it on the whole project:"
 msgstr "Изпълнете го върху целия проект:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:643
+#: site/lectures/10-tests-types-git.md:651
 msgid "For example, on this small older rule:"
 msgstr "Например върху това малко по-старо правило:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:658
+#: site/lectures/10-tests-types-git.md:666
 msgid "ESLint prints (shortened a little):"
 msgstr "ESLint отпечатва (леко съкратено):"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:672
+#: site/lectures/10-tests-types-git.md:680
 msgid "The last one is a real bug: a typo in `emit` - the rule would throw on every matching report (or, with a catch-all `try`, silently never alert)."
 msgstr "Последното е истински бъг: правописна грешка в `emit` - правилото ще гърми при всеки отчет, който отговаря на условието (или, с `try`, който хваща всичко, тихо никога няма да даде alert)."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:675
+#: site/lectures/10-tests-types-git.md:683
 msgid "`npx eslint . --fix` fixes what can be fixed safely (`var`, `prefer-const`, ...)."
 msgstr "`npx eslint . --fix` поправя това, което може да се поправи безопасно (`var`, `prefer-const`, ...)."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:676
+#: site/lectures/10-tests-types-git.md:684
 msgid "The **ESLint** extension of VSCode shows the problems in the editor as you type; with `\"editor.codeActionsOnSave\": { \"source.fixAll.eslint\": \"explicit\" }` in the VSCode settings, it fixes them on every save."
 msgstr "Разширението **ESLint** за VSCode показва проблемите в редактора, докато пишете; с `\"editor.codeActionsOnSave\": { \"source.fixAll.eslint\": \"explicit\" }` в настройките на VSCode ги поправя при всяко записване."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:679
+#: site/lectures/10-tests-types-git.md:687
 msgid "Add `\"lint\": \"eslint .\"` to the scripts of `package.json`: `npm run lint`."
 msgstr "Добавете `\"lint\": \"eslint .\"` в scripts на `package.json`: `npm run lint`."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:681
+#: site/lectures/10-tests-types-git.md:689
 msgid "Prettier: the same format for everybody"
 msgstr "Prettier: един и същ формат за всички"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:683
+#: site/lectures/10-tests-types-git.md:691
 msgid "A **formatter** changes only the **layout** of the code - indentation, spaces, line breaks, quotes, semicolons - never its meaning. **Prettier** is the most common one. With a formatter, nobody discusses spaces in a code review any more:"
 msgstr "**Formatter**-ът променя само **оформлението** на кода - отстъпи, интервали, нови редове, кавички, точки и запетаи - никога смисъла му. **Prettier** е най-разпространеният. С formatter никой не спори повече за интервали в code review:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:692
+#: site/lectures/10-tests-types-git.md:700
 msgid "Settings go into `.prettierrc.json` (for example `{ \"tabWidth\": 4, \"printWidth\": 100 }`); in VSCode, the Prettier extension plus `\"editor.formatOnSave\": true` formats on every save. ESLint and Prettier together: `eslint-config-prettier` turns off the ESLint rules that only concern the layout."
 msgstr "Настройките отиват в `.prettierrc.json` (например `{ \"tabWidth\": 4, \"printWidth\": 100 }`); във VSCode разширението Prettier плюс `\"editor.formatOnSave\": true` форматира при всяко записване. ESLint и Prettier заедно: `eslint-config-prettier` изключва правилата на ESLint, които засягат само оформлението."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:697
+#: site/lectures/10-tests-types-git.md:705
 msgid "Which tool finds what"
 msgstr "Кой инструмент какво намира"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:699
+#: site/lectures/10-tests-types-git.md:707
 msgid "Problem"
 msgstr "Проблем"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:699 site/lectures/10-tests-types-git.md:1060
+#: site/lectures/10-tests-types-git.md:707 site/lectures/10-tests-types-git.md:1068
 msgid "Tests"
 msgstr "Тестове"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:699 site/lectures/10-tests-types-git.md:1069
+#: site/lectures/10-tests-types-git.md:707 site/lectures/10-tests-types-git.md:1077
 msgid "ESLint"
 msgstr "ESLint"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:701
+#: site/lectures/10-tests-types-git.md:709
 msgid "wrong result for an input"
 msgstr "грешен резултат за дадени входни данни"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:701 site/lectures/10-tests-types-git.md:703 site/lectures/10-tests-types-git.md:704 site/lectures/10-tests-types-git.md:705
+#: site/lectures/10-tests-types-git.md:709 site/lectures/10-tests-types-git.md:711 site/lectures/10-tests-types-git.md:712 site/lectures/10-tests-types-git.md:713
 msgid "**yes**"
 msgstr "**да**"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:702
+#: site/lectures/10-tests-types-git.md:710
 msgid "a typo in a key of the report (`modle`)"
 msgstr "правописна грешка в ключ на отчета (`modle`)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:702 site/lectures/10-tests-types-git.md:703
+#: site/lectures/10-tests-types-git.md:710 site/lectures/10-tests-types-git.md:711
 msgid "if a test covers it"
 msgstr "ако някой тест го покрива"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:702
+#: site/lectures/10-tests-types-git.md:710
 msgid "**yes** (with typedefs)"
 msgstr "**да** (с typedefs)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:703
+#: site/lectures/10-tests-types-git.md:711
 msgid "a typo in a variable or function name"
 msgstr "правописна грешка в име на variable или функция"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:703
+#: site/lectures/10-tests-types-git.md:711
 msgid "**yes** (`no-undef`)"
 msgstr "**да** (`no-undef`)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:704
+#: site/lectures/10-tests-types-git.md:712
 msgid "a number where a string is expected"
 msgstr "число там, където се очаква string"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:704
+#: site/lectures/10-tests-types-git.md:712
 msgid "sometimes"
 msgstr "понякога"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:705
+#: site/lectures/10-tests-types-git.md:713
 msgid "`==`, `var`, unused variables"
 msgstr "`==`, `var`, неизползвани variables"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:705
+#: site/lectures/10-tests-types-git.md:713
 msgid "partly"
 msgstr "отчасти"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:706
+#: site/lectures/10-tests-types-git.md:714
 msgid "a missing level that is not checked"
 msgstr "липсващо ниво, което не е проверено"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:706
+#: site/lectures/10-tests-types-git.md:714
 msgid "with an odd sample"
 msgstr "с необичаен примерен отчет"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:706
+#: site/lectures/10-tests-types-git.md:714
 msgid "**yes** (`possibly undefined`)"
 msgstr "**да** (`possibly undefined`)"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:707
+#: site/lectures/10-tests-types-git.md:715
 msgid "inconsistent layout"
 msgstr "непоследователно оформление"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:707 site/lectures/10-tests-types-git.md:1070
+#: site/lectures/10-tests-types-git.md:715 site/lectures/10-tests-types-git.md:1078
 msgid "Prettier"
 msgstr "Prettier"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:709
+#: site/lectures/10-tests-types-git.md:717
 msgid "The three complement each other. The cheapest start: `// @ts-check` (free, in the editor) and a few tests for the library."
 msgstr "Трите се допълват. Най-евтиният старт: `// @ts-check` (безплатно, в редактора) и няколко теста за библиотеката."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:712
+#: site/lectures/10-tests-types-git.md:720
 msgid "9. The Git workflow"
 msgstr "9. Работа с Git"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:714
+#: site/lectures/10-tests-types-git.md:722
 msgid "Lecture 1 used Git alone, on one line of history. Working in a team - or on a change that takes a few days - needs **branches**."
 msgstr "Лекция 1 използваше Git самостоятелно, върху една линия на историята. Работата в екип - или по промяна, която отнема няколко дни - изисква **branches**."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:717 site/lectures/10-tests-types-git.md:1071
+#: site/lectures/10-tests-types-git.md:725 site/lectures/10-tests-types-git.md:1079
 msgid "Branches"
 msgstr "Branches"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:719
+#: site/lectures/10-tests-types-git.md:727
 msgid "A **branch** is a separate line of development: a parallel version of the project. You try out a new helper or fix a bug on a branch, **without** touching the main line (`main`). When the work is ready, you **merge** the branch back."
 msgstr "**Branch** е отделна линия на разработка: паралелна версия на проекта. Пробвате нова helper функция или поправяте бъг на branch, **без** да пипате основната линия (`main`). Когато работата е готова, **сливате** (merge) branch-а обратно."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:734
+#: site/lectures/10-tests-types-git.md:742
 msgid "Older tutorials use `git branch <name>` (create) and `git checkout <name>` (switch), or `git checkout -b <name>` for both - the same as `git switch -c`."
 msgstr "По-старите ръководства използват `git branch <name>` (създаване) и `git checkout <name>` (превключване) или `git checkout -b <name>` за двете - същото като `git switch -c`."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:737
+#: site/lectures/10-tests-types-git.md:745
 msgid "Merging"
 msgstr "Сливане (merge)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:745
+#: site/lectures/10-tests-types-git.md:753
 msgid "When `main` has not changed since the branch was created, Git simply moves `main` forward (a *fast-forward*). When both have new commits, Git creates a **merge commit** that joins the two lines. `git log --oneline --graph` draws them."
 msgstr "Когато `main` не се е променял, откакто е създаден branch-ът, Git просто премества `main` напред (*fast-forward*). Когато и двата имат нови commits, Git създава **merge commit**, който съединява двете линии. `git log --oneline --graph` ги рисува."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:749
+#: site/lectures/10-tests-types-git.md:757
 msgid "Merge conflicts"
 msgstr "Конфликти при сливане"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:751
+#: site/lectures/10-tests-types-git.md:759
 msgid "When both branches changed the **same lines** of a file, Git cannot decide which version is right - a **conflict**:"
 msgstr "Когато двата branches са променили **едни и същи редове** на файл, Git не може да реши коя версия е правилната - **конфликт**:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:760
+#: site/lectures/10-tests-types-git.md:768
 msgid "Git writes both versions into the file, between markers:"
 msgstr "Git записва двете версии във файла, между маркери:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:771
+#: site/lectures/10-tests-types-git.md:779
 msgid "Between `<<<<<<< HEAD` and `=======`: the version of the current branch (`main`)."
 msgstr "Между `<<<<<<< HEAD` и `=======`: версията на текущия branch (`main`)."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:772
+#: site/lectures/10-tests-types-git.md:780
 msgid "Between `=======` and `>>>>>>>`: the version of the branch being merged."
 msgstr "Между `=======` и `>>>>>>>`: версията на branch-а, който се слива."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:774
+#: site/lectures/10-tests-types-git.md:782
 msgid "Edit the file into the version you want - here, perhaps, both the new level and the new model - **remove the three marker lines**, then finish the merge:"
 msgstr "Редактирайте файла до версията, която искате - тук може би и новото ниво, и новият модел - **махнете трите реда с маркери**, после завършете сливането:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:782
+#: site/lectures/10-tests-types-git.md:790
 msgid "VSCode shows conflicts with buttons (\"Accept Current\", \"Accept Incoming\", \"Accept Both\") and a merge editor. `git merge --abort` cancels the merge and restores the state before it."
 msgstr "VSCode показва конфликтите с бутони (\"Accept Current\", \"Accept Incoming\", \"Accept Both\") и редактор за сливане. `git merge --abort` отказва сливането и връща състоянието отпреди него."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:786
+#: site/lectures/10-tests-types-git.md:794
 msgid "**Good habits:**"
 msgstr "**Добри навици:**"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:788
+#: site/lectures/10-tests-types-git.md:796
 msgid "Keep branches **small and short-lived** - one feature or one fix."
 msgstr "Дръжте branches **малки и краткотрайни** - една функционалност или една поправка."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:789
+#: site/lectures/10-tests-types-git.md:797
 msgid "Merge `main` into your branch regularly (`git merge main` while on the branch) - small conflicts early instead of a big one at the end."
 msgstr "Сливайте `main` в своя branch редовно (`git merge main`, докато сте на branch-а) - малки конфликти рано вместо един голям накрая."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:791
+#: site/lectures/10-tests-types-git.md:799
 msgid "Delete branches after they are merged."
 msgstr "Изтривайте branches, след като са слети."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:793
+#: site/lectures/10-tests-types-git.md:801
 msgid "Pull requests and code review"
 msgstr "Pull requests и code review"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:795
+#: site/lectures/10-tests-types-git.md:803
 msgid "On GitHub, a branch is merged through a **pull request** (PR): \"please pull my branch into `main`\"."
 msgstr "В GitHub един branch се слива чрез **pull request** (PR): \"моля, издърпайте (pull) моя branch в `main`\"."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:802
+#: site/lectures/10-tests-types-git.md:810
 msgid "GitHub shows a button **Compare & pull request**. Write what the change does and why, and how it was tested."
 msgstr "GitHub показва бутон **Compare & pull request**. Напишете какво прави промяната и защо и как е тествана."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:804
+#: site/lectures/10-tests-types-git.md:812
 msgid "Colleagues **review** it: they read the diff, comment on lines, ask questions or request changes. New commits pushed to the branch appear in the PR."
 msgstr "Колегите я **преглеждат** (review): четат разликите (diff), коментират редове, задават въпроси или искат промени. Новите commits, качени в branch-а, се появяват в PR-а."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:806
+#: site/lectures/10-tests-types-git.md:814
 msgid "When the review is positive (**Approve**), the PR is **merged** - with the button on GitHub - and the branch deleted."
 msgstr "Когато прегледът е положителен (**Approve**), PR-ът се **слива** - с бутона в GitHub - и branch-ът се изтрива."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:809
+#: site/lectures/10-tests-types-git.md:817
 msgid "A code review is not about style (the formatter does that) - it is about correctness and clarity. For rules, ask:"
 msgstr "Code review не е за стила (за това е formatter-ът) - а за правилност и яснота. За правилата питайте:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:812
+#: site/lectures/10-tests-types-git.md:820
 msgid "Does the rule handle missing data **without** a catch-all `try`?"
 msgstr "Обработва ли правилото липсващите данни **без** `try`, който хваща всичко?"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:813
+#: site/lectures/10-tests-types-git.md:821
 msgid "Are versions compared as numbers? Dates parsed without guessing?"
 msgstr "Сравняват ли се версиите като числа? Разчитат ли се датите без гадаене?"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:814
+#: site/lectures/10-tests-types-git.md:822
 msgid "Is `doc` left unchanged?"
 msgstr "Остава ли `doc` непроменен?"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:815
+#: site/lectures/10-tests-types-git.md:823
 msgid "Is there a test for the new case - and for the bug that was fixed?"
 msgstr "Има ли тест за новия случай - и за поправения бъг?"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:816
+#: site/lectures/10-tests-types-git.md:824
 msgid "Would a colleague understand the condition in a year? (Names, comments with examples.)"
 msgstr "Би ли разбрал колега условието след година? (Имена, коментари с примери.)"
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:819
+#: site/lectures/10-tests-types-git.md:827
 msgid "GitHub Pages"
 msgstr "GitHub Pages"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:821
+#: site/lectures/10-tests-types-git.md:829
 msgid "GitHub can also publish a **website** from a repository, for free for public repositories: **GitHub Pages**. The site you are reading is published this way: every push to its repository builds the pages and publishes them at `https://<user>.github.io/<repository>/`. Turn it on in the repository's **Settings > Pages**: choose a branch (and a folder) with static files, or a GitHub Actions workflow that builds them. For a library, Pages can host its documentation."
 msgstr "GitHub може да публикува и **уебсайт** от repository, безплатно за публичните repositories: **GitHub Pages**. Сайтът, който четете, е публикуван така: всеки push в неговото repository изгражда страниците и ги публикува на `https://<user>.github.io/<repository>/`. Включва се в **Settings > Pages** на repository-то: изберете branch (и папка) със статични файлове или GitHub Actions workflow, който ги изгражда. За библиотека Pages може да хоства документацията ѝ."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:828
+#: site/lectures/10-tests-types-git.md:836
 msgid "10. From one product to the next"
 msgstr "10. От един продукт към следващия"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:830
+#: site/lectures/10-tests-types-git.md:838
 msgid "Your library starts with one product. Its structure decides how easy the second one is. A proven layout - a **core** that knows nothing about any product, plus one **module per product** that knows the paths of that product's reports:"
 msgstr "Библиотеката ви започва с един продукт. Структурата ѝ решава колко лесен ще е вторият. Доказана структура - **ядро**, което не знае нищо за никой продукт, плюс по един **модул за продукт**, който знае пътищата в отчетите на този продукт:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:847
+#: site/lectures/10-tests-types-git.md:855
 msgid "Every product module answers the **same questions** with the same function names:"
 msgstr "Всеки модул за продукт отговаря на **едни и същи въпроси** с едни и същи имена на функции:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:872
+#: site/lectures/10-tests-types-git.md:880
 msgid "Now one rule can check **both** products - it asks the product module, not the report. On this site, with the example document and a small report in the other shape:"
 msgstr "Сега едно правило може да проверява **и двата** продукта - то пита модула на продукта, а не отчета. На този сайт, с примерния документ и малък отчет в другата форма:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:920
+#: site/lectures/10-tests-types-git.md:928
 msgid "Lecture 6 showed the same idea with a class per product - the same interface, other paths. Plain objects of functions, as here, are simpler and enough."
 msgstr "Лекция 6 показа същата идея с клас за всеки продукт - същият интерфейс, други пътища. Обикновени обекти от функции, както тук, са по-прости и достатъчни."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:922
+#: site/lectures/10-tests-types-git.md:930
 msgid "A new product = a new module + its samples + its tests. The core and the existing rules do not change."
 msgstr "Нов продукт = нов модул + неговите примерни документи + неговите тестове. Ядрото и съществуващите правила не се променят."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:924
+#: site/lectures/10-tests-types-git.md:932
 msgid "A **README** with one example per helper, and a version number in `package.json` with a short list of changes per version (a *changelog*), help your colleagues to trust and update the library."
 msgstr "**README** с по един пример за всяка helper функция и номер на версия в `package.json` с кратък списък на промените за всяка версия (*changelog*) помагат на колегите ви да се доверят на библиотеката и да я обновяват."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:928
+#: site/lectures/10-tests-types-git.md:936
 msgid "11. Reading existing rules: a code review"
 msgstr "11. Четене на съществуващи правила: code review"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:930
+#: site/lectures/10-tests-types-git.md:938
 msgid "Here is an older rule, as it might arrive in a pull request. Run it - it seems to work:"
 msgstr "Ето по-старо правило, така както може да пристигне в pull request. Изпълнете го - изглежда, че работи:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:960
+#: site/lectures/10-tests-types-git.md:968
 msgid "**Check yourself:** you are the reviewer."
 msgstr "**Проверете се:** вие сте reviewer-ът."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:962
+#: site/lectures/10-tests-types-git.md:970
 msgid "Write the names of five **tests** you would ask for - each one a small report that the rule handles wrongly. (Hint: lectures 4, 7, 8 and 9.)"
 msgstr "Напишете имената на пет **теста**, които бихте поискали - всеки е малък отчет, който правилото обработва грешно. (Подсказка: лекции 4, 7, 8 и 9.)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:964
+#: site/lectures/10-tests-types-git.md:972
 msgid "What would `// @ts-check` with a `Report` typedef report? And ESLint with the configuration of section 8?"
 msgstr "Какво би докладвал `// @ts-check` с typedef `Report`? А ESLint с конфигурацията от раздел 8?"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:966
+#: site/lectures/10-tests-types-git.md:974
 msgid "Write three review comments, as you would on GitHub - each one with the line, the problem and a suggestion."
 msgstr "Напишете три коментара от review, както бихте ги написали в GitHub - всеки с реда, проблема и предложение."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:968
+#: site/lectures/10-tests-types-git.md:976
 msgid "\"Days since check\" - what is wrong with it, even when no test fails today?"
 msgstr "\"Days since check\" - какво не е наред с него, дори когато днес никой тест не пада?"
 
 #. box title
-#: site/lectures/10-tests-types-git.md:970
+#: site/lectures/10-tests-types-git.md:978
 msgid "Answer"
 msgstr "Отговор"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:971
+#: site/lectures/10-tests-types-git.md:979
 msgid "For example:"
 msgstr "Например:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:972
+#: site/lectures/10-tests-types-git.md:980
 msgid "`\"an enclosure with firmware 2.9 is reported\"` - `\"2.9\" < \"2.14\"` is `false` as text (lecture 7);"
 msgstr "`\"an enclosure with firmware 2.9 is reported\"` - `\"2.9\" < \"2.14\"` е `false` като текст (лекция 7);"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:974
+#: site/lectures/10-tests-types-git.md:982
 msgid "`\"a failed enclosure is reported\"` - only `\"degraded\"` is checked;"
 msgstr "`\"a failed enclosure is reported\"` - проверява се само `\"degraded\"`;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:975
+#: site/lectures/10-tests-types-git.md:983
 msgid "`\"one enclosure sent as an object is checked\"` - `encs.length` is `undefined`, the loop runs zero times (lecture 4);"
 msgstr "`\"one enclosure sent as an object is checked\"` - `encs.length` е `undefined`, loop-ът се изпълнява нула пъти (лекция 4);"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:977
+#: site/lectures/10-tests-types-git.md:985
 msgid "`\"a report without labels still gets the alert\"` - `doc.inventory.labels` is `undefined`, the `TypeError` is swallowed by the catch-all (lecture 9);"
 msgstr "`\"a report without labels still gets the alert\"` - `doc.inventory.labels` е `undefined`, `TypeError`-ът се поглъща от catch-all (лекция 9);"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:979
+#: site/lectures/10-tests-types-git.md:987
 msgid "`\"a report without inventory gives no alert and no error\"` - fine today only by luck (the catch-all)."
 msgstr "`\"a report without inventory gives no alert and no error\"` - днес е наред само по случайност (заради catch-all)."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:981
+#: site/lectures/10-tests-types-git.md:989
 msgid "`@ts-check`: `doc.inventory`, `encs` and `doc.inventory.labels` are \"possibly undefined\" (seven places), and `Date.now() - new Date(checked)`: \"The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type\" - a `Date` is subtracted. ESLint with the configuration of section 8: `no-var` five times, `eqeqeq` for the `==`, and `'e' is defined but never used` in the `catch`."
 msgstr "`@ts-check`: `doc.inventory`, `encs` и `doc.inventory.labels` са \"possibly undefined\" (на седем места), а за `Date.now() - new Date(checked)`: \"The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type\" - изважда се `Date`. ESLint с конфигурацията от раздел 8: `no-var` пет пъти, `eqeqeq` за `==` и `'e' is defined but never used` в `catch`."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:987
+#: site/lectures/10-tests-types-git.md:995
 msgid "For example: \"`encs[i].firmware < \"2.14\"` compares text - `\"2.9\"` is not found. Use `compareVersions(encs[i].firmware, \"2.14\") < 0`.\" - \"`var encs = doc.inventory.enclosures`: please use `asList(doc.inventory?.enclosures)`, one enclosure can come as an object.\" - \"The catch-all `try` hides the missing `labels` - please remove it and use `?.` for the optional parts; there is a test case for it in the PR description.\""
 msgstr "Например: \"`encs[i].firmware < \"2.14\"` сравнява текст - `\"2.9\"` не се намира. Използвайте `compareVersions(encs[i].firmware, \"2.14\") < 0`.\" - \"`var encs = doc.inventory.enclosures`: моля, използвайте `asList(doc.inventory?.enclosures)`, един enclosure може да дойде като обект.\" - \"`try`, който хваща всичко, крие липсващия `labels` - моля, махнете го и използвайте `?.` за незадължителните части; в описанието на PR-а има тестов случай за това.\""
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:993
+#: site/lectures/10-tests-types-git.md:1001
 msgid "Run it: the number is **negative**. `new Date(\"12-10-2026 18:25:23\")` guesses the format - in V8 it becomes 10 December, a date in the future (lecture 8); in other engines it is Invalid Date, and the days are `NaN`. And `Date.now()` makes the result depend on **when** the rule runs - a test cannot check it. Parse the format explicitly, and compare with the report's own time (its EPOCH) instead of \"now\"."
 msgstr "Изпълнете го: числото е **отрицателно**. `new Date(\"12-10-2026 18:25:23\")` гадае формата - във V8 става 10 декември, дата в бъдещето (лекция 8); в други engines е Invalid Date и дните са `NaN`. А `Date.now()` прави резултата зависим от това **кога** се изпълнява правилото - тест не може да го провери. Разчитайте формата изрично и сравнявайте с времето на самия отчет (неговия EPOCH) вместо с \"сега\"."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:1000
+#: site/lectures/10-tests-types-git.md:1008
 msgid "12. The project review"
 msgstr "12. Прегледът на проекта"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1002
+#: site/lectures/10-tests-types-git.md:1010
 msgid "The last part of the session belongs to your course project ([Course project](/project))."
 msgstr "Последната част на занятието е за вашия курсов проект ([Курсов проект](/project))."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:1004
+#: site/lectures/10-tests-types-git.md:1012
 msgid "What to show (10 - 15 minutes)"
 msgstr "Какво да покажете (10 - 15 минути)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1006
+#: site/lectures/10-tests-types-git.md:1014
 msgid "**The product and the problem**: which reports, which rules were hard to write."
 msgstr "**Продуктът и проблемът**: кои отчети, кои правила се пишеха трудно."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1007
+#: site/lectures/10-tests-types-git.md:1015
 msgid "**The library**: the helpers, with their JSDoc - hover over one in VSCode."
 msgstr "**Библиотеката**: helper функциите, с техния JSDoc - задръжте мишката над една във VSCode."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1008
+#: site/lectures/10-tests-types-git.md:1016
 msgid "**A rule before and after**: an existing rule rewritten with the library - shorter, without the catch-all, with the same alerts on the samples."
 msgstr "**Правило преди и след**: съществуващо правило, пренаписано с библиотеката - по-кратко, без catch-all, със същите alerts върху примерните документи."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1010
+#: site/lectures/10-tests-types-git.md:1018
 msgid "**The tests**: `npm test` - and one test that would have caught a real bug."
 msgstr "**Тестовете**: `npm test` - и един тест, който би хванал истински бъг."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1011
+#: site/lectures/10-tests-types-git.md:1019
 msgid "**The local runner**: one rule on the folder of samples."
 msgstr "**Локалният runner**: едно правило върху папката с примерни документи."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1012
+#: site/lectures/10-tests-types-git.md:1020
 msgid "**What next**: the second product, the helpers that are still missing."
 msgstr "**Какво следва**: вторият продукт, helper функциите, които още липсват."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:1014
+#: site/lectures/10-tests-types-git.md:1022
 msgid "How the review works"
 msgstr "Как протича прегледът"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1016
+#: site/lectures/10-tests-types-git.md:1024
 msgid "The code is reviewed as a **pull request**: open a PR from a branch with your last changes (or from the whole project against an empty branch), and invite the trainer as a reviewer. The review comments follow the checklist of section 9."
 msgstr "Кодът се преглежда като **pull request**: отворете PR от branch с последните си промени (или от целия проект срещу празен branch) и поканете преподавателя като reviewer. Коментарите следват контролния списък от раздел 9."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1020
+#: site/lectures/10-tests-types-git.md:1028
 msgid "The minimum for the review: the library as a CommonJS module with JSDoc, tests with `node:test`, and one rewritten rule. Everything else can grow after the course."
 msgstr "Минимумът за прегледа: библиотеката като CommonJS модул с JSDoc, тестове с `node:test` и едно пренаписано правило. Всичко останало може да се доразвие след курса."
 
 #. heading 3
-#: site/lectures/10-tests-types-git.md:1023
+#: site/lectures/10-tests-types-git.md:1031
 msgid "After the course"
 msgstr "След курса"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1025
+#: site/lectures/10-tests-types-git.md:1033
 msgid "Keep your repositories: the Homework repository with all solutions, and the project. Pull the Labs repository once more for the class code."
 msgstr "Пазете repositories си: Homework repository с всички решения и проекта. Изтеглете (pull) още веднъж Labs repository за кода от часовете."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1027
+#: site/lectures/10-tests-types-git.md:1035
 msgid "Next topics, when you need them: TypeScript itself (the [handbook](https://www.typescriptlang.org/docs/handbook/intro.html)), more of Node.js (streams for very large files), and testing with mocks."
 msgstr "Следващи теми, когато ви потрябват: самият TypeScript ([наръчникът](https://www.typescriptlang.org/docs/handbook/intro.html)), още от Node.js (streams за много големи файлове) и тестване с mocks."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1030
+#: site/lectures/10-tests-types-git.md:1038
 msgid "Practise: small daily exercises on [Exercism](https://exercism.org/tracks/javascript) (with mentoring) or [Codewars](https://www.codewars.com/), and keep reading [javascript.info](https://javascript.info/) and MDN."
 msgstr "Упражнявайте се: малки ежедневни упражнения в [Exercism](https://exercism.org/tracks/javascript) (с ментори) или [Codewars](https://www.codewars.com/) и продължавайте да четете [javascript.info](https://javascript.info/) и MDN."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1033
+#: site/lectures/10-tests-types-git.md:1041
 msgid "The best practice of all: improve one real rule a week - with a test."
 msgstr "Най-доброто упражнение от всички: подобрявайте по едно истинско правило седмично - с тест."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:1035
+#: site/lectures/10-tests-types-git.md:1043
 msgid "13. Practice"
 msgstr "13. Упражнения"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1037
+#: site/lectures/10-tests-types-git.md:1045
 msgid "In your copy of the Homework repository, first get the new tasks:"
 msgstr "Във вашето копие на Homework repository първо изтеглете новите задачи:"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1044
+#: site/lectures/10-tests-types-git.md:1052
 msgid "Each file explains the task at the top. Tasks 2 and 4 have two files: in the `.test.js` file you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`."
 msgstr "Всеки файл обяснява задачата в началото. Задачи 2 и 4 имат по два файла: във файла `.test.js` пишете тестове; файлът `-check.js` ги изпълнява и отпечатва `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1048
+#: site/lectures/10-tests-types-git.md:1056
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1048
+#: site/lectures/10-tests-types-git.md:1056
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1048
+#: site/lectures/10-tests-types-git.md:1056
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1050
+#: site/lectures/10-tests-types-git.md:1058
 msgid "Predict 20 results: which `assert` checks pass and which throw"
 msgstr "Предвидете 20 резултата: кои проверки с `assert` минават и кои хвърлят грешка"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1051
+#: site/lectures/10-tests-types-git.md:1059
 msgid "Write tests with `node:test` for four library helpers. `task2-check.js` runs them against the correct library - they must pass - and against five versions with hidden bugs - each must be caught"
 msgstr "Напишете тестове с `node:test` за четири helper функции на библиотека. `task2-check.js` ги изпълнява срещу правилната библиотека - трябва да минат - и срещу пет версии със скрити бъгове - всеки трябва да бъде хванат"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1052
+#: site/lectures/10-tests-types-git.md:1060
 msgid "Open it in VSCode: `// @ts-check` underlines six bugs. Fix them - the checks confirm - and write a `@typedef` for a record of the record list"
 msgstr "Отворете го във VSCode: `// @ts-check` подчертава шест бъга. Поправете ги - проверките потвърждават - и напишете `@typedef` за един запис от списъка със записи"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1053
+#: site/lectures/10-tests-types-git.md:1061
 msgid "Write tests for the rule CHK-0211 on the sample reports, with a fake `emit`. `task4-check.js` runs them against the rule and against five broken versions of it"
 msgstr "Напишете тестове за правилото CHK-0211 върху примерните отчети, с фалшив `emit`. `task4-check.js` ги изпълнява срещу правилото и срещу пет негови развалени версии"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1054
+#: site/lectures/10-tests-types-git.md:1062
 msgid "Clean an older helper the way a linter and a reviewer would ask: no `var`, no `==`, no catch-all - with the same results"
 msgstr "Изчистете по-стара helper функция така, както биха поискали linter и reviewer: без `var`, без `==`, без catch-all - със същите резултати"
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:1056
+#: site/lectures/10-tests-types-git.md:1064
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1058
+#: site/lectures/10-tests-types-git.md:1066
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1058
+#: site/lectures/10-tests-types-git.md:1066
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1060
+#: site/lectures/10-tests-types-git.md:1068
 msgid "Small programs that check results; run them after every change; every fixed bug gets a test"
 msgstr "Малки програми, които проверяват резултати; изпълнявайте ги след всяка промяна; всеки поправен бъг получава тест"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1061
+#: site/lectures/10-tests-types-git.md:1069
 msgid "`node:assert/strict`: `equal`, `deepEqual` (content, key order ignored), `ok`, `match`, `throws`, `rejects`"
 msgstr "`node:assert/strict`: `equal`, `deepEqual` (по съдържание, без значение от реда на ключовете), `ok`, `match`, `throws`, `rejects`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1062
+#: site/lectures/10-tests-types-git.md:1070
 msgid "`test(\"sentence\", fn)`, `describe`, hooks, `mock.fn()`; `node --test` finds `test/` and `*.test.js`; exit code 1 on failure"
 msgstr "`test(\"sentence\", fn)`, `describe`, hooks, `mock.fn()`; `node --test` намира `test/` и `*.test.js`; exit code 1 при неуспех"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1063
+#: site/lectures/10-tests-types-git.md:1071
 msgid "What to test"
 msgstr "Какво да тестваме"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1063
+#: site/lectures/10-tests-types-git.md:1071
 msgid "Normal case, missing, empty, wrong type, odd formats, boundaries, `0` / `false` / `\"\"`"
 msgstr "Нормалният случай, липсващо, празно, грешен тип, странни формати, граници, `0` / `false` / `\"\"`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1064
+#: site/lectures/10-tests-types-git.md:1072
 msgid "Rules"
 msgstr "Правила"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1064
+#: site/lectures/10-tests-types-git.md:1072
 msgid "A fake `emit` (or `mock.fn()`), the runner of lecture 9 as a module, the sample reports"
 msgstr "Фалшив `emit` (или `mock.fn()`), runner-ът от лекция 9 като модул, примерните отчети"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1065
+#: site/lectures/10-tests-types-git.md:1073
 msgid "JSDoc"
 msgstr "JSDoc"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1065
+#: site/lectures/10-tests-types-git.md:1073
 msgid "`/** ... */` before a function: description, `@param {type} name`, `@returns`, `@example`, `@throws`"
 msgstr "`/** ... */` преди функция: описание, `@param {type} name`, `@returns`, `@example`, `@throws`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1066
+#: site/lectures/10-tests-types-git.md:1074
 msgid "Names the shape of a report; `[name]` = optional; `import(\"./types.js\").Report`; `@template` for generic helpers"
 msgstr "Дава име на формата на отчет; `[name]` = незадължително; `import(\"./types.js\").Report`; `@template` за generic helper функции"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1067
+#: site/lectures/10-tests-types-git.md:1075
 msgid "First line of a file; VSCode checks types, typos, possibly undefined; `jsconfig.json` for the whole project"
 msgstr "Първият ред на файла; VSCode проверява типове, правописни грешки, possibly undefined; `jsconfig.json` за целия проект"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1068
+#: site/lectures/10-tests-types-git.md:1076
 msgid "TypeScript"
 msgstr "TypeScript"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1068
+#: site/lectures/10-tests-types-git.md:1076
 msgid "The same types in `.ts` files with a compiler; JSDoc gives the checks without a build step"
 msgstr "Същите типове в `.ts` файлове, с компилатор; JSDoc дава проверките без build стъпка"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1069
+#: site/lectures/10-tests-types-git.md:1077
 msgid "Likely bugs and team rules (`no-undef`, `eqeqeq`, `no-var`); `npx eslint . --fix`"
 msgstr "Вероятни бъгове и правила на екипа (`no-undef`, `eqeqeq`, `no-var`); `npx eslint . --fix`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1070
+#: site/lectures/10-tests-types-git.md:1078
 msgid "Only the layout; format on save; no style debates in reviews"
 msgstr "Само оформлението; форматиране при записване; без спорове за стил в прегледите"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1071
+#: site/lectures/10-tests-types-git.md:1079
 msgid "`git switch -c name`, commit, `git switch main`, `git merge name`, `git branch -d name`"
 msgstr "`git switch -c name`, commit, `git switch main`, `git merge name`, `git branch -d name`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1072
+#: site/lectures/10-tests-types-git.md:1080
 msgid "Conflicts"
 msgstr "Конфликти"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1072
+#: site/lectures/10-tests-types-git.md:1080
 msgid "Edit between `<<<<<<<`, `=======`, `>>>>>>>`, remove the markers, `git add`, `git commit`"
 msgstr "Редактирайте между `<<<<<<<`, `=======`, `>>>>>>>`, махнете маркерите, `git add`, `git commit`"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1073
+#: site/lectures/10-tests-types-git.md:1081
 msgid "Pull requests"
 msgstr "Pull requests"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1073
+#: site/lectures/10-tests-types-git.md:1081
 msgid "Push the branch, open a PR, review, approve, merge, delete the branch"
 msgstr "Push на branch-а, отваряне на PR, преглед, одобрение, сливане, изтриване на branch-а"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1074
+#: site/lectures/10-tests-types-git.md:1082
 msgid "Several products"
 msgstr "Няколко продукта"
 
 #. table cell
-#: site/lectures/10-tests-types-git.md:1074
+#: site/lectures/10-tests-types-git.md:1082
 msgid "A core without product paths + one module per product with the same functions"
 msgstr "Ядро без пътища на продукти + по един модул за продукт със същите функции"
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:1076
+#: site/lectures/10-tests-types-git.md:1084
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1078
+#: site/lectures/10-tests-types-git.md:1086
 msgid "`10-tests-types-git/` (in the homework repository): write `fleetSummary` - a summary of a fleet of reports that uses something from every lecture - in `homework-fleet.js`, and at least three tests for it in `homework.test.js`. Check both with `node 10-tests-types-git/homework.js`."
 msgstr "`10-tests-types-git/` (в homework repository): напишете `fleetSummary` - обобщение на група отчети, което използва по нещо от всяка лекция - в `homework-fleet.js` и поне три теста за нея в `homework.test.js`. Проверете и двете с `node 10-tests-types-git/homework.js`."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1082
+#: site/lectures/10-tests-types-git.md:1090
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr ""
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1084
+#: site/lectures/10-tests-types-git.md:1092
 msgid "**Course project - for the review:**"
 msgstr "**Курсов проект - за прегледа:**"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1085
+#: site/lectures/10-tests-types-git.md:1093
 msgid "JSDoc for every exported helper, a `types.js` with the typedefs of your product, `// @ts-check` in every file;"
 msgstr "JSDoc за всяка експортирана helper функция, `types.js` с typedefs на вашия продукт, `// @ts-check` във всеки файл;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1087
+#: site/lectures/10-tests-types-git.md:1095
 msgid "tests with `node:test` for the library and for one rule (`npm test`);"
 msgstr "тестове с `node:test` за библиотеката и за едно правило (`npm test`);"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1088
+#: site/lectures/10-tests-types-git.md:1096
 msgid "one existing rule rewritten with the library, with the same alerts on the samples;"
 msgstr "едно съществуващо правило, пренаписано с библиотеката, със същите alerts върху примерните документи;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1089
+#: site/lectures/10-tests-types-git.md:1097
 msgid "a README with an example per helper;"
 msgstr "README с пример за всяка helper функция;"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1090
+#: site/lectures/10-tests-types-git.md:1098
 msgid "open a pull request and invite the trainer as a reviewer. Use the checklist `10-tests-types-git/project-checklist.md`."
 msgstr "отворете pull request и поканете преподавателя като reviewer. Използвайте контролния списък `10-tests-types-git/project-checklist.md`."
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1092
+#: site/lectures/10-tests-types-git.md:1100
 msgid "Optional: add ESLint to the project, run it on two of your existing rules, and count what it finds."
 msgstr "По желание: добавете ESLint в проекта, изпълнете го върху две от съществуващите си правила и пребройте какво намира."
 
 #. heading 2
-#: site/lectures/10-tests-types-git.md:1095
+#: site/lectures/10-tests-types-git.md:1103
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1097
+#: site/lectures/10-tests-types-git.md:1105
 msgid "Node.js: [Test runner](https://nodejs.org/api/test.html), [Assert](https://nodejs.org/api/assert.html), [Mocking in tests](https://nodejs.org/en/learn/test-runner/mocking)"
 msgstr "Node.js: [Test runner](https://nodejs.org/api/test.html), [Assert](https://nodejs.org/api/assert.html), [Mocking in tests](https://nodejs.org/en/learn/test-runner/mocking)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1100
+#: site/lectures/10-tests-types-git.md:1108
 msgid "JSDoc and types: [JSDoc Reference (TypeScript handbook)](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html), [Type Checking JavaScript Files](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), [JavaScript in VS Code](https://code.visualstudio.com/docs/languages/javascript), [jsconfig.json](https://code.visualstudio.com/docs/languages/jsconfig), [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)"
 msgstr "JSDoc и типове: [JSDoc Reference (TypeScript handbook)](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html), [Type Checking JavaScript Files](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), [JavaScript in VS Code](https://code.visualstudio.com/docs/languages/javascript), [jsconfig.json](https://code.visualstudio.com/docs/languages/jsconfig), [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1105
+#: site/lectures/10-tests-types-git.md:1113
 msgid "Tools: [ESLint - Getting started](https://eslint.org/docs/latest/use/getting-started), [Prettier](https://prettier.io/docs/), [ESLint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)"
 msgstr "Инструменти: [ESLint - Getting started](https://eslint.org/docs/latest/use/getting-started), [Prettier](https://prettier.io/docs/), [ESLint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1108
+#: site/lectures/10-tests-types-git.md:1116
 msgid "Git: [Pro Git - Git Branching](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell), [About pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests), [Resolving a merge conflict on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github), [GitHub Pages](https://pages.github.com/)"
 msgstr "Git: [Pro Git - Git Branching](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell), [About pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests), [Resolving a merge conflict on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github), [GitHub Pages](https://pages.github.com/)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1112
+#: site/lectures/10-tests-types-git.md:1120
 msgid "javascript.info: [Automated testing with Mocha](https://javascript.info/testing-mocha) (the ideas are the same for `node:test`)"
 msgstr "javascript.info: [Automated testing with Mocha](https://javascript.info/testing-mocha) (идеите са същите за `node:test`)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1113
+#: site/lectures/10-tests-types-git.md:1121
 msgid "Videos: [Git Tutorial for Beginners: Command-Line Fundamentals](https://www.youtube.com/watch?v=HVsySz-h9r4), [GitHub Tutorial for Beginners](https://www.youtube.com/watch?v=0fKg7e37bQE)"
 msgstr "Видеа: [Git Tutorial for Beginners: Command-Line Fundamentals](https://www.youtube.com/watch?v=HVsySz-h9r4), [GitHub Tutorial for Beginners](https://www.youtube.com/watch?v=0fKg7e37bQE)"
 
 #. paragraph
-#: site/lectures/10-tests-types-git.md:1116
+#: site/lectures/10-tests-types-git.md:1124
 msgid "**This was the last session.** Thank you for the questions and the work. Keep the library growing - one helper, one test, one rule at a time."
 msgstr "**Това беше последното занятие.** Благодаря за въпросите и за работата. Нека библиотеката продължава да расте - по една helper функция, един тест, едно правило наведнъж."
 

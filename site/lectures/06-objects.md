@@ -91,6 +91,8 @@ record in a list. Rules spend most of their lines reading objects - safely.
 
 ## 1. What is an object?
 
+MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects)
+
 An **object** groups related data under one name. Each piece of data is a
 **property**: a **key** (a name, a string) and a **value** (any type: a number, a
 string, an array, another object, a function).
@@ -165,6 +167,8 @@ arrow.
 ## 2. Creating an object
 
 ### The object literal - the preferred way
+
+MDN: [Object initializer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)
 
 Write the `key: value` pairs in curly braces, separated by commas:
 
@@ -256,6 +260,8 @@ mix it up with `new Developer(...)` - a call of a **constructor**
 
 ## 3. Reading and writing properties
 
+MDN: [Property accessors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors)
+
 ### The dot
 
 When you know the name of the key when you write the code:
@@ -323,6 +329,8 @@ console.log(doc.inventory.modules["12_4.20"].status);      // OK
 
 ### A missing key, adding, deleting
 
+MDN: [delete](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete)
+
 - Reading a key that does not exist gives `undefined` - **no error**.
 - Writing to a key that does not exist **creates** it.
 - `delete obj.key` removes a property.
@@ -344,6 +352,8 @@ The last line is a common bug: a typo in a key **creates** a property instead of
 changing one. `// @ts-check` (session 10) can catch it.
 
 ### Does the key exist?
+
+MDN: [Object.hasOwn()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn), [in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in)
 
 `obj.key === undefined` cannot tell "missing" from "there, with the value
 undefined". Three ways to ask "is the key there?":
@@ -424,6 +434,8 @@ It works, but the path is written again and again, and `&&` also stops at `0`
 and `""` - values that can be real data.
 
 ### Optional chaining `?.` and `??` (ES2020)
+
+MDN: [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)
 
 `a?.b` means: "if `a` is `undefined` or `null`, stop here and give `undefined`;
 otherwise read `a.b`". It works with brackets and calls too: `a?.[key]`,
@@ -544,6 +556,8 @@ Useful to explore a new report: "where in this document is the serial?".
 
 ## 6. Objects as dictionaries
 
+MDN: [Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), [Object.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
+
 In many reports the keys of an object are not fixed names like `model` - they are
 **ids**: of modules, drives, checks, slots. You do not know them when you write
 the rule. Such an object is used as a **dictionary**:
@@ -603,6 +617,8 @@ expression (session 8) can read such keys more strictly.
 
 ### The older loop: `for...in`
 
+MDN: [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in)
+
 Older rules walk the keys with `for...in`:
 
 ```js run
@@ -648,6 +664,8 @@ a long list of records once, and then reading the groups by key, is the topic of
 session 7 (`Object.groupBy`, `Map`).
 
 ### From pairs back to an object (ES2019)
+
+MDN: [Object.fromEntries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries)
 
 `Object.fromEntries` is the opposite of `Object.entries`: it builds an object from
 `[key, value]` pairs. Together they transform a dictionary:
@@ -806,6 +824,8 @@ the same for parameters
 
 ### Three kinds of "copy"
 
+MDN: [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)
+
 | Code | What you get | Shared with the original |
 |---|---|---|
 | `const b = a;` | the same object, a second name | everything |
@@ -866,6 +886,8 @@ console.log(result.name, JSON.stringify(doc.overview) === before);   // unknown 
 sure, in tests, that nothing writes into it.
 
 ## 9. Spread, rest and destructuring
+
+MDN: [Spread syntax (...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring)
 
 ES6 added three short forms with `...` and `[ ]` / `{ }` on the **left** side of an
 assignment. You meet them in every modern codebase.
@@ -1056,6 +1078,8 @@ p1.greet();     // Hi, I'm Pesho
 
 ### `this` is decided by the call
 
+MDN: [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
+
 `this` is not fixed when the method is written. It is the object before the dot
 **at the moment of the call**. Take the method out of the object, and `this` is
 lost:
@@ -1216,6 +1240,8 @@ in older code it writes into the global object. Classes (below) refuse to be cal
 without `new`.
 
 ### The class syntax (ES6)
+
+MDN: [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 
 A `class` writes the same thing in the form of other object-oriented languages:
 

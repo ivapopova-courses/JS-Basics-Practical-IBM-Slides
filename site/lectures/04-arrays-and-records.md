@@ -230,6 +230,8 @@ console.log(arr[3]);        // undefined
 
 ### The last element
 
+MDN: [Array.prototype.at()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at)
+
 The index of the last element is `length - 1`:
 
 ```js run
@@ -250,6 +252,8 @@ console.log(arr.at(0));              // 2 - at(0) is the same as arr[0]
 :::
 
 ## 3. The `length` property
+
+MDN: [Array: length](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/length)
 
 `arrayName.length` is the number of elements. It is **dynamic**: it changes when
 the array changes - and **writing** to it changes the array:
@@ -376,6 +380,8 @@ come in session 7.
 
 ### Is it an array? `Array.isArray`
 
+MDN: [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)
+
 JSON data does not always have the shape you expect. A list can be missing, can
 be `null`, or can be one object instead of a list with one object. `typeof`
 cannot tell an array from an object - `Array.isArray` can:
@@ -444,12 +450,34 @@ checks in this course do the same with `JSON.stringify` (session 9).
 
 ### At the end and at the start: `push`, `pop`, `unshift`, `shift`
 
+MDN: [Array.prototype.push()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push), [Array.prototype.pop()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop), [Array.prototype.unshift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift), [Array.prototype.shift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift)
+
 | Method | Does | Returns |
 |--------|------|---------|
 | `arr.push(x, ...)` | adds at the **end** | the new length |
 | `arr.pop()` | removes the **last** element | the removed element |
 | `arr.unshift(x, ...)` | adds at the **start** | the new length |
 | `arr.shift()` | removes the **first** element | the removed element |
+
+::: tip How to read an MDN reference page
+Open the page of `push` above. Every reference page has the same parts:
+
+- **The title.** `Array.prototype.push()` is a method of every array: you call
+  it as `arr.push(...)`. A title without `prototype`, like `Array.isArray()`, is
+  called on `Array` itself: `Array.isArray(x)`.
+- **Syntax.** The ways to call it, one per line. A parameter that appears only
+  in some lines can be left out.
+- **Parameters.** What each argument means. "Optional" means you may leave it out.
+- **Return value.** What the call gives back. For `push`: the new length, not
+  the array - the column "Returns" in the table above.
+- **Description.** The details. For arrays it says if the method changes the
+  array ("a mutating method") or returns a new one - see
+  [Which methods change the array?](#which-methods-change-the-array) below.
+- **Examples.** Short code you can paste into the editor and run.
+- **Browser compatibility.** Since when the feature works. The table has a
+  column for Node.js too. For a feature newer than ES2020, check that your rule
+  engine supports it.
+:::
 
 ```js run
 let fruits = ["apple", "banana", "strawberry"];
@@ -517,6 +545,8 @@ console.log(problems.length);       // 1
 
 ### `slice` - copy a part
 
+MDN: [Array.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+
 `arr.slice(start, end)` returns a **new** array with the elements from `start` up
 to, **but not including**, `end`. The original array does not change.
 
@@ -540,6 +570,8 @@ console.log(major);                            // [ '4', '2', '1' ]
 ```
 
 ### `splice` - remove, insert or replace, in place
+
+MDN: [Array.prototype.splice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)
 
 `arr.splice(start, deleteCount, item1, item2, ...)` changes the array **itself**:
 from index `start` it removes `deleteCount` elements, and puts the new items in
@@ -587,6 +619,8 @@ has an extra letter, and it does extra things - it changes the array.
 :::
 
 ### Joining arrays: `concat` and spread
+
+MDN: [Array.prototype.concat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), [Spread syntax (...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
 
 ```js run
 const ssd = ["ENC-01", "ENC-02"];
@@ -641,6 +675,8 @@ console.log(b.length, b);       // 2 [ 'x', 'z' ]
 ```
 
 ## 6. Searching: `indexOf`, `includes`, `lastIndexOf`
+
+MDN: [Array.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf), [Array.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes), [Array.prototype.lastIndexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf)
 
 | Method | Returns |
 |--------|---------|
@@ -747,6 +783,8 @@ what `indexOf` does inside
 ## 7. Strings and arrays: `split` and `join`
 
 ### `split` - from a string to an array
+
+MDN: [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split)
 
 `str.split(separator)` cuts the string at every separator and returns an array of
 the pieces. The separators are dropped. The pieces are always **strings**.
@@ -860,6 +898,8 @@ console.log(list);                      // [ 'CON-01', 'CON-02' ]
 
 ### `join` - from an array to a string
 
+MDN: [Array.prototype.join()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join)
+
 `arr.join(separator)` is the opposite of `split`: it glues the elements into one
 string, with the separator between them. Without an argument the separator is
 `","`.
@@ -947,6 +987,8 @@ The newest entry of a history list is often the last one - walk backwards and
 :::
 
 ### `for...of` - the elements, without the index
+
+MDN: [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)
 
 `for...of` (ES2015) gives the elements one by one. Use it when you do not need the
 index - this is most of the time:

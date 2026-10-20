@@ -132,6 +132,8 @@ call: `const clean = raw.trim();`.
 
 ## 2. String methods
 
+MDN: [String: instance methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#instance_methods)
+
 The methods you need most often, grouped by what they do:
 
 | Group | Methods |
@@ -146,6 +148,8 @@ The methods you need most often, grouped by what they do:
 | Compare | `localeCompare(other)` (lecture 7), `===` |
 
 ### Case and white space
+
+MDN: [String.prototype.toLowerCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase), [String.prototype.toUpperCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase), [String.prototype.trim()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim)
 
 Values typed by people or produced by different tools are not always written the
 same way. Normalise first, then compare:
@@ -164,6 +168,8 @@ console.log(JSON.stringify("  a  ".trimEnd()));     // "  a"
 and ends, and `\n`, `\t` become visible.
 
 ### Searching
+
+MDN: [String.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes), [String.prototype.startsWith()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith), [String.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf)
 
 ```js run
 const level = doc.inventory.details.firmware_level;   // "4.2.1.7 (build 412.17.2607151200)"
@@ -189,6 +195,8 @@ console.log(model.startsWith("XR-2"));        // true - "a model of the XR-2xx f
 | `s.indexOf(")") === s.length - 1` | `s.endsWith(")")` |
 
 ### Cutting out a part: `slice` and `substring`
+
+MDN: [String.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice), [String.prototype.substring()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring)
 
 `slice(start, end)` works like `slice` of arrays (lecture 4): from `start`, up to
 but **not including** `end`; negative positions count from the end.
@@ -220,6 +228,8 @@ Prefer `slice`. `substr` is deprecated: it still works, but do not use it in new
 code. `charAt(i)` is the older form of `s[i]`.
 
 ### Changing: `replace`, `replaceAll`, `padStart`, `repeat`
+
+MDN: [String.prototype.replace()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace), [String.prototype.replaceAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replaceAll), [String.prototype.padStart()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)
 
 ```js run
 // replace changes only the FIRST match; replaceAll changes all (ES2021)
@@ -311,6 +321,8 @@ console.log(Boolean(new Boolean(false)));   // true - an object is always truthy
 conversions (lecture 2) and return primitives.
 
 ## 4. Characters and encodings
+
+MDN: [UTF-16 characters, Unicode code points, and grapheme clusters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
 
 ### Every character is a number
 
@@ -424,6 +436,8 @@ files - and removes it: `text.replace(/^\uFEFF/, "")`.
 
 ## 5. Regular expressions: patterns for text
 
+MDN: [Regular expressions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)
+
 A **regular expression** (regex, *regexp*) describes a **pattern** of text: "four
 digits", "a word, then `=`, then digits", "starts with `XR-`, ignoring the case".
 With a pattern you can **test** a string, **find** parts of it, or **replace** them.
@@ -465,6 +479,8 @@ console.log(re, re.test("XR-220"));
 ```
 
 ### The building blocks
+
+MDN: [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet)
 
 **Characters.** Letters and digits match themselves. These have a special meaning
 and must be escaped with `\` to match literally: `. * + ? ^ $ { } ( ) | [ ] \ /`.
@@ -553,6 +569,8 @@ the patterns of existing rules there.
 
 ### Capture groups: `match`
 
+MDN: [String.prototype.match()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)
+
 `str.match(re)` returns `null` when there is no match, or an **array**: the whole
 match at index 0, then the text of every **group** `( )`:
 
@@ -602,6 +620,8 @@ console.log(`${m.groups.hour}:${m.groups.min}`);             // 12:56
 
 ### Flags
 
+MDN: [Advanced searching with flags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags)
+
 | Flag | Meaning |
 |---|---|
 | `g` | global: find **all** matches, not only the first |
@@ -620,6 +640,8 @@ console.log(report.match(/^ENC-\d+/gm));                    // [ 'ENC-01', 'ENC-
 ```
 
 ### All matches with their groups: `matchAll` (ES2020)
+
+MDN: [String.prototype.matchAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll)
 
 `match` with `g` gives only the matched texts. `matchAll` gives every match **with**
 its groups (the pattern must have the `g` flag):
@@ -669,6 +691,8 @@ console.log("4.2.1.7-B00".split(/[.-]/));               // [ '4', '2', '1', '7',
 ```
 
 ### A trap: `g` and `test` remember where they stopped
+
+MDN: [RegExp.prototype.test()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test), [RegExp: lastIndex](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastIndex)
 
 A pattern with the `g` flag has a `lastIndex`: `test` and `exec` start searching
 from there and move it on. The same pattern object, used again on another string,
@@ -828,6 +852,8 @@ The global `isNaN` converts its argument first (`isNaN("abc")` is `true`);
 
 ### Rounding and formatting
 
+MDN: [Number.prototype.toFixed()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed), [Math.round()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round)
+
 ```js run
 const percent = 1675.1 / 1863 * 100;
 console.log(percent);                         // 89.91411701556629
@@ -848,6 +874,8 @@ console.log(new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDi
 calculation.
 
 ### `Math`
+
+MDN: [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
 
 `Math` is a built-in object with mathematical functions and constants - you call
 them directly, without `new`:
@@ -883,6 +911,8 @@ console.log(Math.round(gib / 1024 * 100) / 100, "TiB");    // 66.5 TiB
 
 ### Big numbers: ids are strings
 
+MDN: [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
+
 A `number` holds whole numbers exactly only up to 2<sup>53</sup> - 1
 (`Number.MAX_SAFE_INTEGER`, about 9 * 10<sup>15</sup>). A longer id in a JSON file
 is **rounded** when it is read as a number:
@@ -901,6 +931,8 @@ digits. Never `Number(...)` them. (Millisecond timestamps like `1791770402000`
 are far below the limit - they are safe.)
 
 ## 10. Dates
+
+MDN: [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
 A `Date` is one moment in time, stored as the number of **milliseconds** since the
 start of 1970 (UTC) - the *EPOCH*. Everything else - year, month, hour, time zone -
@@ -981,6 +1013,8 @@ console.log(new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeZone: "U
 ```
 
 ### Parsing the date formats of real reports
+
+MDN: [Date time string format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format), [Date.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse)
 
 Only one string format is defined by the language: **ISO 8601** (`2026-10-12`,
 `2026-10-12T18:25:23Z`). Everything else is up to the engine - and the formats of

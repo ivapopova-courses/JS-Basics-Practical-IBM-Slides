@@ -106,6 +106,8 @@ engine calls it once for every report.
 
 ## 1. What is a function?
 
+MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions)
+
 A **function** is a sequence of actions that does one task, kept together under a
 **name**. Think of a recipe: "pancakes" is the name; the steps are written once;
 you cook them any time you want. The result can depend on extra **inputs**:
@@ -189,6 +191,8 @@ rule decides what to do with the result.
 ## 2. Defining and calling a function
 
 ### Option 1: a function declaration
+
+MDN: [function declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)
 
 ```text
 function <name>(<parameters>) {
@@ -290,6 +294,8 @@ The parameter is called `doc` here too, but it does not have to be: a parameter 
 a new name, valid only inside the function. More in [section 6](#_6-scope-where-a-variable-can-be-seen).
 
 ### Option 2: a function expression
+
+MDN: [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)
 
 A function is also a **value**. You can create it in an expression and store it
 in a variable:
@@ -431,6 +437,8 @@ question to `versionBelow(level, "4.2")`. Give parameters clear names
 
 ### Any number of arguments: `arguments` and `...rest`
 
+MDN: [The arguments object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)
+
 Sometimes a function should take **any** number of values. In older code you see
 the special `arguments` object. It exists in every `function` (but not in an
 arrow function) and holds all the arguments of the call:
@@ -497,6 +505,8 @@ strings to numbers. (`+` would not: it would join them.)
 :::
 
 ## 4. Default values of parameters
+
+MDN: [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)
 
 A **default value** is the value a parameter gets when **no argument** is
 passed for it. Since ES6 (2015) you write it in the parameter list:
@@ -569,6 +579,8 @@ console.log(deviceName({ overview: { serial_number: "SN0001" }, inventory: {} })
 ```
 
 ## 5. `return`: giving back a result
+
+MDN: [return](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return)
 
 Every function call is an **expression** - like `2 + 2`, it gives a value. That
 value is decided by `return`:
@@ -744,6 +756,8 @@ with `max = 0`: for `[-4, -2]` the answer is `-2`, not `0`. (Practice task 5.)
 :::
 
 ## 6. Scope: where a variable can be seen
+
+MDN: [Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
 
 The **scope** of a variable is the part of the code where you can use it. There
 are three kinds:
@@ -952,6 +966,8 @@ caller();       // Hello, Ada
 
 ## 7. `let`, `const` and `var`
 
+MDN: [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var), [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+
 Lecture 2 said "use `const` and `let`, not `var`". Here is why. Existing rules
 use `var` everywhere, so you need to know what it does.
 
@@ -1094,6 +1110,8 @@ And remember `const` does not freeze an array: `BAD_STATES.push(...)` inside a
 function would still be a change. "Never changed" is a rule **you** follow.
 
 ### Hoisting (advanced)
+
+MDN: [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting)
 
 Before JavaScript runs the code of a scope, it first goes through it once and
 registers all **declarations** in it. You can think of two passes:
@@ -1414,6 +1432,8 @@ console.log(found);     // [ 'remote login enabled', 'power saving on' ]
 
 ### Callbacks
 
+MDN: [Callback function](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function)
+
 A function passed as an argument to another function is called a **callback**:
 the other function "calls it back" when it needs it.
 
@@ -1605,6 +1625,8 @@ console.log(firmwareMajor(doc));            // 4
 ```
 
 ## 10. Arrow functions
+
+MDN: [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 
 ES6 added a shorter way to write a function expression: the **arrow function**
 (also called *fat arrow*; in other languages - Python, Java, C# - a *lambda*). It
@@ -1811,6 +1833,8 @@ everything as **parameters**, and they are easy to move into a shared library
 later (session 9 and the course project).
 
 ### Closures
+
+MDN: [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)
 
 An inner function keeps access to the variables of the outer function **even
 after the outer function has returned**. The function and the variables it

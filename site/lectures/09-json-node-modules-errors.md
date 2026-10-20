@@ -78,6 +78,8 @@ files, modules and tools: today you build them.
 
 ## 1. JSON: the format
 
+MDN: [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
+
 **JSON** (*JavaScript Object Notation*) is a text format for data. It was proposed
 by Douglas Crockford in the early 2000s and is now the most common format for data
 between programs - your reports, configuration files, web APIs. It is
@@ -157,6 +159,8 @@ A rule can treat the two cases differently: "not set" may be a configuration
 problem; "not reported" may be an old firmware that does not send the field.
 
 ## 2. `JSON.parse` and `JSON.stringify`
+
+MDN: [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
 
 JSON is **text**. To work with it, turn it into JavaScript values - *parse* it. To
 send or save data, turn it back into text - *stringify* it.
@@ -302,6 +306,8 @@ features to Node.js quickly; the course uses Node.js 24 (an LTS version).
 
 ### `process`: the running program
 
+Node.js: [process](https://nodejs.org/api/process.html)
+
 ```js
 // info.js - run it with: node info.js LAB-DEV-01 --verbose
 console.log(process.version);           // v24.x.x - the Node.js version
@@ -333,6 +339,8 @@ const samples = path.join(__dirname, "samples");     // always next to this scri
 ```
 
 ### The `console` object
+
+MDN: [console](https://developer.mozilla.org/en-US/docs/Web/API/console)
 
 `console.log` is one method of the `console` object. The others are just as useful -
 they work in Node.js, in the browser and on this site:
@@ -387,6 +395,8 @@ with one). Servers are outside this course - but now you know where the JSON of 
 API comes from (section 9).
 
 ## 4. Files: `fs` and `path`
+
+Node.js: [File system](https://nodejs.org/api/fs.html), [Path](https://nodejs.org/api/path.html)
 
 Node.js has **built-in modules** - no installation needed. Load them with `require`;
 the `node:` prefix says "built in":
@@ -555,6 +565,8 @@ JavaScript has two module systems:
 
 ### CommonJS: `module.exports` and `require`
 
+Node.js: [Modules: CommonJS modules](https://nodejs.org/api/modules.html)
+
 The recipe of lecture 7, explained:
 
 ```js
@@ -602,6 +614,8 @@ from. Locally, Node.js would look for a **package** named `library.js` in
 :::
 
 ### ES modules: `export` and `import`
+
+MDN: [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export), [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 
 The module system of the language itself:
 
@@ -689,6 +703,8 @@ a stack trace is a picture of this stack at the moment of the error
 
 ### The error types
 
+MDN: [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)
+
 | Type | When | Example |
 |---|---|---|
 | `TypeError` | a value of the wrong type is used | `undefined.state`, `null.length`, `5()`, assigning to a `const` |
@@ -719,6 +735,8 @@ In rules, almost every error is a `TypeError` - a missing level of the report - 
 a `SyntaxError` from `JSON.parse`.
 
 ### `try` / `catch`
+
+MDN: [try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)
 
 ```text
 try {
@@ -792,6 +810,8 @@ try {
 ```
 
 ### `throw`: raise your own error
+
+MDN: [throw](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw)
 
 `throw expression;` stops the function and starts looking for a `catch` - in this
 function, then in its caller, then in the caller's caller... The lines after `throw`
@@ -1049,6 +1069,8 @@ console.log("End", sum);
 
 ### The event loop
 
+MDN: [JavaScript execution model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model)
+
 JavaScript runs on **one thread**, with one **call stack** (lecture 5). Waiting work -
 timers, files, network answers - is done outside it; when it is ready, its callback
 goes into a **queue**. The **event loop** takes the next callback from the queue
@@ -1060,6 +1082,8 @@ the talk "Everything You Need to Know About Node.js Event Loop" (Bert Belder) li
 in Read more.
 
 ### From callbacks to promises
+
+MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
 
 The old slides use a story: prepare dinner (2 s), then eat it (0.5 s), then go to bed -
 each step after the previous one, with errors handled. With callbacks, every next
@@ -1114,6 +1138,8 @@ console.log("Do something else meanwhile...");
 
 ### `async` and `await`
 
+MDN: [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)
+
 `async` / `await` (ES2017) write the same chain like normal, synchronous code:
 
 - an **`async` function** always returns a promise;
@@ -1159,6 +1185,8 @@ async function readReports(files) {
 ```
 
 ## 9. `fetch`: JSON from a web API
+
+MDN: [Window: fetch() method](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 
 Web APIs answer requests with JSON. `fetch` (in browsers, and global in Node.js 18+)
 sends a request and returns a promise of the **response**.

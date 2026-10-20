@@ -125,1386 +125,1471 @@ msgstr "2. Методи на strings"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:135
+msgid "MDN: [String: instance methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#instance_methods)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:137
 msgid "The methods you need most often, grouped by what they do:"
 msgstr "Методите, които ви трябват най-често, групирани по това какво правят:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:137
+#: site/lectures/08-strings-regex-dates.md:139
 msgid "Group"
 msgstr "Група"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:137 site/lectures/08-strings-regex-dates.md:1294
+#: site/lectures/08-strings-regex-dates.md:139 site/lectures/08-strings-regex-dates.md:1328
 msgid "Methods"
 msgstr "Методи"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:139
+#: site/lectures/08-strings-regex-dates.md:141
 msgid "Case"
 msgstr "Малки и главни букви"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:140
+#: site/lectures/08-strings-regex-dates.md:142
 msgid "White space"
 msgstr "Празно пространство (white space)"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:141
+#: site/lectures/08-strings-regex-dates.md:143
 msgid "Search (true / false)"
 msgstr "Търсене (true / false)"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:142
+#: site/lectures/08-strings-regex-dates.md:144
 msgid "Search (position)"
 msgstr "Търсене (позиция)"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:142
+#: site/lectures/08-strings-regex-dates.md:144
 msgid "`indexOf(s)`, `lastIndexOf(s)` - `-1` when not found"
 msgstr "`indexOf(s)`, `lastIndexOf(s)` - `-1`, когато не е намерено"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:143
+#: site/lectures/08-strings-regex-dates.md:145
 msgid "Cut out"
 msgstr "Изрязване"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:144
+#: site/lectures/08-strings-regex-dates.md:146
 msgid "Change"
 msgstr "Промяна"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:145
+#: site/lectures/08-strings-regex-dates.md:147
 msgid "To an array and back"
 msgstr "Към array и обратно"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:145
+#: site/lectures/08-strings-regex-dates.md:147
 msgid "`split(sep)` (lecture 4), `array.join(sep)`"
 msgstr "`split(sep)` (лекция 4), `array.join(sep)`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:146
+#: site/lectures/08-strings-regex-dates.md:148
 msgid "Compare"
 msgstr "Сравняване"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:146
+#: site/lectures/08-strings-regex-dates.md:148
 msgid "`localeCompare(other)` (lecture 7), `===`"
 msgstr "`localeCompare(other)` (лекция 7), `===`"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:148
+#: site/lectures/08-strings-regex-dates.md:150
 msgid "Case and white space"
 msgstr "Малки и главни букви, празно пространство"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:150
+#: site/lectures/08-strings-regex-dates.md:152
+msgid "MDN: [String.prototype.toLowerCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase), [String.prototype.toUpperCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase), [String.prototype.trim()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:154
 msgid "Values typed by people or produced by different tools are not always written the same way. Normalise first, then compare:"
 msgstr "Стойностите, въведени от хора или създадени от различни инструменти, не винаги са записани по един и същ начин. Първо нормализирайте, после сравнявайте:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:163
+#: site/lectures/08-strings-regex-dates.md:167
 msgid "`JSON.stringify` is a good way to **see** a string: the quotes show where it starts and ends, and `\\n`, `\\t` become visible."
 msgstr "`JSON.stringify` е добър начин да **видите** string: кавичките показват къде започва и свършва, а `\\n`, `\\t` стават видими."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:166
+#: site/lectures/08-strings-regex-dates.md:170
 msgid "Searching"
 msgstr "Търсене"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:182
+#: site/lectures/08-strings-regex-dates.md:172
+msgid "MDN: [String.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes), [String.prototype.startsWith()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith), [String.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:188
 msgid "`includes`, `startsWith` and `endsWith` (ES2015) replace the older `indexOf(...) !== -1` and `indexOf(...) === 0` of existing rules:"
 msgstr "`includes`, `startsWith` и `endsWith` (ES2015) заменят по-старите `indexOf(...) !== -1` и `indexOf(...) === 0` в съществуващите правила:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:185
+#: site/lectures/08-strings-regex-dates.md:191
 msgid "Older"
 msgstr "По-старо"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:185
+#: site/lectures/08-strings-regex-dates.md:191
 msgid "Modern"
 msgstr "Модерно"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:191
+#: site/lectures/08-strings-regex-dates.md:197
 msgid "Cutting out a part: `slice` and `substring`"
 msgstr "Изрязване на част: `slice` и `substring`"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:193
+#: site/lectures/08-strings-regex-dates.md:199
+msgid "MDN: [String.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice), [String.prototype.substring()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:201
 msgid "`slice(start, end)` works like `slice` of arrays (lecture 4): from `start`, up to but **not including** `end`; negative positions count from the end."
 msgstr "`slice(start, end)` работи като `slice` на arrays (лекция 4): от `start` до, но **без** `end`; отрицателните позиции се броят от края."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:208
+#: site/lectures/08-strings-regex-dates.md:216
 msgid "Older code uses `substring` and `substr`:"
 msgstr "По-старият код използва `substring` и `substr`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:219
+#: site/lectures/08-strings-regex-dates.md:227
 msgid "Prefer `slice`. `substr` is deprecated: it still works, but do not use it in new code. `charAt(i)` is the older form of `s[i]`."
 msgstr "Предпочитайте `slice`. `substr` е остарял (deprecated): все още работи, но не го използвайте в нов код. `charAt(i)` е по-старата форма на `s[i]`."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:222
+#: site/lectures/08-strings-regex-dates.md:230
 msgid "Changing: `replace`, `replaceAll`, `padStart`, `repeat`"
 msgstr "Промяна: `replace`, `replaceAll`, `padStart`, `repeat`"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:238
+#: site/lectures/08-strings-regex-dates.md:232
+msgid "MDN: [String.prototype.replace()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace), [String.prototype.replaceAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replaceAll), [String.prototype.padStart()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:248
 msgid "`replaceAll` is ES2021 - check that your rule engine supports it. The older way to replace all matches is `split` + `join` (`\"a-b-c\".split(\"-\").join(\"+\")`) or a regular expression with the `g` flag (section 6)."
 msgstr "`replaceAll` е ES2021 - проверете дали вашият rule engine го поддържа. По-старият начин да се заменят всички съвпадения е `split` + `join` (`\"a-b-c\".split(\"-\").join(\"+\")`) или regular expression с флага `g` (раздел 6)."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:242
+#: site/lectures/08-strings-regex-dates.md:252
 msgid "An old example from the dates topic - the current time as `HH:MM:SS`, every part with two digits:"
 msgstr "Стар пример от темата за датите - текущото време като `HH:MM:SS`, всяка част с две цифри:"
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:255
+#: site/lectures/08-strings-regex-dates.md:265
 msgid "Strings in a rule: convert first"
 msgstr "Strings в правило: първо преобразувайте"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:256
+#: site/lectures/08-strings-regex-dates.md:266
 msgid "`doc.overview.model.trim()` throws a `TypeError` when `model` is missing or is a number. `String(x ?? \"\")` turns any value into a string first - the sample rule does this. The existing rules do the same with `String(x || \"\")`."
 msgstr "`doc.overview.model.trim()` хвърля `TypeError`, когато `model` липсва или е число. `String(x ?? \"\")` първо превръща всяка стойност в string - примерното правило прави точно това. Съществуващите правила правят същото със `String(x || \"\")`."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:261
+#: site/lectures/08-strings-regex-dates.md:271
 msgid "3. Primitive wrappers (advanced)"
 msgstr "3. Обвивки на примитивите (advanced)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:263
+#: site/lectures/08-strings-regex-dates.md:273
 msgid "A string is a **primitive** (lecture 2) - not an object. How can it have methods?"
 msgstr "String е **примитив** (лекция 2) - не обект. Как тогава може да има методи?"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:265
+#: site/lectures/08-strings-regex-dates.md:275
 msgid "JavaScript has three built-in objects for primitives: `String`, `Number` and `Boolean`. You can create such objects yourself - but you should not:"
 msgstr "JavaScript има три вградени обекта за примитивите: `String`, `Number` и `Boolean`. Можете сами да създавате такива обекти - но не бива:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:278
+#: site/lectures/08-strings-regex-dates.md:288
 msgid "When you use a primitive **like** an object - `\"ada\".toUpperCase()` - JavaScript wraps it for a moment in the matching object (*boxing*), calls the method, and throws the wrapper away:"
 msgstr "Когато използвате примитив **като** обект - `\"ada\".toUpperCase()` - JavaScript за момент го обвива в съответния обект (*boxing*), извиква метода и изхвърля обвивката:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:296
+#: site/lectures/08-strings-regex-dates.md:306
 msgid "**Best practice:** use the primitives, and let JavaScript wrap them when you call a method. Never `new String(...)`, `new Number(...)` or `new Boolean(...)`:"
 msgstr "**Добра практика:** използвайте примитивите и оставете JavaScript да ги обвие, когато извиквате метод. Никога `new String(...)`, `new Number(...)` или `new Boolean(...)`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:310
+#: site/lectures/08-strings-regex-dates.md:320
 msgid "`String(x)`, `Number(x)` and `Boolean(x)` **without** `new` are fine: they are conversions (lecture 2) and return primitives."
 msgstr "`String(x)`, `Number(x)` и `Boolean(x)` **без** `new` са наред: те са преобразувания (лекция 2) и връщат примитиви."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:313
+#: site/lectures/08-strings-regex-dates.md:323
 msgid "4. Characters and encodings"
 msgstr "4. Символи и кодировки"
 
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:325
+msgid "MDN: [UTF-16 characters, Unicode code points, and grapheme clusters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)"
+msgstr ""
+
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:315
+#: site/lectures/08-strings-regex-dates.md:327
 msgid "Every character is a number"
 msgstr "Всеки символ е число"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:317
+#: site/lectures/08-strings-regex-dates.md:329
 msgid "The computer stores text as numbers. Each character has a number, its **code point**:"
 msgstr "Компютърът съхранява текста като числа. Всеки символ има число - своя **code point**:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:327
+#: site/lectures/08-strings-regex-dates.md:339
 msgid "**ASCII** (1963) numbered 128 characters: English letters, digits, punctuation and control characters like the new line (10). Enough for English - not for other languages."
 msgstr "**ASCII** (1963) номерира 128 символа: английските букви, цифрите, препинателните знаци и управляващи символи като новия ред (10). Достатъчно за английски - но не и за други езици."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:330
+#: site/lectures/08-strings-regex-dates.md:342
 msgid "**Unicode** numbers the characters of **all** scripts: Latin, Cyrillic, Greek, Chinese, symbols, emoji - over 150,000 characters. The first 128 are the same as ASCII."
 msgstr "**Unicode** номерира символите на **всички** писмености: латиница, кирилица, гръцки, китайски, символи, emoji - над 150 000 символа. Първите 128 са същите като в ASCII."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:341
+#: site/lectures/08-strings-regex-dates.md:353
 msgid "UTF-8: characters as bytes in a file"
 msgstr "UTF-8: символите като байтове във файл"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:343
+#: site/lectures/08-strings-regex-dates.md:355
 msgid "A file stores **bytes** (numbers from 0 to 255). An **encoding** says how the code points become bytes. Today almost every file and every JSON document uses **UTF-8**:"
 msgstr "Файлът съхранява **байтове** (числа от 0 до 255). **Кодировката** (encoding) казва как code points стават байтове. Днес почти всеки файл и всеки JSON документ използват **UTF-8**:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:347
+#: site/lectures/08-strings-regex-dates.md:359
 msgid "ASCII characters take **1** byte - an English text in UTF-8 is the same as in ASCII;"
 msgstr "ASCII символите заемат **1** байт - английски текст в UTF-8 е същият като в ASCII;"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:349
+#: site/lectures/08-strings-regex-dates.md:361
 msgid "Cyrillic, Greek and similar letters take **2** bytes;"
 msgstr "кирилските, гръцките и подобни букви заемат **2** байта;"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:350
+#: site/lectures/08-strings-regex-dates.md:362
 msgid "most emoji take **4**."
 msgstr "повечето emoji заемат **4**."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:360
+#: site/lectures/08-strings-regex-dates.md:372
 msgid "Before UTF-8, every language had its own one-byte encoding - for example **Windows-1251** for Cyrillic. A file written in one encoding and read in another shows garbage (*mojibake*). `TextDecoder` reads bytes in a given encoding:"
 msgstr "Преди UTF-8 всеки език имаше собствена еднобайтова кодировка - например **Windows-1251** за кирилица. Файл, записан в една кодировка и прочетен в друга, показва безсмислици (*mojibake*). `TextDecoder` чете байтове в зададена кодировка:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:371
+#: site/lectures/08-strings-regex-dates.md:383
 msgid "If a report or an export ever shows such garbage, the question is always: in which encoding was it written, and in which was it read?"
 msgstr "Ако отчет или експорт някога покаже такива безсмислици, въпросът винаги е: в каква кодировка е записан и в каква е прочетен?"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:374
+#: site/lectures/08-strings-regex-dates.md:386
 msgid "`length` counts code units, not characters"
 msgstr "`length` брои code units, не символи"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:376
+#: site/lectures/08-strings-regex-dates.md:388
 msgid "JavaScript strings use 16-bit **code units** (UTF-16). Most characters take one; emoji and some rare characters take **two**. `length` counts code units:"
 msgstr "Strings в JavaScript използват 16-битови **code units** (UTF-16). Повечето символи заемат един; emoji и някои редки символи заемат **два**. `length` брои code units:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:391
+#: site/lectures/08-strings-regex-dates.md:403
 msgid "For report data - ids, versions, states - this rarely matters: they are ASCII. It matters for names and free text."
 msgstr "За данните в отчетите - id-та, версии, състояния - това рядко има значение: те са ASCII. Има значение за имена и свободен текст."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:394
+#: site/lectures/08-strings-regex-dates.md:406
 msgid "Line endings"
 msgstr "Край на реда"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:396
+#: site/lectures/08-strings-regex-dates.md:408
 msgid "A new line is not the same character everywhere:"
 msgstr "Новият ред не е един и същ символ навсякъде:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:398
+#: site/lectures/08-strings-regex-dates.md:410
 msgid "System"
 msgstr "Система"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:398
+#: site/lectures/08-strings-regex-dates.md:410
 msgid "Line ending"
 msgstr "Край на реда"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:398
+#: site/lectures/08-strings-regex-dates.md:410
 msgid "In a string"
 msgstr "В string"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:400
+#: site/lectures/08-strings-regex-dates.md:412
 msgid "Linux, macOS"
 msgstr "Linux, macOS"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:400
+#: site/lectures/08-strings-regex-dates.md:412
 msgid "LF (line feed)"
 msgstr "LF (line feed, нов ред)"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:401
+#: site/lectures/08-strings-regex-dates.md:413
 msgid "Windows"
 msgstr "Windows"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:401
+#: site/lectures/08-strings-regex-dates.md:413
 msgid "CR LF (carriage return + line feed)"
 msgstr "CR LF (carriage return + line feed, връщане на каретката + нов ред)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:403
+#: site/lectures/08-strings-regex-dates.md:415
 msgid "A text that comes from Windows, split at `\"\\n\"`, keeps an invisible `\"\\r\"` at the end of each line - and `\"normal\\r\" === \"normal\"` is `false`:"
 msgstr "Текст, дошъл от Windows и разделен при `\"\\n\"`, запазва невидимо `\"\\r\"` в края на всеки ред - а `\"normal\\r\" === \"normal\"` е `false`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:416
+#: site/lectures/08-strings-regex-dates.md:428
 msgid "`/\\r?\\n/` is a regular expression: \"an optional `\\r`, then `\\n`\". Section 5 starts with them."
 msgstr "`/\\r?\\n/` е regular expression: \"незадължително `\\r`, после `\\n`\". Раздел 5 започва с тях."
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:419
+#: site/lectures/08-strings-regex-dates.md:431
 msgid "Byte order mark"
 msgstr "Byte order mark"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:420
+#: site/lectures/08-strings-regex-dates.md:432
 msgid "Some Windows tools put an invisible character, `\"\\uFEFF\"` (the BOM, *byte order mark*), at the start of a UTF-8 file. `JSON.parse` fails on it. Lecture 9 reads files - and removes it: `text.replace(/^\\uFEFF/, \"\")`."
 msgstr "Някои инструменти под Windows слагат невидим символ, `\"\\uFEFF\"` (BOM, *byte order mark*), в началото на UTF-8 файл. `JSON.parse` се проваля на него. Лекция 9 чете файлове - и го маха: `text.replace(/^\\uFEFF/, \"\")`."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:425
+#: site/lectures/08-strings-regex-dates.md:437
 msgid "5. Regular expressions: patterns for text"
 msgstr "5. Regular expressions: шаблони за текст"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:427
+#: site/lectures/08-strings-regex-dates.md:439
+msgid "MDN: [Regular expressions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:441
 msgid "A **regular expression** (regex, *regexp*) describes a **pattern** of text: \"four digits\", \"a word, then `=`, then digits\", \"starts with `XR-`, ignoring the case\". With a pattern you can **test** a string, **find** parts of it, or **replace** them."
 msgstr "**Regular expression** (regex, *regexp*) описва **шаблон** на текст: \"четири цифри\", \"дума, после `=`, после цифри\", \"започва с `XR-`, без значение малки или главни букви\". С шаблон можете да **проверите** string, да **намерите** части от него или да ги **замените**."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:431
+#: site/lectures/08-strings-regex-dates.md:445
 msgid "They appear in many existing rules:"
 msgstr "Срещат се в много съществуващи правила:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:441
+#: site/lectures/08-strings-regex-dates.md:455
 msgid "By the end of this section and the next, you can read every one of these lines."
 msgstr "До края на този и следващия раздел ще можете да прочетете всеки от тези редове."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:443
+#: site/lectures/08-strings-regex-dates.md:457
 msgid "Writing a pattern"
 msgstr "Писане на шаблон"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:445
+#: site/lectures/08-strings-regex-dates.md:459
 msgid "A pattern is written between two slashes - a **regex literal** - optionally followed by **flags**:"
 msgstr "Шаблонът се пише между две наклонени черти - **regex литерал** - и по желание е последван от **флагове**:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:456
+#: site/lectures/08-strings-regex-dates.md:470
 msgid "`re.test(str)` answers `true` or `false`: does the string contain the pattern?"
 msgstr "`re.test(str)` отговаря с `true` или `false`: съдържа ли string-ът шаблона?"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:458
+#: site/lectures/08-strings-regex-dates.md:472
 msgid "A pattern can also be built from a string with `new RegExp(text, flags)` - when it is not known in advance. In a string, a backslash must be written twice:"
 msgstr "Шаблон може да се изгради и от string с `new RegExp(text, flags)` - когато не е известен предварително. В string обратната наклонена черта трябва да се пише два пъти:"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:467
+#: site/lectures/08-strings-regex-dates.md:481
 msgid "The building blocks"
 msgstr "Градивните елементи"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:469
+#: site/lectures/08-strings-regex-dates.md:483
+msgid "MDN: [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:485
 msgid "**Characters.** Letters and digits match themselves. These have a special meaning and must be escaped with `\\` to match literally: `. * + ? ^ $ { } ( ) | [ ] \\ /`."
 msgstr "**Символи.** Буквите и цифрите съвпадат сами със себе си. Тези имат специално значение и трябва да се escape-нат с `\\`, за да съвпаднат буквално: `. * + ? ^ $ { } ( ) | [ ] \\ /`."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:478
+#: site/lectures/08-strings-regex-dates.md:494
 msgid "**Character classes** - one character out of a set:"
 msgstr "**Класове символи** - един символ от множество:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:480 site/lectures/08-strings-regex-dates.md:493 site/lectures/08-strings-regex-dates.md:504 site/lectures/08-strings-regex-dates.md:694
+#: site/lectures/08-strings-regex-dates.md:496 site/lectures/08-strings-regex-dates.md:509 site/lectures/08-strings-regex-dates.md:520 site/lectures/08-strings-regex-dates.md:718
 msgid "Pattern"
 msgstr "Шаблон"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:480
+#: site/lectures/08-strings-regex-dates.md:496
 msgid "Matches one..."
 msgstr "Съвпада с един..."
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:482
+#: site/lectures/08-strings-regex-dates.md:498
 msgid "`a`, `b` or `c`"
 msgstr "`a`, `b` или `c`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:483
+#: site/lectures/08-strings-regex-dates.md:499
 msgid "character in a range"
 msgstr "символ в диапазон"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:484
+#: site/lectures/08-strings-regex-dates.md:500
 msgid "character that is **not** in the set"
 msgstr "символ, който **не** е в множеството"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:485
+#: site/lectures/08-strings-regex-dates.md:501
 msgid "digit - the same as `[0-9]`"
 msgstr "цифра - същото като `[0-9]`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:486
+#: site/lectures/08-strings-regex-dates.md:502
 msgid "\"word\" character: `[A-Za-z0-9_]`"
 msgstr "символ \"от дума\": `[A-Za-z0-9_]`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:487
+#: site/lectures/08-strings-regex-dates.md:503
 msgid "white space: space, tab, new line, `\\r`"
 msgstr "празно пространство: интервал, табулация, нов ред, `\\r`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:488
+#: site/lectures/08-strings-regex-dates.md:504
 msgid "the opposite of `\\d`, `\\w`, `\\s`"
 msgstr "обратното на `\\d`, `\\w`, `\\s`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:489
+#: site/lectures/08-strings-regex-dates.md:505
 msgid "any character except a new line"
 msgstr "всеки символ освен нов ред"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:491
+#: site/lectures/08-strings-regex-dates.md:507
 msgid "**Quantifiers** - how many times the thing before them may repeat:"
 msgstr "**Квантификатори** - колко пъти може да се повтори това преди тях:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:493 site/lectures/08-strings-regex-dates.md:504
+#: site/lectures/08-strings-regex-dates.md:509 site/lectures/08-strings-regex-dates.md:520
 msgid "Means"
 msgstr "Означава"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:495
+#: site/lectures/08-strings-regex-dates.md:511
 msgid "0 or more"
 msgstr "0 или повече"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:496
+#: site/lectures/08-strings-regex-dates.md:512
 msgid "1 or more"
 msgstr "1 или повече"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:497
+#: site/lectures/08-strings-regex-dates.md:513
 msgid "0 or 1 (optional)"
 msgstr "0 или 1 (незадължително)"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:498
+#: site/lectures/08-strings-regex-dates.md:514
 msgid "exactly 4"
 msgstr "точно 4"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:499
+#: site/lectures/08-strings-regex-dates.md:515
 msgid "2 to 4"
 msgstr "от 2 до 4"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:500
+#: site/lectures/08-strings-regex-dates.md:516
 msgid "2 or more"
 msgstr "2 или повече"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:502
+#: site/lectures/08-strings-regex-dates.md:518
 msgid "**Anchors** - positions, not characters:"
 msgstr "**Котви** (anchors) - позиции, а не символи:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:506
+#: site/lectures/08-strings-regex-dates.md:522
 msgid "the start of the string"
 msgstr "началото на string-а"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:507
+#: site/lectures/08-strings-regex-dates.md:523
 msgid "the end of the string"
 msgstr "краят на string-а"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:508
+#: site/lectures/08-strings-regex-dates.md:524
 msgid "a word boundary (between `\\w` and not `\\w`)"
 msgstr "граница на дума (между `\\w` и не-`\\w`)"
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:520
+#: site/lectures/08-strings-regex-dates.md:536
 msgid "`^` and `$` - use them for \"is it exactly this?\""
 msgstr "`^` и `$` - използвайте ги за \"точно това ли е?\""
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:521
+#: site/lectures/08-strings-regex-dates.md:537
 msgid "Without anchors, a pattern matches **anywhere** in the string: `/\\d{4}/` is true for `\"x12345y\"`. For validation - \"is this a four-digit type?\" - write `^...$`."
 msgstr "Без котви шаблонът съвпада **където и да е** в string-а: `/\\d{4}/` е true за `\"x12345y\"`. За валидиране - \"това четирицифрен тип ли е?\" - пишете `^...$`."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:525
+#: site/lectures/08-strings-regex-dates.md:541
 msgid "**Alternatives** with `|`, and **groups** with `( )`:"
 msgstr "**Алтернативи** с `|` и **групи** с `( )`:"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:534
+#: site/lectures/08-strings-regex-dates.md:550
 msgid "Greedy and lazy"
 msgstr "Лакоми и мързеливи (greedy и lazy)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:536
+#: site/lectures/08-strings-regex-dates.md:552
 msgid "`*` and `+` are **greedy**: they take as much as they can. Add `?` to make them **lazy** - as little as possible:"
 msgstr "`*` и `+` са **лакоми** (greedy): вземат колкото могат повече. Добавете `?`, за да станат **мързеливи** (lazy) - колкото може по-малко:"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:545
+#: site/lectures/08-strings-regex-dates.md:561
 msgid "Try patterns online"
 msgstr "Изпробвайте шаблони онлайн"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:547
+#: site/lectures/08-strings-regex-dates.md:563
 msgid "Regular expressions are easier to read with a tool: [regex101.com](https://regex101.com/) (choose the *ECMAScript (JavaScript)* flavour) explains a pattern part by part and shows the matches as you type. Paste the patterns of existing rules there."
 msgstr "Regular expressions се четат по-лесно с инструмент: [regex101.com](https://regex101.com/) (изберете вариант *ECMAScript (JavaScript)*) обяснява шаблона част по част и показва съвпаденията, докато пишете. Поставете там шаблоните от съществуващите правила."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:552
+#: site/lectures/08-strings-regex-dates.md:568
 msgid "6. Groups, flags and the regex methods"
 msgstr "6. Групи, флагове и методите за regex"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:554
+#: site/lectures/08-strings-regex-dates.md:570
 msgid "Capture groups: `match`"
 msgstr "Capture groups: `match`"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:556
+#: site/lectures/08-strings-regex-dates.md:572
+msgid "MDN: [String.prototype.match()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:574
 msgid "`str.match(re)` returns `null` when there is no match, or an **array**: the whole match at index 0, then the text of every **group** `( )`:"
 msgstr "`str.match(re)` връща `null`, когато няма съвпадение, или **array**: цялото съвпадение на индекс 0, после текста на всяка **група** `( )`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:571
+#: site/lectures/08-strings-regex-dates.md:589
 msgid "Always check for `null` before you read the groups - `null[1]` is a `TypeError`:"
 msgstr "Винаги проверявайте за `null`, преди да четете групите - `null[1]` е `TypeError`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:581
+#: site/lectures/08-strings-regex-dates.md:599
 msgid "Destructuring (lecture 6) takes the groups into variables:"
 msgstr "Destructuring (лекция 6) взема групите във variables:"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:589
+#: site/lectures/08-strings-regex-dates.md:607
 msgid "Named groups (ES2018)"
 msgstr "Именувани групи (ES2018)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:591
+#: site/lectures/08-strings-regex-dates.md:609
 msgid "`(?<name>...)` gives a group a name; the match has them in `.groups`:"
 msgstr "`(?<name>...)` дава име на група; съвпадението ги съдържа в `.groups`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:600
+#: site/lectures/08-strings-regex-dates.md:618
 msgid "`(?:...)` is a group that does **not** capture - only for grouping, as in `/\\d+(?:\\.\\d+)+/` of the sample rule: \"digits, then (a dot and digits) once or more\"."
 msgstr "`(?:...)` е група, която **не** запазва (capture) - само за групиране, като в `/\\d+(?:\\.\\d+)+/` от примерното правило: \"цифри, после (точка и цифри) веднъж или повече пъти\"."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:603 site/lectures/08-strings-regex-dates.md:1300
+#: site/lectures/08-strings-regex-dates.md:621 site/lectures/08-strings-regex-dates.md:1334
 msgid "Flags"
 msgstr "Флагове"
 
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:623
+msgid "MDN: [Advanced searching with flags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags)"
+msgstr ""
+
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:605
+#: site/lectures/08-strings-regex-dates.md:625
 msgid "Flag"
 msgstr "Флаг"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:605
+#: site/lectures/08-strings-regex-dates.md:625
 msgid "Meaning"
 msgstr "Значение"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:607
+#: site/lectures/08-strings-regex-dates.md:627
 msgid "global: find **all** matches, not only the first"
 msgstr "global: намира **всички** съвпадения, не само първото"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:608
+#: site/lectures/08-strings-regex-dates.md:628
 msgid "ignore case: `/xr/i` matches `XR`, `xr`, `Xr`"
 msgstr "ignore case: `/xr/i` съвпада с `XR`, `xr`, `Xr`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:609
+#: site/lectures/08-strings-regex-dates.md:629
 msgid "multiline: `^` and `$` match at every line, not only at the start and end of the string"
 msgstr "multiline: `^` и `$` съвпадат на всеки ред, а не само в началото и края на string-а"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:610
+#: site/lectures/08-strings-regex-dates.md:630
 msgid "\"dotAll\": `.` also matches a new line (ES2018)"
 msgstr "\"dotAll\": `.` съвпада и с нов ред (ES2018)"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:611
+#: site/lectures/08-strings-regex-dates.md:631
 msgid "Unicode mode: correct handling of emoji and `\\p{...}` classes"
 msgstr "Unicode режим: правилна обработка на emoji и на класовете `\\p{...}`"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:622
+#: site/lectures/08-strings-regex-dates.md:642
 msgid "All matches with their groups: `matchAll` (ES2020)"
 msgstr "Всички съвпадения с техните групи: `matchAll` (ES2020)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:624
+#: site/lectures/08-strings-regex-dates.md:644
+msgid "MDN: [String.prototype.matchAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:646
 msgid "`match` with `g` gives only the matched texts. `matchAll` gives every match **with** its groups (the pattern must have the `g` flag):"
 msgstr "`match` с `g` дава само текстовете на съвпаденията. `matchAll` дава всяко съвпадение **с** групите му (шаблонът трябва да има флага `g`):"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:639
+#: site/lectures/08-strings-regex-dates.md:661
 msgid "Older code uses `re.exec(str)` in a `while` loop for the same - it returns one match per call and moves on, when the pattern has the `g` flag."
 msgstr "По-старият код използва `re.exec(str)` в `while` loop за същото - той връща по едно съвпадение при всяко извикване и продължава нататък, когато шаблонът има флага `g`."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:642
+#: site/lectures/08-strings-regex-dates.md:664
 msgid "`replace` with a pattern"
 msgstr "`replace` с шаблон"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:660
+#: site/lectures/08-strings-regex-dates.md:682
 msgid "`replaceAll` with a pattern needs the `g` flag - without it, it throws a `TypeError`."
 msgstr "`replaceAll` с шаблон изисква флага `g` - без него хвърля `TypeError`."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:663
+#: site/lectures/08-strings-regex-dates.md:685
 msgid "`split` with a pattern"
 msgstr "`split` с шаблон"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:671
+#: site/lectures/08-strings-regex-dates.md:693
 msgid "A trap: `g` and `test` remember where they stopped"
 msgstr "Капан: `g` и `test` помнят докъде са стигнали"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:673
+#: site/lectures/08-strings-regex-dates.md:695
+msgid "MDN: [RegExp.prototype.test()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test), [RegExp: lastIndex](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastIndex)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:697
 msgid "A pattern with the `g` flag has a `lastIndex`: `test` and `exec` start searching from there and move it on. The same pattern object, used again on another string, can then **miss**:"
 msgstr "Шаблон с флага `g` има `lastIndex`: `test` и `exec` започват търсенето оттам и го преместват напред. Същият обект-шаблон, използван отново върху друг string, може тогава да **пропусне**:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:684
+#: site/lectures/08-strings-regex-dates.md:708
 msgid "Rule guidelines ask for `const` globals - a `const` regex with `g`, used with `test` in a helper, gives a different answer every second call. **Do not use the `g` flag with `test`**; use `g` only with `match`, `matchAll`, `replace` and `replaceAll`."
 msgstr "Правилата за писане на rules изискват глобалните variables да са `const` - `const` regex с `g`, използван с `test` в helper функция, дава различен отговор при всяко второ извикване. **Не използвайте флага `g` с `test`**; използвайте `g` само с `match`, `matchAll`, `replace` и `replaceAll`."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:689
+#: site/lectures/08-strings-regex-dates.md:713
 msgid "7. Reading the patterns in existing rules"
 msgstr "7. Четене на шаблоните в съществуващите правила"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:691
+#: site/lectures/08-strings-regex-dates.md:715
 msgid "Read a pattern from left to right, one building block at a time. The patterns from the start of section 5:"
 msgstr "Четете шаблона отляво надясно, по един градивен елемент. Шаблоните от началото на раздел 5:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:694
+#: site/lectures/08-strings-regex-dates.md:718
 msgid "Read it as"
 msgstr "Четете го като"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:694
+#: site/lectures/08-strings-regex-dates.md:718
 msgid "Matches"
 msgstr "Съвпада с"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:696
+#: site/lectures/08-strings-regex-dates.md:720
 msgid "start, exactly 4 digits, end"
 msgstr "начало, точно 4 цифри, край"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:696
+#: site/lectures/08-strings-regex-dates.md:720
 msgid "`\"2607\"`, not `\"2607X25\"`"
 msgstr "`\"2607\"`, но не `\"2607X25\"`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:697
+#: site/lectures/08-strings-regex-dates.md:721
 msgid "start, digits (group 1), `_`, an optional `v`, one or more of anything (group 2), end"
 msgstr "начало, цифри (група 1), `_`, незадължително `v`, един или повече произволни символа (група 2), край"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:698
+#: site/lectures/08-strings-regex-dates.md:722
 msgid "every character that is not A-Z or 0-9 (with `replace`: remove them)"
 msgstr "всеки символ, който не е A-Z или 0-9 (с `replace`: махнете ги)"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:698
+#: site/lectures/08-strings-regex-dates.md:722
 msgid "the `-`, `/` and spaces in `\"LAB-DEV 01/A\"`"
 msgstr "`-`, `/` и интервалите в `\"LAB-DEV 01/A\"`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:699
+#: site/lectures/08-strings-regex-dates.md:723
 msgid "the whole string is one of three words, any case"
 msgstr "целият string е една от три думи, с малки или главни букви"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:699
+#: site/lectures/08-strings-regex-dates.md:723
 msgid "`\"Unknown\"`, not `\"unknown device\"`"
 msgstr "`\"Unknown\"`, но не `\"unknown device\"`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:700
+#: site/lectures/08-strings-regex-dates.md:724
 msgid "digits, then (a dot and digits) zero or more times"
 msgstr "цифри, после (точка и цифри) нула или повече пъти"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:700
+#: site/lectures/08-strings-regex-dates.md:724
 msgid "`\"2.13.1\"` in `\"Platform 2.13.1 GA\"`"
 msgstr "`\"2.13.1\"` в `\"Platform 2.13.1 GA\"`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:701
+#: site/lectures/08-strings-regex-dates.md:725
 msgid "start, four groups of digits separated by dots"
 msgstr "начало, четири групи цифри, разделени с точки"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:701
+#: site/lectures/08-strings-regex-dates.md:725
 msgid "`\"4.2.1.7\"` at the start of `\"4.2.1.7 (build ...)\"`"
 msgstr "`\"4.2.1.7\"` в началото на `\"4.2.1.7 (build ...)\"`"
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:718
+#: site/lectures/08-strings-regex-dates.md:742
 msgid "Do not overdo it"
 msgstr "Не прекалявайте"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:719
+#: site/lectures/08-strings-regex-dates.md:743
 msgid "A pattern that nobody can read is a bug waiting to happen. For simple questions use string methods - `startsWith(\"XR-2\")` is clearer than `/^XR-2/`. Use a regex when the **shape** of the text matters (digits, separators, optional parts), and add a comment with an example: `// \"347_v2.12\" -> number 347, version 2.12`."
 msgstr "Шаблон, който никой не може да прочете, е бъг, който чака своя ред. За прости въпроси използвайте методите на strings - `startsWith(\"XR-2\")` е по-ясно от `/^XR-2/`. Използвайте regex, когато **формата** на текста има значение (цифри, разделители, незадължителни части), и добавете коментар с пример: `// \"347_v2.12\" -> number 347, version 2.12`."
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:725
+#: site/lectures/08-strings-regex-dates.md:749
 msgid "`RegExp.escape` (ES2025)"
 msgstr "`RegExp.escape` (ES2025)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:726
+#: site/lectures/08-strings-regex-dates.md:750
 msgid "To build a pattern from text that may contain special characters (a model like `\"XR-2.0\"`), `RegExp.escape(text)` escapes them. It is very new - check that your rule engine supports it; older code escapes with `text.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\")`."
 msgstr "За да изградите шаблон от текст, който може да съдържа специални символи (модел като `\"XR-2.0\"`), `RegExp.escape(text)` ги escape-ва. Той е съвсем нов - проверете дали вашият rule engine го поддържа; по-старият код escape-ва с `text.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\")`."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:732
+#: site/lectures/08-strings-regex-dates.md:756
 msgid "8. Versions in many formats"
 msgstr "8. Версии в много формати"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:734
+#: site/lectures/08-strings-regex-dates.md:758
 msgid "Lecture 5 wrote `compareVersions` for dotted versions. Real reports send versions in many more shapes:"
 msgstr "Лекция 5 написа `compareVersions` за версии с точки. Истинските отчети изпращат версии в много повече форми:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:737
+#: site/lectures/08-strings-regex-dates.md:761
 msgid "Format"
 msgstr "Формат"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:737 site/lectures/08-strings-regex-dates.md:855
+#: site/lectures/08-strings-regex-dates.md:761 site/lectures/08-strings-regex-dates.md:883
 msgid "Example"
 msgstr "Пример"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:737
+#: site/lectures/08-strings-regex-dates.md:761
 msgid "What it means"
 msgstr "Какво означава"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:739
+#: site/lectures/08-strings-regex-dates.md:763
 msgid "dotted"
 msgstr "с точки"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:739
+#: site/lectures/08-strings-regex-dates.md:763
 msgid "four numbers"
 msgstr "четири числа"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:740
+#: site/lectures/08-strings-regex-dates.md:764
 msgid "with a build"
 msgstr "с build"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:740
+#: site/lectures/08-strings-regex-dates.md:764
 msgid "the version is the first word"
 msgstr "версията е първата дума"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:741
+#: site/lectures/08-strings-regex-dates.md:765
 msgid "with a suffix"
 msgstr "със суфикс"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:741
+#: site/lectures/08-strings-regex-dates.md:765
 msgid "a build letter and number after `-`"
 msgstr "буква и номер на build след `-`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:742
+#: site/lectures/08-strings-regex-dates.md:766
 msgid "with a prefix"
 msgstr "с префикс"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:742
+#: site/lectures/08-strings-regex-dates.md:766
 msgid "text before the numbers"
 msgstr "текст преди числата"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:743
+#: site/lectures/08-strings-regex-dates.md:767
 msgid "packed"
 msgstr "пакетиран"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:743
+#: site/lectures/08-strings-regex-dates.md:767
 msgid "the digits of 4.2.1.07, without dots"
 msgstr "цифрите на 4.2.1.07, без точки"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:744
+#: site/lectures/08-strings-regex-dates.md:768
 msgid "product code"
 msgstr "код на продукт"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:744
+#: site/lectures/08-strings-regex-dates.md:768
 msgid "product + version 4.2.0 + build 117"
 msgstr "продукт + версия 4.2.0 + build 117"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:745
+#: site/lectures/08-strings-regex-dates.md:769
 msgid "short"
 msgstr "кратък"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:745
+#: site/lectures/08-strings-regex-dates.md:769
 msgid "major.minor only"
 msgstr "само major.minor"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:747
+#: site/lectures/08-strings-regex-dates.md:771
 msgid "One shared helper turns them into **one** format, and then `compareVersions` works for all:"
 msgstr "Една обща helper функция ги превръща в **един** формат и тогава `compareVersions` работи за всички:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:768
+#: site/lectures/08-strings-regex-dates.md:792
 msgid "The suffix (`-B00`) is dropped. When the suffix matters - is `4.2.1.7-C00` newer than `4.2.1.7-B00`? - compare it as a second step:"
 msgstr "Суфиксът (`-B00`) отпада. Когато суфиксът има значение - по-нова ли е `4.2.1.7-C00` от `4.2.1.7-B00`? - сравнете го като втора стъпка:"
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:781
+#: site/lectures/08-strings-regex-dates.md:805
 msgid "One helper, in the library"
 msgstr "Една helper функция, в библиотеката"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:782
+#: site/lectures/08-strings-regex-dates.md:806
 msgid "The existing rules re-implement version parsing again and again - with small differences, and small bugs. `normalizeVersion` and `compareVersions` belong in your **library**: write them once, test them on every format your product sends (lecture 10), and every rule gets the fix."
 msgstr "Съществуващите правила реализират разчитането на версии отново и отново - с малки разлики и с малки бъгове. Мястото на `normalizeVersion` и `compareVersions` е във вашата **библиотека**: напишете ги веднъж, тествайте ги с всеки формат, който изпраща продуктът ви (лекция 10), и всяко правило получава поправката."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:788
+#: site/lectures/08-strings-regex-dates.md:812
 msgid "9. Numbers and `Math`"
 msgstr "9. Числа и `Math`"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:790
+#: site/lectures/08-strings-regex-dates.md:814
 msgid "From text to a number - again"
 msgstr "От текст към число - отново"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:792
+#: site/lectures/08-strings-regex-dates.md:816
 msgid "Lecture 2 introduced `Number`, `parseInt` and `parseFloat`. Report data adds a few more cases:"
 msgstr "Лекция 2 въведе `Number`, `parseInt` и `parseFloat`. Данните в отчетите добавят още няколко случая:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:809
+#: site/lectures/08-strings-regex-dates.md:833
 msgid "Check the result before you calculate:"
 msgstr "Проверете резултата, преди да смятате:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:826
+#: site/lectures/08-strings-regex-dates.md:850
 msgid "The global `isNaN` converts its argument first (`isNaN(\"abc\")` is `true`); `Number.isNaN` does not. Prefer the `Number.` versions."
 msgstr "Глобалният `isNaN` първо преобразува аргумента си (`isNaN(\"abc\")` е `true`); `Number.isNaN` не го прави. Предпочитайте версиите с `Number.`."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:829
+#: site/lectures/08-strings-regex-dates.md:853
 msgid "Rounding and formatting"
 msgstr "Закръгляне и форматиране"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:847
+#: site/lectures/08-strings-regex-dates.md:855
+msgid "MDN: [Number.prototype.toFixed()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed), [Math.round()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:873
 msgid "`toFixed` returns a **string** - fine for an alert text, wrong for further calculation."
 msgstr "`toFixed` връща **string** - подходящо за текст на alert, неподходящо за по-нататъшни сметки."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:852
+#: site/lectures/08-strings-regex-dates.md:878
+msgid "MDN: [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:880
 msgid "`Math` is a built-in object with mathematical functions and constants - you call them directly, without `new`:"
 msgstr "`Math` е вграден обект с математически функции и константи - извиквате ги директно, без `new`:"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:855
+#: site/lectures/08-strings-regex-dates.md:883
 msgid "Function"
 msgstr "Функция"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:855
+#: site/lectures/08-strings-regex-dates.md:883
 msgid "Result"
 msgstr "Резултат"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:857
+#: site/lectures/08-strings-regex-dates.md:885
 msgid "`5` - to the nearest whole number"
 msgstr "`5` - до най-близкото цяло число"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:858
+#: site/lectures/08-strings-regex-dates.md:886
 msgid "`4` - down"
 msgstr "`4` - надолу"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:859
+#: site/lectures/08-strings-regex-dates.md:887
 msgid "`5` - up"
 msgstr "`5` - нагоре"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:860
+#: site/lectures/08-strings-regex-dates.md:888
 msgid "`-4` - drop the decimals"
 msgstr "`-4` - махат се десетичните знаци"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:861
+#: site/lectures/08-strings-regex-dates.md:889
 msgid "`3` - without the sign"
 msgstr "`3` - без знака"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:865
+#: site/lectures/08-strings-regex-dates.md:893
 msgid "a number from 0 (included) to 1 (not included)"
 msgstr "число от 0 (включително) до 1 (без 1)"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:884
+#: site/lectures/08-strings-regex-dates.md:912
 msgid "Big numbers: ids are strings"
 msgstr "Големи числа: id-тата са strings"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:886
+#: site/lectures/08-strings-regex-dates.md:914
+msgid "MDN: [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:916
 msgid "A `number` holds whole numbers exactly only up to 2<sup>53</sup> - 1 (`Number.MAX_SAFE_INTEGER`, about 9 * 10<sup>15</sup>). A longer id in a JSON file is **rounded** when it is read as a number:"
 msgstr "`number` пази цели числа точно само до 2<sup>53</sup> - 1 (`Number.MAX_SAFE_INTEGER`, около 9 * 10<sup>15</sup>). По-дълго id в JSON файл се **закръгля**, когато се прочете като число:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:899
+#: site/lectures/08-strings-regex-dates.md:929
 msgid "Treat ids, serials and long codes as **strings** - even when they contain only digits. Never `Number(...)` them. (Millisecond timestamps like `1791770402000` are far below the limit - they are safe.)"
 msgstr "Третирайте id-та, серийни номера и дълги кодове като **strings** - дори когато съдържат само цифри. Никога не прилагайте `Number(...)` върху тях. (Времената в милисекунди като `1791770402000` са далеч под границата - те са безопасни.)"
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:903
+#: site/lectures/08-strings-regex-dates.md:933
 msgid "10. Dates"
 msgstr "10. Дати"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:905
+#: site/lectures/08-strings-regex-dates.md:935
+msgid "MDN: [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:937
 msgid "A `Date` is one moment in time, stored as the number of **milliseconds** since the start of 1970 (UTC) - the *EPOCH*. Everything else - year, month, hour, time zone - is calculated from that number."
 msgstr "`Date` е един момент във времето, съхранен като броя **милисекунди** от началото на 1970 г. (UTC) - *EPOCH*. Всичко останало - година, месец, час, часова зона - се изчислява от това число."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:916
+#: site/lectures/08-strings-regex-dates.md:948
 msgid "EPOCH seconds and milliseconds"
 msgstr "EPOCH в секунди и милисекунди"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:918
+#: site/lectures/08-strings-regex-dates.md:950
 msgid "Reports send timestamps as numbers - or as strings of digits. Some count **seconds**, some **milliseconds**:"
 msgstr "Отчетите изпращат времена като числа - или като strings от цифри. Някои броят **секунди**, други - **милисекунди**:"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:938
+#: site/lectures/08-strings-regex-dates.md:970
 msgid "Creating a date"
 msgstr "Създаване на дата"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:950
+#: site/lectures/08-strings-regex-dates.md:982
 msgid "Reading the parts"
 msgstr "Четене на частите"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:952
+#: site/lectures/08-strings-regex-dates.md:984
 msgid "The `getUTC...` methods give the parts in UTC; the methods without `UTC` give them in the **local** time zone of the computer that runs the code:"
 msgstr "Методите `getUTC...` дават частите в UTC; методите без `UTC` ги дават в **местната** часова зона на компютъра, на който се изпълнява кодът:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:966
+#: site/lectures/08-strings-regex-dates.md:998
 msgid "`getMonth()` from 0 to 11 and `getDay()` from 0 (Sunday) to 6 are a classic source of bugs: `getMonth() + 1` for a month number."
 msgstr "`getMonth()` от 0 до 11 и `getDay()` от 0 (неделя) до 6 са класически източник на бъгове: `getMonth() + 1` за номер на месец."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:969
+#: site/lectures/08-strings-regex-dates.md:1001
 msgid "Time zones"
 msgstr "Часови зони"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:971
+#: site/lectures/08-strings-regex-dates.md:1003
 msgid "The same moment is a different clock time in Sofia, in London and in UTC. Servers and reports should use **UTC** (`Z` at the end of an ISO string); show local time only to people:"
 msgstr "Един и същ момент е различен час в София, в Лондон и в UTC. Сървърите и отчетите трябва да използват **UTC** (`Z` в края на ISO string); показвайте местно време само на хора:"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:983
+#: site/lectures/08-strings-regex-dates.md:1015
 msgid "Parsing the date formats of real reports"
 msgstr "Разчитане на форматите на датите в истински отчети"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:985
+#: site/lectures/08-strings-regex-dates.md:1017
+msgid "MDN: [Date time string format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format), [Date.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/08-strings-regex-dates.md:1019
 msgid "Only one string format is defined by the language: **ISO 8601** (`2026-10-12`, `2026-10-12T18:25:23Z`). Everything else is up to the engine - and the formats of real exports are not ISO:"
 msgstr "Езикът дефинира само един формат на string: **ISO 8601** (`2026-10-12`, `2026-10-12T18:25:23Z`). Всичко останало зависи от engine-а - а форматите на истинските експорти не са ISO:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1000
+#: site/lectures/08-strings-regex-dates.md:1034
 msgid "`\"12-10-2026\"` - is that 12 October (day-month-year, as in Europe) or 10 December (month-day-year, as in the USA)? V8 guesses month-day-year; other engines may refuse the string. **Never** let `new Date(text)` guess a non-ISO format. Read the parts with a regular expression, and build the date with `Date.UTC`:"
 msgstr "`\"12-10-2026\"` - това 12 октомври ли е (ден-месец-година, както в Европа) или 10 декември (месец-ден-година, както в САЩ)? V8 предполага месец-ден-година; други engines може да откажат string-а. **Никога** не оставяйте `new Date(text)` да гадае формат, който не е ISO. Прочетете частите с regular expression и изградете датата с `Date.UTC`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1027
+#: site/lectures/08-strings-regex-dates.md:1061
 msgid "(These helpers assume the times are UTC. If a format is in local time, the report must say which time zone - ask the people who produce the data.)"
 msgstr "(Тези helper функции приемат, че времената са в UTC. Ако форматът е в местно време, отчетът трябва да казва в коя часова зона - попитайте хората, които създават данните.)"
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:1030
+#: site/lectures/08-strings-regex-dates.md:1064
 msgid "Is it a valid date?"
 msgstr "Валидна ли е датата?"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1032
+#: site/lectures/08-strings-regex-dates.md:1066
 msgid "An invalid date does not throw - it is an \"Invalid Date\" whose time is `NaN`:"
 msgstr "Невалидната дата не хвърля грешка - тя е \"Invalid Date\", чието време е `NaN`:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1046
+#: site/lectures/08-strings-regex-dates.md:1080
 msgid "`bad.toISOString()` **does** throw a `RangeError` - check before you format."
 msgstr "`bad.toISOString()` **наистина** хвърля `RangeError` - проверете, преди да форматирате."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:1048
+#: site/lectures/08-strings-regex-dates.md:1082
 msgid "Comparing and subtracting"
 msgstr "Сравняване и изваждане"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1050
+#: site/lectures/08-strings-regex-dates.md:1084
 msgid "Two dates compare with `<` and `>`, and subtracting them gives **milliseconds**:"
 msgstr "Две дати се сравняват с `<` и `>`, а изваждането им дава **милисекунди**:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1070
+#: site/lectures/08-strings-regex-dates.md:1104
 msgid "An old example - the age of a person from the date of birth (careful: the birthday of this year may not have come yet):"
 msgstr "Стар пример - възрастта на човек от датата на раждане (внимание: рожденият ден тази година може още да не е дошъл):"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1085
+#: site/lectures/08-strings-regex-dates.md:1119
 msgid "And one more old example - timing code (lecture 7 used `console.time`):"
 msgstr "И още един стар пример - измерване на времето за изпълнение на код (лекция 7 използва `console.time`):"
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:1094
+#: site/lectures/08-strings-regex-dates.md:1128
 msgid "Temporal - the next date API"
 msgstr "Temporal - следващото API за дати"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1095
+#: site/lectures/08-strings-regex-dates.md:1129
 msgid "`Date` has many problems: months from 0, local time by default, unreliable parsing. **Temporal** is a new, much better date and time API that is arriving in JavaScript engines (2025 - 2026). It is not in Node.js 24 yet - for rules, use `Date` with the care shown here."
 msgstr "`Date` има много проблеми: месеците започват от 0, по подразбиране е местно време, разчитането е ненадеждно. **Temporal** е ново, много по-добро API за дати и часове, което идва в JavaScript engines (2025 - 2026). Още го няма в Node.js 24 - за правилата използвайте `Date` с показаното тук внимание."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1101
+#: site/lectures/08-strings-regex-dates.md:1135
 msgid "11. Reading existing rules"
 msgstr "11. Четене на съществуващи правила"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1103
+#: site/lectures/08-strings-regex-dates.md:1137
 msgid "First, run the rule from the start of the lecture:"
 msgstr "Първо изпълнете правилото от началото на лекцията:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1177
+#: site/lectures/08-strings-regex-dates.md:1211
 msgid "Here is a rule in an older style that does the same work - with `indexOf`, `substring`, `new Date(text)` and string comparisons:"
 msgstr "Ето правило в по-стар стил, което върши същата работа - с `indexOf`, `substring`, `new Date(text)` и сравнения на strings:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1231
+#: site/lectures/08-strings-regex-dates.md:1265
 msgid "**Check yourself:**"
 msgstr "**Проверете се:**"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1233
+#: site/lectures/08-strings-regex-dates.md:1267
 msgid "The two rules give different \"Report date\" values for the example document. Which is right, and what are the two bugs in the old line?"
 msgstr "Двете правила дават различни стойности на \"Report date\" за примерния документ. Коя е вярната и кои са двата бъга в стария ред?"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1235
+#: site/lectures/08-strings-regex-dates.md:1269
 msgid "`if (version >= \"4.2.2\") return;` - when does it give the wrong answer? Give two versions that are **newer** than 4.2.2 but still get an alert."
 msgstr "`if (version >= \"4.2.2\") return;` - кога дава грешен отговор? Дайте две версии, които са **по-нови** от 4.2.2, но все пак получават alert."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1237
+#: site/lectures/08-strings-regex-dates.md:1271
 msgid "The second report gives an alert in the modern rule, none in the old one. Find the two reasons. (Look at the model and at the firmware level.)"
 msgstr "Вторият отчет получава alert от модерното правило и никакъв от старото. Намерете двете причини. (Погледнете модела и firmware level.)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1239
+#: site/lectures/08-strings-regex-dates.md:1273
 msgid "`doc.status.epoch * 1000` works without `Number(...)`. Why? Would `doc.status.epoch + 1000` work too?"
 msgstr "`doc.status.epoch * 1000` работи без `Number(...)`. Защо? Би ли работило и `doc.status.epoch + 1000`?"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1241
+#: site/lectures/08-strings-regex-dates.md:1275
 msgid "`parseInt((reported - installed) / (1000 * 60 * 60 * 24))` and `Math.floor(... / 86_400_000)` - do they give the same result? When could `parseInt` of a number surprise you?"
 msgstr "`parseInt((reported - installed) / (1000 * 60 * 60 * 24))` и `Math.floor(... / 86_400_000)` - дават ли еднакъв резултат? Кога `parseInt` на число може да ви изненада?"
 
 #. box title
-#: site/lectures/08-strings-regex-dates.md:1245
+#: site/lectures/08-strings-regex-dates.md:1279
 msgid "Answer"
 msgstr "Отговор"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1246
+#: site/lectures/08-strings-regex-dates.md:1280
 msgid "The modern `\"2026-10-12\"` is right. The old line uses `getMonth()` (0-11: October is 9, so it writes `09`) without `+ 1`, and the day without `padStart` (a day below 10 would be `5`, not `05`). It also uses local time (`getMonth`, `getDate`, `getFullYear`) - near midnight, the date depends on where the rule runs. The modern rule uses `toISOString()`: UTC, always two digits."
 msgstr "Модерното `\"2026-10-12\"` е вярното. Старият ред използва `getMonth()` (0-11: октомври е 9, затова пише `09`) без `+ 1`, а деня - без `padStart` (ден под 10 би бил `5`, а не `05`). Освен това използва местно време (`getMonth`, `getDate`, `getFullYear`) - около полунощ датата зависи от това къде се изпълнява правилото. Модерното правило използва `toISOString()`: UTC, винаги с две цифри."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1251
+#: site/lectures/08-strings-regex-dates.md:1285
 msgid "Strings are compared character by character (lecture 3). `\"4.2.10\" >= \"4.2.2\"` is `false` (`\"1\"` < `\"2\"` at position 4), and `\"10.1.0\" >= \"4.2.2\"` is `false` too (`\"1\"` < `\"4\"` at position 0) - so both newer versions get an alert. Compare versions as numbers, part by part (`compareVersions`)."
 msgstr "Strings се сравняват символ по символ (лекция 3). `\"4.2.10\" >= \"4.2.2\"` е `false` (`\"1\"` < `\"2\"` на позиция 4), и `\"10.1.0\" >= \"4.2.2\"` също е `false` (`\"1\"` < `\"4\"` на позиция 0) - така и двете по-нови версии получават alert. Сравнявайте версиите като числа, част по част (`compareVersions`)."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1255
+#: site/lectures/08-strings-regex-dates.md:1289
 msgid "The model `\" xr-210\"` has a space: the old rule upper-cases but does not `trim`, so `\" XR-210\"` is not in the list - no alert. And `\"42107-C00\"` has no space: the old rule takes the whole string as the version and compares it as text with `\"4.2.2\"` (`\"42107-C00\" >= \"4.2.2\"`: `\"2\"` > `\".\"`, so `true` - it returns). `normalizeVersion` reads it as `4.2.1.7`."
 msgstr "Моделът `\" xr-210\"` има интервал: старото правило прави главни букви, но не прави `trim`, затова `\" XR-210\"` не е в списъка - няма alert. А `\"42107-C00\"` няма интервал: старото правило взема целия string като версия и го сравнява като текст с `\"4.2.2\"` (`\"42107-C00\" >= \"4.2.2\"`: `\"2\"` > `\".\"`, значи `true` - правилото приключва). `normalizeVersion` го разчита като `4.2.1.7`."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1260
+#: site/lectures/08-strings-regex-dates.md:1294
 msgid "`*` converts both sides to numbers (lecture 2), so `\"1791770402\" * 1000` is a number. `+` with a string **joins**: `\"1791770402\" + 1000` is `\"17917704021000\"` - a wrong date, by a factor of 10,000. Convert first, always."
 msgstr "`*` преобразува двете страни в числа (лекция 2), затова `\"1791770402\" * 1000` е число. `+` със string **съединява**: `\"1791770402\" + 1000` е `\"17917704021000\"` - грешна дата, сгрешена 10 000 пъти. Винаги първо преобразувайте."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1263
+#: site/lectures/08-strings-regex-dates.md:1297
 msgid "Here yes - both drop the decimals of a positive number. But `parseInt` first turns its argument into a **string**: for very small or very large numbers that string is `\"1e-7\"` or `\"1e+21\"`, and `parseInt` reads only the `1`. Use `Math.floor` (or `Math.trunc`) for numbers; `parseInt` is for strings."
 msgstr "Тук да - и двете махат десетичните знаци на положително число. Но `parseInt` първо превръща аргумента си в **string**: за много малки или много големи числа този string е `\"1e-7\"` или `\"1e+21\"` и `parseInt` прочита само `1`. Използвайте `Math.floor` (или `Math.trunc`) за числа; `parseInt` е за strings."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1269
+#: site/lectures/08-strings-regex-dates.md:1303
 msgid "12. Practice"
 msgstr "12. Упражнения"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1271
+#: site/lectures/08-strings-regex-dates.md:1305
 msgid "In your copy of the Homework repository, first get the new tasks:"
 msgstr "Във вашето копие на Homework repository първо изтеглете новите задачи:"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1278
+#: site/lectures/08-strings-regex-dates.md:1312
 msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
 msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1281
+#: site/lectures/08-strings-regex-dates.md:1315
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1281
+#: site/lectures/08-strings-regex-dates.md:1315
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1281
+#: site/lectures/08-strings-regex-dates.md:1315
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1283
+#: site/lectures/08-strings-regex-dates.md:1317
 msgid "Predict 20 results: string methods, `Number`, `Math`, regular expressions, dates"
 msgstr "Предвидете 20 резултата: методи на strings, `Number`, `Math`, regular expressions, дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1284
+#: site/lectures/08-strings-regex-dates.md:1318
 msgid "Clean and examine values: trim, case, empty words, ids, lines with `\\r\\n`, packed values"
 msgstr "Изчистване и изследване на стойности: trim, малки и главни букви, празни думи, id-та, редове с `\\r\\n`, пакетирани стойности"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1285
+#: site/lectures/08-strings-regex-dates.md:1319
 msgid "Write the patterns: a four-digit type, a module key, a dotted version, settings with `matchAll`, an id cleaned with `replace`"
 msgstr "Напишете шаблоните: четирицифрен тип, ключ на модул, версия с точки, настройки с `matchAll`, id, изчистено с `replace`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1286
+#: site/lectures/08-strings-regex-dates.md:1320
 msgid "`normalizeVersion` for every format of the table in section 8, then sort and compare"
 msgstr "`normalizeVersion` за всеки формат от таблицата в раздел 8, после сортиране и сравняване"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1287
+#: site/lectures/08-strings-regex-dates.md:1321
 msgid "EPOCH seconds and milliseconds, three date formats of real exports, days between, the age of a report"
 msgstr "EPOCH в секунди и милисекунди, три формата на дати от истински експорти, дни между две дати, възрастта на отчет"
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1289
+#: site/lectures/08-strings-regex-dates.md:1323
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1291
+#: site/lectures/08-strings-regex-dates.md:1325
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1291
+#: site/lectures/08-strings-regex-dates.md:1325
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1293
+#: site/lectures/08-strings-regex-dates.md:1327
 msgid "Strings"
 msgstr "Strings"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1293
+#: site/lectures/08-strings-regex-dates.md:1327
 msgid "Immutable - every method returns a new string; `String(x ?? \"\")` before calling methods"
 msgstr "Immutable - всеки метод връща нов string; `String(x ?? \"\")` преди да извиквате методи"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1295
+#: site/lectures/08-strings-regex-dates.md:1329
 msgid "Older forms"
 msgstr "По-стари форми"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1295
+#: site/lectures/08-strings-regex-dates.md:1329
 msgid "`indexOf(...) !== -1`, `substring`, `substr` (deprecated), `charAt` - read them, write the modern form"
 msgstr "`indexOf(...) !== -1`, `substring`, `substr` (deprecated), `charAt` - четете ги, пишете модерната форма"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1296
+#: site/lectures/08-strings-regex-dates.md:1330
 msgid "Wrappers"
 msgstr "Обвивки"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1296
+#: site/lectures/08-strings-regex-dates.md:1330
 msgid "`\"a\".toUpperCase()` works by boxing; never `new String` / `new Number` / `new Boolean`"
 msgstr "`\"a\".toUpperCase()` работи чрез boxing; никога `new String` / `new Number` / `new Boolean`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1297
+#: site/lectures/08-strings-regex-dates.md:1331
 msgid "Encoding"
 msgstr "Кодиране"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1297
+#: site/lectures/08-strings-regex-dates.md:1331
 msgid "Characters are code points; UTF-8 in files (1-4 bytes); `length` counts code units; `\\r\\n` vs `\\n` - split with `/\\r?\\n/`"
 msgstr "Символите са code points; UTF-8 във файловете (1-4 байта); `length` брои code units; `\\r\\n` срещу `\\n` - разделяйте с `/\\r?\\n/`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1298
+#: site/lectures/08-strings-regex-dates.md:1332
 msgid "Regex"
 msgstr "Regex"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1298
+#: site/lectures/08-strings-regex-dates.md:1332
 msgid "`/pattern/flags`; `\\d \\w \\s .`, `[...]`, `* + ? {n,m}`, `^ $ \\b`, `( )`, `\\|`; test it on regex101"
 msgstr "`/pattern/flags`; `\\d \\w \\s .`, `[...]`, `* + ? {n,m}`, `^ $ \\b`, `( )`, `\\|`; изпробвайте го в regex101"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1299
+#: site/lectures/08-strings-regex-dates.md:1333
 msgid "Methods with regex"
 msgstr "Методи с regex"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1299
+#: site/lectures/08-strings-regex-dates.md:1333
 msgid "`test` (true / false), `match` (groups or `null`), `matchAll` (all, with groups), `replace` (`$1`, a function), `split`"
 msgstr "`test` (true / false), `match` (групи или `null`), `matchAll` (всички, с групите), `replace` (`$1`, функция), `split`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1300
+#: site/lectures/08-strings-regex-dates.md:1334
 msgid "`g` all, `i` ignore case, `m` multiline; never `g` with `test`"
 msgstr "`g` всички, `i` без значение малки или главни, `m` многоредов режим; никога `g` с `test`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1301
+#: site/lectures/08-strings-regex-dates.md:1335
 msgid "Versions"
 msgstr "Версии"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1301
+#: site/lectures/08-strings-regex-dates.md:1335
 msgid "Normalise every format to dotted numbers, then `compareVersions` - one helper in the library"
 msgstr "Нормализирайте всеки формат до числа с точки, после `compareVersions` - една helper функция в библиотеката"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1302
+#: site/lectures/08-strings-regex-dates.md:1336
 msgid "Numbers"
 msgstr "Числа"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1302
+#: site/lectures/08-strings-regex-dates.md:1336
 msgid "`Number(\"\")` is 0; `Number.isNaN`, `Number.isFinite`; `toFixed` gives a string; long ids stay strings"
 msgstr "`Number(\"\")` е 0; `Number.isNaN`, `Number.isFinite`; `toFixed` дава string; дългите id-та остават strings"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1304
+#: site/lectures/08-strings-regex-dates.md:1338
 msgid "Dates"
 msgstr "Дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1304
+#: site/lectures/08-strings-regex-dates.md:1338
 msgid "Milliseconds since 1970 UTC; EPOCH seconds * 1000; months from 0; `toISOString()` for UTC text"
 msgstr "Милисекунди от 1970 г. UTC; EPOCH в секунди * 1000; месеците от 0; `toISOString()` за текст в UTC"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1305
+#: site/lectures/08-strings-regex-dates.md:1339
 msgid "Parsing dates"
 msgstr "Разчитане на дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1305
+#: site/lectures/08-strings-regex-dates.md:1339
 msgid "Only ISO is reliable; other formats: regex + `Date.UTC`; check `Number.isNaN(d.getTime())`"
 msgstr "Само ISO е надежден; другите формати: regex + `Date.UTC`; проверявайте `Number.isNaN(d.getTime())`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1306
+#: site/lectures/08-strings-regex-dates.md:1340
 msgid "Date math"
 msgstr "Сметки с дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1306
+#: site/lectures/08-strings-regex-dates.md:1340
 msgid "`b - a` gives ms; 1 day = 86,400,000 ms; compare with `<` or `getTime()`"
 msgstr "`b - a` дава ms; 1 ден = 86 400 000 ms; сравнявайте с `<` или `getTime()`"
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1308
+#: site/lectures/08-strings-regex-dates.md:1342
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1310
+#: site/lectures/08-strings-regex-dates.md:1344
 msgid "`08-strings-regex-dates/homework.js` (in the homework repository): parse the firmware string of the records export, the age of every module of the dictionary report, and a report line with formatted numbers and dates."
 msgstr "`08-strings-regex-dates/homework.js` (в homework repository): разчитане на string-а с firmware от експорта със записи, възрастта на всеки модул от отчета с dictionaries и ред от отчет с форматирани числа и дати."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1313
+#: site/lectures/08-strings-regex-dates.md:1347
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr ""
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1315
+#: site/lectures/08-strings-regex-dates.md:1349
 msgid "**Course project:** add `normalizeVersion` (for the formats of **your** product) and a date parser for its timestamp formats to `library.js`. Collect real examples of every format in a comment above each helper."
 msgstr "**Курсов проект:** добавете в `library.js` `normalizeVersion` (за форматите на **вашия** продукт) и функция за разчитане на форматите на времената му. Съберете истински примери за всеки формат в коментар над всяка helper функция."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1318
+#: site/lectures/08-strings-regex-dates.md:1352
 msgid "Optional: find every regular expression in your rules. Paste each into regex101 and write a one-line comment that says what it matches."
 msgstr "По желание: намерете всеки regular expression във вашите правила. Поставете всеки в regex101 и напишете коментар от един ред, който казва с какво съвпада."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1321
+#: site/lectures/08-strings-regex-dates.md:1355
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1323
+#: site/lectures/08-strings-regex-dates.md:1357
 msgid "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Regular expressions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions), [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet), [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math), [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), [Standard built-in objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)"
 msgstr "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Regular expressions (ръководство)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions), [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet), [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math), [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), [Standard built-in objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1330
+#: site/lectures/08-strings-regex-dates.md:1364
 msgid "javascript.info: [Strings](https://javascript.info/string), [Regular expressions](https://javascript.info/regular-expressions), [Date and time](https://javascript.info/date), [Numbers](https://javascript.info/number), [Methods of primitives](https://javascript.info/primitives-methods)"
 msgstr "javascript.info: [Strings](https://javascript.info/string), [Regular expressions](https://javascript.info/regular-expressions), [Date and time](https://javascript.info/date), [Numbers](https://javascript.info/number), [Methods of primitives](https://javascript.info/primitives-methods)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1335
+#: site/lectures/08-strings-regex-dates.md:1369
 msgid "Tools: [regex101.com](https://regex101.com/) - test and explain patterns"
 msgstr "Инструменти: [regex101.com](https://regex101.com/) - изпробване и обяснение на шаблони"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1336
+#: site/lectures/08-strings-regex-dates.md:1370
 msgid "Encodings: [The Absolute Minimum Every Software Developer Must Know About Unicode](https://tonsky.me/blog/unicode/) (Nikita Prokopov)"
 msgstr "Кодировки: [The Absolute Minimum Every Software Developer Must Know About Unicode](https://tonsky.me/blog/unicode/) (Nikita Prokopov)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1337
+#: site/lectures/08-strings-regex-dates.md:1371
 msgid "Old reading: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
 msgstr "Стара статия: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1339
+#: site/lectures/08-strings-regex-dates.md:1373
 msgid "**Next session:** JSON, Node.js, modules and errors - read sample documents from files, turn your `library.js` into a real module, handle errors without hiding them, fetch JSON from a web API, and run a rule locally on a folder of reports."
 msgstr "**Следващото занятие:** JSON, Node.js, модули и грешки - четене на примерни документи от файлове, превръщане на `library.js` в истински модул, обработка на грешки, без да се крият, изтегляне на JSON от уеб API и локално изпълнение на правило върху папка с отчети."
 

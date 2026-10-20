@@ -100,1476 +100,1546 @@ msgstr "1. JSON: форматът"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:81
+msgid "MDN: [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:83
 msgid "**JSON** (*JavaScript Object Notation*) is a text format for data. It was proposed by Douglas Crockford in the early 2000s and is now the most common format for data between programs - your reports, configuration files, web APIs. It is **language-independent**: Python, Java, Go and every other language read and write it."
 msgstr "**JSON** (*JavaScript Object Notation*) е текстов формат за данни. Предложен е от Douglas Crockford в началото на 2000-те и днес е най-разпространеният формат за данни между програми - вашите отчети, конфигурационни файлове, уеб API. Той е **независим от езика**: Python, Java, Go и всеки друг език го четат и пишат."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:87
+#: site/lectures/09-json-node-modules-errors.md:89
 msgid "Why it won:"
 msgstr "Защо спечели:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:89
+#: site/lectures/09-json-node-modules-errors.md:91
 msgid "easy to read and write - for people and for programs;"
 msgstr "лесно се чете и пише - от хора и от програми;"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:90
+#: site/lectures/09-json-node-modules-errors.md:92
 msgid "a minimal syntax: objects, arrays and a few value types;"
 msgstr "минимален синтаксис: обекти, arrays и няколко вида стойности;"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:91
+#: site/lectures/09-json-node-modules-errors.md:93
 msgid "it looks like JavaScript: a JSON document is (almost) a JavaScript object literal."
 msgstr "прилича на JavaScript: JSON документът е (почти) обектен литерал на JavaScript."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:93
+#: site/lectures/09-json-node-modules-errors.md:95
 msgid "A JSON document with the six types:"
 msgstr "JSON документ с шестте типа:"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:107
+#: site/lectures/09-json-node-modules-errors.md:109
 msgid "JSON type"
 msgstr "JSON тип"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:107
+#: site/lectures/09-json-node-modules-errors.md:109
 msgid "Examples"
 msgstr "Примери"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:107
+#: site/lectures/09-json-node-modules-errors.md:109
 msgid "Notes"
 msgstr "Бележки"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:109
+#: site/lectures/09-json-node-modules-errors.md:111
 msgid "string"
 msgstr "string"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:109
+#: site/lectures/09-json-node-modules-errors.md:111
 msgid "**double quotes only**; escapes like `\\n`, `\\\"`, `\\u0041`"
 msgstr "**само двойни кавички**; escape последователности като `\\n`, `\\\"`, `\\u0041`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:110
+#: site/lectures/09-json-node-modules-errors.md:112
 msgid "number"
 msgstr "number"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:110
+#: site/lectures/09-json-node-modules-errors.md:112
 msgid "no `NaN`, no `Infinity`, no leading zeros (`007`), no hex"
 msgstr "без `NaN`, без `Infinity`, без водещи нули (`007`), без шестнадесетични числа"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:111
+#: site/lectures/09-json-node-modules-errors.md:113
 msgid "boolean"
 msgstr "boolean"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:112
+#: site/lectures/09-json-node-modules-errors.md:114
 msgid "null"
 msgstr "null"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:112
+#: site/lectures/09-json-node-modules-errors.md:114
 msgid "\"no value\""
 msgstr "\"няма стойност\""
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:113
+#: site/lectures/09-json-node-modules-errors.md:115
 msgid "array"
 msgstr "array"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:113
+#: site/lectures/09-json-node-modules-errors.md:115
 msgid "an ordered list of values"
 msgstr "подреден списък от стойности"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:114
+#: site/lectures/09-json-node-modules-errors.md:116
 msgid "object"
 msgstr "object"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:114
+#: site/lectures/09-json-node-modules-errors.md:116
 msgid "keys are **strings in double quotes**"
 msgstr "ключовете са **strings в двойни кавички**"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:116
+#: site/lectures/09-json-node-modules-errors.md:118
 msgid "JSON is stricter than JavaScript"
 msgstr "JSON е по-строг от JavaScript"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:118
+#: site/lectures/09-json-node-modules-errors.md:120
 msgid "Allowed in a JavaScript object literal"
 msgstr "Позволено в обектен литерал на JavaScript"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:118
+#: site/lectures/09-json-node-modules-errors.md:120
 msgid "In JSON"
 msgstr "В JSON"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:120
+#: site/lectures/09-json-node-modules-errors.md:122
 msgid "keys without quotes: `{ model: \"XR-220\" }`"
 msgstr "ключове без кавички: `{ model: \"XR-220\" }`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:120
+#: site/lectures/09-json-node-modules-errors.md:122
 msgid "not allowed - `{ \"model\": \"XR-220\" }`"
 msgstr "не е позволено - `{ \"model\": \"XR-220\" }`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:121
+#: site/lectures/09-json-node-modules-errors.md:123
 msgid "single quotes: `'XR-220'`"
 msgstr "единични кавички: `'XR-220'`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:121 site/lectures/09-json-node-modules-errors.md:122 site/lectures/09-json-node-modules-errors.md:123 site/lectures/09-json-node-modules-errors.md:124
+#: site/lectures/09-json-node-modules-errors.md:123 site/lectures/09-json-node-modules-errors.md:124 site/lectures/09-json-node-modules-errors.md:125 site/lectures/09-json-node-modules-errors.md:126
 msgid "not allowed"
 msgstr "не е позволено"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:122
+#: site/lectures/09-json-node-modules-errors.md:124
 msgid "a trailing comma: `[1, 2, ]`"
 msgstr "запетая след последния елемент: `[1, 2, ]`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:123
+#: site/lectures/09-json-node-modules-errors.md:125
 msgid "comments `//` and `/* */`"
 msgstr "коментари `//` и `/* */`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:124
+#: site/lectures/09-json-node-modules-errors.md:126
 msgid "`undefined`, functions, `NaN`, `Infinity`"
 msgstr "`undefined`, функции, `NaN`, `Infinity`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:126
+#: site/lectures/09-json-node-modules-errors.md:128
 msgid "VSCode checks `.json` files as you type (red underlines), and online validators such as [JSONLint](https://jsonlint.com/) show the exact position of an error."
 msgstr "VSCode проверява `.json` файловете, докато пишете (червено подчертаване), а онлайн валидатори като [JSONLint](https://jsonlint.com/) показват точната позиция на грешката."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:129
+#: site/lectures/09-json-node-modules-errors.md:131
 msgid "JSON and XML"
 msgstr "JSON и XML"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:130
+#: site/lectures/09-json-node-modules-errors.md:132
 msgid "Before JSON, data was often exchanged as XML: `<features><feature>dedup</feature><feature>compression</feature></features>`. JSON says the same with less text - `{\"features\": [\"dedup\", \"compression\"]}` - and maps directly to the objects and arrays of JavaScript."
 msgstr "Преди JSON данните често се обменяха като XML: `<features><feature>dedup</feature><feature>compression</feature></features>`. JSON казва същото с по-малко текст - `{\"features\": [\"dedup\", \"compression\"]}` - и съответства директно на обектите и arrays в JavaScript."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:136
+#: site/lectures/09-json-node-modules-errors.md:138
 msgid "`null`: \"known to be empty\""
 msgstr "`null`: \"известно е, че е празно\""
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:138
+#: site/lectures/09-json-node-modules-errors.md:140
 msgid "`undefined` does not exist in JSON - a key is either there or not. `null` is how a document says \"this key exists, and it has no value\" - which is different from a missing key:"
 msgstr "`undefined` не съществува в JSON - ключът или го има, или го няма. `null` е начинът документът да каже \"този ключ съществува и няма стойност\" - което е различно от липсващ ключ:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:156
+#: site/lectures/09-json-node-modules-errors.md:158
 msgid "A rule can treat the two cases differently: \"not set\" may be a configuration problem; \"not reported\" may be an old firmware that does not send the field."
 msgstr "Правилото може да третира двата случая различно: \"не е зададено\" може да е проблем в конфигурацията; \"не е докладвано\" може да е стар firmware, който не изпраща полето."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:159
+#: site/lectures/09-json-node-modules-errors.md:161
 msgid "2. `JSON.parse` and `JSON.stringify`"
 msgstr "2. `JSON.parse` и `JSON.stringify`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:161
+#: site/lectures/09-json-node-modules-errors.md:163
+msgid "MDN: [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:165
 msgid "JSON is **text**. To work with it, turn it into JavaScript values - *parse* it. To send or save data, turn it back into text - *stringify* it."
 msgstr "JSON е **текст**. За да работите с него, превърнете го в стойности на JavaScript - *разчетете* го (parse). За да изпратите или запишете данни, превърнете ги обратно в текст - *stringify*."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:182
+#: site/lectures/09-json-node-modules-errors.md:186
 msgid "The example document `doc` of this site is the result of `JSON.parse` of `data/sample-asset.json` - and every check rule gets its `doc` the same way."
 msgstr "Примерният документ `doc` на този сайт е резултатът от `JSON.parse` на `data/sample-asset.json` - и всяко правило за проверка получава своя `doc` по същия начин."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:185
+#: site/lectures/09-json-node-modules-errors.md:189
 msgid "Invalid JSON throws"
 msgstr "Невалидният JSON хвърля грешка"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:207
+#: site/lectures/09-json-node-modules-errors.md:211
 msgid "Data from outside - a file, a web API, a message - can always be broken. Parse it in a `try` (section 7), and say **which** file or message failed."
 msgstr "Данните отвън - файл, уеб API, съобщение - винаги могат да са развалени. Разчитайте ги в `try` (раздел 7) и казвайте **кой** файл или кое съобщение е сгрешено."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:210
+#: site/lectures/09-json-node-modules-errors.md:214
 msgid "Readable output: indentation"
 msgstr "Четим изход: отстъпи"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:212
+#: site/lectures/09-json-node-modules-errors.md:216
 msgid "`JSON.stringify(value, replacer, space)`: the third argument indents the text - 2 spaces is the usual choice:"
 msgstr "`JSON.stringify(value, replacer, space)`: третият аргумент прави отстъпи в текста - 2 интервала е обичайният избор:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:221
+#: site/lectures/09-json-node-modules-errors.md:225
 msgid "Choosing what goes in: the replacer"
 msgstr "Какво да влезе: replacer"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:223
+#: site/lectures/09-json-node-modules-errors.md:227
 msgid "The second argument chooses the keys - an **array** of key names, or a **function** called for every key and value:"
 msgstr "Вторият аргумент избира ключовете - **array** от имена на ключове или **функция**, извиквана за всеки ключ и стойност:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:244
+#: site/lectures/09-json-node-modules-errors.md:248
 msgid "`JSON.parse` has a similar second argument, the *reviver*, called for every key and value while parsing - for example to turn ISO date strings into `Date` objects:"
 msgstr "`JSON.parse` има подобен втори аргумент, *reviver*, извикван за всеки ключ и стойност по време на разчитането - например за да превърне ISO strings с дати в обекти `Date`:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:254
+#: site/lectures/09-json-node-modules-errors.md:258
 msgid "What JSON cannot hold"
 msgstr "Какво JSON не може да съдържа"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:256
+#: site/lectures/09-json-node-modules-errors.md:260
 msgid "`JSON.stringify` silently drops or changes what JSON cannot represent:"
 msgstr "`JSON.stringify` тихо маха или променя това, което JSON не може да представи:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:278
+#: site/lectures/09-json-node-modules-errors.md:282
 msgid "So a \"round trip\" - `JSON.parse(JSON.stringify(x))` - is a deep copy only for plain JSON-like data (lecture 6). For alert details it is fine: they are strings and numbers anyway."
 msgstr "Затова \"двупосочното преобразуване\" - `JSON.parse(JSON.stringify(x))` - е дълбоко копие само за прости данни, подобни на JSON (лекция 6). За детайлите на alert е наред: те и без това са strings и числа."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:282
+#: site/lectures/09-json-node-modules-errors.md:286
 msgid "Comparing with `JSON.stringify`"
 msgstr "Сравняване с `JSON.stringify`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:283
+#: site/lectures/09-json-node-modules-errors.md:287
 msgid "`JSON.stringify(a) === JSON.stringify(b)` is a quick way to compare two plain objects - the practice files use it. But the **order of the keys** matters: `{\"a\":1,\"b\":2}` and `{\"b\":2,\"a\":1}` are different texts. Lecture 10 shows `assert.deepEqual` of `node:assert/strict`, which ignores the key order."
 msgstr "`JSON.stringify(a) === JSON.stringify(b)` е бърз начин да се сравнят два прости обекта - файловете за упражнение го използват. Но **редът на ключовете** има значение: `{\"a\":1,\"b\":2}` и `{\"b\":2,\"a\":1}` са различни текстове. Лекция 10 показва `assert.deepEqual` от `node:assert/strict`, който не се интересува от реда на ключовете."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:289
+#: site/lectures/09-json-node-modules-errors.md:293
 msgid "3. Node.js"
 msgstr "3. Node.js"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:291
+#: site/lectures/09-json-node-modules-errors.md:295
 msgid "**Node.js** (2009) runs JavaScript **outside** the browser: on your computer, on servers, in tools. It is built on Chrome's **V8** engine (lecture 1), plus libraries for files, the network and processes. New versions of V8 bring the new language features to Node.js quickly; the course uses Node.js 24 (an LTS version)."
 msgstr "**Node.js** (2009) изпълнява JavaScript **извън** браузъра: на вашия компютър, на сървъри, в инструменти. Изграден е върху engine-а **V8** на Chrome (лекция 1), плюс библиотеки за файлове, мрежа и процеси. Новите версии на V8 бързо носят новите възможности на езика в Node.js; курсът използва Node.js 24 (LTS версия)."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:296
+#: site/lectures/09-json-node-modules-errors.md:300
 msgid "Run a file: `node file.js`. Start a console (REPL): `node`, and `.exit` to leave."
 msgstr "Изпълнение на файл: `node file.js`. Стартиране на конзола (REPL): `node`, а `.exit` за изход."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:297
+#: site/lectures/09-json-node-modules-errors.md:301
 msgid "Node.js runs on **one thread**: it does one thing at a time. While it waits for a file or the network, it does other work and comes back later (section 8)."
 msgstr "Node.js работи с **една нишка**: прави едно нещо в даден момент. Докато чака файл или мрежата, върши друга работа и се връща по-късно (раздел 8)."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:299
+#: site/lectures/09-json-node-modules-errors.md:303
 msgid "The environment gives Node.js programs objects the browser does not have (`process`, `require`, the built-in modules) - and does not give them `document` or `window`."
 msgstr "Средата дава на програмите в Node.js обекти, които браузърът няма (`process`, `require`, вградените модули) - и не им дава `document` или `window`."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:303
+#: site/lectures/09-json-node-modules-errors.md:307
 msgid "`process`: the running program"
 msgstr "`process`: работещата програма"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:320
+#: site/lectures/09-json-node-modules-errors.md:309
+msgid "Node.js: [process](https://nodejs.org/api/process.html)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:326
 msgid "`process.exitCode = 1` tells the caller (a script, a CI pipeline) that something failed. `check.js` of the practice files does exactly this when a check fails. (`process.exit(1)` stops at once - output that is still being written can be lost.)"
 msgstr "`process.exitCode = 1` казва на извикващия (script, CI pipeline), че нещо се е провалило. `check.js` от файловете за упражнение прави точно това, когато проверка не мине. (`process.exit(1)` спира веднага - изход, който още се записва, може да се загуби.)"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:324
+#: site/lectures/09-json-node-modules-errors.md:330
 msgid "`__dirname`: where the file is"
 msgstr "`__dirname`: къде е файлът"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:326
+#: site/lectures/09-json-node-modules-errors.md:332
 msgid "`process.cwd()` is the folder you **ran** the program from; `__dirname` is the folder of the **file** itself. To read a file next to your script, start from `__dirname` - then it works from any folder:"
 msgstr "`process.cwd()` е папката, от която сте **стартирали** програмата; `__dirname` е папката на самия **файл**. За да прочетете файл до своя script, започнете от `__dirname` - тогава работи от всяка папка:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:335
+#: site/lectures/09-json-node-modules-errors.md:341
 msgid "The `console` object"
 msgstr "Обектът `console`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:337
+#: site/lectures/09-json-node-modules-errors.md:343
+msgid "MDN: [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:345
 msgid "`console.log` is one method of the `console` object. The others are just as useful - they work in Node.js, in the browser and on this site:"
 msgstr "`console.log` е един от методите на обекта `console`. Останалите са също толкова полезни - работят в Node.js, в браузъра и на този сайт:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:365
+#: site/lectures/09-json-node-modules-errors.md:373
 msgid "In Node.js, `log` and `info` write to **stdout** (the normal output), `warn` and `error` to **stderr** (the error output). `node run-rule.js > alerts.json` saves only stdout in the file - the error messages still appear on the screen."
 msgstr "В Node.js `log` и `info` пишат в **stdout** (нормалния изход), а `warn` и `error` - в **stderr** (изхода за грешки). `node run-rule.js > alerts.json` записва във файла само stdout - съобщенията за грешки пак се появяват на екрана."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:369
+#: site/lectures/09-json-node-modules-errors.md:377
 msgid "Node.js can also be a server"
 msgstr "Node.js може да бъде и сървър"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:371
+#: site/lectures/09-json-node-modules-errors.md:379
 msgid "Node.js is best known for web servers - a server is a program that waits for requests and answers them. A minimal one, with the built-in `http` module:"
 msgstr "Node.js е най-известен с уеб сървърите - сървърът е програма, която чака заявки и отговаря на тях. Минимален сървър, с вградения модул `http`:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:385
+#: site/lectures/09-json-node-modules-errors.md:393
 msgid "Frameworks such as Express make bigger servers easier (the old course built a form with one). Servers are outside this course - but now you know where the JSON of a web API comes from (section 9)."
 msgstr "Frameworks като Express улесняват по-големите сървъри (старият курс изграждаше форма с такъв). Сървърите са извън този курс - но вече знаете откъде идва JSON-ът на уеб API (раздел 9)."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:389
+#: site/lectures/09-json-node-modules-errors.md:397
 msgid "4. Files: `fs` and `path`"
 msgstr "4. Файлове: `fs` и `path`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:391
+#: site/lectures/09-json-node-modules-errors.md:399
+msgid "Node.js: [File system](https://nodejs.org/api/fs.html), [Path](https://nodejs.org/api/path.html)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:401
 msgid "Node.js has **built-in modules** - no installation needed. Load them with `require`; the `node:` prefix says \"built in\":"
 msgstr "Node.js има **вградени модули** - не е нужна инсталация. Зареждате ги с `require`; префиксът `node:` казва \"вграден\":"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:418
+#: site/lectures/09-json-node-modules-errors.md:428
 msgid "Function"
 msgstr "Функция"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:418
+#: site/lectures/09-json-node-modules-errors.md:428
 msgid "Does"
 msgstr "Прави"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:420
+#: site/lectures/09-json-node-modules-errors.md:430
 msgid "reads a text file; **without** `\"utf8\"` you get bytes (a `Buffer`)"
 msgstr "чете текстов файл; **без** `\"utf8\"` получавате байтове (`Buffer`)"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:421
+#: site/lectures/09-json-node-modules-errors.md:431
 msgid "writes (replaces) a file"
 msgstr "записва (заменя) файл"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:422
+#: site/lectures/09-json-node-modules-errors.md:432
 msgid "the names of the files in a folder"
 msgstr "имената на файловете в папка"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:423
+#: site/lectures/09-json-node-modules-errors.md:433
 msgid "is it there?"
 msgstr "съществува ли?"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:424
+#: site/lectures/09-json-node-modules-errors.md:434
 msgid "joins parts with the right separator (`/` or `\\` on Windows)"
 msgstr "съединява части с правилния разделител (`/` или `\\` под Windows)"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:425
+#: site/lectures/09-json-node-modules-errors.md:435
 msgid "parts of a path"
 msgstr "части от път"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:426
+#: site/lectures/09-json-node-modules-errors.md:436
 msgid "an absolute path"
 msgstr "абсолютен път"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:428
+#: site/lectures/09-json-node-modules-errors.md:438
 msgid "Build paths with `path.join`, not with `+ \"/\" +` - then the same script works on Linux, macOS and Windows."
 msgstr "Изграждайте пътищата с `path.join`, а не с `+ \"/\" +` - тогава същият script работи под Linux, macOS и Windows."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:431
+#: site/lectures/09-json-node-modules-errors.md:441
 msgid "The byte order mark"
 msgstr "Byte order mark"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:432
+#: site/lectures/09-json-node-modules-errors.md:442
 msgid "Some Windows tools save UTF-8 with a BOM (lecture 8), and `JSON.parse` fails on it. Remove it after reading: `const text = fs.readFileSync(file, \"utf8\").replace(/^\\uFEFF/, \"\");`"
 msgstr "Някои инструменти под Windows записват UTF-8 с BOM (лекция 8) и `JSON.parse` се проваля на него. Махнете го след четенето: `const text = fs.readFileSync(file, \"utf8\").replace(/^\\uFEFF/, \"\");`"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:437
+#: site/lectures/09-json-node-modules-errors.md:447
 msgid "`require` of a JSON file"
 msgstr "`require` на JSON файл"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:439
+#: site/lectures/09-json-node-modules-errors.md:449
 msgid "`require` can read a JSON file directly - the practice files do this with `require(\"../data/sample-asset.json\")`:"
 msgstr "`require` може да прочете JSON файл директно - файловете за упражнение правят това с `require(\"../data/sample-asset.json\")`:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:446
+#: site/lectures/09-json-node-modules-errors.md:456
 msgid "Convenient, with two catches: `require` reads a file only **once** per program (it remembers it - section 6), and every `require` of the same file gives the **same** object - a change by one helper is seen by all. For data that changes, or for many files, use `fs.readFileSync` + `JSON.parse`."
 msgstr "Удобно, с две уловки: `require` чете даден файл само **веднъж** за програмата (запомня го - раздел 6) и всеки `require` на същия файл дава **същия** обект - промяна от една helper функция се вижда от всички. За данни, които се променят, или за много файлове използвайте `fs.readFileSync` + `JSON.parse`."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:451
+#: site/lectures/09-json-node-modules-errors.md:461
 msgid "Reading without waiting: the callback version"
 msgstr "Четене без чакане: версията с callback"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:453
+#: site/lectures/09-json-node-modules-errors.md:463
 msgid "`readFileSync` makes the program **wait** until the file is read (*synchronous*). `fs.readFile` (without `Sync`) starts reading and calls a function when it is done - meanwhile the program goes on:"
 msgstr "`readFileSync` кара програмата да **чака**, докато файлът се прочете (*синхронно*). `fs.readFile` (без `Sync`) започва четенето и извиква функция, когато приключи - междувременно програмата продължава:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:470
+#: site/lectures/09-json-node-modules-errors.md:480
 msgid "The callback gets the error first (`null` when there is none) - the classic Node.js style. Section 8 shows the modern form with `await`. For small scripts like a rule runner, the `Sync` functions are fine and simpler."
 msgstr "Callback-ът получава първо грешката (`null`, когато няма такава) - класическият стил на Node.js. Раздел 8 показва модерната форма с `await`. За малки scripts като runner за правила функциите със `Sync` са наред и са по-прости."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:474
+#: site/lectures/09-json-node-modules-errors.md:484
 msgid "5. npm: packages and `package.json`"
 msgstr "5. npm: пакети и `package.json`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:476
+#: site/lectures/09-json-node-modules-errors.md:486
 msgid "**npm** (*Node Package Manager*) comes with Node.js. It is two things: the command-line tool `npm`, and the **registry** at [npmjs.com](https://www.npmjs.com/) - millions of packages: small helpers, libraries, whole frameworks and tools."
 msgstr "**npm** (*Node Package Manager*) идва с Node.js. Той е две неща: инструментът за командния ред `npm` и **регистърът** на [npmjs.com](https://www.npmjs.com/) - милиони пакети: малки helper функции, библиотеки, цели frameworks и инструменти."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:480
+#: site/lectures/09-json-node-modules-errors.md:490
 msgid "A project: `package.json`"
 msgstr "Проект: `package.json`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:504
+#: site/lectures/09-json-node-modules-errors.md:514
 msgid "`package.json` describes the project: its name and version, the **scripts** you run often, and the **dependencies** - the packages it needs."
 msgstr "`package.json` описва проекта: името и версията му, **scripts**, които изпълнявате често, и **зависимостите** (dependencies) - пакетите, които му трябват."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:507
+#: site/lectures/09-json-node-modules-errors.md:517
 msgid "`npm run run-rule` runs a script; `npm test` (or `npm run test`) runs the tests (lecture 10). Scripts are the team's shared commands: nobody has to remember the long command lines."
 msgstr "`npm run run-rule` изпълнява script; `npm test` (или `npm run test`) изпълнява тестовете (лекция 10). Scripts са общите команди на екипа: никой не трябва да помни дългите команди."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:510
+#: site/lectures/09-json-node-modules-errors.md:520
 msgid "`\"type\": \"commonjs\"` or `\"module\"` decides how `.js` files are treated (section 6)."
 msgstr "`\"type\": \"commonjs\"` или `\"module\"` решава как се третират `.js` файловете (раздел 6)."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:512
+#: site/lectures/09-json-node-modules-errors.md:522
 msgid "Installing packages"
 msgstr "Инсталиране на пакети"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:523
+#: site/lectures/09-json-node-modules-errors.md:533
 msgid "Packages go into the folder **`node_modules/`** - often thousands of files. Never commit it: put `node_modules/` into `.gitignore` (lecture 1). Whoever clones the repository runs `npm install` and gets the same packages."
 msgstr "Пакетите отиват в папката **`node_modules/`** - често хиляди файлове. Никога не я включвайте в commit: сложете `node_modules/` в `.gitignore` (лекция 1). Който клонира repository-то, изпълнява `npm install` и получава същите пакети."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:526
+#: site/lectures/09-json-node-modules-errors.md:536
 msgid "**`package-lock.json`** records the exact version of every installed package. Commit it: it makes `npm install` give everybody the same versions."
 msgstr "**`package-lock.json`** записва точната версия на всеки инсталиран пакет. Включете го в commit: така `npm install` дава на всички едни и същи версии."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:528
+#: site/lectures/09-json-node-modules-errors.md:538
 msgid "`\"^10.0.0\"` means \"10.0.0 or newer, but below 11\" - the numbers are *major.minor.patch* (semantic versioning): a new major version may break your code."
 msgstr "`\"^10.0.0\"` означава \"10.0.0 или по-нова, но под 11\" - числата са *major.minor.patch* (semantic versioning): нова major версия може да счупи кода ви."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:530
+#: site/lectures/09-json-node-modules-errors.md:540
 msgid "**Local or global?** A package your project uses: local (the default). A tool you want as a command everywhere: global (`-g`) - or run it without installing with **`npx`**: `npx eslint .` runs the local (or a downloaded) eslint."
 msgstr "**Локално или глобално?** Пакет, който проектът ви използва: локално (по подразбиране). Инструмент, който искате като команда навсякъде: глобално (`-g`) - или го изпълнете без инсталиране с **`npx`**: `npx eslint .` изпълнява локалния (или изтеглен) eslint."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:534
+#: site/lectures/09-json-node-modules-errors.md:544
 msgid "Packages and rules"
 msgstr "Пакети и правила"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:535
+#: site/lectures/09-json-node-modules-errors.md:545
 msgid "Your rule engine runs your rule and your `library.js` - not npm packages. Use npm for your **tools**: tests, a linter, scripts. The library itself should need no packages."
 msgstr "Вашият rule engine изпълнява правилото ви и вашия `library.js` - не npm пакети. Използвайте npm за **инструментите** си: тестове, linter, scripts. Самата библиотека не бива да има нужда от пакети."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:540
+#: site/lectures/09-json-node-modules-errors.md:550
 msgid "6. Modules"
 msgstr "6. Модули"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:542
+#: site/lectures/09-json-node-modules-errors.md:552
 msgid "A **module** is a file that keeps its own variables private and **exports** what other files may use. Each module has its own scope (lecture 5): two modules can both have a `function get` without a clash."
 msgstr "**Модулът** е файл, който пази своите variables лични и **експортира** това, което другите файлове могат да използват. Всеки модул има собствен scope (лекция 5): два модула могат да имат по `function get` без конфликт."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:546
+#: site/lectures/09-json-node-modules-errors.md:556
 msgid "JavaScript has two module systems:"
 msgstr "JavaScript има две системи за модули:"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:548
+#: site/lectures/09-json-node-modules-errors.md:558
 msgid "CommonJS (CJS)"
 msgstr "CommonJS (CJS)"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:548
+#: site/lectures/09-json-node-modules-errors.md:558
 msgid "ES modules (ESM)"
 msgstr "ES modules (ESM)"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:550
+#: site/lectures/09-json-node-modules-errors.md:560
 msgid "Since"
 msgstr "От"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:550
+#: site/lectures/09-json-node-modules-errors.md:560
 msgid "Node.js, 2009"
 msgstr "Node.js, 2009"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:550
+#: site/lectures/09-json-node-modules-errors.md:560
 msgid "the language standard, ES2015"
 msgstr "стандартът на езика, ES2015"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:551
+#: site/lectures/09-json-node-modules-errors.md:561
 msgid "Export"
 msgstr "Export"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:552
+#: site/lectures/09-json-node-modules-errors.md:562
 msgid "Import"
 msgstr "Import"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:553 site/lectures/09-json-node-modules-errors.md:1455
+#: site/lectures/09-json-node-modules-errors.md:563 site/lectures/09-json-node-modules-errors.md:1483
 msgid "Files"
 msgstr "Файлове"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:553
+#: site/lectures/09-json-node-modules-errors.md:563
 msgid "`.js` (default in Node.js), `.cjs`"
 msgstr "`.js` (по подразбиране в Node.js), `.cjs`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:553
+#: site/lectures/09-json-node-modules-errors.md:563
 msgid "`.mjs`, or `.js` with `\"type\": \"module\"`"
 msgstr "`.mjs` или `.js` с `\"type\": \"module\"`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:554
+#: site/lectures/09-json-node-modules-errors.md:564
 msgid "Used by"
 msgstr "Използва се от"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:554
+#: site/lectures/09-json-node-modules-errors.md:564
 msgid "older Node.js code, many tools, **your rule engine** (`require(\"library.js\")`)"
 msgstr "по-стар код на Node.js, много инструменти, **вашия rule engine** (`require(\"library.js\")`)"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:554
+#: site/lectures/09-json-node-modules-errors.md:564
 msgid "browsers, modern Node.js code"
 msgstr "браузърите, модерен код на Node.js"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:556
+#: site/lectures/09-json-node-modules-errors.md:566
 msgid "CommonJS: `module.exports` and `require`"
 msgstr "CommonJS: `module.exports` и `require`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:558
+#: site/lectures/09-json-node-modules-errors.md:568
+msgid "Node.js: [Modules: CommonJS modules](https://nodejs.org/api/modules.html)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:570
 msgid "The recipe of lecture 7, explained:"
 msgstr "Рецептата от лекция 7, обяснена:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:585
+#: site/lectures/09-json-node-modules-errors.md:597
 msgid "Every file has an object `module.exports` (at first `{}`). `require(file)` returns it."
 msgstr "Всеки файл има обект `module.exports` (в началото `{}`). `require(file)` го връща."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:587
+#: site/lectures/09-json-node-modules-errors.md:599
 msgid "`require(\"./library.js\")` - a **relative** path (`./`, `../`) is a file of your project. `require(\"node:fs\")` is built in; `require(\"eslint\")` is a package from `node_modules`."
 msgstr "`require(\"./library.js\")` - **относителният** път (`./`, `../`) е файл от вашия проект. `require(\"node:fs\")` е вграден; `require(\"eslint\")` е пакет от `node_modules`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:590
+#: site/lectures/09-json-node-modules-errors.md:602
 msgid "`exports.versionBelow = versionBelow;` adds one export - a short form of `module.exports.versionBelow = ...`. But `exports = { ... }` does **nothing**: it only changes the local variable `exports`. Use `module.exports = { ... }`."
 msgstr "`exports.versionBelow = versionBelow;` добавя един export - кратка форма на `module.exports.versionBelow = ...`. Но `exports = { ... }` **не прави нищо**: променя само локалната variable `exports`. Използвайте `module.exports = { ... }`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:593
+#: site/lectures/09-json-node-modules-errors.md:605
 msgid "A module runs **once**. Every later `require` of the same file gets the same, cached `module.exports` - which is why `require` of a JSON file always gives the same object."
 msgstr "Модулът се изпълнява **веднъж**. Всеки следващ `require` на същия файл получава същия, кеширан `module.exports` - затова `require` на JSON файл винаги дава същия обект."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:597
+#: site/lectures/09-json-node-modules-errors.md:609
 msgid "Your rule engine"
 msgstr "Вашият rule engine"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:598
+#: site/lectures/09-json-node-modules-errors.md:610
 msgid "Rules load the shared helpers with `const library = require(\"library.js\");` - a CommonJS-style `require`, without `./`. The engine decides where `\"library.js\"` comes from. Locally, Node.js would look for a **package** named `library.js` in `node_modules`; section 10 gives the rule our own file instead."
 msgstr "Правилата зареждат общите helper функции с `const library = require(\"library.js\");` - `require` в стила на CommonJS, без `./`. Engine-ът решава откъде идва `\"library.js\"`. Локално Node.js би търсил **пакет** с име `library.js` в `node_modules`; раздел 10 вместо това дава на правилото нашия собствен файл."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:604
+#: site/lectures/09-json-node-modules-errors.md:616
 msgid "ES modules: `export` and `import`"
 msgstr "ES modules: `export` и `import`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:606
+#: site/lectures/09-json-node-modules-errors.md:618
+msgid "MDN: [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export), [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:620
 msgid "The module system of the language itself:"
 msgstr "Системата за модули на самия език:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:628
+#: site/lectures/09-json-node-modules-errors.md:642
 msgid "In Node.js, a file is an ES module when its name ends with `.mjs`, or when `package.json` has `\"type\": \"module\"`."
 msgstr "В Node.js един файл е ES module, когато името му завършва на `.mjs` или когато `package.json` има `\"type\": \"module\"`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:630
+#: site/lectures/09-json-node-modules-errors.md:644
 msgid "`import` paths need the **file extension**: `\"./library.mjs\"`, not `\"./library\"`."
 msgstr "Пътищата в `import` изискват **разширението на файла**: `\"./library.mjs\"`, а не `\"./library\"`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:631
+#: site/lectures/09-json-node-modules-errors.md:645
 msgid "`import` and `export` stand at the top level of the file, not inside `if` or a function. ES modules are always in strict mode."
 msgstr "`import` и `export` стоят на най-горното ниво на файла, а не в `if` или във функция. ES modules винаги са в strict mode."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:633
+#: site/lectures/09-json-node-modules-errors.md:647
 msgid "In an ES module, `await` works at the top level (section 8); `__dirname` is `import.meta.dirname` (Node.js 20.11+)."
 msgstr "В ES module `await` работи на най-горното ниво (раздел 8); `__dirname` е `import.meta.dirname` (Node.js 20.11+)."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:635
+#: site/lectures/09-json-node-modules-errors.md:649
 msgid "Node.js 22.12+ can also `require()` an ES module, and an ES module can `import` a CommonJS one - so the two systems mix."
 msgstr "Node.js 22.12+ може и да `require()`-ва ES module, а ES module може да `import`-ва CommonJS модул - така двете системи се смесват."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:638
+#: site/lectures/09-json-node-modules-errors.md:652
 msgid "**Which one for the course project?** CommonJS - because your rule engine loads the library with `require`. Your tools and tests may use either."
 msgstr "**Коя за курсовия проект?** CommonJS - защото вашият rule engine зарежда библиотеката с `require`. Инструментите и тестовете ви могат да използват която и да е."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:641
+#: site/lectures/09-json-node-modules-errors.md:655
 msgid "Before modules: one global object"
 msgstr "Преди модулите: един глобален обект"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:643
+#: site/lectures/09-json-node-modules-errors.md:657
 msgid "Before modules, a library put everything into **one** global object, wrapped in an IIFE (lecture 5) so that its helpers stayed private:"
 msgstr "Преди модулите една библиотека слагаше всичко в **един** глобален обект, обвит в IIFE (лекция 5), така че helper функциите ѝ да останат лични:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:654
+#: site/lectures/09-json-node-modules-errors.md:668
 msgid "You may still meet this pattern in old code. A module does the same, cleaner: the file is the private scope, `module.exports` is the returned object."
 msgstr "Още може да срещнете този модел в стар код. Модулът прави същото, но по-чисто: файлът е личният scope, `module.exports` е върнатият обект."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:657
+#: site/lectures/09-json-node-modules-errors.md:671
 msgid "7. Errors"
 msgstr "7. Грешки"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:659
+#: site/lectures/09-json-node-modules-errors.md:673
 msgid "What is an exception?"
 msgstr "Какво е exception?"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:661
+#: site/lectures/09-json-node-modules-errors.md:675
 msgid "An **exception** is an event during the run of a program (a *runtime error*) that stops its normal flow: reading a key of `undefined`, calling something that is not a function, invalid JSON. It is different from a **syntax error**, which the engine finds before anything runs (lecture 1)."
 msgstr "**Exception** е събитие по време на изпълнението на програмата (*runtime error*), което спира нормалния ѝ ход: четене на ключ на `undefined`, извикване на нещо, което не е функция, невалиден JSON. Различно е от **syntax error**, който engine-ът открива, преди нещо да се изпълни (лекция 1)."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:666
+#: site/lectures/09-json-node-modules-errors.md:680
 msgid "Developers say \"exception\"; JavaScript **throws** `Error` objects:"
 msgstr "Програмистите казват \"exception\"; JavaScript **хвърля** обекти `Error`:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:680
+#: site/lectures/09-json-node-modules-errors.md:694
 msgid "Without a `try`, the error stops the program: Node.js prints the message and the **stack trace** - the chain of function calls that led to it - and exits with code 1. Read a stack trace from the top: the first line is where the error happened."
 msgstr "Без `try` грешката спира програмата: Node.js отпечатва съобщението и **stack trace** - веригата от извиквания на функции, които са довели до нея - и излиза с код 1. Четете stack trace отгоре: първият ред е мястото на грешката."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:684
+#: site/lectures/09-json-node-modules-errors.md:698
 msgid "Animation"
 msgstr "Анимация"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:685
+#: site/lectures/09-json-node-modules-errors.md:699
 msgid "**The call stack:** [4. Nested calls](../animations/callStack.html#4){target=\"_blank\"}, [7. Stack overflow (advanced)](../animations/callStack.html#7){target=\"_blank\"} - a stack trace is a picture of this stack at the moment of the error"
 msgstr "**Стекът на извикванията:** [4. Вложени извиквания](../animations/callStack.html#4){target=\"_blank\"}, [7. Препълване на стека (advanced)](../animations/callStack.html#7){target=\"_blank\"} - stack trace е снимка на този стек в момента на грешката"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:690
+#: site/lectures/09-json-node-modules-errors.md:704
 msgid "The error types"
 msgstr "Видовете грешки"
 
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:706
+msgid "MDN: [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)"
+msgstr ""
+
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:692
+#: site/lectures/09-json-node-modules-errors.md:708
 msgid "Type"
 msgstr "Тип"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:692
+#: site/lectures/09-json-node-modules-errors.md:708
 msgid "When"
 msgstr "Кога"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:692
+#: site/lectures/09-json-node-modules-errors.md:708
 msgid "Example"
 msgstr "Пример"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:694
+#: site/lectures/09-json-node-modules-errors.md:710
 msgid "a value of the wrong type is used"
 msgstr "използва се стойност от грешен тип"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:694
+#: site/lectures/09-json-node-modules-errors.md:710
 msgid "`undefined.state`, `null.length`, `5()`, assigning to a `const`"
 msgstr "`undefined.state`, `null.length`, `5()`, присвояване на `const`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:695
+#: site/lectures/09-json-node-modules-errors.md:711
 msgid "a name that does not exist"
 msgstr "име, което не съществува"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:695
+#: site/lectures/09-json-node-modules-errors.md:711
 msgid "`console.log(firmwareLevle)` (a typo)"
 msgstr "`console.log(firmwareLevle)` (правописна грешка)"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:696
+#: site/lectures/09-json-node-modules-errors.md:712
 msgid "code or data that cannot be parsed"
 msgstr "код или данни, които не могат да се разчетат"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:697
+#: site/lectures/09-json-node-modules-errors.md:713
 msgid "a number outside the allowed range"
 msgstr "число извън позволения диапазон"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:698
+#: site/lectures/09-json-node-modules-errors.md:714
 msgid "a broken URI escape"
 msgstr "развалена escape последователност в URI"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:699
+#: site/lectures/09-json-node-modules-errors.md:715
 msgid "(historic, not thrown today)"
 msgstr "(историческа, днес не се хвърля)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:718
+#: site/lectures/09-json-node-modules-errors.md:734
 msgid "In rules, almost every error is a `TypeError` - a missing level of the report - or a `SyntaxError` from `JSON.parse`."
 msgstr "В правилата почти всяка грешка е `TypeError` - липсващо ниво в отчета - или `SyntaxError` от `JSON.parse`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:731
+#: site/lectures/09-json-node-modules-errors.md:739
+msgid "MDN: [try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:749
 msgid "When a statement in `try` throws, the rest of `try` is **skipped** and `catch` runs. Without an error, `catch` is skipped. The program goes on after the whole statement:"
 msgstr "Когато statement в `try` хвърли грешка, останалата част от `try` се **прескача** и се изпълнява `catch`. Без грешка `catch` се прескача. Програмата продължава след целия statement:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:744
+#: site/lectures/09-json-node-modules-errors.md:762
 msgid "`err` exists only **inside** the `catch` block. When you do not need it, leave it out (*optional catch binding*, ES2019): `catch { ... }`."
 msgstr "`err` съществува само **вътре** в блока `catch`. Когато не ви трябва, пропуснете го (*optional catch binding*, ES2019): `catch { ... }`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:758
+#: site/lectures/09-json-node-modules-errors.md:776
 msgid "`finally` runs **always** - after `try`, or after `catch` - error or not. It is the place for clean-up: closing a file, printing a summary, resetting a value."
 msgstr "`finally` се изпълнява **винаги** - след `try` или след `catch` - с грешка или без. Това е мястото за почистване: затваряне на файл, отпечатване на обобщение, нулиране на стойност."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:777
+#: site/lectures/09-json-node-modules-errors.md:795
 msgid "`try` / `finally` without `catch` also exists - the error is **not** caught, but `finally` still runs before it goes up:"
 msgstr "Съществува и `try` / `finally` без `catch` - грешката **не** се хваща, но `finally` все пак се изпълнява, преди тя да продължи нагоре:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:794
+#: site/lectures/09-json-node-modules-errors.md:812
 msgid "`throw`: raise your own error"
 msgstr "`throw`: хвърлете собствена грешка"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:796
+#: site/lectures/09-json-node-modules-errors.md:814
+msgid "MDN: [throw](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:816
 msgid "`throw expression;` stops the function and starts looking for a `catch` - in this function, then in its caller, then in the caller's caller... The lines after `throw` do not run:"
 msgstr "`throw expression;` спира функцията и започва да търси `catch` - в тази функция, после в извикващата я, после в извикващата нея... Редовете след `throw` не се изпълняват:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:817
+#: site/lectures/09-json-node-modules-errors.md:837
 msgid "On the report - a helper that **needs** a value says so clearly:"
 msgstr "Върху отчета - helper функция, на която **трябва** стойност, го казва ясно:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:839
+#: site/lectures/09-json-node-modules-errors.md:859
 msgid "You **can** throw any value - `throw \"Error 1\"` - but then there is no `name`, no `stack`, and `err.message` is `undefined`. Always throw `Error` objects (`new Error(...)` or one of the types: `new TypeError(...)`, `new RangeError(...)`)."
 msgstr "**Можете** да хвърлите всякаква стойност - `throw \"Error 1\"` - но тогава няма `name`, няма `stack`, а `err.message` е `undefined`. Винаги хвърляйте обекти `Error` (`new Error(...)` или някой от видовете: `new TypeError(...)`, `new RangeError(...)`)."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:851
+#: site/lectures/09-json-node-modules-errors.md:871
 msgid "Return an error, or throw it?"
 msgstr "Да върнем грешката или да я хвърлим?"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:853
+#: site/lectures/09-json-node-modules-errors.md:873
 msgid "An older example returns an `Error` object instead of throwing it, and the caller checks with `instanceof`:"
 msgstr "По-стар пример връща обект `Error`, вместо да го хвърли, а извикващият проверява с `instanceof`:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:869
+#: site/lectures/09-json-node-modules-errors.md:889
 msgid "It works, but every caller must remember the check - forget it, and `-5` travels on as an `Error` object. Better rules of thumb:"
 msgstr "Работи, но всеки извикващ трябва да помни проверката - забрави ли я, `-5` продължава нататък като обект `Error`. По-добри правила на палеца:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:872
+#: site/lectures/09-json-node-modules-errors.md:892
 msgid "**Expected** situations - a missing field in a report, a model that is not ours - are normal data: handle them with `if` / guard clauses and return a value (`null`, `\"\"`, no alert). No exceptions."
 msgstr "**Очакваните** ситуации - липсващо поле в отчета, модел, който не е наш - са нормални данни: обработвайте ги с `if` / guard clauses и връщайте стойност (`null`, `\"\"`, без alert). Без exceptions."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:875
+#: site/lectures/09-json-node-modules-errors.md:895
 msgid "**Unexpected** situations - a bug, data that breaks the contract of a helper - are errors: `throw`, and let the caller (or the engine) see them."
 msgstr "**Неочакваните** ситуации - бъг, данни, които нарушават договора на helper функцията - са грешки: `throw` и оставете извикващия (или engine-а) да ги види."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:878
+#: site/lectures/09-json-node-modules-errors.md:898
 msgid "Handling a specific error"
 msgstr "Обработка на конкретна грешка"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:880
+#: site/lectures/09-json-node-modules-errors.md:900
 msgid "`catch` catches **everything**. To react to one kind of error only, check it - and throw the others on:"
 msgstr "`catch` хваща **всичко**. За да реагирате само на един вид грешка, проверете я - и хвърлете останалите нататък:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:895
+#: site/lectures/09-json-node-modules-errors.md:915
 msgid "The old slides list all the types in one `if...else if` chain:"
 msgstr "Старите слайдове изброяват всички видове в една верига `if...else if`:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:912
+#: site/lectures/09-json-node-modules-errors.md:932
 msgid "Your own error classes"
 msgstr "Собствени класове за грешки"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:914
+#: site/lectures/09-json-node-modules-errors.md:934
 msgid "A class that **extends** `Error` (lecture 6) gives your errors their own name - and room for more information:"
 msgstr "Клас, който **разширява** (extends) `Error` (лекция 6), дава на грешките ви собствено име - и място за повече информация:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:942
+#: site/lectures/09-json-node-modules-errors.md:962
 msgid "Before classes, the same was written with a constructor function and its prototype (the *ES5 way*):"
 msgstr "Преди класовете същото се пишеше с конструкторска функция и нейния prototype (*начинът в ES5*):"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:960
+#: site/lectures/09-json-node-modules-errors.md:980
 msgid "When you catch an error and throw a new, clearer one, keep the original as the **cause** (ES2022):"
 msgstr "Когато хванете грешка и хвърлите нова, по-ясна, запазете оригиналната като **причина** (cause, ES2022):"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:979
+#: site/lectures/09-json-node-modules-errors.md:999
 msgid "The catch-all `catch` in rules"
 msgstr "`catch`, който хваща всичко, в правилата"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:981
+#: site/lectures/09-json-node-modules-errors.md:1001
 msgid "Many existing rules wrap everything in one `try`:"
 msgstr "Много съществуващи правила обвиват всичко в един `try`:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:993
+#: site/lectures/09-json-node-modules-errors.md:1013
 msgid "It keeps the engine from showing errors - and that is exactly the problem: a missing level of the report, a typo in a key, a bug in a helper - all end the same way: **no alert, no message**. Lectures 5 - 8 showed it again and again: a device with a real problem silently missed."
 msgstr "Това пречи на engine-а да показва грешки - и точно там е проблемът: липсващо ниво в отчета, правописна грешка в ключ, бъг в helper функция - всички свършват по един и същ начин: **без alert, без съобщение**. Лекции 5 - 8 го показаха отново и отново: устройство с истински проблем, тихо пропуснато."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:998
+#: site/lectures/09-json-node-modules-errors.md:1018
 msgid "Better:"
 msgstr "По-добре:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1000
+#: site/lectures/09-json-node-modules-errors.md:1020
 msgid "Use guard clauses and `?.` / `??` for the data that can **legitimately** be missing - then there is nothing to catch."
 msgstr "Използвайте guard clauses и `?.` / `??` за данните, които **законно** могат да липсват - тогава няма какво да се хваща."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1002
+#: site/lectures/09-json-node-modules-errors.md:1022
 msgid "If a part can fail (`JSON.parse` of an embedded string, a date in an odd format), wrap **only that part** in `try`, and decide what the rule does without it."
 msgstr "Ако дадена част може да се провали (`JSON.parse` на вграден string, дата в странен формат), обвийте **само тази част** в `try` и решете какво прави правилото без нея."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1004
+#: site/lectures/09-json-node-modules-errors.md:1024
 msgid "Let real bugs throw. A rule that fails loudly gets fixed; a rule that fails silently misses alerts for years."
 msgstr "Оставете истинските бъгове да хвърлят грешки. Правило, което гърми шумно, се поправя; правило, което се проваля тихо, пропуска alerts с години."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1007
+#: site/lectures/09-json-node-modules-errors.md:1027
 msgid "Section 11 runs both versions on the same reports."
 msgstr "Раздел 11 изпълнява двете версии върху едни и същи отчети."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1009
+#: site/lectures/09-json-node-modules-errors.md:1029
 msgid "Global error handlers and error tracking"
 msgstr "Глобални обработчици на грешки и проследяване на грешки"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1011
+#: site/lectures/09-json-node-modules-errors.md:1031
 msgid "A browser page can catch every error that nobody caught with `window.onerror` - the old slides show it with `message`, `source`, `lineno`, `colno` and `error`. Node.js has `process.on(\"uncaughtException\", handler)`. Both are a last resort for logging, not a way to continue as if nothing happened."
 msgstr "Страница в браузъра може да хване всяка грешка, която никой не е хванал, с `window.onerror` - старите слайдове го показват с `message`, `source`, `lineno`, `colno` и `error`. Node.js има `process.on(\"uncaughtException\", handler)`. И двете са последна мярка за записване в log, а не начин да се продължи, сякаш нищо не е станало."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1016
+#: site/lectures/09-json-node-modules-errors.md:1036
 msgid "In production, errors and logs are usually sent to a **log management** or **error tracking** service (older names: Loggly, Rollbar; today often Sentry or the logging of the platform) - so that someone sees them. Ask what your rule engine does with the errors of a rule."
 msgstr "В production грешките и логовете обикновено се изпращат към услуга за **управление на логове** или за **проследяване на грешки** (по-стари имена: Loggly, Rollbar; днес често Sentry или логовете на платформата) - за да ги види някой. Попитайте какво прави вашият rule engine с грешките на правилата."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1021
+#: site/lectures/09-json-node-modules-errors.md:1041
 msgid "8. Code that waits: promises, `async` and `await`"
 msgstr "8. Код, който чака: promises, `async` и `await`"
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:1023
+#: site/lectures/09-json-node-modules-errors.md:1043
 msgid "Not for rules"
 msgstr "Не е за правилата"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1024
+#: site/lectures/09-json-node-modules-errors.md:1044
 msgid "Rule engines run a rule from start to end at once - rules do not wait for files or the network. You need this section for **Node.js tools**: reading many files, `fetch` (section 9), and tests (lecture 10)."
 msgstr "Rule engines изпълняват правилото от началото до края наведнъж - правилата не чакат файлове или мрежата. Този раздел ви трябва за **инструментите в Node.js**: четене на много файлове, `fetch` (раздел 9) и тестове (лекция 10)."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1029
+#: site/lectures/09-json-node-modules-errors.md:1049
 msgid "Synchronous and asynchronous"
 msgstr "Синхронно и асинхронно"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1031
+#: site/lectures/09-json-node-modules-errors.md:1051
 msgid "**Synchronous**: each task finishes before the next one starts - like waiting in the queue at a coffee shop until you have your coffee."
 msgstr "**Синхронно**: всяка задача свършва, преди да започне следващата - като да чакате на опашката в кафенето, докато получите кафето си."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1033
+#: site/lectures/09-json-node-modules-errors.md:1053
 msgid "**Asynchronous**: a task is started, the program goes on, and the result is handled **later** - like ordering a coffee and doing other things until it is ready."
 msgstr "**Асинхронно**: една задача се стартира, програмата продължава, а резултатът се обработва **по-късно** - като да поръчате кафе и да вършите други неща, докато стане готово."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1037
+#: site/lectures/09-json-node-modules-errors.md:1057
 msgid "`setTimeout(f, ms)` runs `f` later - even with `0` ms, only after the current code has finished:"
 msgstr "`setTimeout(f, ms)` изпълнява `f` по-късно - дори с `0` ms, едва след като текущият код е свършил:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1050
+#: site/lectures/09-json-node-modules-errors.md:1070
 msgid "The event loop"
 msgstr "Event loop"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1052
+#: site/lectures/09-json-node-modules-errors.md:1072
+msgid "MDN: [JavaScript execution model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:1074
 msgid "JavaScript runs on **one thread**, with one **call stack** (lecture 5). Waiting work - timers, files, network answers - is done outside it; when it is ready, its callback goes into a **queue**. The **event loop** takes the next callback from the queue whenever the call stack is **empty**. That is why the timer above runs after `console.log(\"End\")`: the stack was busy until then."
 msgstr "JavaScript работи с **една нишка**, с един **call stack** (лекция 5). Работата, която чака - таймери, файлове, отговори от мрежата - се върши извън него; когато е готова, нейният callback отива в **опашка**. **Event loop**-ът взема следващия callback от опашката винаги когато call stack-ът е **празен**. Затова таймерът по-горе се изпълнява след `console.log(\"End\")`: стекът беше зает дотогава."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1058
+#: site/lectures/09-json-node-modules-errors.md:1080
 msgid "See it step by step in [JavaScript Visualizer 9000](https://www.jsv9000.app/), and in the talk \"Everything You Need to Know About Node.js Event Loop\" (Bert Belder) linked in Read more."
 msgstr "Вижте го стъпка по стъпка в [JavaScript Visualizer 9000](https://www.jsv9000.app/) и в лекцията \"Everything You Need to Know About Node.js Event Loop\" (Bert Belder), с връзка в Още за четене."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1062
+#: site/lectures/09-json-node-modules-errors.md:1084
 msgid "From callbacks to promises"
 msgstr "От callbacks към promises"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1064
+#: site/lectures/09-json-node-modules-errors.md:1086
+msgid "MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:1088
 msgid "The old slides use a story: prepare dinner (2 s), then eat it (0.5 s), then go to bed - each step after the previous one, with errors handled. With callbacks, every next step goes **inside** the previous one (\"callback hell\"):"
 msgstr "Старите слайдове използват история: пригответе вечеря (2 s), после я изяжте (0.5 s), после си легнете - всяка стъпка след предишната, с обработка на грешките. С callbacks всяка следваща стъпка отива **вътре** в предишната (\"callback hell\"):"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1086
+#: site/lectures/09-json-node-modules-errors.md:1110
 msgid "A **promise** is an object that stands for a result that comes **later**. It is *pending* at first, then either *fulfilled* (with a value) or *rejected* (with an error). You create one with `new Promise((resolve, reject) => ...)`, and use its result with `.then()`, `.catch()` and `.finally()`:"
 msgstr "**Promise** е обект, който заменя резултат, който идва **по-късно**. Първо е *pending* (чакащ), после е или *fulfilled* (изпълнен, със стойност), или *rejected* (отхвърлен, с грешка). Създавате го с `new Promise((resolve, reject) => ...)` и използвате резултата му с `.then()`, `.catch()` и `.finally()`:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1115
+#: site/lectures/09-json-node-modules-errors.md:1139
 msgid "`async` and `await`"
 msgstr "`async` и `await`"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1117
+#: site/lectures/09-json-node-modules-errors.md:1141
+msgid "MDN: [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:1143
 msgid "`async` / `await` (ES2017) write the same chain like normal, synchronous code:"
 msgstr "`async` / `await` (ES2017) записват същата верига като нормален, синхронен код:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1119
+#: site/lectures/09-json-node-modules-errors.md:1145
 msgid "an **`async` function** always returns a promise;"
 msgstr "**`async` функцията** винаги връща promise;"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1120
+#: site/lectures/09-json-node-modules-errors.md:1146
 msgid "inside it, **`await` promise** waits for the promise and gives its value - or throws its error, so `try` / `catch` works as usual."
 msgstr "вътре в нея **`await` promise** чака promise-а и дава стойността му - или хвърля неговата грешка, така че `try` / `catch` работи както обикновено."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1147
+#: site/lectures/09-json-node-modules-errors.md:1173
 msgid "In a CommonJS file, `await` works only inside an `async` function - call it at the end: `main().catch(err => { console.error(err); process.exitCode = 1; });`."
 msgstr "В CommonJS файл `await` работи само в `async` функция - извикайте я накрая: `main().catch(err => { console.error(err); process.exitCode = 1; });`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1150
+#: site/lectures/09-json-node-modules-errors.md:1176
 msgid "Reading many files at once - `Promise.all` waits for all promises:"
 msgstr "Четене на много файлове наведнъж - `Promise.all` чака всички promises:"
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1161
+#: site/lectures/09-json-node-modules-errors.md:1187
 msgid "9. `fetch`: JSON from a web API"
 msgstr "9. `fetch`: JSON от уеб API"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1163
+#: site/lectures/09-json-node-modules-errors.md:1189
+msgid "MDN: [Window: fetch() method](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)"
+msgstr ""
+
+#. paragraph
+#: site/lectures/09-json-node-modules-errors.md:1191
 msgid "Web APIs answer requests with JSON. `fetch` (in browsers, and global in Node.js 18+) sends a request and returns a promise of the **response**."
 msgstr "Уеб API отговарят на заявки с JSON. `fetch` (в браузърите, а в Node.js 18+ - глобално) изпраща заявка и връща promise за **отговора**."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1166
+#: site/lectures/09-json-node-modules-errors.md:1194
 msgid "HTTP in one minute"
 msgstr "HTTP за една минута"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1168
+#: site/lectures/09-json-node-modules-errors.md:1196
 msgid "The client sends a **request**: a method (`GET` to read, `POST` to send data), a URL, headers, sometimes a body."
 msgstr "Клиентът изпраща **заявка** (request): метод (`GET` за четене, `POST` за изпращане на данни), URL, headers, понякога тяло."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1170
+#: site/lectures/09-json-node-modules-errors.md:1198
 msgid "The server sends a **response**: a **status code** (`200` OK, `404` not found, `500` server error, ...), headers (`Content-Type: application/json`) and a body - here, JSON text."
 msgstr "Сървърът изпраща **отговор** (response): **status code** (`200` OK, `404` не е намерено, `500` грешка на сървъра, ...), headers (`Content-Type: application/json`) и тяло - тук JSON текст."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1174
+#: site/lectures/09-json-node-modules-errors.md:1202
 msgid "The weather, as JSON"
 msgstr "Времето, като JSON"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1176
+#: site/lectures/09-json-node-modules-errors.md:1204
 msgid "[Open-Meteo](https://open-meteo.com/) is a free weather API, without an account. The current temperature in Sofia:"
 msgstr "[Open-Meteo](https://open-meteo.com/) е безплатно API за времето, без регистрация. Текущата температура в София:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1190
+#: site/lectures/09-json-node-modules-errors.md:1218
 msgid "`response.json()` reads the body and **parses** it - despite its name, the result is a JavaScript object, not JSON text."
 msgstr "`response.json()` прочита тялото и го **разчита** - въпреки името, резултатът е обект на JavaScript, а не JSON текст."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1192
+#: site/lectures/09-json-node-modules-errors.md:1220
 msgid "`fetch` rejects only when there is **no** response (no network, a wrong host). A `404` or `500` is a normal response: check `response.ok` (true for `200` - `299`)."
 msgstr "`fetch` отхвърля promise-а само когато **няма** отговор (няма мрежа, грешен host). `404` или `500` е нормален отговор: проверете `response.ok` (true за `200` - `299`)."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1213
+#: site/lectures/09-json-node-modules-errors.md:1241
 msgid "The same with `.then()`, as older code writes it:"
 msgstr "Същото с `.then()`, както го пише по-старият код:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1222
+#: site/lectures/09-json-node-modules-errors.md:1250
 msgid "Public APIs that return JSON, good for practice: [JSONPlaceholder](https://jsonplaceholder.typicode.com/) (fake data for testing), [Open-Meteo](https://open-meteo.com/en/docs) (weather), [Open Trivia Database](https://opentdb.com/api_config.php) (quiz questions), [chucknorris.io](https://api.chucknorris.io/) (jokes), and a long list: [public-apis on GitHub](https://github.com/public-apis/public-apis)."
 msgstr "Публични API, които връщат JSON, подходящи за упражнения: [JSONPlaceholder](https://jsonplaceholder.typicode.com/) (фалшиви данни за тестване), [Open-Meteo](https://open-meteo.com/en/docs) (времето), [Open Trivia Database](https://opentdb.com/api_config.php) (въпроси за викторини), [chucknorris.io](https://api.chucknorris.io/) (вицове) и дълъг списък: [public-apis в GitHub](https://github.com/public-apis/public-apis)."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:1229
+#: site/lectures/09-json-node-modules-errors.md:1257
 msgid "In the browser: CORS"
 msgstr "В браузъра: CORS"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1230
+#: site/lectures/09-json-node-modules-errors.md:1258
 msgid "A page may `fetch` from another site only if that site allows it (with the header `Access-Control-Allow-Origin`) - the two APIs above do. Node.js has no such limit."
 msgstr "Една страница може да прави `fetch` към друг сайт само ако той го позволява (с header-а `Access-Control-Allow-Origin`) - двете API по-горе го позволяват. Node.js няма такова ограничение."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1234
+#: site/lectures/09-json-node-modules-errors.md:1262
 msgid "10. Running a rule locally"
 msgstr "10. Локално изпълнение на правило"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1236
+#: site/lectures/09-json-node-modules-errors.md:1264
 msgid "Rules can be tested only in the rule engine's web interface - unless you run them yourself. With Node.js you can: load a rule **unchanged**, give it a fake `emit` and your `library.js`, and run it on a folder of sample reports."
 msgstr "Правилата могат да се тестват само в уеб интерфейса на rule engine-а - освен ако не ги изпълнявате сами. С Node.js можете: заредете правилото **без промени**, дайте му фалшив `emit` и вашия `library.js` и го изпълнете върху папка с примерни отчети."
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1240
+#: site/lectures/09-json-node-modules-errors.md:1268
 msgid "The folder"
 msgstr "Папката"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1242
+#: site/lectures/09-json-node-modules-errors.md:1270
 msgid "The homework repository has one ready (`data/reports/`), and a rule with its library (`09-json-node-modules-errors/rules/`):"
 msgstr "Homework repository има готова (`data/reports/`), както и правило с неговата библиотека (`09-json-node-modules-errors/rules/`):"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1255
+#: site/lectures/09-json-node-modules-errors.md:1283
 msgid "Loading a rule as it is"
 msgstr "Зареждане на правило както си е"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1257
+#: site/lectures/09-json-node-modules-errors.md:1285
 msgid "A rule file is not a module: it has no `module.exports`, it uses `emit` and `require(\"library.js\")` that the **engine** provides. So the runner does what an engine does - it reads the code as text and runs it with the values it needs, using the `Function` constructor (the Run button of this site works the same way):"
 msgstr "Файлът с правило не е модул: няма `module.exports`, използва `emit` и `require(\"library.js\")`, които дава **engine-ът**. Затова runner-ът прави това, което прави един engine - чете кода като текст и го изпълнява със стойностите, които му трябват, чрез конструктора `Function` (бутонът Run на този сайт работи по същия начин):"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1272
+#: site/lectures/09-json-node-modules-errors.md:1300
 msgid "The idea, on this site:"
 msgstr "Идеята, на този сайт:"
 
 #. heading 3
-#: site/lectures/09-json-node-modules-errors.md:1292
+#: site/lectures/09-json-node-modules-errors.md:1320
 msgid "The whole runner"
 msgstr "Целият runner"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1294
+#: site/lectures/09-json-node-modules-errors.md:1322
 msgid "The script at the start of the lecture, run on the sample reports:"
 msgstr "Script-ът от началото на лекцията, изпълнен върху примерните отчети:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1317
+#: site/lectures/09-json-node-modules-errors.md:1345
 msgid "and on the older rule `chk-0132.js`, which reads `doc.inventory.details` without a check:"
 msgstr "и върху по-старото правило `chk-0132.js`, което чете `doc.inventory.details` без проверка:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1326
+#: site/lectures/09-json-node-modules-errors.md:1354
 msgid "Now a missing part of a report is a **visible** problem, with the file name and the exact error - not a silent \"no alert\". Practice task 5 builds this runner."
 msgstr "Сега липсващата част на отчета е **видим** проблем, с името на файла и точната грешка - а не тихо \"няма alert\". Задача 5 за упражнение изгражда този runner."
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:1329
+#: site/lectures/09-json-node-modules-errors.md:1357
 msgid "Next: from \"look at the output\" to tests"
 msgstr "Следва: от \"погледни изхода\" към тестове"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1330
+#: site/lectures/09-json-node-modules-errors.md:1358
 msgid "The runner shows the alerts; you still have to read them. Lecture 10 turns the same idea into **tests** that check the alerts automatically: \"for lab-dev-02 exactly one alert, with these problems\"."
 msgstr "Runner-ът показва alerts; все още трябва да ги прочетете. Лекция 10 превръща същата идея в **тестове**, които проверяват alerts автоматично: \"за lab-dev-02 точно един alert, с тези проблеми\"."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1335
+#: site/lectures/09-json-node-modules-errors.md:1363
 msgid "11. Reading existing rules"
 msgstr "11. Четене на съществуващи правила"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1337
+#: site/lectures/09-json-node-modules-errors.md:1365
 msgid "The same rule twice: with a catch-all `try`, and with guard clauses. Both run on the same five small reports:"
 msgstr "Едно и също правило два пъти: с `try`, който хваща всичко, и с guard clauses. Двете се изпълняват върху едни и същи пет малки отчета:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1393
+#: site/lectures/09-json-node-modules-errors.md:1421
 msgid "**Check yourself:**"
 msgstr "**Проверете се:**"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1395
+#: site/lectures/09-json-node-modules-errors.md:1423
 msgid "For which reports does the old rule give **no** alert although the new one does? What happened inside the old rule each time?"
 msgstr "За кои отчети старото правило **не** дава alert, макар че новото дава? Какво се е случило вътре в старото правило всеки път?"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1397
+#: site/lectures/09-json-node-modules-errors.md:1425
 msgid "\"no details\": neither rule gives an alert. Is that right? What would you want a rule to do with a report that has no firmware level at all?"
 msgstr "\"no details\": нито едно от правилата не дава alert. Правилно ли е това? Какво бихте искали правилото да прави с отчет, който изобщо няма firmware level?"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1399
+#: site/lectures/09-json-node-modules-errors.md:1427
 msgid "In the new rule there is no `try`. Can it still throw? Find an input that makes it throw - and decide whether that error should be caught."
 msgstr "В новото правило няма `try`. Може ли все пак да хвърли грешка? Намерете входни данни, при които хвърля - и решете дали тази грешка трябва да се хваща."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1401
+#: site/lectures/09-json-node-modules-errors.md:1429
 msgid "The old rule compares `version < \"4.2\"` as strings. What does it do with a report whose firmware level is `\"4.10.0.1\"`? And the new rule?"
 msgstr "Старото правило сравнява `version < \"4.2\"` като strings. Какво прави с отчет, чийто firmware level е `\"4.10.0.1\"`? А новото правило?"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1403
+#: site/lectures/09-json-node-modules-errors.md:1431
 msgid "In which line of the old rule would you put a **narrow** `try`, if any?"
 msgstr "На кой ред на старото правило бихте сложили **тесен** `try`, ако изобщо бихте?"
 
 #. box title
-#: site/lectures/09-json-node-modules-errors.md:1405
+#: site/lectures/09-json-node-modules-errors.md:1433
 msgid "Answer"
 msgstr "Отговор"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1406
+#: site/lectures/09-json-node-modules-errors.md:1434
 msgid "\"no status\": the old rule reads `doc.status.device_alias` inside `emit(...)` - a `TypeError`, caught, silently returned; the new rule uses `?.` and reports \"unknown device\". \"level is a number\": `level.split` is not a function for the number `4.1` - a `TypeError`, swallowed; the new rule converts with `String(...)` and reports version `4.1`."
 msgstr "\"no status\": старото правило чете `doc.status.device_alias` вътре в `emit(...)` - `TypeError`, хванат и тихо приключил; новото правило използва `?.` и докладва \"unknown device\". \"level is a number\": `level.split` не е функция за числото `4.1` - `TypeError`, погълнат; новото правило преобразува със `String(...)` и докладва версия `4.1`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1411
+#: site/lectures/09-json-node-modules-errors.md:1439
 msgid "Both stop: the old one by an error (by luck), the new one on purpose (`version === \"\"`). Whether \"no firmware level\" should be an alert is a decision about the data - maybe a separate check (\"report incomplete\"). The point: the new rule makes the decision **visible** in the code."
 msgstr "И двете спират: старото - заради грешка (по случайност), новото - нарочно (`version === \"\"`). Дали \"няма firmware level\" трябва да е alert, е решение за данните - може би отделна проверка (\"непълен отчет\"). Важното: новото правило прави решението **видимо** в кода."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1415
+#: site/lectures/09-json-node-modules-errors.md:1443
 msgid "Yes - for example `newRule(null, ...)`: `null.overview` throws a `TypeError` (`doc?.overview` would not). Should it be caught? A rule called with `null` means the engine or the runner is broken - an error is the right signal there."
 msgstr "Да - например `newRule(null, ...)`: `null.overview` хвърля `TypeError` (`doc?.overview` не би). Трябва ли да се хваща? Правило, извикано с `null`, означава, че engine-ът или runner-ът е развален - там грешката е правилният сигнал."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1418
+#: site/lectures/09-json-node-modules-errors.md:1446
 msgid "`\"4.10.0.1\" < \"4.2\"` is `true` as strings (`\"1\"` < `\"2\"` at position 2, lecture 3): the old rule sends an alert for a device that is **newer** than 4.2. The new rule compares the numbers - major 4, minor 10 - and sends none."
 msgstr "`\"4.10.0.1\" < \"4.2\"` е `true` като strings (`\"1\"` < `\"2\"` на позиция 2, лекция 3): старото правило изпраща alert за устройство, което е **по-ново** от 4.2. Новото правило сравнява числата - major 4, minor 10 - и не изпраща."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1421
+#: site/lectures/09-json-node-modules-errors.md:1449
 msgid "Nowhere in this rule: everything that can be missing is handled with `?.` and `??`. A narrow `try` belongs around something that can really fail with valid data - for example `JSON.parse` of a string field that contains embedded JSON."
 msgstr "Никъде в това правило: всичко, което може да липсва, се обработва с `?.` и `??`. Тесният `try` е мястото му около нещо, което наистина може да се провали с валидни данни - например `JSON.parse` на поле string, което съдържа вграден JSON."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1426
+#: site/lectures/09-json-node-modules-errors.md:1454
 msgid "12. Practice"
 msgstr "12. Упражнения"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1428
+#: site/lectures/09-json-node-modules-errors.md:1456
 msgid "In your copy of the Homework repository, first get the new tasks:"
 msgstr "Във вашето копие на Homework repository първо изтеглете новите задачи:"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1435
+#: site/lectures/09-json-node-modules-errors.md:1463
 msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
 msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1438
+#: site/lectures/09-json-node-modules-errors.md:1466
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1438
+#: site/lectures/09-json-node-modules-errors.md:1466
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1438
+#: site/lectures/09-json-node-modules-errors.md:1466
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1440
+#: site/lectures/09-json-node-modules-errors.md:1468
 msgid "Predict 20 results: `JSON.stringify` and `JSON.parse`, the error types, `try` / `finally`"
 msgstr "Предвидете 20 резултата: `JSON.stringify` и `JSON.parse`, видовете грешки, `try` / `finally`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1441
+#: site/lectures/09-json-node-modules-errors.md:1469
 msgid "Parse safely (with the file name in the error), remove a BOM, stringify with fixed keys and indentation, compare without key order, mask values"
 msgstr "Безопасно разчитане (с името на файла в грешката), махане на BOM, stringify с фиксирани ключове и отстъпи, сравняване без значение от реда на ключовете, маскиране на стойности"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1442
+#: site/lectures/09-json-node-modules-errors.md:1470
 msgid "Turn your helpers into a CommonJS module; `task3-module.js` loads it with `require` and checks it"
 msgstr "Превърнете helper функциите си в CommonJS модул; `task3-module.js` го зарежда с `require` и го проверява"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1443
+#: site/lectures/09-json-node-modules-errors.md:1471
 msgid "The old tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), a `ReportError` class, `requireField`, the type of an error"
 msgstr "Старите задачи (`calculateArea`, `retryOperation`, `checkUserPermission`), клас `ReportError`, `requireField`, видът на една грешка"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1444
+#: site/lectures/09-json-node-modules-errors.md:1472
 msgid "The local rule runner: read the reports of a folder, load a rule with a fake `emit`, collect alerts and errors"
 msgstr "Локалният runner за правила: прочитане на отчетите от папка, зареждане на правило с фалшив `emit`, събиране на alerts и грешки"
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1446
+#: site/lectures/09-json-node-modules-errors.md:1474
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1448
+#: site/lectures/09-json-node-modules-errors.md:1476
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1448
+#: site/lectures/09-json-node-modules-errors.md:1476
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1450
+#: site/lectures/09-json-node-modules-errors.md:1478
 msgid "JSON"
 msgstr "JSON"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1450
+#: site/lectures/09-json-node-modules-errors.md:1478
 msgid "Text; double quotes; no trailing comma, comments, `undefined`, `NaN`; six types; `null` = \"known to be empty\""
 msgstr "Текст; двойни кавички; без запетая накрая, коментари, `undefined`, `NaN`; шест типа; `null` = \"известно е, че е празно\""
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1451
+#: site/lectures/09-json-node-modules-errors.md:1479
 msgid "Text -> values; throws `SyntaxError` - parse in a `try` and say which file failed; a reviver for dates"
 msgstr "Текст -> стойности; хвърля `SyntaxError` - разчитайте в `try` и казвайте кой файл е сгрешен; reviver за дати"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1452
+#: site/lectures/09-json-node-modules-errors.md:1480
 msgid "Values -> text; `(value, null, 2)` for people; a replacer chooses or masks keys; drops `undefined` and functions"
 msgstr "Стойности -> текст; `(value, null, 2)` за хора; replacer избира или маскира ключове; маха `undefined` и функциите"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1453
+#: site/lectures/09-json-node-modules-errors.md:1481
 msgid "Node.js"
 msgstr "Node.js"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1453
+#: site/lectures/09-json-node-modules-errors.md:1481
 msgid "`node file.js`; `process.argv`, `process.env`, `process.exitCode`; `__dirname` vs `process.cwd()`"
 msgstr "`node file.js`; `process.argv`, `process.env`, `process.exitCode`; `__dirname` срещу `process.cwd()`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1454
+#: site/lectures/09-json-node-modules-errors.md:1482
 msgid "`log`, `warn`, `error` (stderr), `table`, `dir` with `{ depth: null }`, `group`, `count`, `time`, `assert`"
 msgstr "`log`, `warn`, `error` (stderr), `table`, `dir` с `{ depth: null }`, `group`, `count`, `time`, `assert`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1455
+#: site/lectures/09-json-node-modules-errors.md:1483
 msgid "`fs.readFileSync(f, \"utf8\")`, `writeFileSync`, `readdirSync`; paths with `path.join`"
 msgstr "`fs.readFileSync(f, \"utf8\")`, `writeFileSync`, `readdirSync`; пътища с `path.join`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1456
+#: site/lectures/09-json-node-modules-errors.md:1484
 msgid "npm"
 msgstr "npm"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1456
+#: site/lectures/09-json-node-modules-errors.md:1484
 msgid "`npm init -y`; `package.json` scripts and dependencies; `node_modules/` not in Git; `package-lock.json` in Git; `npx`"
 msgstr "`npm init -y`; scripts и зависимости в `package.json`; `node_modules/` не е в Git; `package-lock.json` е в Git; `npx`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1457
+#: site/lectures/09-json-node-modules-errors.md:1485
 msgid "CommonJS"
 msgstr "CommonJS"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1457
+#: site/lectures/09-json-node-modules-errors.md:1485
 msgid "`module.exports = { ... }`; `require(\"./file.js\")`; runs once, cached; the course library uses it"
 msgstr "`module.exports = { ... }`; `require(\"./file.js\")`; изпълнява се веднъж, кешира се; курсовата библиотека го използва"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1458
+#: site/lectures/09-json-node-modules-errors.md:1486
 msgid "ES modules"
 msgstr "ES modules"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1458
+#: site/lectures/09-json-node-modules-errors.md:1486
 msgid "`export` / `export default`, `import { a } from \"./file.mjs\"`; `.mjs` or `\"type\": \"module\"`"
 msgstr "`export` / `export default`, `import { a } from \"./file.mjs\"`; `.mjs` или `\"type\": \"module\"`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1459
+#: site/lectures/09-json-node-modules-errors.md:1487
 msgid "Errors"
 msgstr "Грешки"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1459
+#: site/lectures/09-json-node-modules-errors.md:1487
 msgid "`Error` objects: `name`, `message`, `stack`, `cause`; `TypeError`, `ReferenceError`, `SyntaxError`, `RangeError`"
 msgstr "Обекти `Error`: `name`, `message`, `stack`, `cause`; `TypeError`, `ReferenceError`, `SyntaxError`, `RangeError`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1460
+#: site/lectures/09-json-node-modules-errors.md:1488
 msgid "`catch` for errors you can handle; `finally` always runs; check the type and rethrow the rest"
 msgstr "`catch` за грешки, които можете да обработите; `finally` винаги се изпълнява; проверете вида и хвърлете останалите нататък"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1461
+#: site/lectures/09-json-node-modules-errors.md:1489
 msgid "Throw `Error` objects, never strings; custom classes with `extends Error`"
 msgstr "Хвърляйте обекти `Error`, никога strings; собствени класове с `extends Error`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1462
+#: site/lectures/09-json-node-modules-errors.md:1490
 msgid "Catch-all"
 msgstr "Catch-all"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1462
+#: site/lectures/09-json-node-modules-errors.md:1490
 msgid "`catch (err) { return; }` hides bugs and misses alerts - guard clauses instead"
 msgstr "`catch (err) { return; }` крие бъгове и пропуска alerts - вместо това guard clauses"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1463
+#: site/lectures/09-json-node-modules-errors.md:1491
 msgid "Async"
 msgstr "Async"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1463
+#: site/lectures/09-json-node-modules-errors.md:1491
 msgid "Promises: pending -> fulfilled / rejected; `.then` / `.catch`; `async` functions and `await`; `Promise.all`"
 msgstr "Promises: pending -> fulfilled / rejected; `.then` / `.catch`; `async` функции и `await`; `Promise.all`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1464
+#: site/lectures/09-json-node-modules-errors.md:1492
 msgid "`await fetch(url)`, check `response.ok`, `await response.json()`"
 msgstr "`await fetch(url)`, проверете `response.ok`, `await response.json()`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1465
+#: site/lectures/09-json-node-modules-errors.md:1493
 msgid "Local runs"
 msgstr "Локално изпълнение"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1465
+#: site/lectures/09-json-node-modules-errors.md:1493
 msgid "Load the rule unchanged with a fake `emit` and `require`; run it on a folder; print every error"
 msgstr "Заредете правилото без промени с фалшиви `emit` и `require`; изпълнете го върху папка; отпечатвайте всяка грешка"
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1467
+#: site/lectures/09-json-node-modules-errors.md:1495
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1469
+#: site/lectures/09-json-node-modules-errors.md:1497
 msgid "`09-json-node-modules-errors/homework.js` (in the homework repository): load all reports of a folder with `fs/promises` and `Promise.all`, a `fetchJson` that checks the status (tested with a fake `fetch`), and a summary of the runner's alerts and errors."
 msgstr "`09-json-node-modules-errors/homework.js` (в homework repository): зареждане на всички отчети от папка с `fs/promises` и `Promise.all`, `fetchJson`, който проверява статуса (тестван с фалшив `fetch`), и обобщение на alerts и грешките от runner-а."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1473
+#: site/lectures/09-json-node-modules-errors.md:1501
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr ""
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1475
+#: site/lectures/09-json-node-modules-errors.md:1503
 msgid "**Course project:** make `library.js` a clean CommonJS module, add `run-rule.js` (practice task 5) to your repository, and run one of your real rules (with an anonymised sample) locally. Add `package.json` with a script `\"run-rule\"`."
 msgstr "**Курсов проект:** направете `library.js` чист CommonJS модул, добавете `run-rule.js` (задача 5 за упражнение) в repository-то си и изпълнете локално едно от истинските си правила (с анонимизиран примерен документ). Добавете `package.json` със script `\"run-rule\"`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1478
+#: site/lectures/09-json-node-modules-errors.md:1506
 msgid "Optional: find a rule of yours with a catch-all `try`. Which errors could it hide? Rewrite it with guard clauses and run both versions on your samples."
 msgstr "По желание: намерете ваше правило с `try`, който хваща всичко. Какви грешки би могъл да скрие? Пренапишете го с guard clauses и изпълнете двете версии върху примерните си документи."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1481
+#: site/lectures/09-json-node-modules-errors.md:1509
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1483
+#: site/lectures/09-json-node-modules-errors.md:1511
 msgid "MDN: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify), [Control flow and error handling](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling), [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises), [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
 msgstr "MDN: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify), [Control flow and error handling](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling), [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises), [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1493
+#: site/lectures/09-json-node-modules-errors.md:1521
 msgid "Node.js: [Introduction to Node.js](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs), [Reading files](https://nodejs.org/en/learn/manipulating-files/reading-files-with-nodejs), [Modules: CommonJS](https://nodejs.org/api/modules.html), [Modules: ECMAScript modules](https://nodejs.org/api/esm.html), [An introduction to the npm package manager](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager), [The Node.js event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)"
 msgstr "Node.js: [Introduction to Node.js](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs), [Reading files](https://nodejs.org/en/learn/manipulating-files/reading-files-with-nodejs), [Modules: CommonJS](https://nodejs.org/api/modules.html), [Modules: ECMAScript modules](https://nodejs.org/api/esm.html), [An introduction to the npm package manager](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager), [The Node.js event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1499
+#: site/lectures/09-json-node-modules-errors.md:1527
 msgid "javascript.info: [JSON methods](https://javascript.info/json), [Error handling](https://javascript.info/error-handling), [Modules](https://javascript.info/modules-intro), [Promises, async/await](https://javascript.info/async)"
 msgstr "javascript.info: [JSON methods](https://javascript.info/json), [Error handling](https://javascript.info/error-handling), [Modules](https://javascript.info/modules-intro), [Promises, async/await](https://javascript.info/async)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1503
+#: site/lectures/09-json-node-modules-errors.md:1531
 msgid "Tools: [JSONLint](https://jsonlint.com/), [JavaScript Visualizer 9000](https://www.jsv9000.app/)"
 msgstr "Инструменти: [JSONLint](https://jsonlint.com/), [JavaScript Visualizer 9000](https://www.jsv9000.app/)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1504
+#: site/lectures/09-json-node-modules-errors.md:1532
 msgid "Video: [Everything You Need to Know About Node.js Event Loop](https://www.youtube.com/watch?v=PNa9OMajw9w) (Bert Belder)"
 msgstr "Видео: [Everything You Need to Know About Node.js Event Loop](https://www.youtube.com/watch?v=PNa9OMajw9w) (Bert Belder)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1506
+#: site/lectures/09-json-node-modules-errors.md:1534
 msgid "**Next session:** tests with `node:test`, JSDoc types and `// @ts-check`, a linter, the Git workflow with branches and pull requests - and the review of your course project."
 msgstr "**Следващото занятие:** тестове с `node:test`, JSDoc типове и `// @ts-check`, linter, работа с Git с branches и pull requests - и прегледът на вашия курсов проект."
 

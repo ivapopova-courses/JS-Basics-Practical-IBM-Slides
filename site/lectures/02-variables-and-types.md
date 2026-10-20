@@ -61,6 +61,8 @@ console.log(model);
 
 ### `let` and `const`
 
+MDN: [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+
 | Keyword | Can it get a new value? | Use it for |
 |---------|-------------------------|-----------|
 | `const` | no | values that do not change - most of your variables |
@@ -89,6 +91,8 @@ variables: *"they must be declared as const"*.
 :::
 
 ### Strict mode: no variables by accident
+
+MDN: [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)
 
 Without `let`, `const` or `var`, JavaScript silently creates a **global**
 variable. A typo in a name then creates a new variable instead of an error:
@@ -152,6 +156,8 @@ Not valid: `2ndNode` (starts with a digit), `firmware-level` (`-` is minus),
 
 ## 3. Primitive types
 
+MDN: [JavaScript data types and data structures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures)
+
 A value in JavaScript is either a **primitive** (a single simple value) or an
 **object** (a structure with properties - like `doc`). The primitive types:
 
@@ -166,6 +172,8 @@ A value in JavaScript is either a **primitive** (a single simple value) or an
 (Two more, `bigint` and `symbol`, are rarely needed.)
 
 ### `typeof`
+
+MDN: [typeof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof)
 
 ```js run
 console.log(typeof 42);              // number
@@ -200,6 +208,8 @@ decimals are approximations. Round results before you show them.
 :::
 
 ### Strings
+
+MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 
 Three kinds of quotes:
 
@@ -320,6 +330,8 @@ console.log(usedPercent.toFixed(1));        // 69.0 - a string with 1 decimal
 
 ### Precedence
 
+MDN: [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence)
+
 As in math: `**` first, then `*` `/` `%`, then `+` `-`. Use parentheses when in doubt:
 
 ```js run
@@ -375,6 +387,8 @@ console.log(epoch, typeof epoch);
 ```
 
 ### String to number
+
+MDN: [Number() constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number), [parseInt()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt), [parseFloat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat)
 
 ```js run
 console.log(Number("42"));            // 42
@@ -477,6 +491,19 @@ Each file explains the task at the top. Write your code between the
    and the course project reuse them. Every check must print `OK`.
 3. Optional: take a JSON document you know (anonymised) and try the same
    conversions on it.
+
+## Read more
+
+- MDN: [Grammar and types](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types),
+  [JavaScript data types and data structures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures),
+  [Expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators),
+  [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence),
+  [Type coercion](https://developer.mozilla.org/en-US/docs/Glossary/Type_coercion)
+- javascript.info: [Variables](https://javascript.info/variables),
+  [Data types](https://javascript.info/types),
+  [Type conversions](https://javascript.info/type-conversions),
+  [Basic operators, maths](https://javascript.info/operators)
+- Eloquent JavaScript (4th edition): [Values, Types, and Operators](https://eloquentjavascript.net/01_values.html)
 
 **Next session:** comparisons, logical operators, conditions and loops - and the
 `if` of the sample rule.
