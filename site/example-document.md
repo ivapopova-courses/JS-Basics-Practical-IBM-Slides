@@ -18,21 +18,6 @@ the JSON a device sends.
   one (for example `inventory.modules` in lecture 6). This page always shows the
   current version. After `git pull upstream main` your copy is the same.
 
-## The main parts
-
-| Part | What it holds | Example path |
-|---|---|---|
-| `_note` | only a note that the data is made up | `doc._note` |
-| `status` | the device alias and the time of the report (`epoch`: seconds, as a string) | `doc.status.device_alias` |
-| `overview` | model, serial number and firmware version | `doc.overview.model` |
-| `alerts` | alerts already raised, keyed by rule id | `doc.alerts["CHK-0132"].raised` |
-| `inventory.details` | settings of the device; every value is a string, some pack several values into one string | `doc.inventory.details.settings` |
-| `inventory.extended_info` | a deep nested object | `doc.inventory.extended_info.json.data.system.name` |
-| `inventory.features` | a list of strings | `doc.inventory.features[0]` |
-| `inventory.enclosures` | a list of records (objects with the same keys) | `doc.inventory.enclosures[2].state` |
-| `inventory.modules` | a dictionary keyed by ids, with dots in the keys | `doc.inventory.modules["12_4.20"].status` |
-| `inventory.labels` | keys with spaces | `doc.inventory.labels["Firmware Version"]` |
-
 ## The whole document
 
 ```json

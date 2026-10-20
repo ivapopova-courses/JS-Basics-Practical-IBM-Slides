@@ -55,190 +55,162 @@ msgstr "Документът расте по време на курса: лек�
 
 #. heading 2
 #: site/example-document.md:21
-msgid "The main parts"
-msgstr "Основните части"
-
-#. table cell
-#: site/example-document.md:23
-msgid "Part"
-msgstr "Част"
-
-#. table cell
-#: site/example-document.md:23
-msgid "What it holds"
-msgstr "Какво съдържа"
-
-#. table cell
-#: site/example-document.md:23
-msgid "Example path"
-msgstr "Примерен път"
-
-#. table cell
-#: site/example-document.md:25
-msgid "only a note that the data is made up"
-msgstr "само бележка, че данните са измислени"
-
-#. table cell
-#: site/example-document.md:26
-msgid "the device alias and the time of the report (`epoch`: seconds, as a string)"
-msgstr "alias-ът на устройството и времето на отчета (`epoch`: секунди, като string)"
-
-#. table cell
-#: site/example-document.md:27
-msgid "model, serial number and firmware version"
-msgstr "модел, сериен номер и версия на firmware"
-
-#. table cell
-#: site/example-document.md:28
-msgid "alerts already raised, keyed by rule id"
-msgstr "вече създадени alerts, с ключ id на правилото"
-
-#. table cell
-#: site/example-document.md:29
-msgid "settings of the device; every value is a string, some pack several values into one string"
-msgstr "настройки на устройството; всяка стойност е string, някои пакетират няколко стойности в един string"
-
-#. table cell
-#: site/example-document.md:30
-msgid "a deep nested object"
-msgstr "дълбоко вложен обект"
-
-#. table cell
-#: site/example-document.md:31
-msgid "a list of strings"
-msgstr "списък от strings"
-
-#. table cell
-#: site/example-document.md:32
-msgid "a list of records (objects with the same keys)"
-msgstr "списък от записи (обекти с еднакви ключове)"
-
-#. table cell
-#: site/example-document.md:33
-msgid "a dictionary keyed by ids, with dots in the keys"
-msgstr "dictionary с ключове id, с точки в ключовете"
-
-#. table cell
-#: site/example-document.md:34
-msgid "keys with spaces"
-msgstr "ключове с интервали"
-
-#. heading 2
-#: site/example-document.md:36
 msgid "The whole document"
 msgstr "Целият документ"
 
 #. heading 2
-#: site/example-document.md:42
+#: site/example-document.md:27
 msgid "Print it in an example"
 msgstr "Отпечатване в пример"
 
 #. paragraph
-#: site/example-document.md:44
+#: site/example-document.md:29
 msgid "`console.log(doc)` prints an object on one line, and shows the deeper levels only as `[Object]`. To see a part of the document indented, turn it into text with `JSON.stringify(value, null, 2)` (2 = two spaces per level; more about JSON in session 9):"
 msgstr "`console.log(doc)` отпечатва обекта на един ред и показва по-дълбоките нива само като `[Object]`. За да видите част от документа с отстъпи, превърнете я в текст с `JSON.stringify(value, null, 2)` (2 = два интервала на ниво; повече за JSON в занятие 9):"
 
 #. paragraph
-#: site/example-document.md:54
+#: site/example-document.md:39
 msgid "Change the path and press **Run** to look at another part, or print the whole document with `JSON.stringify(doc, null, 2)`. `console.dir(doc, { depth: null })` also shows every level (on one line), and `console.table(doc.inventory.enclosures)` shows a list of records as a table (session 7)."
 msgstr "Сменете пътя и натиснете **Run**, за да разгледате друга част, или отпечатайте целия документ с `JSON.stringify(doc, null, 2)`. `console.dir(doc, { depth: null })` също показва всички нива (на един ред), а `console.table(doc.inventory.enclosures)` показва списък от записи като таблица (занятие 7)."
 
 #. box title
-#: site/example-document.md:59
+#: site/example-document.md:44
 msgid "Every Run starts with a fresh copy"
 msgstr "Всяко изпълнение започва с ново копие"
 
 #. paragraph
-#: site/example-document.md:60
+#: site/example-document.md:45
 msgid "An example that changes `doc` (adds, changes or deletes a key) changes only its own copy. The file and the other examples on the page stay the same."
 msgstr "Пример, който променя `doc` (добавя, променя или изтрива ключ), променя само собственото си копие. Файлът и другите примери на страницата остават същите."
 
 #. heading 2
-#: site/example-document.md:64
+#: site/example-document.md:49
 msgid "The other data files of the homework"
 msgstr "Другите файлове с данни на домашните"
 
 #. paragraph
-#: site/example-document.md:66
+#: site/example-document.md:51
 msgid "Some tasks use bigger made-up documents, in the other shapes the real data comes in. They are in the same folder `data/` of the homework repository:"
 msgstr "Някои задачи използват по-големи измислени документи - в другите форми, в които идват истинските данни. Те са в същата папка `data/` на homework repository:"
 
 #. table cell
-#: site/example-document.md:69
+#: site/example-document.md:54
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/example-document.md:69
+#: site/example-document.md:54
 msgid "Shape"
 msgstr "Форма"
 
 #. table cell
-#: site/example-document.md:69
+#: site/example-document.md:54
 msgid "Used in"
 msgstr "Използва се в"
 
 #. table cell
-#: site/example-document.md:71
+#: site/example-document.md:56
 msgid "[report-records.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-records.json)"
 msgstr "[report-records.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-records.json)"
 
 #. table cell
-#: site/example-document.md:71
+#: site/example-document.md:56
 msgid "a flat list of 79 key/value records `{ group, item, code, label, value }` that must be grouped"
 msgstr "плосък списък от 79 записа ключ/стойност `{ group, item, code, label, value }`, които трябва да се групират"
 
 #. table cell
-#: site/example-document.md:71
+#: site/example-document.md:56
 msgid "sessions 4, 7 and 8"
 msgstr "занятия 4, 7 и 8"
 
 #. table cell
-#: site/example-document.md:72
+#: site/example-document.md:57
 msgid "[report-dictionary.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-dictionary.json)"
 msgstr "[report-dictionary.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-dictionary.json)"
 
 #. table cell
-#: site/example-document.md:72
+#: site/example-document.md:57
 msgid "dictionaries keyed by ids, with dots in the keys; dates and versions in mixed formats"
 msgstr "dictionaries с ключове id, с точки в ключовете; дати и версии в смесени формати"
 
 #. table cell
-#: site/example-document.md:72
+#: site/example-document.md:57
 msgid "sessions 5 - 8"
 msgstr "занятия 5 - 8"
 
 #. table cell
-#: site/example-document.md:73
+#: site/example-document.md:58
 msgid "[report-export.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-export.json)"
 msgstr "[report-export.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-export.json)"
 
 #. table cell
-#: site/example-document.md:73
+#: site/example-document.md:58
 msgid "the same deep document twice: nested (`_source`) and as a flattened export (`fields`, where every key is a whole path: `\"a.b.c\": [value]`)"
 msgstr "един и същ дълбок документ два пъти: вложен (`_source`) и като сплескан (flattened) експорт (`fields`, където всеки ключ е цял път: `\"a.b.c\": [value]`)"
 
 #. table cell
-#: site/example-document.md:73
+#: site/example-document.md:58
 msgid "sessions 6 and 8"
 msgstr "занятия 6 и 8"
 
 #. table cell
-#: site/example-document.md:74
+#: site/example-document.md:59
 msgid "[reports/](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/tree/main/data/reports)"
 msgstr "[reports/](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/tree/main/data/reports)"
 
 #. table cell
-#: site/example-document.md:74
+#: site/example-document.md:59
 msgid "five small reports in the shape of `doc`, for running a rule on a folder: one fine, one with problems, another model, one with missing parts, and one that is not valid JSON - on purpose"
 msgstr "пет малки отчета във формата на `doc`, за изпълнение на правило върху папка: един без проблеми, един с проблеми, друг модел, един с липсващи части и един, който не е валиден JSON - нарочно"
 
 #. table cell
-#: site/example-document.md:74
+#: site/example-document.md:59
 msgid "sessions 9 and 10"
 msgstr "занятия 9 и 10"
 
 #. paragraph
-#: site/example-document.md:76
+#: site/example-document.md:61
 msgid "Each task file says at the top which file it uses and what to look for in it."
 msgstr "Всеки файл със задача казва в началото кой файл използва и какво да търсите в него."
+
+#~ msgid "The main parts"
+#~ msgstr "Основните части"
+
+#~ msgid "Part"
+#~ msgstr "Част"
+
+#~ msgid "What it holds"
+#~ msgstr "Какво съдържа"
+
+#~ msgid "Example path"
+#~ msgstr "Примерен път"
+
+#~ msgid "only a note that the data is made up"
+#~ msgstr "само бележка, че данните са измислени"
+
+#~ msgid "the device alias and the time of the report (`epoch`: seconds, as a string)"
+#~ msgstr "alias-ът на устройството и времето на отчета (`epoch`: секунди, като string)"
+
+#~ msgid "model, serial number and firmware version"
+#~ msgstr "модел, сериен номер и версия на firmware"
+
+#~ msgid "alerts already raised, keyed by rule id"
+#~ msgstr "вече създадени alerts, с ключ id на правилото"
+
+#~ msgid "settings of the device; every value is a string, some pack several values into one string"
+#~ msgstr "настройки на устройството; всяка стойност е string, някои пакетират няколко стойности в един string"
+
+#~ msgid "a deep nested object"
+#~ msgstr "дълбоко вложен обект"
+
+#~ msgid "a list of strings"
+#~ msgstr "списък от strings"
+
+#~ msgid "a list of records (objects with the same keys)"
+#~ msgstr "списък от записи (обекти с еднакви ключове)"
+
+#~ msgid "a dictionary keyed by ids, with dots in the keys"
+#~ msgstr "dictionary с ключове id, с точки в ключовете"
+
+#~ msgid "keys with spaces"
+#~ msgstr "ключове с интервали"
