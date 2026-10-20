@@ -7,9 +7,11 @@ outline: [2, 3]
 
 **10 sessions of 4 academic hours**, 40 academic hours in total.
 
-**Goal:** by the end of the course you can read and write check rules over JSON
-documents with confidence, and you can build, test and document a small helper
-library for the JSON of one product.
+**Goal:** a deep, solid knowledge of the basics of JavaScript - how the code
+works, not only what to write - so that you read and write JavaScript with ease
+and confidence. Applied to your work: by the end of the course you can read and
+write check rules over JSON documents with confidence, and you can build, test
+and document a small helper library for the JSON of one product.
 
 Every topic is shown on the kind of data you work with: the JSON report of one
 device (`doc`) and a check rule.

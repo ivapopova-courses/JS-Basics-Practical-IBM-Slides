@@ -25,488 +25,491 @@ msgstr "**10 занятия по 4 учебни часа**, общо 40 учеб
 
 #. paragraph
 #: site/agenda.md:10
-msgid "**Goal:** by the end of the course you can read and write check rules over JSON documents with confidence, and you can build, test and document a small helper library for the JSON of one product."
-msgstr "**Цел:** в края на курса четете и пишете уверено правила за проверка върху JSON документи и можете да изградите, тествате и документирате малка помощна библиотека за JSON на един продукт."
+msgid "**Goal:** a deep, solid knowledge of the basics of JavaScript - how the code works, not only what to write - so that you read and write JavaScript with ease and confidence. Applied to your work: by the end of the course you can read and write check rules over JSON documents with confidence, and you can build, test and document a small helper library for the JSON of one product."
+msgstr "**Цел:** задълбочено и солидно познаване на основите на JavaScript - как работи кодът, а не само какво да се напише - за да четете и пишете JavaScript с лекота и увереност. Приложено към вашата работа: в края на курса четете и пишете уверено правила за проверка върху JSON документи и можете да изградите, тествате и документирате малка помощна библиотека за JSON на един продукт."
 
 #. paragraph
-#: site/agenda.md:14
+#: site/agenda.md:16
 msgid "Every topic is shown on the kind of data you work with: the JSON report of one device (`doc`) and a check rule."
 msgstr "Всяка тема е показана върху данните, с които работите: JSON отчетът на едно устройство (`doc`) и правило за проверка."
 
 #. heading 2
-#: site/agenda.md:17
+#: site/agenda.md:19
 msgid "Sessions"
 msgstr "Занятия"
 
 #. table cell
-#: site/agenda.md:19
+#: site/agenda.md:21
 msgid "Date"
 msgstr "Дата"
 
 #. table cell
-#: site/agenda.md:19
+#: site/agenda.md:21
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/agenda.md:21
+#: site/agenda.md:23
 msgid "Tue 06.10"
 msgstr "вт 06.10"
 
 #. table cell
-#: site/agenda.md:21
+#: site/agenda.md:23
 msgid "[Getting started](/lectures/01-getting-started): course setup, how a program runs, what a variable is"
 msgstr "[Първи стъпки](/lectures/01-getting-started): настройка за курса, как се изпълнява една програма, какво е variable"
 
 #. table cell
-#: site/agenda.md:22
+#: site/agenda.md:24
 msgid "Wed 14.10"
 msgstr "ср 14.10"
 
 #. table cell
-#: site/agenda.md:22
+#: site/agenda.md:24
 msgid "[Variables, types and operators](/lectures/02-variables-and-types)"
 msgstr "[Variables, типове и оператори](/lectures/02-variables-and-types)"
 
 #. table cell
-#: site/agenda.md:23
+#: site/agenda.md:25
 msgid "Wed 21.10"
 msgstr "ср 21.10"
 
 #. table cell
-#: site/agenda.md:23
+#: site/agenda.md:25
 msgid "[Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops)"
 msgstr "[Сравнения, логика, условия и loops](/lectures/03-conditions-and-loops)"
 
 #. table cell
-#: site/agenda.md:24
+#: site/agenda.md:26
 msgid "Fri 23.10"
 msgstr "пт 23.10"
 
 #. table cell
-#: site/agenda.md:24
+#: site/agenda.md:26
 msgid "[Arrays and lists of records](/lectures/04-arrays-and-records)"
 msgstr "[Arrays и списъци от записи](/lectures/04-arrays-and-records)"
 
 #. table cell
-#: site/agenda.md:25
+#: site/agenda.md:27
 msgid "Wed 28.10"
 msgstr "ср 28.10"
 
 #. table cell
-#: site/agenda.md:25
+#: site/agenda.md:27
 msgid "[Functions, and reading older code](/lectures/05-functions)"
 msgstr "[Функции и четене на по-стар код](/lectures/05-functions)"
 
 #. table cell
-#: site/agenda.md:26
+#: site/agenda.md:28
 msgid "Fri 30.10"
 msgstr "пт 30.10"
 
 #. table cell
-#: site/agenda.md:26
+#: site/agenda.md:28
 msgid "[Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects)"
 msgstr "[Обекти: дълбоки пътища, dictionaries, различни форми на данните](/lectures/06-objects)"
 
 #. table cell
-#: site/agenda.md:27
+#: site/agenda.md:29
 msgid "Wed 04.11"
 msgstr "ср 04.11"
 
 #. table cell
-#: site/agenda.md:27
+#: site/agenda.md:29
 msgid "[Array methods: transforming, grouping and indexing data](/lectures/07-array-methods); project kickoff"
 msgstr "[Методи на arrays: трансформиране, групиране и индексиране на данни](/lectures/07-array-methods); старт на проекта"
 
 #. table cell
-#: site/agenda.md:28
+#: site/agenda.md:30
 msgid "Fri 06.11"
 msgstr "пт 06.11"
 
 #. table cell
-#: site/agenda.md:28
+#: site/agenda.md:30
 msgid "[Strings, regular expressions, dates and numbers](/lectures/08-strings-regex-dates)"
 msgstr "[Strings, regular expressions, дати и числа](/lectures/08-strings-regex-dates)"
 
 #. table cell
-#: site/agenda.md:29
+#: site/agenda.md:31
 msgid "Wed 11.11"
 msgstr "ср 11.11"
 
 #. table cell
-#: site/agenda.md:29
+#: site/agenda.md:31
 msgid "[JSON, Node.js, modules and errors; running rules locally](/lectures/09-json-node-modules-errors)"
 msgstr "[JSON, Node.js, модули и грешки; локално изпълнение на правила](/lectures/09-json-node-modules-errors)"
 
 #. table cell
-#: site/agenda.md:30
+#: site/agenda.md:32
 msgid "Fri 13.11"
 msgstr "пт 13.11"
 
 #. table cell
-#: site/agenda.md:30
+#: site/agenda.md:32
 msgid "[Tests, JSDoc types and code quality; Git workflow; project review](/lectures/10-tests-types-git)"
 msgstr "[Тестове, JSDoc типове и качество на кода; работа с Git; преглед на проекта](/lectures/10-tests-types-git)"
 
 #. heading 2
-#: site/agenda.md:32
+#: site/agenda.md:34
 msgid "Session details"
 msgstr "Подробно по занятия"
 
 #. heading 3
-#: site/agenda.md:34
+#: site/agenda.md:36
 msgid "1. Getting started"
 msgstr "1. Първи стъпки"
 
 #. paragraph
-#: site/agenda.md:36
+#: site/agenda.md:38
 msgid "About the course, resources, environment: VSCode, Node.js, Git, GitHub."
 msgstr "За курса, ресурси, среда: VSCode, Node.js, Git, GitHub."
 
 #. paragraph
-#: site/agenda.md:37
+#: site/agenda.md:39
 msgid "Introduction to JavaScript; text editor vs IDE."
 msgstr "Въведение в JavaScript; текстов редактор срещу IDE."
 
 #. paragraph
-#: site/agenda.md:38
+#: site/agenda.md:40
 msgid "How a program runs; program structure; what a variable is."
 msgstr "Как се изпълнява една програма; структура на програмата; какво е variable."
 
 #. heading 3
-#: site/agenda.md:40
+#: site/agenda.md:42
 msgid "2. Variables, types and operators"
 msgstr "2. Variables, типове и оператори"
 
 #. paragraph
-#: site/agenda.md:42
+#: site/agenda.md:44
 msgid "Declaring and defining variables: `let`, `const` (and why not `var`); naming rules and conventions."
 msgstr "Деклариране и дефиниране на variables: `let`, `const` (и защо не `var`); правила и конвенции за имената."
 
 #. paragraph
-#: site/agenda.md:44
+#: site/agenda.md:46
 msgid "Primitive types: number, string, boolean, `null`, `undefined`; `typeof`; `NaN`."
 msgstr "Примитивни типове: number, string, boolean, `null`, `undefined`; `typeof`; `NaN`."
 
 #. paragraph
-#: site/agenda.md:45
+#: site/agenda.md:47
 msgid "Strings: quotes, escapes, template strings."
 msgstr "Strings: кавички, escape последователности, template strings."
 
 #. paragraph
-#: site/agenda.md:46
+#: site/agenda.md:48
 msgid "Comments, assignment, arithmetic, `++` / `--`, operator precedence."
 msgstr "Коментари, присвояване, аритметика, `++` / `--`, приоритет на операторите."
 
 #. paragraph
-#: site/agenda.md:47
+#: site/agenda.md:49
 msgid "From string to number and back: the values in the report JSON are strings."
 msgstr "От string към number и обратно: стойностите в JSON отчета са strings."
 
 #. paragraph
-#: site/agenda.md:48
+#: site/agenda.md:50
 msgid "**Practice:** variables for the data of the sample rule; an alert message with a template string; the age of a report from its EPOCH."
 msgstr "**Упражнение:** variables за данните на примерното правило; съобщение за alert с template string; възрастта на отчет по неговия EPOCH."
 
 #. heading 3
-#: site/agenda.md:51
+#: site/agenda.md:53
 msgid "3. Comparisons, logic, conditions and loops"
 msgstr "3. Сравнения, логика, условия и loops"
 
 #. paragraph
-#: site/agenda.md:53
+#: site/agenda.md:55
 msgid "Comparison operators; `===` vs `==`; why `\"4.10\" < \"4.2\"` is `true`."
 msgstr "Оператори за сравнение; `===` срещу `==`; защо `\"4.10\" < \"4.2\"` е `true`."
 
 #. paragraph
-#: site/agenda.md:54
+#: site/agenda.md:56
 msgid "Logical operators `&&`, `||`, `!`; truthy and falsy; `||` and `??` as defaults."
 msgstr "Логически оператори `&&`, `||`, `!`; truthy и falsy; `||` и `??` за стойности по подразбиране."
 
 #. paragraph
-#: site/agenda.md:55
+#: site/agenda.md:57
 msgid "`if` / `else`, `switch`, the ternary operator; guard clauses (stop early)."
 msgstr "`if` / `else`, `switch`, тернарният оператор; guard clauses (ранно спиране)."
 
 #. paragraph
-#: site/agenda.md:56
+#: site/agenda.md:58
 msgid "Loops: `for`, `while`, `do...while`, `break`, `continue`."
 msgstr "Loops: `for`, `while`, `do...while`, `break`, `continue`."
 
 #. paragraph
-#: site/agenda.md:57
+#: site/agenda.md:59
 msgid "Reading the conditions in existing rules (older style)."
 msgstr "Четене на условията в съществуващи правила (по-стар стил)."
 
 #. paragraph
-#: site/agenda.md:58
+#: site/agenda.md:60
 msgid "**Practice:** predict comparisons; classify a firmware level; the condition of the sample rule; versions with loops; `||` vs `??`."
 msgstr "**Упражнение:** предвиждане на резултата от сравнения; класифициране на firmware level; условието на примерното правило; версии с loops; `||` срещу `??`."
 
 #. heading 3
-#: site/agenda.md:61
+#: site/agenda.md:63
 msgid "4. Arrays and lists of records"
 msgstr "4. Arrays и списъци от записи"
 
 #. paragraph
-#: site/agenda.md:63
+#: site/agenda.md:65
 msgid "Creating arrays, index, `length`; `push`, `pop`, `slice`, `splice`, `at`."
 msgstr "Създаване на arrays, индекс, `length`; `push`, `pop`, `slice`, `splice`, `at`."
 
 #. paragraph
-#: site/agenda.md:64
+#: site/agenda.md:66
 msgid "`indexOf`, `includes` (the model list in the sample rule); `split` and `join` - also for values packed into one string (`\"a;b\"`, `\"key=value,key=value\"`)."
 msgstr "`indexOf`, `includes` (списъкът с модели в примерното правило); `split` и `join` - също и за стойности, събрани в един string (`\"a;b\"`, `\"key=value,key=value\"`)."
 
 #. paragraph
-#: site/agenda.md:66
+#: site/agenda.md:68
 msgid "Loops over arrays: `for`, `for...of`; `Array.isArray`."
 msgstr "Loops върху arrays: `for`, `for...of`; `Array.isArray`."
 
 #. paragraph
-#: site/agenda.md:67
+#: site/agenda.md:69
 msgid "Arrays of objects: a long list of records (resource, keyword, value) - find, count and collect."
 msgstr "Arrays от обекти: дълъг списък от записи (resource, keyword, value) - търсене, броене и събиране."
 
 #. paragraph
-#: site/agenda.md:69
+#: site/agenda.md:71
 msgid "**Practice:** a model allow-list; split a version into numbers; find records in a list of thousands."
 msgstr "**Упражнение:** allow-list от модели; разделяне на версия на числа; търсене на записи в списък от хиляди."
 
 #. heading 3
-#: site/agenda.md:72
+#: site/agenda.md:74
 msgid "5. Functions, and reading older code"
 msgstr "5. Функции и четене на по-стар код"
 
 #. paragraph
-#: site/agenda.md:74
+#: site/agenda.md:76
 msgid "Declarations, expressions, arrow functions; parameters, defaults, `return`."
 msgstr "Декларации, function expressions, arrow functions; параметри, стойности по подразбиране, `return`."
 
 #. paragraph
-#: site/agenda.md:75
+#: site/agenda.md:77
 msgid "Scope; `var` vs `let` / `const`, hoisting; why rule guidelines ask for `const` globals that are never changed; pure functions."
 msgstr "Scope; `var` срещу `let` / `const`, hoisting; защо насоките за правилата искат глобалните стойности да са `const` и никога да не се променят; чисти функции."
 
 #. paragraph
-#: site/agenda.md:77
+#: site/agenda.md:79
 msgid "Functions inside functions, closures; callbacks written as `function (x) {...}` and as arrows."
 msgstr "Функции във функции, closures; callbacks, написани като `function (x) {...}` и като arrow functions."
 
 #. paragraph
-#: site/agenda.md:79
+#: site/agenda.md:81
 msgid "The structure of a rule: helper functions first, then `rule(doc)`."
 msgstr "Структурата на едно правило: първо helper функциите, след това `rule(doc)`."
 
 #. paragraph
-#: site/agenda.md:80
+#: site/agenda.md:82
 msgid "Reading and modernising an older rule, step by step."
 msgstr "Четене и модернизиране на по-старо правило, стъпка по стъпка."
 
 #. paragraph
-#: site/agenda.md:81
+#: site/agenda.md:83
 msgid "**Practice:** our own `versionBelow(a, b)`; a long rule split into small helpers."
 msgstr "**Упражнение:** наша собствена `versionBelow(a, b)`; дълго правило, разделено на малки helper функции."
 
 #. heading 3
-#: site/agenda.md:83
+#: site/agenda.md:85
 msgid "6. Objects: deep paths, dictionaries, different data shapes"
 msgstr "6. Обекти: дълбоки пътища, dictionaries, различни форми на данните"
 
 #. paragraph
-#: site/agenda.md:85
+#: site/agenda.md:87
 msgid "Object literals; dot vs bracket notation; keys with spaces or dots (`\"Firmware Version\"`, `\"12_4.20\"`)."
 msgstr "Обектни литерали; точка срещу квадратни скоби; ключове с интервали или точки (`\"Firmware Version\"`, `\"12_4.20\"`)."
 
 #. paragraph
-#: site/agenda.md:87
+#: site/agenda.md:89
 msgid "Nested objects and long paths; a missing branch; `in` and `Object.hasOwn`; optional chaining `?.`."
 msgstr "Вложени обекти и дълги пътища; липсващ клон; `in` и `Object.hasOwn`; optional chaining `?.`."
 
 #. paragraph
-#: site/agenda.md:89
+#: site/agenda.md:91
 msgid "Objects used as **dictionaries** (keys are ids): `Object.keys`, `Object.values`, `Object.entries`, `for...in`; reading information out of the key."
 msgstr "Обекти, използвани като **dictionaries** (ключовете са id-та): `Object.keys`, `Object.values`, `Object.entries`, `for...in`; извличане на информация от самия ключ."
 
 #. paragraph
-#: site/agenda.md:91
+#: site/agenda.md:93
 msgid "The same data as an array in one document and as an object in another; flattened exports (`\"a.b.c\": [value]`)."
 msgstr "Едни и същи данни като array в един документ и като обект в друг; \"сплескани\" (flattened) експорти (`\"a.b.c\": [value]`)."
 
 #. paragraph
-#: site/agenda.md:93
+#: site/agenda.md:95
 msgid "Spread and destructuring; references vs copies; `structuredClone`."
 msgstr "Spread и destructuring; референции срещу копия; `structuredClone`."
 
 #. paragraph
-#: site/agenda.md:94
+#: site/agenda.md:96
 msgid "**Practice:** `get(doc, path, fallback)` with the path as a string **or** an array; the details object for `emit`, with its columns in a fixed order."
 msgstr "**Упражнение:** `get(doc, path, fallback)` с път като string **или** като array; обектът с подробности за `emit`, с колоните в определен ред."
 
 #. heading 3
-#: site/agenda.md:97
+#: site/agenda.md:99
 msgid "7. Array methods: transforming, grouping and indexing data"
 msgstr "7. Методи на arrays: трансформиране, групиране и индексиране на данни"
 
 #. paragraph
-#: site/agenda.md:99
+#: site/agenda.md:101
 msgid "`forEach`, `map`, `filter`, `find` / `findIndex` / `findLast`, `some`, `every`, `reduce`; `flat` and `flatMap`."
 msgstr "`forEach`, `map`, `filter`, `find` / `findIndex` / `findLast`, `some`, `every`, `reduce`; `flat` и `flatMap`."
 
 #. paragraph
-#: site/agenda.md:101
+#: site/agenda.md:103
 msgid "Sorting: `sort` with a compare function, `toSorted`; numbers, strings, versions, several keys."
 msgstr "Сортиране: `sort` с функция за сравнение, `toSorted`; числа, strings, версии, няколко ключа."
 
 #. paragraph
-#: site/agenda.md:103
+#: site/agenda.md:105
 msgid "Chaining methods; when a plain loop is clearer; `console.table` for records."
 msgstr "Верижно извикване на методи; кога обикновеният loop е по-ясен; `console.table` за записи."
 
 #. paragraph
-#: site/agenda.md:104
+#: site/agenda.md:106
 msgid "Turning a list of records into a nested object (group by resource, then by keyword); building an index once instead of searching thousands of records again and again (`Object.groupBy`, `Map`); unique values with `Set`."
 msgstr "Превръщане на списък от записи във вложен обект (групиране по resource, после по keyword); изграждане на индекс веднъж, вместо да търсим отново и отново в хиляди записи (`Object.groupBy`, `Map`); уникални стойности със `Set`."
 
 #. paragraph
-#: site/agenda.md:107
+#: site/agenda.md:109
 msgid "Reading the older forms: `function (x) { ... }` callbacks, `forEach` with `push`."
 msgstr "Четене на по-старите форми: callbacks, написани като `function (x) { ... }`, `forEach` с `push`."
 
 #. paragraph
-#: site/agenda.md:108
+#: site/agenda.md:110
 msgid "**Project kickoff:** choose the product and the sample documents, set up the repository, start `library.js` with the first helpers."
 msgstr "**Старт на проекта:** избор на продукт и примерни документи, създаване на repository-то, начало на `library.js` с първите helper функции."
 
 #. paragraph
-#: site/agenda.md:110
+#: site/agenda.md:112
 msgid "**Practice:** outdated elements; group records; sort devices by firmware level."
 msgstr "**Упражнение:** остарели елементи; групиране на записи; сортиране на устройства по firmware level."
 
 #. heading 3
-#: site/agenda.md:112
+#: site/agenda.md:114
 msgid "8. Strings, regular expressions, dates and numbers"
 msgstr "8. Strings, regular expressions, дати и числа"
 
 #. paragraph
-#: site/agenda.md:114
+#: site/agenda.md:116
 msgid "`String` methods: `trim`, `toLowerCase`, `startsWith`, `endsWith`, `includes`, `slice`, `padStart`, `replaceAll`, ...; text encoding: Unicode, UTF-8, line endings."
 msgstr "Методи на `String`: `trim`, `toLowerCase`, `startsWith`, `endsWith`, `includes`, `slice`, `padStart`, `replaceAll`, ...; кодиране на текста: Unicode, UTF-8, край на реда."
 
 #. paragraph
-#: site/agenda.md:117
+#: site/agenda.md:119
 msgid "Regular expressions: `test`, `match` and capture groups, `matchAll`, `replace` with the `g` flag, the `i` flag; reading the patterns in existing rules."
 msgstr "Regular expressions: `test`, `match` и capture groups, `matchAll`, `replace` с флага `g`, флагът `i`; четене на шаблоните в съществуващи правила."
 
 #. paragraph
-#: site/agenda.md:119
+#: site/agenda.md:121
 msgid "Versions in many formats (`4.2.1.7-B00`, `42107-C00`, `XR420_117`): normalise and compare - one shared helper instead of a copy in every rule."
 msgstr "Версии в много формати (`4.2.1.7-B00`, `42107-C00`, `XR420_117`): нормализиране и сравняване - една обща helper функция вместо копие във всяко правило."
 
 #. paragraph
-#: site/agenda.md:121
+#: site/agenda.md:123
 msgid "Dates: EPOCH seconds and milliseconds; parsing the date formats found in reports; `Date`, time zones, comparing and subtracting dates."
 msgstr "Дати: EPOCH в секунди и милисекунди; разчитане на форматите на датите в отчетите; `Date`, часови зони, сравняване и изваждане на дати."
 
 #. paragraph
-#: site/agenda.md:124
+#: site/agenda.md:126
 msgid "**Practice:** clean and compare versions; parse keys like `\"31_2.07\"`; the age of a report from different date formats."
 msgstr "**Упражнение:** почистване и сравняване на версии; разчитане на ключове като `\"31_2.07\"`; възрастта на отчет при различни формати на датата."
 
 #. heading 3
-#: site/agenda.md:127
+#: site/agenda.md:129
 msgid "9. JSON, Node.js, modules and errors; running rules locally"
 msgstr "9. JSON, Node.js, модули и грешки; локално изпълнение на правила"
 
 #. paragraph
-#: site/agenda.md:129
+#: site/agenda.md:131
 msgid "JSON: the format, `JSON.parse`, `JSON.stringify`; what JSON cannot hold; reading sample documents with `fs`."
 msgstr "JSON: форматът, `JSON.parse`, `JSON.stringify`; какво JSON не може да съдържа; четене на примерни документи с `fs`."
 
 #. paragraph
-#: site/agenda.md:131
+#: site/agenda.md:133
 msgid "Node.js and npm: `process`, `package.json`, built-in modules, the `console` object."
 msgstr "Node.js и npm: `process`, `package.json`, вградени модули, обектът `console`."
 
 #. paragraph
-#: site/agenda.md:133
+#: site/agenda.md:135
 msgid "Modules: CommonJS (`require` / `module.exports`, as a shared `library.js`) and ES modules (`import` / `export`)."
 msgstr "Модули: CommonJS (`require` / `module.exports`, като обща `library.js`) и ES модули (`import` / `export`)."
 
 #. paragraph
-#: site/agenda.md:135
+#: site/agenda.md:137
 msgid "Errors: `try` / `catch` / `finally`, `throw`, the error types; why a `catch` that only returns hides bugs; defensive code for missing or odd data."
 msgstr "Грешки: `try` / `catch` / `finally`, `throw`, видовете грешки; защо `catch`, който само прави return, крие бъгове; защитен код за липсващи или странни данни."
 
 #. paragraph
-#: site/agenda.md:137
+#: site/agenda.md:139
 msgid "Code that waits: promises, `async` / `await`, and `fetch` - JSON from a web API."
 msgstr "Код, който чака: promises, `async` / `await` и `fetch` - JSON от уеб API."
 
 #. paragraph
-#: site/agenda.md:138
+#: site/agenda.md:140
 msgid "Running a rule locally: a fake `emit()` and a folder of sample documents."
 msgstr "Локално изпълнение на правило: фалшива `emit()` и папка с примерни документи."
 
 #. paragraph
-#: site/agenda.md:139
+#: site/agenda.md:141
 msgid "**Practice:** JSON round trips; a module; errors with a clear message; a local rule runner."
 msgstr "**Упражнения:** JSON и обратно; модул; грешки с ясно съобщение; локален runner за правила."
 
 #. heading 3
-#: site/agenda.md:142
+#: site/agenda.md:144
 msgid "10. Tests, JSDoc types and code quality; Git workflow; project review"
 msgstr "10. Тестове, JSDoc типове и качество на кода; работа с Git; преглед на проекта"
 
 #. paragraph
-#: site/agenda.md:144
+#: site/agenda.md:146
 msgid "Testing with `node:test` and `assert`: helpers, edge cases, whole rules on sample documents."
 msgstr "Тестване с `node:test` и `assert`: helper функции, гранични случаи (edge cases), цели правила върху примерни документи."
 
 #. paragraph
-#: site/agenda.md:146
+#: site/agenda.md:148
 msgid "Documenting helpers for other users: JSDoc, and types for a product's JSON with `@typedef` and `// @ts-check` (editor checks and autocomplete, no build step)."
 msgstr "Документиране на helper функциите за другите потребители: JSDoc и типове за JSON на продукта с `@typedef` и `// @ts-check` (проверки и autocomplete в редактора, без build стъпка)."
 
 #. paragraph
-#: site/agenda.md:148
+#: site/agenda.md:150
 msgid "A linter (ESLint) and a formatter: finding bugs before the code runs."
 msgstr "Linter (ESLint) и formatter: откриване на бъгове, преди кодът да се изпълни."
 
 #. paragraph
-#: site/agenda.md:149
+#: site/agenda.md:151
 msgid "The Git workflow: branches, merging, conflicts, pull requests and code review."
 msgstr "Работа с Git: branches, сливане (merge), конфликти, pull requests и code review."
 
 #. paragraph
-#: site/agenda.md:150
+#: site/agenda.md:152
 msgid "From one product to the next: a shared core plus a module per product."
 msgstr "От един продукт към следващия: обща основа плюс модул за всеки продукт."
 
 #. paragraph
-#: site/agenda.md:151
+#: site/agenda.md:153
 msgid "**Project review:** present the library - helpers, rules rewritten with it, tests; Q&A, next steps and resources."
 msgstr "**Преглед на проекта:** представяне на библиотеката - helper функции, правила, пренаписани с нея, тестове; въпроси, следващи стъпки и ресурси."
 
 #. heading 2
-#: site/agenda.md:154
+#: site/agenda.md:156
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/agenda.md:156
+#: site/agenda.md:158
 msgid "After each session there is a small task on the report JSON. It is reviewed at the start of the next session (about 15 min)."
 msgstr "След всяко занятие има малка задача върху JSON отчета. Тя се преглежда в началото на следващото занятие (около 15 мин)."
 
 #. heading 2
-#: site/agenda.md:159
+#: site/agenda.md:161
 msgid "Course project"
 msgstr "Курсов проект"
 
 #. paragraph
-#: site/agenda.md:161
+#: site/agenda.md:163
 msgid "See [Course project](/project)."
 msgstr "Вижте [Курсов проект](/project)."
+
+#~ msgid "**Goal:** by the end of the course you can read and write check rules over JSON documents with confidence, and you can build, test and document a small helper library for the JSON of one product."
+#~ msgstr "**Цел:** в края на курса четете и пишете уверено правила за проверка върху JSON документи и можете да изградите, тествате и документирате малка помощна библиотека за JSON на един продукт."
 
 #~ msgid "Session"
 #~ msgstr "Занятие"

@@ -21,7 +21,7 @@ msgstr "Примерният JSON документ"
 #. paragraph
 #: site/example-document.md:3
 msgid "In every runnable example on this site, the variable `doc` holds this document. It is like the `doc` a check rule receives: the **report** of one device."
-msgstr "Във всеки пример с бутон Run на този сайт variable-ът `doc` съдържа този документ. Той е като `doc`, който получава правилото за проверка: **отчетът** на едно устройство."
+msgstr "Във всеки пример с бутон Run на този сайт variable `doc` съдържа този документ. Той е като `doc`, който получава правилото за проверка: **отчетът** на едно устройство."
 
 #. box title
 #: site/example-document.md:6

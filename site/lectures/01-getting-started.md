@@ -53,12 +53,24 @@ Every lecture adds the pieces you need to write more of this.
 
 ### The goal
 
-**Read and write check rules over JSON documents with confidence, and build,
-test and document a small helper library for the JSON of one product.**
+**A deep, solid knowledge of the basics of JavaScript.** Not only *what* to
+write, but also *how* and *why* the code works - so that you read and write
+JavaScript with ease and confidence, in any project:
 
-In practice that means: understand and write JavaScript code with ease - mostly
-functions, arrays, objects, methods and properties - and handle large, deeply
-nested JSON documents safely.
+- the core of the language: values and types, operators, conditions and loops,
+  arrays, functions, objects, strings, regular expressions, dates and numbers,
+  JSON, modules and errors;
+- what happens under the hood: values and references in memory, scope and
+  closures, the call stack;
+- modern JavaScript, and the older style you meet in existing code - so you can
+  read it with ease and modernise it;
+- the everyday tools: Node.js, VSCode, Git and GitHub, tests, JSDoc types,
+  ESLint and Prettier.
+
+**Applied to your work:** read and write check rules over large, deeply nested
+JSON documents with confidence, and build, test and document a small helper
+library for the JSON of one product. The focus is where your work needs it
+most: functions, arrays, objects, methods and properties.
 
 ### The sessions
 
