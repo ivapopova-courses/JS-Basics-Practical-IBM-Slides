@@ -40,11 +40,6 @@ msgstr "Занятия"
 
 #. table cell
 #: site/agenda.md:19
-msgid "Session"
-msgstr "Занятие"
-
-#. table cell
-#: site/agenda.md:19
 msgid "Date"
 msgstr "Дата"
 
@@ -512,6 +507,9 @@ msgstr "Курсов проект"
 #: site/agenda.md:161
 msgid "See [Course project](/project)."
 msgstr "Вижте [Курсов проект](/project)."
+
+#~ msgid "Session"
+#~ msgstr "Занятие"
 
 #~ msgid "Array methods: transforming and grouping data; project kickoff"
 #~ msgstr "Методи на arrays: трансформиране и групиране на данни; старт на проекта"

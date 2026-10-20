@@ -70,8 +70,8 @@ msgstr "Целият документ, с карта на частите му и
 
 #. heading 2
 #: site/how-to.md:35
-msgid "Practice in VSCode"
-msgstr "Упражнения във VSCode"
+msgid "Practice and Homeworks in VSCode"
+msgstr "Упражнения и домашни във VSCode"
 
 #. paragraph
 #: site/how-to.md:37
@@ -160,8 +160,8 @@ msgstr "Натиснете **+** (горе вдясно), после **New repos
 
 #. paragraph
 #: site/how-to.md:101
-msgid "**Repository name**: for example `js-basics-homework`."
-msgstr "**Repository name**: например `js-basics-homework`."
+msgid "**Repository name**: for example `JS-Basics-Practical-Homework`."
+msgstr "**Repository name**: например `JS-Basics-Practical-Homework`."
 
 #. paragraph
 #: site/how-to.md:102
@@ -180,8 +180,8 @@ msgstr "Натиснете **Create repository**."
 
 #. paragraph
 #: site/how-to.md:106
-msgid "GitHub shows a page with a web address like `https://github.com/your-user/js-basics-homework.git`. Copy it (the copy button next to it). You need it in step 4."
-msgstr "GitHub показва страница с уеб адрес като `https://github.com/your-user/js-basics-homework.git`. Копирайте го (бутонът за копиране до него). Трябва ви в стъпка 4."
+msgid "GitHub shows a page with a web address like `https://github.com/your-user/JS-Basics-Practical-Homework.git`. Copy it (the copy button next to it). You need it in step 4."
+msgstr "GitHub показва страница с уеб адрес като `https://github.com/your-user/JS-Basics-Practical-Homework.git`. Копирайте го (бутонът за копиране до него). Трябва ви в стъпка 4."
 
 #. heading 4
 #: site/how-to.md:110
@@ -407,6 +407,15 @@ msgstr "Бутонът **EN / BG** до него отваря същата ст�
 #: site/how-to.md:277
 msgid "The navigation on the left and the \"In this lecture\" column on the right can be made narrower or wider, in any step: drag their inner edge (it turns blue under the mouse), or click the edge and use the Left / Right arrow keys (16 px a step, with Shift 64 px). At 0 the panel is hidden and a small tab stays at the edge of the window - click it to show the panel again. Double-click the edge to go back to the default width."
 msgstr "Навигацията вляво и колоната \"На тази страница\" вдясно могат да се стесняват и разширяват на произволна стъпка: плъзнете вътрешния им ръб (под мишката той става син) или щракнете върху ръба и използвайте стрелките наляво / надясно (16 px на стъпка, с Shift - 64 px). При 0 панелът се скрива и на ръба на прозореца остава малко езиче - щракнете го, за да се покаже панелът отново. Двоен клик върху ръба връща ширината по подразбиране."
+
+#~ msgid "Practice in VSCode"
+#~ msgstr "Упражнения във VSCode"
+
+#~ msgid "**Repository name**: for example `js-basics-homework`."
+#~ msgstr "**Repository name**: например `JS-Basics-Practical-Homework`."
+
+#~ msgid "GitHub shows a page with a web address like `https://github.com/your-user/js-basics-homework.git`. Copy it (the copy button next to it). You need it in step 4."
+#~ msgstr "GitHub показва страница с уеб адрес като `https://github.com/your-user/JS-Basics-Practical-Homework.git`. Копирайте го (бутонът за копиране до него). Трябва ви в стъпка 4."
 
 #~ msgid "In every runnable example, the variable `doc` holds a **sample device report**, like the `doc` a check rule receives:"
 #~ msgstr "Във всеки пример, който може да се изпълни, variable `doc` съдържа **примерен отчет на устройство** - същия `doc`, който получава едно правило за проверка:"

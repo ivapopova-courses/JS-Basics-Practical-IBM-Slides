@@ -32,7 +32,7 @@ the JSON a device sends.
 The whole document, with a map of its parts and tips on how to print it:
 [The example JSON document](./example-document).
 
-## Practice and Homeworks in VSCode
+## Practice and Homeworks in VSCode {#practice-in-vscode}
 
 The practice tasks and the homework are in the **Homework repository**:
 https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework
@@ -104,7 +104,7 @@ Use the same email as in your GitHub account.
    licence. The repository must be **empty** - otherwise step 5 fails.
 6. Click **Create repository**.
 7. GitHub shows a page with a web address like
-   `https://github.com/your-user/js-basics-homework.git`. Copy it (the copy button
+   `https://github.com/your-user/JS-Basics-Practical-Homework.git`. Copy it (the copy button
    next to it). You need it in step 4.
 
 #### 4. Download the course repository and connect your own
@@ -137,7 +137,7 @@ Add your own repository as `origin`. Paste **your** address from step 3 instead 
 the example one:
 
 ```bash
-git remote add origin https://github.com/your-user/js-basics-homework.git
+git remote add origin https://github.com/your-user/JS-Basics-Practical-Homework.git
 ```
 
 ::: tip Paste in the terminal
@@ -178,8 +178,8 @@ You should see four lines like these - `origin` with **your** address, `upstream
 with the course address:
 
 ```text
-origin    https://github.com/your-user/js-basics-homework.git (fetch)
-origin    https://github.com/your-user/js-basics-homework.git (push)
+origin    https://github.com/your-user/JS-Basics-Practical-Homework.git (fetch)
+origin    https://github.com/your-user/JS-Basics-Practical-Homework.git (push)
 upstream  https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework.git (fetch)
 upstream  https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework.git (push)
 ```
