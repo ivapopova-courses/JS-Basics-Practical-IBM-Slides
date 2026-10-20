@@ -32,7 +32,7 @@ the JSON a device sends.
 The whole document, with a map of its parts and tips on how to print it:
 [The example JSON document](./example-document).
 
-## Practice in VSCode
+## Practice and Homeworks in VSCode
 
 The practice tasks and the homework are in the **Homework repository**:
 https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework
@@ -98,7 +98,7 @@ Use the same email as in your GitHub account.
 
 1. Sign in to https://github.com.
 2. Click **+** (top right), then **New repository**.
-3. **Repository name**: for example `js-basics-homework`.
+3. **Repository name**: for example `JS-Basics-Practical-Homework`.
 4. Choose **Private** (only you can see it) or **Public**.
 5. Leave everything else as it is: **no** README, **no** `.gitignore`, **no**
    licence. The repository must be **empty** - otherwise step 5 fails.
