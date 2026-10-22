@@ -18,8 +18,7 @@ title: 3. Comparisons, logic, conditions and loops
 - make decisions with `if` / `else`, `switch` and the ternary operator `? :`;
 - stop a rule early when data is missing (a *guard clause*);
 - repeat work with `for`, `while` and `do...while`, and control loops with
-  `break` and `continue`;
-- read the conditions in existing rules, which are often written in an older style.
+  `break` and `continue`.
 
 Where this fits in the sample check rule - after today you can read and write all
 of it. Every part uses one of today's topics - the number in the comment is the
@@ -80,8 +79,6 @@ function rule(doc) {
   session 5.
 - `?.` (optional chaining) is a preview: it stops at a missing level instead of
   throwing an error. More in section 5 and in session 6.
-- In [section 11](#_11-reading-existing-rules) you run this rule, and read the same
-  rule written in the older style that many existing rules use.
 
 Almost every rule is a chain of decisions like these: "is the data there?", "is
 it the right model?", "is the firmware too old?". Getting the conditions exactly
@@ -867,9 +864,9 @@ MDN: [Statements and declarations](https://developer.mozilla.org/en-US/docs/Web/
 
 JavaScript code is made of two kinds of pieces:
 
-- An **expression** produces a **value**. It can stand wherever a value is
+- An **expression produces a value**. It can stand wherever a value is
   expected.
-- A **statement** **does** something, but has no value: declarations, `if`,
+- A **statement does something, but has no value**. Like declarations, `if`,
   `switch`, `return`, and the loops of the next section (`for`, `while`).
 
 ```js
@@ -901,9 +898,10 @@ console.log(`auth: ${enabled ? "on" : "off"}`);     // fine
 
 MDN: [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration), [for](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for), [while](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/while)
 
-A loop repeats a block of code. In rules you loop over the parts of a version, the
-characters of a string, and (from session 4) over lists of drives, nodes and
-records.
+A loop repeats a block of code. In JavaScript for loops we use:
+- `for` (most common)
+- `while` and `do...while` (rare)
+- `for...of` (from ES2015) - for arrays and strings, which will be discussed in [session 4, section 8](./04-arrays-and-records#_8-looping-over-an-array).
 
 ### `for`
 
@@ -915,7 +913,7 @@ for (init; condition; update) {
 
 The steps:
 
-1. `init` runs **once**, first.
+1. `init` runs **once**, first. Usually it declares a variable, e.g. `let i = 0`, on which the loop iterates.
 2. `condition` is checked: if true, the block runs; if false, the loop ends.
 3. `update` runs after the block (usually `i++`).
 4. Back to step 2.
@@ -925,6 +923,10 @@ for (let i = 0; i < 5; i++) {
     console.log(`i=${i}`);
 }
 ```
+
+::: info Animation
+**Loops step by step:** [2. The `for` loop](../animations/loopsStepByStep.html#2){target="_blank"}
+:::
 
 The even numbers from 2 to 10:
 
@@ -954,10 +956,6 @@ for (let tries = 5; tries > 0; tries--) {
 Existing rules often write `for (var i = 0; ...)`. It works the same here, but `i`
 still exists after the loop. Write `let` in new code; the difference is explained
 in session 5.
-:::
-
-::: info Animation
-**Loops step by step:** [2. The `for` loop](../animations/loopsStepByStep.html#2){target="_blank"}
 :::
 
 ### Loops over a string
@@ -1217,206 +1215,7 @@ what changes the condition?
 **Loops step by step:** [5. `break` and `continue`](../animations/loopsStepByStep.html#5){target="_blank"}
 :::
 
-## 11. Reading existing rules
-
-First, run the rule from the start of the lecture. `emit` is a fake here: it only
-prints the alert.
-
-```js run
-function emit(id, details) {          // fake: prints instead of creating an alert
-    console.log("ALERT for " + id + ": " + JSON.stringify(details));
-}
-
-// ready-made helper - we write our own in session 5
-function versionBelow(a, b) {
-    const pa = String(a).split(".").map(Number);
-    const pb = String(b).split(".").map(Number);
-    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-        const x = pa[i] || 0;
-        const y = pb[i] || 0;
-        if (x !== y) return x < y;
-    }
-    return false;
-}
-
-function rule(doc) {
-    if (!doc.overview || !doc.inventory) return;
-
-    const model = doc.overview.model;
-    if (model !== "XR-210" && model !== "XR-220") return;
-
-    const name = doc.inventory.extended_info?.json?.data?.system?.name
-                 || doc.status.device_alias;
-    const level = doc.inventory.details.firmware_level ?? "";
-
-    let version = "";
-    for (const ch of level) {
-        if (ch === " ") break;
-        version += ch;
-    }
-    if (version === "") return;
-
-    let status;
-    if (versionBelow(version, "4.2.0.0")) {
-        status = "Below minimum";
-    } else if (versionBelow(version, "4.2.1.7")) {
-        status = "Below recommended";
-    } else {
-        return;
-    }
-
-    let action;
-    switch (status) {
-        case "Below minimum":
-            action = "Upgrade as soon as possible.";
-            break;
-        case "Below recommended":
-            action = "Plan an upgrade.";
-            break;
-    }
-
-    const login = doc.inventory.details.remote_login_enabled === "yes" ? "on" : "off";
-
-    emit(name, { "Model": model, "Version": version, "Status": status,
-                 "Action": action, "Remote login": login });
-}
-
-console.log("example JSON document:");
-rule(doc);              // firmware 4.2.1.7 is OK - no alert
-
-console.log("an older device:");
-rule({
-    overview: { model: "XR-210" },
-    inventory: {
-        details: { firmware_level: "4.1.9.3 (build 419.3)", remote_login_enabled: "no" },
-        extended_info: {}
-    },
-    status: { device_alias: "LAB-DEV-02" }
-});
-```
-
-Change the firmware level of the older device to `"4.2.0.5 (build 420.5)"`, then
-to `""`, and run again. Which lines decide the result each time?
-
-Many existing rules are written in an older style (before ES2015). Here is **the
-same rule** in that style - you need to read it with ease, and decide when to
-modernise it:
-
-```js run
-function emit(id, details) {
-    console.log("ALERT for " + id + ": " + JSON.stringify(details));
-}
-
-function versionBelow(a, b) {
-    var pa = String(a).split(".");
-    var pb = String(b).split(".");
-    for (var i = 0; i < Math.max(pa.length, pb.length); i++) {
-        var x = parseInt(pa[i], 10) || 0;
-        var y = parseInt(pb[i], 10) || 0;
-        if (x < y) return true;
-        if (x > y) return false;
-    }
-    return false;
-}
-
-function rule(doc) {  // the engine calls rule(doc) - keep this line as it is
-    if (!doc.overview || !doc.inventory) return;
-
-    var model = String(doc.overview.model || "").toUpperCase();
-    if (model != "XR-210" && model != "XR-220") return;
-
-    var info = doc.inventory.extended_info;
-    var name = String(info && info.json && info.json.data && info.json.data.system
-                      && info.json.data.system.name || doc.status.device_alias);
-    var level = String(doc.inventory.details.firmware_level || "");
-
-    var version = "";
-    for (var i = 0; i < level.length; i++) {
-        if (level.charAt(i) == " ") break;      // charAt(i) is the same as level[i]
-        version = version + level.charAt(i);
-    }
-    if (version == "") return;
-
-    var status;
-    if (versionBelow(version, "4.2.0.0") == true) {
-        status = "Below minimum";
-    } else if (versionBelow(version, "4.2.1.7") == true) {
-        status = "Below recommended";
-    } else {
-        return;
-    }
-
-    var action = status == "Below minimum" ? "Upgrade as soon as possible." : "Plan an upgrade.";
-    var login = doc.inventory.details.remote_login_enabled == "yes" ? "on" : "off";
-
-    var details = new Object();
-    details["Model"] = model;
-    details["Version"] = version;
-    details["Status"] = status;
-    details["Action"] = action;
-    details["Remote login"] = login;
-    emit(name, details);
-}
-
-console.log("example JSON document:");
-rule(doc);
-
-console.log("an older device:");
-rule({
-    overview: { model: "xr-210" },
-    inventory: {
-        details: { firmware_level: "4.1.9.3 (build 419.3)", remote_login_enabled: "no" },
-        extended_info: {}
-    },
-    status: { device_alias: "LAB-DEV-02" }
-});
-```
-
-**Check yourself:**
-
-1. List the differences you see between the two versions. Which ones change only
-   the style, and which could change the result?
-2. What does `info && info.json && info.json.data && info.json.data.system && info.json.data.system.name || doc.status.device_alias`
-   return when `extended_info` is `{}`? And when `extended_info` is missing?
-3. The two rules are **not** exactly the same. Look at the model in the second
-   call: `"xr-210"`, in lower case. Which rule creates an alert for it, and why?
-   Run the modern rule with that document to check.
-4. The old rule uses `|| ""` for `level`, the new one `?? ""`. Can that make a
-   difference here?
-5. Both rules start with a guard clause. Is it enough? Find a small document
-   that makes **both** rules stop with an error. How would you fix the guard?
-
-::: details Answer
-1. Style only: `var` -> `const` / `let`; `==` / `!=` -> `===` / `!==` (here both
-   sides are strings, so the result is the same); `charAt(i)` -> `for...of`;
-   `== true` -> nothing; `new Object()` + `details["..."] = ...` -> an object
-   literal; a ternary instead of the `switch`; the `&&` chain -> `?.`.
-   Could change the result: `String(...)` and `.toUpperCase()` around the model
-   (question 3), and `||` vs `??` (question 4).
-2. `doc.status.device_alias` in both cases: `info.json` is `undefined` (falsy),
-   so the `&&` chain stops and returns `undefined`, and `||` takes the alias. When
-   `extended_info` is missing, `info` itself is `undefined` - same result. Note:
-   `&&` is evaluated before `||`.
-3. Only the old one: it upper-cases the model first, so `"xr-210"` becomes
-   `"XR-210"`. The modern rule compares the model as it is and stops. Whether that
-   is a bug or a feature depends on the data - if the JSON can contain lower-case
-   models, the modern rule should normalise too.
-4. Not for strings: `"" || ""` and `"" ?? ""` are both `""`. It matters only if
-   `firmware_level` were not a string - for example the number `0`: the old rule
-   turns it into `""` and stops; the new one keeps `0`, and `for...of` over a
-   number is an error. The old `String(...)` is a good habit: convert first, then
-   loop.
-5. No. The guard checks `overview` and `inventory`, but the rules also read
-   `doc.inventory.details` and (when there is no system name)
-   `doc.status`. For example
-   `{ overview: { model: "XR-210" }, inventory: {}, status: { device_alias: "X" } }`
-   passes the guard, and then `doc.inventory.details.firmware_level` is an error:
-   `details` is `undefined`. Fix: check every part you read without `?.`:
-   `if (!doc.overview || !doc.inventory || !doc.inventory.details || !doc.status) return;`
-   (or, in the modern style, `if (!doc.overview || !doc.inventory?.details || !doc.status) return;`).
-:::
-
-## 12. Practice
+## 11. Practice
 
 In your copy of the Homework repository, first get the new tasks:
 
@@ -1450,7 +1249,6 @@ Each file explains the task at the top. Write your code between the
 | Ternary | `cond ? a : b` returns a value; one level only |
 | Loops | `for` when the count is known, `while` when not, `do...while` at least once |
 | `break` / `continue` | Leave the loop / skip to the next round |
-| Old style | `var`, `== false`, `indexOf(...) !== -1`, `a && a.b` - read it, write the modern form |
 
 ## Homework
 
