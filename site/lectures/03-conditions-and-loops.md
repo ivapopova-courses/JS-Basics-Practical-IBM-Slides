@@ -18,7 +18,8 @@ title: 3. Comparisons, logic, conditions and loops
 - make decisions with `if` / `else`, `switch` and the ternary operator `? :`;
 - stop a rule early when data is missing (a *guard clause*);
 - repeat work with `for`, `while` and `do...while`, and control loops with
-  `break` and `continue`.
+  `break` and `continue`;
+- read existing rules written in an older style (`var`, `==`, `== false`).
 
 Where this fits in the sample check rule - after today you can read and write all
 of it. Every part uses one of today's topics - the number in the comment is the
@@ -1215,7 +1216,101 @@ what changes the condition?
 **Loops step by step:** [5. `break` and `continue`](../animations/loopsStepByStep.html#5){target="_blank"}
 :::
 
-## 11. Practice
+## 11. Reading existing rules
+
+Many existing rules are written in an older style (before ES2015). They use only
+what you know from this lecture and lecture 2 - just written differently. Here is
+a short rule in that style. `emit` is a fake here: it only prints the alert.
+
+```js run
+function emit(id, text) {          // fake: prints instead of creating an alert
+    console.log("ALERT for " + id + ": " + text);
+}
+
+function rule(doc) {
+    if (!doc.overview || !doc.inventory || !doc.inventory.details) return;
+
+    var model = doc.overview.model;
+    if (model != "XR-210" && model != "XR-220") return;
+
+    var details = doc.inventory.details;
+    var loginOn = details.remote_login_enabled == "yes";
+    if (loginOn == false) return;
+
+    var level = details.firmware_level || "";
+    var version = "";
+    for (var i = 0; i < level.length; i++) {
+        if (level[i] == " ") break;
+        version = version + level[i];
+    }
+
+    var name = doc.status && doc.status.device_alias || "unknown device";
+    emit(name, "remote login is on, firmware " + version);
+}
+
+rule(doc);
+```
+
+The old forms, and what you write today:
+
+| Old style | Means | Today |
+|-----------|-------|-------|
+| `var x = ...` | a variable | `const` (or `let` if it changes) |
+| `a != b`, `a == b` | compare, with type conversion | `!==`, `===` |
+| `if (loginOn == false)` | "not on" | `if (!loginOn)` |
+| `x \|\| ""` | a default for every falsy value | `x ?? ""` (only for `null` / `undefined`) |
+| `a && a.b` | `a.b`, only if `a` exists | `a?.b` |
+| `s = s + x` | add to the end | `s += x` |
+| `"text " + x` | join strings | `` `text ${x}` `` |
+
+The same rule in the modern style:
+
+```js run
+function emit(id, text) {          // fake: prints instead of creating an alert
+    console.log(`ALERT for ${id}: ${text}`);
+}
+
+function rule(doc) {
+    if (!doc.overview || !doc.inventory?.details) return;
+
+    const model = doc.overview.model;
+    if (model !== "XR-210" && model !== "XR-220") return;
+
+    const details = doc.inventory.details;
+    if (details.remote_login_enabled !== "yes") return;
+
+    const level = details.firmware_level ?? "";
+    let version = "";
+    for (let i = 0; i < level.length; i++) {
+        if (level[i] === " ") break;
+        version += level[i];
+    }
+
+    const name = doc.status?.device_alias ?? "unknown device";
+    emit(name, `remote login is on, firmware ${version}`);
+}
+
+rule(doc);
+```
+
+**Check yourself:**
+
+1. What is `version` for the example JSON document, and why does the loop stop
+   there?
+2. `device_alias` is `""` (empty). Which name does each rule use?
+3. `remote_login_enabled` is missing. Does either rule create an alert?
+
+::: details Answer
+1. `"4.2.1.7"`. The firmware level is `"4.2.1.7 (build ...)"`, and `break` ends
+   the loop at the first space.
+2. The old rule: `"unknown device"` - `||` replaces every falsy value, also `""`.
+   The modern rule: `""` - `??` replaces only `null` and `undefined`. When you
+   modernise, decide which one the rule needs (section 5).
+3. No. `undefined == "yes"` is `false`, so `loginOn` is `false` and the old rule
+   stops. `undefined !== "yes"` is `true`, so the modern rule stops too.
+:::
+
+## 12. Practice
 
 In your copy of the Homework repository, first get the new tasks:
 
@@ -1249,6 +1344,7 @@ Each file explains the task at the top. Write your code between the
 | Ternary | `cond ? a : b` returns a value; one level only |
 | Loops | `for` when the count is known, `while` when not, `do...while` at least once |
 | `break` / `continue` | Leave the loop / skip to the next round |
+| Old style | `var`, `==`, `== false`, `a && a.b` - read it, write `const` / `let`, `===`, `!`, `?.` |
 
 ## Homework
 
