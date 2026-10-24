@@ -1600,43 +1600,46 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1835
-msgid "`04-arrays-and-records/homework.js` (in the homework repository): the names in a packed firmware string, alert lines from three lists, and the empty pools in the records export."
-msgstr "`04-arrays-and-records/homework.js` (в homework repository): имената в пакетиран string с firmware нива, редове за alert от три списъка и празните pools в експорта със записи."
+msgid "`04-arrays-and-records/homework.js` (in the homework repository): the names in a packed firmware string, alert lines from three lists, the empty pools and a packed setting in the records export, and two more loop tasks: even / odd numbers, and a bug to fix in a game loop."
+msgstr "`04-arrays-and-records/homework.js` (в homework repository): имената в пакетиран string с firmware нива, редове за alert от три списъка, празните pools и една пакетирана настройка в експорта със записи, и още две задачи с loops: четни / нечетни числа и бъг за поправяне в loop-а на една игра."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1838
+#: site/lectures/04-arrays-and-records.md:1839
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr ""
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1840
+#: site/lectures/04-arrays-and-records.md:1841
 msgid "Optional: take one of your own rules and find every array in it. Where does each one come from (the report, `split`, the rule itself)? Is there an `indexOf(...) !== -1` or a `for...in` over an array you would modernise? Does the rule change an array of `doc`?"
 msgstr "По желание: вземете едно от вашите правила и намерете всеки array в него. Откъде идва всеки (от отчета, от `split`, от самото правило)? Има ли `indexOf(...) !== -1` или `for...in` върху array, които бихте модернизирали? Променя ли правилото array от `doc`?"
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1845
+#: site/lectures/04-arrays-and-records.md:1846
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1847
+#: site/lectures/04-arrays-and-records.md:1848
 msgid "MDN: [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [Indexed collections](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections), [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split), [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
 msgstr "MDN: [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [Indexed collections](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections), [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split), [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1852
+#: site/lectures/04-arrays-and-records.md:1853
 msgid "javascript.info: [Arrays](https://javascript.info/array), [Array methods](https://javascript.info/array-methods) (the first part; the rest is session 7)"
 msgstr "javascript.info: [Arrays](https://javascript.info/array), [Array methods](https://javascript.info/array-methods) (първата част; останалото е в занятие 7)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1855
+#: site/lectures/04-arrays-and-records.md:1856
 msgid "Eloquent JavaScript (4th edition): [Data Structures: Objects and Arrays](https://eloquentjavascript.net/04_data.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Data Structures: Objects and Arrays](https://eloquentjavascript.net/04_data.html)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1857
+#: site/lectures/04-arrays-and-records.md:1858
 msgid "**Next session:** functions. The helpers you used ready-made - `versionBelow`, `asList`, `capitalize` - you write yourself, and you learn to read the older `function (x) { ... }` code in existing rules."
 msgstr "**Следващото занятие:** функции. Helper функциите, които използвахте готови - `versionBelow`, `asList`, `capitalize` - ще напишете сами и ще се научите да четете по-стария код `function (x) { ... }` в съществуващите правила."
+
+#~ msgid "`04-arrays-and-records/homework.js` (in the homework repository): the names in a packed firmware string, alert lines from three lists, and the empty pools in the records export."
+#~ msgstr "`04-arrays-and-records/homework.js` (в homework repository): имената в пакетиран string с firmware нива, редове за alert от три списъка и празните pools в експорта със записи."
 
 #~ msgid "Finish the five practice tasks - every check must print `OK`."
 #~ msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

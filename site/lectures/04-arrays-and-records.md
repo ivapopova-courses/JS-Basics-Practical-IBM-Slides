@@ -1833,8 +1833,9 @@ lines; the checks at the bottom print `OK` or `FAIL`.
 ## Homework
 
 1. `04-arrays-and-records/homework.js` (in the homework repository): the names in
-   a packed firmware string, alert lines from three lists, and the empty pools in
-   the records export.
+   a packed firmware string, alert lines from three lists, the empty pools and a
+   packed setting in the records export, and two more loop tasks: even / odd
+   numbers, and a bug to fix in a game loop.
 2. The practice tasks you did not finish in class - recommended, as later tasks
    and the course project reuse them. Every check must print `OK`.
 3. Optional: take one of your own rules and find every array in it. Where does
