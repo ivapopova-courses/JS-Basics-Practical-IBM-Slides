@@ -16,7 +16,7 @@
     "i18n:import": "node i18n/cli.mjs import"
   },
   "dependencies": {
-    "@sciscend/course-kit": "github:SciScend/course-kit#v0.4.0"
+    "@sciscend/course-kit": "github:SciScend/course-kit#v0.4.1"
   },
   "devDependencies": {
     "vitepress": "^1.6.4"

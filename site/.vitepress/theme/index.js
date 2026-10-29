@@ -18,8 +18,8 @@ import './zoomImages.css'
 // own RunCode (top-level await, Node-like output, Bulgarian buttons - see RunCode.vue),
 // the preview of a data file (<DataFile file="sample-asset.json" />, DataFile.vue),
 // diagrams that open bigger on a click (zoomImages.js), the grey unreleased
-// lectures in the side menu (sidebar.css), a top bar that fits a phone and shows the
-// whole site title (navbar.css) and the ProgressBG logo in the footer (footer.css).
+// lectures in the side menu (sidebar.css), a top bar that fits a phone (navbar.css)
+// and the ProgressBG logo in the footer (footer.css).
 export default {
   ...CourseTheme,
   enhanceApp(ctx) {

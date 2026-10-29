@@ -66,9 +66,8 @@ site/                          the course site (VitePress)
                                DataFile.vue + jsonPreview.js + dataFiles.js (the viewer of a
                                data file), LangSwitch.vue (the EN / BG button), codeFold,
                                scrollHash, zoomImages (a diagram opens bigger on a click),
-                               diagram.css, navbar.css (top bar on a phone, the whole site
-                               title next to the side menu), sidebar.css (grey unreleased
-                               lectures), footer.css (the logo)
+                               diagram.css, navbar.css (top bar on a phone), sidebar.css
+                               (grey unreleased lectures), footer.css (the logo)
     bg/                        GENERATED Bulgarian pages (git-ignored, see i18n/)
 i18n/                          translations: bg/*.po, the generator, translator guide, glossary
 data/                          MADE-UP data files: COPIES of Homework/data/ (sample-asset.json,

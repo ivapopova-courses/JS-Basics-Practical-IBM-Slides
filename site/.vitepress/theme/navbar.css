@@ -27,20 +27,3 @@
     padding: 0 12px;
   }
 }
-
-/* From 960px (with the side menu) the course-kit gives the title box a padding
-   with the selector ".VPNavBar.has-sidebar .title" - and the title link inside the
-   box has the class "title" too. The padding was counted twice, and the last letter
-   of "Practical JavaScript Basics" was cut. Only the box keeps the padding; a title
-   that is still too long (Bulgarian) ends with "...". */
-@media (min-width: 960px) {
-  .VPNavBar.has-sidebar .VPNavBarTitle .title {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  .VPNavBarTitle .title span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-}
