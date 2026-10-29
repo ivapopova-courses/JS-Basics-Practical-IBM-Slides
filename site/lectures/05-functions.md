@@ -1802,7 +1802,37 @@ declarations for named helpers and **methods**.
 
 ### Helpers inside `rule`
 
-Many existing rules define their helpers **inside** `rule`:
+Many existing rules define their helpers **inside** `rule`. First the idea on a
+small example: a function inside another function can use the variables of the
+outer function.
+
+```js run
+function checkFirmware(version) {
+    function major() {                          // no parameters
+        return Number(version.split(".")[0]);   // version of checkFirmware
+    }
+
+    if (major() < 4) {
+        console.log(version + ": too old, major " + major());
+    } else {
+        console.log(version + ": OK");
+    }
+}
+
+checkFirmware("4.2.1.7");       // 4.2.1.7: OK
+checkFirmware("3.9.0.1");       // 3.9.0.1: too old, major 3
+```
+
+What happens:
+
+- `major` is a **local** variable of `checkFirmware`. A new `major` function is
+  created on **every** call of `checkFirmware`, and it disappears when
+  `checkFirmware` returns.
+- `major` uses `version` without getting it as a parameter: it finds it in the
+  scope of `checkFirmware`, through the scope chain (section 6). In the first call
+  it sees `"4.2.1.7"`, in the second call `"3.9.0.1"`.
+
+In a rule, the outer function is `rule`, and the helpers use `doc` in the same way:
 
 ```js run
 function rule(doc) {
@@ -1811,20 +1841,12 @@ function rule(doc) {
     }
 
     if (model() === "XR-220") {
-        console.log("check " + doc.status.device_alias + ", model " + model());
+        console.log("check model " + model());
     }
 }
 
-rule(doc);
-rule({ overview: { model: "XR-210" }, status: { device_alias: "LAB-DEV-02" } });
+rule(doc);      // check model XR-220
 ```
-
-What happens:
-
-- `model` is a **local** variable of `rule`. A new `model` function is created on
-  **every** call of `rule`, and it disappears when `rule` returns.
-- `model` uses `doc` without getting it as a parameter: it finds it in `rule`'s
-  scope, through the scope chain (section 6).
 
 ::: info Animation
 **Functions and data:** [6. A helper inside `rule`](../animations/functionsAndData.html#6){target="_blank"}
@@ -1873,34 +1895,27 @@ A practical closure: a **function factory**. It takes a setting and returns a
 ready test with the setting built in:
 
 ```js run
-function compareVersions(a, b) {
-    const pa = String(a).split(".");
-    const pb = String(b).split(".");
-    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-        const x = parseInt(pa[i], 10) || 0;
-        const y = parseInt(pb[i], 10) || 0;
-        if (x !== y) return x < y ? -1 : 1;
-    }
-    return 0;
+function above(limit) {
+    return value => value > limit;      // remembers limit
 }
 
-function olderThan(minimum) {
-    return version => compareVersions(version, minimum) < 0;    // remembers minimum
+const tooHot = above(40);       // a temperature limit, in degrees
+const tooFull = above(90);      // a used-space limit, in percent
+
+console.log(tooHot(45), tooHot(35));        // true false
+console.log(tooFull(95), tooFull(80));      // true false
+
+const temps = [31, 44, 37, 42];
+const hot = [];
+for (const t of temps) {
+    if (tooHot(t)) hot.push(t);
 }
-
-const firmwareTooOld = olderThan("2.14");
-const levelTooOld = olderThan("4.2.1.0");
-
-console.log(firmwareTooOld("2.10"), firmwareTooOld("2.14"));    // true false
-console.log(levelTooOld("4.1.9.9"));                            // true
-
-const encs = doc.inventory.enclosures;
-const old = [];
-for (const enc of encs) {
-    if (firmwareTooOld(enc.firmware)) old.push(enc.id);
-}
-console.log(old);       // [ 'ENC-02', 'ENC-04' ]
+console.log(hot);       // [ 44, 42 ]
 ```
+
+Every call of `above` has its own `limit`: `tooHot` remembers 40, `tooFull`
+remembers 90. In the homework you write `olderThan(minimum)` - the same idea for
+versions.
 
 ### IIFE: run a function at once (advanced)
 
@@ -1927,22 +1942,25 @@ name). The `()` at the end calls it.
 
 Before modules existed, an IIFE was **the** way to keep variables out of the global
 scope: everything declared inside is local to the IIFE. Old libraries are written
-like this:
+like this - the IIFE runs once and returns a function, and that function remembers
+the private variable (a closure):
 
 ```js run
-var myLib = (function () {
-    var calls = 0;                      // private: not visible outside
-    function versionLabel(v) {
-        calls++;
-        return "v" + v;
-    }
-    return { versionLabel: versionLabel, callCount: function () { return calls; } };
+var nextAlertId = (function () {
+    var count = 0;                      // private: not visible outside
+    return function () {
+        count++;
+        return "ALERT-" + count;
+    };
 })();
 
-console.log(myLib.versionLabel("4.2"));     // v4.2
-console.log(myLib.callCount());             // 1
-console.log(typeof calls);                  // undefined - it did not leak
+console.log(nextAlertId());     // ALERT-1
+console.log(nextAlertId());     // ALERT-2
+console.log(typeof count);      // undefined - it did not leak
 ```
+
+Often the IIFE returns several such functions together, in an object (objects:
+session 6).
 
 Today, files that are modules (session 9) have their own scope, and the IIFE is
 rarely needed. You still meet it in older code.
@@ -1976,33 +1994,34 @@ level of a report (session 6). Without a base case the stack overflows:
 
 ### A shallow copy (advanced)
 
-A pure helper that must return a changed record often copies it first with the
-spread syntax `{ ...enc }` (ES2018; more in session 6). The copy is **shallow**:
-a nested array is still shared:
+A pure helper that must return a changed array often copies it first with the
+spread syntax `[...arr]` (lecture 4). The copy is **shallow**: only the outer
+array is new, the inner arrays are still shared:
 
 ```js run
-function withPort(enc, port) {
-    const copy = { ...enc };    // a new object with the same properties
-    copy.ports.push(port);      // but ports is the SAME array!
+function addReading(table, row, value) {
+    const copy = [...table];        // a new outer array with the same rows
+    copy[row].push(value);          // but copy[row] is the SAME inner array!
     return copy;
 }
 
-const enc = { id: "ENC-01", ports: ["P1"] };
-const enc2 = withPort(enc, "P2");
-console.log(enc.ports);         // [ 'P1', 'P2' ] - the original changed too
-console.log(enc2 === enc, enc2.ports === enc.ports);    // false true
+const temps = [[31, 34], [40]];     // the readings of two enclosures
+const temps2 = addReading(temps, 0, 37);
+console.log(temps[0]);              // [ 31, 34, 37 ] - the original changed too
+console.log(temps2 === temps, temps2[0] === temps[0]);     // false true
 
-// pure: copy the nested array too
-function withPortPure(e, port) {
-    return { ...e, ports: [...e.ports, port] };
+// pure: copy the row you change too
+function addReadingPure(table, row, value) {
+    const copy = [...table];
+    copy[row] = [...table[row], value];     // a new inner array
+    return copy;
 }
-const enc3 = withPortPure(enc, "P3");
-console.log(enc.ports.length, enc3.ports.length);       // 2 3
+const temps3 = addReadingPure(temps, 1, 42);
+console.log(temps[1], temps3[1]);   // [ 40 ] [ 40, 42 ]
 ```
 
-::: info Animation
-**Functions and data:** [7. A shallow copy (advanced)](../animations/functionsAndData.html#7){target="_blank"}
-:::
+A copy of an object with `{ ...obj }` is shallow in the same way - session 6
+shows it, together with a full (deep) copy.
 
 ## 12. The structure of a rule
 
