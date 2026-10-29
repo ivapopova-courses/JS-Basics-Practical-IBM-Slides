@@ -756,7 +756,7 @@ const SCENARIOS = [
         { line: 5, text: `1 2 3 is printed, not 0 2 3 - this is a <b>bug</b>. The same happens with "", false and null. ES6 default values do not have this problem.`,
           do: s => { rd(s, 'o2', 'x', 'y', 'z'); log(s, '1 2 3'); }, reveal: ['con'],
           fly: [['v:o2.x', 'con', '1'], ['v:o2.y', 'con', '2'], ['v:o2.z', 'con', '3']] },
-        { line: -1, text: `<b>Summary:</b> prefer <code>function f(x = 1)</code> - the default value is taken only if the argument is undefined. The trick <code>x = x || 1</code> replaces every falsy value. <b>Note:</b> some older materials write <code>let x = x || 1;</code>, but with let you get <code>SyntaxError: Identifier 'x' has already been declared</code>, because the parameter x is already a local variable.`,
+        { line: -1, text: `<b>Summary:</b> prefer <code>function f(x = 1)</code> - the default value is taken only if the argument is undefined. The trick <code>x = x || 1</code> replaces every falsy value. <b>Note:</b> a common mistake is to write <code>let x = x || 1;</code> - with let you get <code>SyntaxError: Identifier 'x' has already been declared</code>, because the parameter x is already a local variable.`,
           do: s => { pop(s); unmk(s, 'd1'); } },
     ],
 },

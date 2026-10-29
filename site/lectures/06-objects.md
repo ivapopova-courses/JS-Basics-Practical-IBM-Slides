@@ -143,7 +143,7 @@ A JSON report is exactly this: objects of data, with objects and arrays inside.
 | Order | the order of the elements is the data | keys have an order too, but you look them up by name |
 | Typical use | a list of things of one kind | the parts of one thing; or a dictionary keyed by ids |
 
-The old slides said "objects are not ordered". Today the language defines the
+Older books and tutorials say "objects are not ordered". Today the language defines the
 order of the keys: keys that look like whole numbers (`"2"`, `"10"`) come
 **first, sorted**; all other keys follow in the order they were **created**. This
 matters for the columns of an alert (section 12):
@@ -195,7 +195,7 @@ const car1 = {
 console.log(obj, car1);
 ```
 
-The old slides said "no comma after the last property". That rule is from
+Older books and tutorials say "no comma after the last property". That rule is from
 before ES5 (2009): a trailing comma is allowed today, and it makes long lists
 easier to edit - the same as in arrays.
 
@@ -789,7 +789,7 @@ console.log(asList({ id: "ENC-09" }).length, asList(doc.inventory.enclosures).le
 
 ### Primitives are copied, objects are shared (advanced)
 
-The old slides showed how values are stored:
+How values are stored:
 
 - **Primitive** values (number, string, boolean, ...) are stored **by value**. Copying
   a variable copies the value; the two variables are independent. Primitives
@@ -919,7 +919,7 @@ console.log(settings);              // { locale: 'en_US', power_saving: 'on' }
 
 Spread never changes the original - unlike `push`, `unshift` and `splice`.
 
-An old example: flip one property and keep the rest:
+An example: flip one property and keep the rest:
 
 ```js run
 const obj = { a: true, b: false };
@@ -1312,7 +1312,7 @@ console.log(p1.name);           // Peter
 ```
 
 Class fields and `static` fields are ES2022 - check that your rule engine supports
-them. (Before ES2022, the old slides wrote `Person.count = 0;` after the class.)
+them. (Code written before ES2022 sets `Person.count = 0;` after the class.)
 
 ### Inheritance: `extends` and `super`
 
@@ -1601,7 +1601,7 @@ print `OK` or `FAIL`.
 | 2 | `task2-get.js` | **The course project starts:** `get(obj, path, fallback)` with a string or an array path, and all the edge cases |
 | 3 | `task3-dictionaries.js` | The dictionaries of `report-dictionary.json`: keys, values, information in the keys, counting and grouping |
 | 4 | `task4-shapes.js` | The flattened export `report-export.json`: read single values, rebuild records from parallel arrays, compare with the nested document |
-| 5 | `task5-objects-classic.js` | The old tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person |
+| 5 | `task5-objects-classic.js` | Classic tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person |
 
 ## Summary
 

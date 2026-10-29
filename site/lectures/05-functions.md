@@ -340,7 +340,7 @@ console.log(typeof b);  // undefined - b is not visible here; b() would be a Ref
 Leaving out the `;` after a function expression usually does no harm, because
 JavaScript inserts it for you at the end of the line (*automatic semicolon
 insertion*). But **not** when the next line starts with `(` or `[`. Then
-JavaScript joins the two lines. An old example:
+JavaScript joins the two lines. An example:
 
 ```js run
 let x, y;
@@ -482,8 +482,7 @@ logAll("[CHK-0132] ", "firmware below 4.2", "remote login enabled");
 
 ### Example: the area of a rectangle
 
-An old task: write `rectangleArea(width, height)`, and use it for the rooms of a
-flat.
+A function `rectangleArea(width, height)`, used for the rooms of a flat:
 
 ```js run
 function rectangleArea(width, height) {
@@ -554,8 +553,8 @@ value can come as `null`. When `null` must also get the default, use `??` in the
 body: `x = x ?? 1;` (ES2020).
 
 ::: warning `let x = x || 1` is an error
-Some old materials write `let x = x || 1;` inside the function. The parameter
-`x` is already declared, so this is
+A common mistake is to write `let x = x || 1;` inside the function. The
+parameter `x` is already declared, so this is
 `SyntaxError: Identifier 'x' has already been declared`. Write `x = x || 1;` - or
 better, a default value.
 :::
@@ -732,7 +731,7 @@ console.log(v.major, v.minor, v.rest);      // 4 2 1.7
 
 (Session 6 shows a short way to unpack it: `const { major, minor } = splitVersion(...)`.)
 
-**Check yourself:** an old task - `logEvenElements(arr)` prints the even elements
+**Check yourself:** `logEvenElements(arr)` prints the even elements
 of an array, and `findMaxEven(arr)` returns the largest even element. Which one
 is a procedure and which a function? Write `findMaxEven` - what should it return
 for `[1, 3, 5]`?
@@ -797,7 +796,7 @@ read it, and every function can **change** it. In a browser page, all script fil
 share **one** global scope - a global name in one file can clash with the same
 name in another file.
 
-An old example from the arrays theme: a page loads two libraries, and both
+An example: a page loads two libraries, and both
 define a global with the same name. The second one wins:
 
 ```js run
@@ -847,8 +846,7 @@ Parameters shadow too. In rules this is common and fine: the helper's
 parameter `doc` hides nothing important, because the helper works only with
 what it gets.
 
-**Check yourself** (an old task): before you run it, write down the three lines it
-prints.
+**Check yourself:** before you run it, write down the three lines it prints.
 
 ```js run
 let x = 1;
@@ -1519,7 +1517,7 @@ console.log(countIf(encs, isHdd));          // 2
 every call of the callback gets its own frame.
 :::
 
-Two classic callback functions, from the old advanced tasks. `customMap` builds a
+Two classic exercises with callbacks. `customMap` builds a
 new array with the result of the callback for every element; `customFilter` keeps
 only the elements for which the callback returns `true`:
 
@@ -1601,7 +1599,7 @@ bar();
 **Functions are values:** [4. A function returns a function](../animations/functionsAsValues.html#4){target="_blank"}
 :::
 
-A useful example, from the old advanced tasks: `compose(f, g)` returns a **new**
+A useful example: `compose(f, g)` returns a **new**
 function that calls `f`, then `g` on its result:
 
 ```js run

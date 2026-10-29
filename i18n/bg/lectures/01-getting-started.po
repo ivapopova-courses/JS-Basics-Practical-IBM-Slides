@@ -850,8 +850,8 @@ msgstr "**Repository** - `git commit` запазва подготвените п
 
 #. paragraph
 #: site/lectures/01-getting-started.md:366
-msgid "Older materials use `git reset HEAD -- <file>` to unstage - it does the same."
-msgstr "По-старите материали използват `git reset HEAD -- <file>`, за да махнат файл от staging - прави същото."
+msgid "Older Git versions suggest `git reset HEAD -- <file>` to unstage - it does the same."
+msgstr "По-старите версии на Git предлагат `git reset HEAD -- <file>`, за да махнат файл от staging - прави същото."
 
 #. heading 3
 #: site/lectures/01-getting-started.md:368
@@ -1245,8 +1245,8 @@ msgstr "![Частите на промпта: PS за PowerShell, текущат
 
 #. paragraph
 #: site/lectures/01-getting-started.md:601
-msgid "In VSCode: open the folder, open the terminal (`` Ctrl+` ``), type `node hello.js`. (Old course materials used a `.vscode/tasks.json` file and `Ctrl+Shift+B` for this - the terminal is simpler.) VSCode can also run and debug a file with **Run > Run Without Debugging** (`Ctrl+F5`)."
-msgstr "Във VSCode: отворете папката, отворете терминала (`` Ctrl+` ``), напишете `node hello.js`. (Старите материали на курса използваха файл `.vscode/tasks.json` и `Ctrl+Shift+B` за това - терминалът е по-прост.) VSCode може и да изпълни и debug-не файл с **Run > Run Without Debugging** (`Ctrl+F5`)."
+msgid "In VSCode: open the folder, open the terminal (`` Ctrl+` ``), type `node hello.js`. (A `.vscode/tasks.json` file and `Ctrl+Shift+B` can do the same - the terminal is simpler.) VSCode can also run and debug a file with **Run > Run Without Debugging** (`Ctrl+F5`)."
+msgstr "Във VSCode: отворете папката, отворете терминала (`` Ctrl+` ``), напишете `node hello.js`. (Файл `.vscode/tasks.json` и `Ctrl+Shift+B` могат да направят същото - терминалът е по-прост.) VSCode може и да изпълни и debug-не файл с **Run > Run Without Debugging** (`Ctrl+F5`)."
 
 #. paragraph
 #: site/lectures/01-getting-started.md:606
@@ -1420,8 +1420,8 @@ msgstr "token"
 
 #. paragraph
 #: site/lectures/01-getting-started.md:696
-msgid "The old slides also showed `alert(\"Welcome\")` and `document.body.style.backgroundColor = \"red\"` - these work only in a browser (`alert` and `document` come from the browser, not from the language). In this site they would show a message box and colour the page; in Node.js and in a rule engine they do not exist."
-msgstr "Старите слайдове показваха и `alert(\"Welcome\")` и `document.body.style.backgroundColor = \"red\"` - те работят само в браузъра (`alert` и `document` идват от браузъра, а не от езика). В този сайт те биха показали прозорче със съобщение и биха оцветили страницата; в Node.js и в rule engine те не съществуват."
+msgid "Browser examples often use `alert(\"Welcome\")` and `document.body.style.backgroundColor = \"red\"` - these work only in a browser (`alert` and `document` come from the browser, not from the language). In this site they would show a message box and colour the page; in Node.js and in a rule engine they do not exist."
+msgstr "Примерите за браузъра често използват `alert(\"Welcome\")` и `document.body.style.backgroundColor = \"red\"` - те работят само в браузъра (`alert` и `document` идват от браузъра, а не от езика). В този сайт те биха показали прозорче със съобщение и биха оцветили страницата; в Node.js и в rule engine те не съществуват."
 
 #. paragraph
 #: site/lectures/01-getting-started.md:703

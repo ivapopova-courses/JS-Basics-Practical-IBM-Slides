@@ -285,8 +285,8 @@ msgstr "`replaceAll` е ES2021 - проверете дали вашият rule e
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:252
-msgid "An old example from the dates topic - the current time as `HH:MM:SS`, every part with two digits:"
-msgstr "Стар пример от темата за датите - текущото време като `HH:MM:SS`, всяка част с две цифри:"
+msgid "An example with a date - the current time as `HH:MM:SS`, every part with two digits:"
+msgstr "Пример с дата - текущото време като `HH:MM:SS`, всяка част с две цифри:"
 
 #. box title
 #: site/lectures/08-strings-regex-dates.md:265
@@ -1255,13 +1255,13 @@ msgstr "Две дати се сравняват с `<` и `>`, а изважда
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1104
-msgid "An old example - the age of a person from the date of birth (careful: the birthday of this year may not have come yet):"
-msgstr "Стар пример - възрастта на човек от датата на раждане (внимание: рожденият ден тази година може още да не е дошъл):"
+msgid "Another example - the age of a person from the date of birth (careful: the birthday of this year may not have come yet):"
+msgstr "Още един пример - възрастта на човек от датата на раждане (внимание: рожденият ден тази година може още да не е дошъл):"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1119
-msgid "And one more old example - timing code (lecture 7 used `console.time`):"
-msgstr "И още един стар пример - измерване на времето за изпълнение на код (лекция 7 използва `console.time`):"
+msgid "And one more example - timing code (lecture 7 used `console.time`):"
+msgstr "И още един пример - измерване на времето за изпълнение на код (лекция 7 използва `console.time`):"
 
 #. box title
 #: site/lectures/08-strings-regex-dates.md:1128
@@ -1585,8 +1585,8 @@ msgstr "Кодировки: [The Absolute Minimum Every Software Developer Must 
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1372
-msgid "Old reading: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
-msgstr "Стара статия: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
+msgid "Background reading (2010): [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
+msgstr "За допълнително четене (2010): [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1374

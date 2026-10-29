@@ -390,8 +390,8 @@ const server = http.createServer((request, response) => {
 server.listen(3000, () => console.log("listening on http://localhost:3000"));
 ```
 
-Frameworks such as Express make bigger servers easier (the old course built a form
-with one). Servers are outside this course - but now you know where the JSON of a web
+Frameworks such as Express make bigger servers easier. Servers are outside this
+course - but now you know where the JSON of a web
 API comes from (section 9).
 
 ## 4. Files: `fs` and `path`
@@ -870,7 +870,7 @@ try {
 
 ### Return an error, or throw it?
 
-An older example returns an `Error` object instead of throwing it, and the caller
+Some code returns an `Error` object instead of throwing it, and the caller
 checks with `instanceof`:
 
 ```js run
@@ -912,7 +912,7 @@ function parseOrNull(text) {
 console.log(parseOrNull('{"a": 1}'), parseOrNull("{a: 1}"));   // { a: 1 } null
 ```
 
-The old slides list all the types in one `if...else if` chain:
+You can also check all the types in one `if...else if` chain:
 
 ```js run
 try {
@@ -1029,7 +1029,7 @@ Section 11 runs both versions on the same reports.
 ### Global error handlers and error tracking
 
 A browser page can catch every error that nobody caught with `window.onerror` - the
-old slides show it with `message`, `source`, `lineno`, `colno` and `error`. Node.js
+handler gets `message`, `source`, `lineno`, `colno` and `error`. Node.js
 has `process.on("uncaughtException", handler)`. Both are a last resort for logging,
 not a way to continue as if nothing happened.
 
@@ -1085,7 +1085,7 @@ in Read more.
 
 MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
 
-The old slides use a story: prepare dinner (2 s), then eat it (0.5 s), then go to bed -
+A story in three steps: prepare dinner (2 s), then eat it (0.5 s), then go to bed -
 each step after the previous one, with errors handled. With callbacks, every next
 step goes **inside** the previous one ("callback hell"):
 
@@ -1469,7 +1469,7 @@ print `OK` or `FAIL`.
 | 1 | `task1-predict.js` | Predict 20 results: `JSON.stringify` and `JSON.parse`, the error types, `try` / `finally` |
 | 2 | `task2-json.js` | Parse safely (with the file name in the error), remove a BOM, stringify with fixed keys and indentation, compare without key order, mask values |
 | 3 | `task3-library.js` + `task3-module.js` | Turn your helpers into a CommonJS module; `task3-module.js` loads it with `require` and checks it |
-| 4 | `task4-errors.js` | The old tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), a `ReportError` class, `requireField`, the type of an error |
+| 4 | `task4-errors.js` | Classic tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), a `ReportError` class, `requireField`, the type of an error |
 | 5 | `task5-run-rule.js` | The local rule runner: read the reports of a folder, load a rule with a fake `emit`, collect alerts and errors |
 
 ## Summary

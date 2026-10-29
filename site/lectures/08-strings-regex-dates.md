@@ -249,7 +249,7 @@ console.log("-".repeat(20));
 replace all matches is `split` + `join` (`"a-b-c".split("-").join("+")`) or a
 regular expression with the `g` flag (section 6).
 
-An old example from the dates topic - the current time as `HH:MM:SS`, every part
+An example with a date - the current time as `HH:MM:SS`, every part
 with two digits:
 
 ```js run
@@ -1101,7 +1101,7 @@ const due = new Date(installed.getTime() + 30 * 86_400_000);
 console.log(due.toISOString().slice(0, 10));             // 2025-12-20
 ```
 
-An old example - the age of a person from the date of birth (careful: the birthday
+Another example - the age of a person from the date of birth (careful: the birthday
 of this year may not have come yet):
 
 ```js run
@@ -1116,7 +1116,7 @@ console.log(calcAge(new Date("1990-12-31"), new Date("2026-10-12")));   // 35
 console.log(calcAge(new Date("1990-01-15"), new Date("2026-10-12")));   // 36
 ```
 
-And one more old example - timing code (lecture 7 used `console.time`):
+And one more example - timing code (lecture 7 used `console.time`):
 
 ```js run
 const start = Date.now();
@@ -1369,7 +1369,7 @@ print `OK` or `FAIL`.
   [Methods of primitives](https://javascript.info/primitives-methods)
 - Tools: [regex101.com](https://regex101.com/) - test and explain patterns
 - Encodings: [The Absolute Minimum Every Software Developer Must Know About Unicode](https://tonsky.me/blog/unicode/) (Nikita Prokopov)
-- Old reading: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)
+- Background reading (2010): [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)
 
 **Next session:** JSON, Node.js, modules and errors - read sample documents from
 files, turn your `library.js` into a real module, handle errors without hiding

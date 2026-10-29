@@ -363,7 +363,7 @@ git commit -m "Add the first script"
 git restore --staged hello.js   # unstage (the change stays in the file)
 ```
 
-Older materials use `git reset HEAD -- <file>` to unstage - it does the same.
+Older Git versions suggest `git reset HEAD -- <file>` to unstage - it does the same.
 
 ### Good commit messages
 
@@ -599,8 +599,8 @@ folder.
 ![The parts of the prompt: PS for PowerShell, the current folder, then your command; under it what the program prints, then the prompt again](/diagrams/terminal-prompt.svg){.diagram width=920 height=290}
 
 In VSCode: open the folder, open the terminal (`` Ctrl+` ``), type
-`node hello.js`. (Old course materials used a `.vscode/tasks.json` file and
-`Ctrl+Shift+B` for this - the terminal is simpler.) VSCode can also run and debug
+`node hello.js`. (A `.vscode/tasks.json` file and `Ctrl+Shift+B` can do the same -
+the terminal is simpler.) VSCode can also run and debug
 a file with **Run > Run Without Debugging** (`Ctrl+F5`).
 
 `node` without a file starts an interactive console (a *REPL*): type JavaScript,
@@ -693,7 +693,7 @@ console.log(answer);
 }
 ```
 
-The old slides also showed `alert("Welcome")` and
+Browser examples often use `alert("Welcome")` and
 `document.body.style.backgroundColor = "red"` - these work only in a browser
 (`alert` and `document` come from the browser, not from the language). In this site
 they would show a message box and colour the page; in Node.js and in a rule engine

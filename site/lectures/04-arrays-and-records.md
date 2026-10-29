@@ -502,7 +502,7 @@ fruits.pop();
 console.log(fruits);             // [ 'apple', 'banana', 'strawberry' ]
 ```
 
-The returned values are useful too - an older example with the rainbow:
+The returned values are useful too - an example with the rainbow:
 
 ```js run
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
@@ -1032,7 +1032,7 @@ function, so it comes in session 5 and 7.
 
 ### Example: every element, its square, the sum
 
-An old example, with a bug. Run it - which line is wrong?
+An example with a bug. Run it - which line is wrong?
 
 ```js run
 const numbers = [1, 2, 3, 4, 5];
@@ -1102,7 +1102,7 @@ console.log(sum);    // 8 + 4 + 2 = 14
 ```
 :::
 
-The same for a range of numbers, without an array (old loop homework): the sum
+The same for a range of numbers, without an array: the sum
 from 1 to 100, and the odd numbers below 100 that divide by 11:
 
 ```js run
@@ -1150,8 +1150,7 @@ for (const n of numArray) {
 }
 ```
 
-The old homework, both tasks at once: the odd numbers, and the odd **positive**
-numbers:
+Two tasks in one loop: the odd numbers, and the odd **positive** numbers:
 
 ```js run
 const a = [0, 2, 3, 41, 5, 60, 7, 80];
@@ -1258,8 +1257,8 @@ normal" (section 10).
 
 ### Going round in a circle: `%`
 
-An old browser example changed a box colour on every click, going round the list
-of colours. Without the browser, the idea is the index with `% length`:
+On a web page, a button can change the colour of a box on every click, going round
+a list of colours. Without the browser, the idea is the index with `% length`:
 
 ```js run
 const colors = ["blue", "purple", "red"];
@@ -1362,7 +1361,7 @@ console.log(`sum = ${sum}`);    // 1 + 5 + 9 = 15
 **Algorithms with arrays:** [7. Two-dimensional array (advanced)](../animations/arrayAlgorithms.html#7){target="_blank"}
 :::
 
-**Check yourself** (old lab task): `fruitsData` keeps the names in row 0 and the
+**Check yourself:** `fruitsData` keeps the names in row 0 and the
 prices in row 1. Print `apple = 1.2`, `orange = 2`, `cherry = 3.5` with a loop.
 
 ```js run
@@ -1435,7 +1434,7 @@ for (const enc of enclosures) {
 
 ### Records as arrays, or as objects?
 
-Older code (and the old course examples) keep a record as an array:
+Older code often keeps a record as an array:
 
 ```js run
 // [gender, age, first name, last name]
@@ -1464,13 +1463,13 @@ object says it: `student.age`. That is why JSON reports use objects for records.
 ::: details Answer
 The same loop with `>` instead of `<`:
 `if (student[1] > oldest[1]) { oldest = student; }`, starting with
-`let oldest = students[0];`. Note: the old version of this example started with
-`minAge = students[0][1]` but left `youngestStudent` undefined - if the first
-student had been the youngest, the program would have crashed. Starting with the
-whole first record avoids this.
+`let oldest = students[0];`. A common mistake is to start with
+`minAge = students[0][1]` and leave `youngestStudent` undefined - if the first
+student is the youngest, the program crashes. Starting with the whole first
+record avoids this.
 :::
 
-An old homework in the same shape - rulers and the years of their rule. The names
+A task in the same shape - rulers and the years of their rule. The names
 are in mixed case, so a small helper fixes them:
 
 ```js run

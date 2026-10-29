@@ -613,7 +613,7 @@ const SCENARIOS = [
         'console.log("x:", x);',
     ],
     steps: [
-        { text: `Why does this code (from the slide "Variables Hoisting") give no error, but print <b>undefined</b>? Because JavaScript goes through the code in <b>two phases</b>: first <span class="sc">creation</span> (the creation phase - "compile time" in the slides), then <b>execution</b> (the execution phase - "run time"). On the right is the <b>scope</b> - the table of names that JavaScript knows. For now it is empty.`,
+        { text: `Why does this code give no error, but print <b>undefined</b>? Because JavaScript goes through the code in <b>two phases</b>: first <span class="sc">creation</span> (the creation phase - often called "compile time"), then <b>execution</b> (the execution phase - "run time"). On the right is the <b>scope</b> - the table of names that JavaScript knows. For now it is empty.`,
           do: s => scope(s, 'g', 'global', GLOBAL) },
         { text: `<span class="sc">Phase 1 - creation.</span> Before it runs any line, JavaScript looks through the <b>whole</b> code from top to bottom and looks only for <b>declarations</b>: <code>var</code>, <code>let</code>, <code>const</code>, <code>function</code>. Line 1 has no declaration - <code>console.log</code> is an expression and will run only in phase 2.`,
           do: s => { phase1(s, 'g', 'global'); scanTo(s, 0); } },
@@ -644,7 +644,7 @@ const SCENARIOS = [
         '}',
     ],
     steps: [
-        { text: `The function <code>foo</code> is called on line 1, but it is defined further down, with a <b>declaration</b> (a function declaration - "Option 1" in the slides). Will it work?`,
+        { text: `The function <code>foo</code> is called on line 1, but it is defined further down, with a <b>declaration</b> (a function declaration). Will it work?`,
           do: s => scope(s, 'g', 'global', GLOBAL) },
         { text: `<span class="sc">Phase 1.</span> Line 1 has no declarations - the call <code>foo()</code> is an expression and will run later.`,
           do: s => { phase1(s, 'g', 'global'); scanTo(s, 0); } },

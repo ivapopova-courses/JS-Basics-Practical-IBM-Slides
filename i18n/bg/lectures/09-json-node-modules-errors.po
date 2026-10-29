@@ -445,8 +445,8 @@ msgstr "Node.js е най-известен с уеб сървърите - сър
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:393
-msgid "Frameworks such as Express make bigger servers easier (the old course built a form with one). Servers are outside this course - but now you know where the JSON of a web API comes from (section 9)."
-msgstr "Frameworks като Express улесняват по-големите сървъри (старият курс изграждаше форма с такъв). Сървърите са извън този курс - но вече знаете откъде идва JSON-ът на уеб API (раздел 9)."
+msgid "Frameworks such as Express make bigger servers easier. Servers are outside this course - but now you know where the JSON of a web API comes from (section 9)."
+msgstr "Frameworks като Express улесняват по-големите сървъри. Сървърите са извън този курс - но вече знаете откъде идва JSON-ът на уеб API (раздел 9)."
 
 #. heading 2
 #: site/lectures/09-json-node-modules-errors.md:397
@@ -965,8 +965,8 @@ msgstr "Да върнем грешката или да я хвърлим?"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:873
-msgid "An older example returns an `Error` object instead of throwing it, and the caller checks with `instanceof`:"
-msgstr "По-стар пример връща обект `Error`, вместо да го хвърли, а извикващият проверява с `instanceof`:"
+msgid "Some code returns an `Error` object instead of throwing it, and the caller checks with `instanceof`:"
+msgstr "Понякога кодът връща обект `Error`, вместо да го хвърли, а извикващият проверява с `instanceof`:"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:889
@@ -995,8 +995,8 @@ msgstr "`catch` хваща **всичко**. За да реагирате сам
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:915
-msgid "The old slides list all the types in one `if...else if` chain:"
-msgstr "Старите слайдове изброяват всички видове в една верига `if...else if`:"
+msgid "You can also check all the types in one `if...else if` chain:"
+msgstr "Може да проверите и всички видове в една верига `if...else if`:"
 
 #. heading 3
 #: site/lectures/09-json-node-modules-errors.md:932
@@ -1065,8 +1065,8 @@ msgstr "Глобални обработчици на грешки и просл�
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1031
-msgid "A browser page can catch every error that nobody caught with `window.onerror` - the old slides show it with `message`, `source`, `lineno`, `colno` and `error`. Node.js has `process.on(\"uncaughtException\", handler)`. Both are a last resort for logging, not a way to continue as if nothing happened."
-msgstr "Страница в браузъра може да хване всяка грешка, която никой не е хванал, с `window.onerror` - старите слайдове го показват с `message`, `source`, `lineno`, `colno` и `error`. Node.js има `process.on(\"uncaughtException\", handler)`. И двете са последна мярка за записване в log, а не начин да се продължи, сякаш нищо не е станало."
+msgid "A browser page can catch every error that nobody caught with `window.onerror` - the handler gets `message`, `source`, `lineno`, `colno` and `error`. Node.js has `process.on(\"uncaughtException\", handler)`. Both are a last resort for logging, not a way to continue as if nothing happened."
+msgstr "Страница в браузъра може да хване всяка грешка, която никой не е хванал, с `window.onerror` - обработчикът получава `message`, `source`, `lineno`, `colno` и `error`. Node.js има `process.on(\"uncaughtException\", handler)`. И двете са последна мярка за записване в log, а не начин да се продължи, сякаш нищо не е станало."
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1036
@@ -1140,8 +1140,8 @@ msgstr "MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/R
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1088
-msgid "The old slides use a story: prepare dinner (2 s), then eat it (0.5 s), then go to bed - each step after the previous one, with errors handled. With callbacks, every next step goes **inside** the previous one (\"callback hell\"):"
-msgstr "Старите слайдове използват история: пригответе вечеря (2 s), после я изяжте (0.5 s), после си легнете - всяка стъпка след предишната, с обработка на грешките. С callbacks всяка следваща стъпка отива **вътре** в предишната (\"callback hell\"):"
+msgid "A story in three steps: prepare dinner (2 s), then eat it (0.5 s), then go to bed - each step after the previous one, with errors handled. With callbacks, every next step goes **inside** the previous one (\"callback hell\"):"
+msgstr "История в три стъпки: пригответе вечеря (2 s), после я изяжте (0.5 s), после си легнете - всяка стъпка след предишната, с обработка на грешките. С callbacks всяка следваща стъпка отива **вътре** в предишната (\"callback hell\"):"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1110
@@ -1435,8 +1435,8 @@ msgstr "Превърнете helper функциите си в CommonJS моду
 
 #. table cell
 #: site/lectures/09-json-node-modules-errors.md:1472
-msgid "The old tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), a `ReportError` class, `requireField`, the type of an error"
-msgstr "Старите задачи (`calculateArea`, `retryOperation`, `checkUserPermission`), клас `ReportError`, `requireField`, видът на една грешка"
+msgid "Classic tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), a `ReportError` class, `requireField`, the type of an error"
+msgstr "Класически задачи (`calculateArea`, `retryOperation`, `checkUserPermission`), клас `ReportError`, `requireField`, видът на една грешка"
 
 #. table cell
 #: site/lectures/09-json-node-modules-errors.md:1473

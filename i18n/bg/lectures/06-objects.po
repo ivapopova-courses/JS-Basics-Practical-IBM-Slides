@@ -195,8 +195,8 @@ msgstr "частите на едно нещо; или dictionary с ключов
 
 #. paragraph
 #: site/lectures/06-objects.md:146
-msgid "The old slides said \"objects are not ordered\". Today the language defines the order of the keys: keys that look like whole numbers (`\"2\"`, `\"10\"`) come **first, sorted**; all other keys follow in the order they were **created**. This matters for the columns of an alert (section 12):"
-msgstr "Старите слайдове казваха \"обектите не са подредени\". Днес езикът определя реда на ключовете: ключовете, които изглеждат като цели числа (`\"2\"`, `\"10\"`), идват **първи, сортирани**; всички останали ключове следват в реда, в който са **създадени**. Това е важно за колоните на alert (раздел 12):"
+msgid "Older books and tutorials say \"objects are not ordered\". Today the language defines the order of the keys: keys that look like whole numbers (`\"2\"`, `\"10\"`) come **first, sorted**; all other keys follow in the order they were **created**. This matters for the columns of an alert (section 12):"
+msgstr "По-старите книги и ръководства казват \"обектите не са подредени\". Днес езикът определя реда на ключовете: ключовете, които изглеждат като цели числа (`\"2\"`, `\"10\"`), идват **първи, сортирани**; всички останали ключове следват в реда, в който са **създадени**. Това е важно за колоните на alert (раздел 12):"
 
 #. heading 3
 #: site/lectures/06-objects.md:156
@@ -240,8 +240,8 @@ msgstr "Напишете двойките `key: value` във фигурни с�
 
 #. paragraph
 #: site/lectures/06-objects.md:198
-msgid "The old slides said \"no comma after the last property\". That rule is from before ES5 (2009): a trailing comma is allowed today, and it makes long lists easier to edit - the same as in arrays."
-msgstr "Старите слайдове казваха \"без запетая след последното property\". Това правило е отпреди ES5 (2009): днес запетаята в края е позволена и улеснява редактирането на дълги списъци - както при arrays."
+msgid "Older books and tutorials say \"no comma after the last property\". That rule is from before ES5 (2009): a trailing comma is allowed today, and it makes long lists easier to edit - the same as in arrays."
+msgstr "По-старите книги и ръководства казват \"без запетая след последното property\". Това правило е отпреди ES5 (2009): днес запетаята в края е позволена и улеснява редактирането на дълги списъци - както при arrays."
 
 #. heading 3
 #: site/lectures/06-objects.md:202
@@ -815,8 +815,8 @@ msgstr "Примитивите се копират, обектите се спо
 
 #. paragraph
 #: site/lectures/06-objects.md:792
-msgid "The old slides showed how values are stored:"
-msgstr "Старите слайдове показваха как се пазят стойностите:"
+msgid "How values are stored:"
+msgstr "Как се пазят стойностите:"
 
 #. paragraph
 #: site/lectures/06-objects.md:794
@@ -960,8 +960,8 @@ msgstr "Spread никога не променя оригинала - за раз
 
 #. paragraph
 #: site/lectures/06-objects.md:922
-msgid "An old example: flip one property and keep the rest:"
-msgstr "Стар пример: обърнете едно property и запазете останалите:"
+msgid "An example: flip one property and keep the rest:"
+msgstr "Пример: обърнете едно property и запазете останалите:"
 
 #. heading 3
 #: site/lectures/06-objects.md:930
@@ -1175,8 +1175,8 @@ msgstr "Static членове, полета, getters и setters (advanced)"
 
 #. paragraph
 #: site/lectures/06-objects.md:1314
-msgid "Class fields and `static` fields are ES2022 - check that your rule engine supports them. (Before ES2022, the old slides wrote `Person.count = 0;` after the class.)"
-msgstr "Полетата на класа и `static` полетата са ES2022 - проверете дали rule engine-ът ви ги поддържа. (Преди ES2022 старите слайдове пишеха `Person.count = 0;` след класа.)"
+msgid "Class fields and `static` fields are ES2022 - check that your rule engine supports them. (Code written before ES2022 sets `Person.count = 0;` after the class.)"
+msgstr "Полетата на класа и `static` полетата са ES2022 - проверете дали rule engine-ът ви ги поддържа. (Код, писан преди ES2022, задава `Person.count = 0;` след класа.)"
 
 #. heading 3
 #: site/lectures/06-objects.md:1317
@@ -1385,8 +1385,8 @@ msgstr "Сплесканият експорт `report-export.json`: четене
 
 #. table cell
 #: site/lectures/06-objects.md:1604
-msgid "The old tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person"
-msgstr "Старите задачи: factory, class, `swap` с destructuring, `createPerson` със съкратени properties и метод, `combineArrays`, най-младият човек"
+msgid "Classic tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person"
+msgstr "Класически задачи: factory, class, `swap` с destructuring, `createPerson` със съкратени properties и метод, `combineArrays`, най-младият човек"
 
 #. heading 2
 #: site/lectures/06-objects.md:1606

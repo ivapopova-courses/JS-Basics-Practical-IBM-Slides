@@ -757,7 +757,7 @@ const SCENARIOS = [
     ],
     steps: [
         { line: -1, text: `Every number in JavaScript - whole or fractional - takes <b>64 bits</b> (8 bytes) and is kept in one and the same format: <b>IEEE 754 double</b>, a so-called floating point number. That is why in JavaScript whole and real numbers are one type - number.` },
-        { line: 0, text: `Remember the exponential notation from the slides: <code>1e6</code> = 1 * 10<sup>6</sup>. Any number can be written as digits with <b>one digit before the point</b>, multiplied by a power of 10: 13 = 1.3 * 10<sup>1</sup>, 0.042 = 4.2 * 10<sup>-2</sup>.`,
+        { line: 0, text: `Remember the exponential notation: <code>1e6</code> = 1 * 10<sup>6</sup>. Any number can be written as digits with <b>one digit before the point</b>, multiplied by a power of 10: 13 = 1.3 * 10<sup>1</sup>, 0.042 = 4.2 * 10<sup>-2</sup>.`,
           do: s => { s.sci = { dec: '1000000 = 1 * 10<sup>6</sup>', bin: '' }; } },
         { line: -1, text: `The computer does the same, but with base <b>2</b>: 13 = 1101 (binary) = <b>1.101 * 2<sup>3</sup></b> - the point moves 3 positions. In binary (except for zero) the digit before the point is always 1, so it is not stored at all - this saves 1 bit.`,
           do: s => { s.sci = { dec: '13 = 1.3 * 10<sup>1</sup>', bin: '1101 = 1.101 * 2<sup>3</sup>' }; } },
@@ -798,7 +798,7 @@ const SCENARIOS = [
         'console.log(cents / 100);',
     ],
     steps: [
-        { line: 0, text: `The classic surprise from the slides about arithmetic with real numbers. <span class="q">What will <code>0.1 + 0.2</code> print? Think before you go on.</span>` },
+        { line: 0, text: `The classic surprise of arithmetic with real numbers. <span class="q">What will <code>0.1 + 0.2</code> print? Think before you go on.</span>` },
         { line: 0, text: `First the literal <code>0.1</code> is turned into a 64-bit number. 0.1 has no exact binary form (scenario 2), so memory gets the closest possible number - <b>a little more</b> than 0.1. The coloured part is the error.`,
           do: s => { s.cards = 1; } },
         { line: 0, text: `The same with <code>0.2</code> - it is also a little more than 0.2. (Its error is exactly twice as big: 0.2 = 2 * 0.1, and multiplying by 2 only changes the exponent.)`,
@@ -825,7 +825,7 @@ const SCENARIOS = [
           do: s => { s.fixes = 3; } },
         { line: 6, text: `We divide by 100 only at the end, to show the result: 30 / 100 gives the number that prints as 0.3 - the closest one to 0.3.`,
           do: s => { s.fixes = 3; log(s, show((10 + 20) / 100)); } },
-        { line: -1, text: `<b>Summary:</b> 0.1, 0.2 and 0.3 are kept approximately, and small errors can add up. Do not compare real numbers with <code>===</code>, but with a tolerance; round only when you show the result; for money, calculate in whole numbers or, as the slides say, use a special library.`,
+        { line: -1, text: `<b>Summary:</b> 0.1, 0.2 and 0.3 are kept approximately, and small errors can add up. Do not compare real numbers with <code>===</code>, but with a tolerance; round only when you show the result; for money, calculate in whole numbers or use a special library.`,
           do: s => { s.fixes = 3; } },
     ],
 },

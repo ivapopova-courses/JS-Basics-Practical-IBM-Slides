@@ -149,7 +149,7 @@ msgid "In memory, the variable does not hold the elements themselves. It holds a
 msgstr "В паметта variable-ата не пази самите елементи. Тя пази **референция** - стрелка - към array-я, който живее в отделна област от паметта (*heap*). Това е важно в [раздел 4](#_4-an-array-is-an-object-advanced)."
 
 #. box title
-#: site/lectures/04-arrays-and-records.md:132 site/lectures/04-arrays-and-records.md:249 site/lectures/04-arrays-and-records.md:342 site/lectures/04-arrays-and-records.md:542 site/lectures/04-arrays-and-records.md:963 site/lectures/04-arrays-and-records.md:985 site/lectures/04-arrays-and-records.md:1124 site/lectures/04-arrays-and-records.md:1204 site/lectures/04-arrays-and-records.md:1235 site/lectures/04-arrays-and-records.md:1361 site/lectures/04-arrays-and-records.md:1540
+#: site/lectures/04-arrays-and-records.md:132 site/lectures/04-arrays-and-records.md:249 site/lectures/04-arrays-and-records.md:342 site/lectures/04-arrays-and-records.md:542 site/lectures/04-arrays-and-records.md:963 site/lectures/04-arrays-and-records.md:985 site/lectures/04-arrays-and-records.md:1124 site/lectures/04-arrays-and-records.md:1203 site/lectures/04-arrays-and-records.md:1234 site/lectures/04-arrays-and-records.md:1360 site/lectures/04-arrays-and-records.md:1539
 msgid "Animation"
 msgstr "Анимация"
 
@@ -424,7 +424,7 @@ msgid "To check if two short arrays of strings or numbers have the same elements
 msgstr "За да проверите дали два кратки arrays от strings или числа имат еднакви елементи, сравнете текста им: `a.join(\",\") === b.join(\",\")` (раздел 7). Проверките в домашните на този курс правят същото с `JSON.stringify` (занятие 9)."
 
 #. box title
-#: site/lectures/04-arrays-and-records.md:444 site/lectures/04-arrays-and-records.md:615 site/lectures/04-arrays-and-records.md:777 site/lectures/04-arrays-and-records.md:939 site/lectures/04-arrays-and-records.md:1308
+#: site/lectures/04-arrays-and-records.md:444 site/lectures/04-arrays-and-records.md:615 site/lectures/04-arrays-and-records.md:777 site/lectures/04-arrays-and-records.md:939 site/lectures/04-arrays-and-records.md:1307
 msgid "Animations"
 msgstr "Анимации"
 
@@ -540,8 +540,8 @@ msgstr "**Browser compatibility (съвместимост с браузърит�
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:505
-msgid "The returned values are useful too - an older example with the rainbow:"
-msgstr "Върнатите стойности също са полезни - един по-стар пример с дъгата:"
+msgid "The returned values are useful too - an example with the rainbow:"
+msgstr "Върнатите стойности също са полезни - пример с дъгата:"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:528
@@ -1005,11 +1005,11 @@ msgstr "Пример: всеки елемент, квадратът му, сум
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1035
-msgid "An old example, with a bug. Run it - which line is wrong?"
-msgstr "Стар пример, с бъг. Изпълнете го - кой ред е грешен?"
+msgid "An example with a bug. Run it - which line is wrong?"
+msgstr "Пример с бъг. Изпълнете го - кой ред е грешен?"
 
 #. box title
-#: site/lectures/04-arrays-and-records.md:1058 site/lectures/04-arrays-and-records.md:1092 site/lectures/04-arrays-and-records.md:1382 site/lectures/04-arrays-and-records.md:1464 site/lectures/04-arrays-and-records.md:1769
+#: site/lectures/04-arrays-and-records.md:1058 site/lectures/04-arrays-and-records.md:1092 site/lectures/04-arrays-and-records.md:1381 site/lectures/04-arrays-and-records.md:1463 site/lectures/04-arrays-and-records.md:1768
 msgid "Answer"
 msgstr "Отговор"
 
@@ -1035,8 +1035,8 @@ msgstr "**Проверете се:** отпечатайте сумата на в
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1105
-msgid "The same for a range of numbers, without an array (old loop homework): the sum from 1 to 100, and the odd numbers below 100 that divide by 11:"
-msgstr "Същото за диапазон от числа, без array (старо домашно за loops): сумата от 1 до 100 и нечетните числа под 100, които се делят на 11:"
+msgid "The same for a range of numbers, without an array: the sum from 1 to 100, and the odd numbers below 100 that divide by 11:"
+msgstr "Същото за диапазон от числа, без array: сумата от 1 до 100 и нечетните числа под 100, които се делят на 11:"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1125
@@ -1060,581 +1060,581 @@ msgstr "Отрицателните нечетни числа:"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1153
-msgid "The old homework, both tasks at once: the odd numbers, and the odd **positive** numbers:"
-msgstr "Старото домашно, двете задачи наведнъж: нечетните числа и нечетните **положителни** числа:"
+msgid "Two tasks in one loop: the odd numbers, and the odd **positive** numbers:"
+msgstr "Две задачи в един loop: нечетните числа и нечетните **положителни** числа:"
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1168
+#: site/lectures/04-arrays-and-records.md:1167
 msgid "Collect into new arrays"
 msgstr "Събиране в нови arrays"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1170
+#: site/lectures/04-arrays-and-records.md:1169
 msgid "Instead of printing, collect the matching elements into a new array with `push`. The task *separateArrayElementsInNewArrays*: the positive even numbers go into one array, the negative odd numbers into another (zero is neither positive nor negative):"
 msgstr "Вместо да отпечатвате, съберете съвпадащите елементи в нов array с `push`. Задачата *separateArrayElementsInNewArrays*: положителните четни числа отиват в един array, отрицателните нечетни - в друг (нулата не е нито положителна, нито отрицателна):"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1191
+#: site/lectures/04-arrays-and-records.md:1190
 msgid "With the report - the ids of the enclosures that are not on firmware `\"2.14\"`:"
 msgstr "С отчета - id-тата на enclosures, които не са на firmware `\"2.14\"`:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1205
+#: site/lectures/04-arrays-and-records.md:1204
 msgid "**Algorithms with arrays:** [5. Filtering into new arrays](../animations/arrayAlgorithms.html#5){target=\"_blank\"}"
 msgstr "**Алгоритми с arrays:** [5. Филтриране в нови arrays](../animations/arrayAlgorithms.html#5){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1208
+#: site/lectures/04-arrays-and-records.md:1207
 msgid "The largest (and the smallest) element"
 msgstr "Най-големият (и най-малкият) елемент"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1210
+#: site/lectures/04-arrays-and-records.md:1209
 msgid "Take the **first element** as the largest so far, then compare it with every next one:"
 msgstr "Вземете **първия елемент** за най-голям засега, после го сравнете с всеки следващ:"
 
 #. box title
-#: site/lectures/04-arrays-and-records.md:1226
+#: site/lectures/04-arrays-and-records.md:1225
 msgid "Do not start with 0"
 msgstr "Не започвайте от 0"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1227
+#: site/lectures/04-arrays-and-records.md:1226
 msgid "`let max = 0;` looks harmless, but with only negative numbers the result is `0` - a value that is not in the array. Start from `arr[0]`. And check first that the array is not empty: `[][0]` is `undefined`."
 msgstr "`let max = 0;` изглежда безобидно, но само с отрицателни числа резултатът е `0` - стойност, която я няма в array-я. Започнете от `arr[0]`. И първо проверете, че array-ят не е празен: `[][0]` е `undefined`."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1232
+#: site/lectures/04-arrays-and-records.md:1231
 msgid "`Math.max(...temps)` gives the same maximum in one line (spread passes the elements as separate arguments; `Math` in session 8) - but not the index."
 msgstr "`Math.max(...temps)` дава същия максимум на един ред (spread подава елементите като отделни аргументи; `Math` в занятие 8) - но не и индекса."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1236
+#: site/lectures/04-arrays-and-records.md:1235
 msgid "**Algorithms with arrays:** [4. Largest element](../animations/arrayAlgorithms.html#4){target=\"_blank\"}"
 msgstr "**Алгоритми с arrays:** [4. Най-голям елемент](../animations/arrayAlgorithms.html#4){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1239
+#: site/lectures/04-arrays-and-records.md:1238
 msgid "Search with `break`"
 msgstr "Търсене с `break`"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1241
+#: site/lectures/04-arrays-and-records.md:1240
 msgid "When you need **one** element, stop at the first match:"
 msgstr "Когато ви трябва **един** елемент, спрете при първото съвпадение:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1255
+#: site/lectures/04-arrays-and-records.md:1254
 msgid "For a plain value this is just `ids.indexOf(\"ENC-03\")`. You write the loop when the condition is more than `===` - for example, \"the first enclosure that is not normal\" (section 10)."
 msgstr "За обикновена стойност това е просто `ids.indexOf(\"ENC-03\")`. Loop пишете, когато условието е нещо повече от `===` - например \"първият enclosure, който не е normal\" (раздел 10)."
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1259
+#: site/lectures/04-arrays-and-records.md:1258
 msgid "Going round in a circle: `%`"
 msgstr "Въртене в кръг: `%`"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1261
-msgid "An old browser example changed a box colour on every click, going round the list of colours. Without the browser, the idea is the index with `% length`:"
-msgstr "Стар пример от браузъра сменяше цвета на една кутия при всяко щракване, като обикаляше списъка с цветове. Без браузъра идеята е индексът с `% length`:"
+#: site/lectures/04-arrays-and-records.md:1260
+msgid "On a web page, a button can change the colour of a box on every click, going round a list of colours. Without the browser, the idea is the index with `% length`:"
+msgstr "В уеб страница един бутон може да сменя цвета на една кутия при всяко щракване, като обикаля списък с цветове. Без браузъра идеята е индексът с `% length`:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1273
+#: site/lectures/04-arrays-and-records.md:1272
 msgid "The same spreads checks over a list of consoles, one after the other (*round robin*)."
 msgstr "Така се разпределят проверки върху списък от конзоли, една след друга (*round robin*)."
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1276
+#: site/lectures/04-arrays-and-records.md:1275
 msgid "9. Arrays of arrays (two-dimensional)"
 msgstr "9. Arrays от arrays (двумерни)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1278
+#: site/lectures/04-arrays-and-records.md:1277
 msgid "JavaScript has no real two-dimensional (or multi-dimensional) arrays. But an element can be of any type - also an array - so a table is an **array of arrays**: every element is a row, and every row is an array."
 msgstr "В JavaScript няма истински двумерни (или многомерни) arrays. Но елементът може да е от всеки тип - също array - затова таблицата е **array от arrays**: всеки елемент е ред, а всеки ред е array."
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1291
+#: site/lectures/04-arrays-and-records.md:1290
 msgid "Access: first the row, then the column"
 msgstr "Достъп: първо редът, после колоната"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1305
+#: site/lectures/04-arrays-and-records.md:1304
 msgid "`matrix[1][1]` is read in two steps: `matrix[1]` gives the row `[\"d\", \"e\", \"f\"]`, and `[1]` of that row gives `\"e\"`."
 msgstr "`matrix[1][1]` се чете на две стъпки: `matrix[1]` дава реда `[\"d\", \"e\", \"f\"]`, а `[1]` от този ред дава `\"e\"`."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1309
+#: site/lectures/04-arrays-and-records.md:1308
 msgid "**Arrays in memory:** [6. Two-dimensional (advanced)](../animations/arraysInMemory.html#6){target=\"_blank\"}, [7. Shared row (advanced)](../animations/arraysInMemory.html#7){target=\"_blank\"} - why `[row, row]` is a trap"
 msgstr "**Arrays в паметта:** [6. Двумерен array (advanced)](../animations/arraysInMemory.html#6){target=\"_blank\"}, [7. Общ ред (advanced)](../animations/arraysInMemory.html#7){target=\"_blank\"} - защо `[row, row]` е капан"
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1314
+#: site/lectures/04-arrays-and-records.md:1313
 msgid "Loop over rows and columns"
 msgstr "Обхождане по редове и колони"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1316
+#: site/lectures/04-arrays-and-records.md:1315
 msgid "Two nested loops: the outer one over the rows (`i`), the inner one over the columns of the current row (`j`):"
 msgstr "Два вложени loops: външният по редовете (`i`), вътрешният по колоните на текущия ред (`j`):"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1336
+#: site/lectures/04-arrays-and-records.md:1335
 msgid "With `for...of` the same is shorter - and works when the rows have different lengths:"
 msgstr "С `for...of` същото е по-кратко - и работи, когато редовете са с различна дължина:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1346
+#: site/lectures/04-arrays-and-records.md:1345
 msgid "The sum of the main diagonal (`m[0][0] + m[1][1] + m[2][2]`) needs only one loop:"
 msgstr "Сумата на главния диагонал (`m[0][0] + m[1][1] + m[2][2]`) иска само един loop:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1362
+#: site/lectures/04-arrays-and-records.md:1361
 msgid "**Algorithms with arrays:** [7. Two-dimensional array (advanced)](../animations/arrayAlgorithms.html#7){target=\"_blank\"}"
 msgstr "**Алгоритми с arrays:** [7. Двумерен array (advanced)](../animations/arrayAlgorithms.html#7){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1365
-msgid "**Check yourself** (old lab task): `fruitsData` keeps the names in row 0 and the prices in row 1. Print `apple = 1.2`, `orange = 2`, `cherry = 3.5` with a loop."
-msgstr "**Проверете се** (стара задача от упражнение): `fruitsData` пази имената в ред 0, а цените в ред 1. Отпечатайте `apple = 1.2`, `orange = 2`, `cherry = 3.5` с loop."
+#: site/lectures/04-arrays-and-records.md:1364
+msgid "**Check yourself:** `fruitsData` keeps the names in row 0 and the prices in row 1. Print `apple = 1.2`, `orange = 2`, `cherry = 3.5` with a loop."
+msgstr "**Проверете се:** `fruitsData` пази имената в ред 0, а цените в ред 1. Отпечатайте `apple = 1.2`, `orange = 2`, `cherry = 3.5` с loop."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1383
+#: site/lectures/04-arrays-and-records.md:1382
 msgid "The name and the price of one fruit are in the same **column** `j`, so loop over the columns:"
 msgstr "Името и цената на един плод са в една и съща **колона** `j`, затова обхождайте колоните:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1392
+#: site/lectures/04-arrays-and-records.md:1391
 msgid "`2.0` is printed as `2`: for JavaScript `2.0` and `2` are the same number."
 msgstr "`2.0` се отпечатва като `2`: за JavaScript `2.0` и `2` са едно и също число."
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1395
+#: site/lectures/04-arrays-and-records.md:1394
 msgid "A table in the report"
 msgstr "Таблица в отчета"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1397
+#: site/lectures/04-arrays-and-records.md:1396
 msgid "Reports sometimes send a table as rows of values, with the column names in a separate list - the first row of a CSV file, for example:"
 msgstr "Отчетите понякога изпращат таблица като редове от стойности, а имената на колоните - в отделен списък, като първия ред на CSV файл например:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1415
+#: site/lectures/04-arrays-and-records.md:1414
 msgid "`header.indexOf(...)` instead of a fixed `row[1]`: the code keeps working if the export adds a column in front."
 msgstr "`header.indexOf(...)` вместо фиксирано `row[1]`: кодът продължава да работи, ако експортът добави колона отпред."
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1418
+#: site/lectures/04-arrays-and-records.md:1417
 msgid "10. Lists of records"
 msgstr "10. Списъци от записи"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1420
+#: site/lectures/04-arrays-and-records.md:1419
 msgid "A **record** is a group of values about one thing - one enclosure, one drive, one setting. In JSON a record is an **object** `{ key: value, ... }` (objects in detail: session 6). A **list of records** is an array of such objects, all with the same keys:"
 msgstr "**Записът** е група от стойности за едно нещо - един enclosure, един диск, една настройка. В JSON записът е **обект** `{ key: value, ... }` (обектите подробно: занятие 6). **Списъкът от записи** е array от такива обекти, всички с едни и същи ключове:"
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1436
+#: site/lectures/04-arrays-and-records.md:1435
 msgid "Records as arrays, or as objects?"
 msgstr "Записи като arrays или като обекти?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1438
-msgid "Older code (and the old course examples) keep a record as an array:"
-msgstr "По-старият код (и старите примери от курса) пази записа като array:"
+#: site/lectures/04-arrays-and-records.md:1437
+msgid "Older code often keeps a record as an array:"
+msgstr "По-старият код често пази записа като array:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1459
+#: site/lectures/04-arrays-and-records.md:1458
 msgid "It works, but what is `student[1]`? You must remember that index 1 is the age. An object says it: `student.age`. That is why JSON reports use objects for records."
 msgstr "Работи, но какво е `student[1]`? Трябва да помните, че индекс 1 е възрастта. Обектът го казва: `student.age`. Затова JSON отчетите използват обекти за записите."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1462
+#: site/lectures/04-arrays-and-records.md:1461
 msgid "**Check yourself:** find the **oldest** student. (Expected: Ivan Ivanov, 24.)"
 msgstr "**Проверете се:** намерете **най-възрастния** студент. (Очаквано: Ivan Ivanov, 24.)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1465
-msgid "The same loop with `>` instead of `<`: `if (student[1] > oldest[1]) { oldest = student; }`, starting with `let oldest = students[0];`. Note: the old version of this example started with `minAge = students[0][1]` but left `youngestStudent` undefined - if the first student had been the youngest, the program would have crashed. Starting with the whole first record avoids this."
-msgstr "Същият loop с `>` вместо `<`: `if (student[1] > oldest[1]) { oldest = student; }`, като започнете с `let oldest = students[0];`. Забележка: старата версия на този пример започваше с `minAge = students[0][1]`, но оставяше `youngestStudent` недефинирана - ако първият студент беше най-младият, програмата щеше да гръмне. Започването с целия първи запис избягва това."
+#: site/lectures/04-arrays-and-records.md:1464
+msgid "The same loop with `>` instead of `<`: `if (student[1] > oldest[1]) { oldest = student; }`, starting with `let oldest = students[0];`. A common mistake is to start with `minAge = students[0][1]` and leave `youngestStudent` undefined - if the first student is the youngest, the program crashes. Starting with the whole first record avoids this."
+msgstr "Същият loop с `>` вместо `<`: `if (student[1] > oldest[1]) { oldest = student; }`, като започнете с `let oldest = students[0];`. Честа грешка е да се започне с `minAge = students[0][1]` и да се остави `youngestStudent` недефинирана - ако първият студент е най-младият, програмата гърми. Започването с целия първи запис избягва това."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1473
-msgid "An old homework in the same shape - rulers and the years of their rule. The names are in mixed case, so a small helper fixes them:"
-msgstr "Старо домашно в същата форма - владетели и годините на управлението им. Имената са с разбъркани малки и главни букви, затова една малка helper функция ги оправя:"
+#: site/lectures/04-arrays-and-records.md:1472
+msgid "A task in the same shape - rulers and the years of their rule. The names are in mixed case, so a small helper fixes them:"
+msgstr "Задача в същата форма - владетели и годините на управлението им. Имената са с разбъркани малки и главни букви, затова една малка helper функция ги оправя:"
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1501
+#: site/lectures/04-arrays-and-records.md:1500
 msgid "Find, count, collect"
 msgstr "Намиране, броене, събиране"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1503
+#: site/lectures/04-arrays-and-records.md:1502
 msgid "Three questions you ask a list of records again and again:"
 msgstr "Три въпроса, които задавате на един списък от записи отново и отново:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1537
+#: site/lectures/04-arrays-and-records.md:1536
 msgid "`startsWith` checks the beginning of a string - session 8. In session 7 these three loops become `find`, `filter(...).length` and `filter` + `map`."
 msgstr "`startsWith` проверява началото на string - занятие 8. В занятие 7 тези три loops стават `find`, `filter(...).length` и `filter` + `map`."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1541
+#: site/lectures/04-arrays-and-records.md:1540
 msgid "**Array methods:** [6. A list of records](../animations/arrayMethods.html#6){target=\"_blank\"}"
 msgstr "**Методи на arrays:** [6. Списък от записи](../animations/arrayMethods.html#6){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1544
+#: site/lectures/04-arrays-and-records.md:1543
 msgid "A long list of key / value records"
 msgstr "Дълъг списък от записи ключ / стойност"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1546
+#: site/lectures/04-arrays-and-records.md:1545
 msgid "Some exports do not send a nested object at all. Every value is one small record, and the list has thousands of them:"
 msgstr "Някои експорти изобщо не изпращат вложен обект. Всяка стойност е малък запис, а списъкът има хиляди такива:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1580
+#: site/lectures/04-arrays-and-records.md:1579
 msgid "The homework folder has a whole export in this shape: `Homework/data/report-records.json` (79 records). The practice tasks use it."
 msgstr "Папката с домашните има цял експорт в тази форма: `Homework/data/report-records.json` (79 записа). Задачите за упражнение го използват."
 
 #. box title
-#: site/lectures/04-arrays-and-records.md:1583
+#: site/lectures/04-arrays-and-records.md:1582
 msgid "Thousands of records: do not search inside a loop"
 msgstr "Хиляди записи: не търсете в loop"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1584
+#: site/lectures/04-arrays-and-records.md:1583
 msgid "To find one value, a loop walks the list - fine once. But \"for every enclosure, find its state\" written as a loop **inside** a loop walks the whole list again for every enclosure: with 9,500 records and 100 enclosures that is almost a million comparisons. Walk the list **once** and collect what you need. In session 7 we build an *index* (an object or a `Map` keyed by item) once, and then every lookup is instant."
 msgstr "За да намерите една стойност, loop обхожда списъка - веднъж е наред. Но \"за всеки enclosure намери състоянието му\", написано като loop **в** loop, обхожда целия списък отново за всеки enclosure: с 9500 записа и 100 enclosures това са почти милион сравнения. Обходете списъка **веднъж** и съберете каквото ви трябва. В занятие 7 ще построим *индекс* (обект или `Map` с ключ item) веднъж и след това всяко търсене е мигновено."
 
 #. heading 3
-#: site/lectures/04-arrays-and-records.md:1592
+#: site/lectures/04-arrays-and-records.md:1591
 msgid "One record, or a list?"
 msgstr "Един запис или списък?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1594
+#: site/lectures/04-arrays-and-records.md:1593
 msgid "The same data can come as a list in one report and as a single object in another (for example, when there is only one enclosure). Normalise it to an array first, then the rest of the code has one shape to handle:"
 msgstr "Едни и същи данни могат да дойдат като списък в един отчет и като единичен обект в друг (например когато има само един enclosure). Първо ги нормализирайте до array, тогава останалата част от кода има само една форма:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1610
+#: site/lectures/04-arrays-and-records.md:1609
 msgid "(`function` with `return` is session 5 - read it as \"give back this value\".)"
 msgstr "(`function` с `return` е тема на занятие 5 - четете го като \"върни тази стойност\".)"
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1612
+#: site/lectures/04-arrays-and-records.md:1611
 msgid "11. Reading existing rules"
 msgstr "11. Четене на съществуващи правила"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1614
+#: site/lectures/04-arrays-and-records.md:1613
 msgid "First, run the rule from the start of the lecture. `emit` is a fake here: it only prints the alert."
 msgstr "Първо изпълнете правилото от началото на лекцията. `emit` тук е фалшив: само отпечатва alert-а."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1682
+#: site/lectures/04-arrays-and-records.md:1681
 msgid "Change the state of `ENC-01` in the second document to `\"failed\"` and run again. Then change `enclosures` to one object instead of a list (remove the `[` `]`). What happens, and why?"
 msgstr "Сменете състоянието на `ENC-01` във втория документ на `\"failed\"` и изпълнете отново. После сменете `enclosures` на един обект вместо списък (махнете `[` `]`). Какво става и защо?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1686
+#: site/lectures/04-arrays-and-records.md:1685
 msgid "Here is **the same rule** in the older style. Read it with ease, and decide what to modernise:"
 msgstr "Ето **същото правило** в по-стария стил. Прочетете го спокойно и решете какво да модернизирате:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1754
+#: site/lectures/04-arrays-and-records.md:1753
 msgid "**Check yourself:**"
 msgstr "**Проверете се:**"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1756
+#: site/lectures/04-arrays-and-records.md:1755
 msgid "List the differences between the two versions. Which ones change only the style, and which could change the result?"
 msgstr "Избройте разликите между двете версии. Кои променят само стила и кои биха могли да променят резултата?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1758
+#: site/lectures/04-arrays-and-records.md:1757
 msgid "`new Array(\"XR-210\", \"XR-220\")` creates the same list as `[\"XR-210\", \"XR-220\"]`. What would `new Array(2)` create? Why is `[...]` safer?"
 msgstr "`new Array(\"XR-210\", \"XR-220\")` създава същия списък като `[\"XR-210\", \"XR-220\"]`. Какво би създало `new Array(2)`? Защо `[...]` е по-сигурно?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1761
+#: site/lectures/04-arrays-and-records.md:1760
 msgid "Run the old rule: the second document sends `enclosures` as a **string**. What does the old rule do with it, and what would the modern rule do?"
 msgstr "Изпълнете старото правило: вторият документ изпраща `enclosures` като **string**. Какво прави старото правило с него и какво би направило модерното?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1763
+#: site/lectures/04-arrays-and-records.md:1762
 msgid "`if (!enclosures || !enclosures.length) return;` and `if (!Array.isArray(enclosures)) return;` - do they behave the same for `[]`? For `undefined`? For one object `{ id: \"ENC-01\", ... }`?"
 msgstr "`if (!enclosures || !enclosures.length) return;` и `if (!Array.isArray(enclosures)) return;` - еднакво ли се държат за `[]`? За `undefined`? За един обект `{ id: \"ENC-01\", ... }`?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1766
+#: site/lectures/04-arrays-and-records.md:1765
 msgid "A report has `firmware_level: \"4.2.1.7\"` - with no `(build ...)` part. What is `version` in both rules?"
 msgstr "Един отчет има `firmware_level: \"4.2.1.7\"` - без частта `(build ...)`. Каква е `version` в двете правила?"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1770
+#: site/lectures/04-arrays-and-records.md:1769
 msgid "Style only: `var` -> `const` / `let`; `new Array(...)` -> `[...]`; `indexOf(model) == -1` -> `!includes(model)` (the same for strings); `==` / `!=` -> `===` / `!==`; the `for` with an index -> `for...of`; `== true` -> nothing; `+` -> template strings; the `&&` chain -> `?.`; `new Object()` + `details[\"...\"]` -> an object literal. Could change the result: the guard for `enclosures` (questions 3 and 4) and `String(... || \"\")` vs `?? \"\"`."
 msgstr "Само стил: `var` -> `const` / `let`; `new Array(...)` -> `[...]`; `indexOf(model) == -1` -> `!includes(model)` (същото за strings); `==` / `!=` -> `===` / `!==`; `for` с индекс -> `for...of`; `== true` -> нищо; `+` -> template strings; веригата с `&&` -> `?.`; `new Object()` + `details[\"...\"]` -> обектен литерал. Биха могли да променят резултата: guard-ът за `enclosures` (въпроси 3 и 4) и `String(... || \"\")` срещу `?? \"\"`."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1777
+#: site/lectures/04-arrays-and-records.md:1776
 msgid "An empty array of length 2 (two holes), not `[2]`. `[...]` always means \"these elements\"."
 msgstr "Празен array с дължина 2 (две празни места), а не `[2]`. `[...]` винаги означава \"тези елементи\"."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1779
+#: site/lectures/04-arrays-and-records.md:1778
 msgid "A string has `length` (6), so the old guard lets it through, and the loop walks the **characters**: `enc` is `\"E\"`, `\"N\"`, ... `enc.state` and `enc.firmware` are `undefined`, so every character gives two \"problems\" (`versionBelow(undefined, \"2.14\")` is true too: `parseInt` gives `NaN`, and `|| 0` makes it 0). Twelve problems like `\"undefined is undefined\"` - a nonsense alert. The modern rule stops: a string is not an array."
 msgstr "String-ът има `length` (6), затова старият guard го пропуска и loop-ът обхожда **символите**: `enc` е `\"E\"`, `\"N\"`, ... `enc.state` и `enc.firmware` са `undefined`, така че всеки символ дава два \"проблема\" (`versionBelow(undefined, \"2.14\")` също е true: `parseInt` дава `NaN`, а `|| 0` го прави 0). Дванадесет проблема като `\"undefined is undefined\"` - безсмислен alert. Модерното правило спира: string-ът не е array."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1785
+#: site/lectures/04-arrays-and-records.md:1784
 msgid "`[]`: the old rule stops at the guard (`![].length` is true); the modern one loops zero times and stops at `problems.length === 0` - the same result. `undefined`: both stop. One object: the object has no `length`, so the old rule stops; `Array.isArray` is false, so the modern rule stops too - both **miss** the enclosure. Fix: `const enclosures = asList(doc.inventory.enclosures);` (section 10)."
 msgstr "`[]`: старото правило спира на guard-а (`![].length` е true); модерното минава нула пъти през loop-а и спира на `problems.length === 0` - същият резултат. `undefined`: и двете спират. Един обект: обектът няма `length`, затова старото правило спира; `Array.isArray` е false, затова и модерното спира - и двете **пропускат** enclosure-а. Поправка: `const enclosures = asList(doc.inventory.enclosures);` (раздел 10)."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1791
+#: site/lectures/04-arrays-and-records.md:1790
 msgid "`\"4.2.1.7\"` in both: when there is no space, `split(\" \")` gives an array with the whole string, and `[0]` is that string."
 msgstr "`\"4.2.1.7\"` и в двете: когато няма интервал, `split(\" \")` дава array с целия string, а `[0]` е този string."
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1795
+#: site/lectures/04-arrays-and-records.md:1794
 msgid "12. Practice"
 msgstr "12. Упражнения"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1797
+#: site/lectures/04-arrays-and-records.md:1796
 msgid "In your copy of the Homework repository, first get the new tasks:"
 msgstr "Във вашето копие на Homework repository първо вземете новите задачи:"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1804
+#: site/lectures/04-arrays-and-records.md:1803
 msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
 msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките в края отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1807
+#: site/lectures/04-arrays-and-records.md:1806
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1807
+#: site/lectures/04-arrays-and-records.md:1806
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1807
+#: site/lectures/04-arrays-and-records.md:1806
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1809
+#: site/lectures/04-arrays-and-records.md:1808
 msgid "Predict 20 results of array operations, then check yourself"
 msgstr "Предсказвате 20 резултата от операции с arrays, после се проверявате"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1810
+#: site/lectures/04-arrays-and-records.md:1809
 msgid "An allow-list of models: check, add without duplicates, remove"
 msgstr "Allow-list от модели: проверка, добавяне без повторения, премахване"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1811
+#: site/lectures/04-arrays-and-records.md:1810
 msgid "`split` and `join`: version parts as numbers, the last part of an id, packed lists and `key=value` strings"
 msgstr "`split` и `join`: частите на версия като числа, последната част на id, пакетирани списъци и strings `key=value`"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1812
+#: site/lectures/04-arrays-and-records.md:1811
 msgid "A list of 79 key / value records: find a value, count, collect"
 msgstr "Списък от 79 записа ключ / стойност: намиране на стойност, броене, събиране"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1813
+#: site/lectures/04-arrays-and-records.md:1812
 msgid "Sum, maximum and filtering on plain arrays and on a table"
 msgstr "Сума, максимум и филтриране върху обикновени arrays и върху таблица"
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1815
+#: site/lectures/04-arrays-and-records.md:1814
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1817
+#: site/lectures/04-arrays-and-records.md:1816
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1817
+#: site/lectures/04-arrays-and-records.md:1816
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1819
+#: site/lectures/04-arrays-and-records.md:1818
 msgid "Array"
 msgstr "Array"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1819
+#: site/lectures/04-arrays-and-records.md:1818
 msgid "An ordered list; index from 0; `[...]` to create; any type of element"
 msgstr "Подреден списък; индекс от 0; `[...]` за създаване; елементи от всеки тип"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1820
+#: site/lectures/04-arrays-and-records.md:1819
 msgid "Access"
 msgstr "Достъп"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1820
+#: site/lectures/04-arrays-and-records.md:1819
 msgid "`arr[i]`; a missing index gives `undefined`, no error; last: `arr[arr.length - 1]` or `arr.at(-1)`"
 msgstr "`arr[i]`; липсващ индекс дава `undefined`, без грешка; последният: `arr[arr.length - 1]` или `arr.at(-1)`"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1821
+#: site/lectures/04-arrays-and-records.md:1820
 msgid "Number of elements, one more than the last index; writing to it changes the array; `[]` is truthy - check `length === 0`"
 msgstr "Брой елементи, с едно повече от последния индекс; записът в него променя array-я; `[]` е truthy - проверявайте `length === 0`"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1822
+#: site/lectures/04-arrays-and-records.md:1821
 msgid "An object"
 msgstr "Обект"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1822
+#: site/lectures/04-arrays-and-records.md:1821
 msgid "`typeof` is `\"object\"`; use `Array.isArray`; `===` compares references; `const` does not freeze the array"
 msgstr "`typeof` е `\"object\"`; използвайте `Array.isArray`; `===` сравнява референции; `const` не замразява array-я"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1823
+#: site/lectures/04-arrays-and-records.md:1822
 msgid "Add / remove"
 msgstr "Добавяне / премахване"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1823
+#: site/lectures/04-arrays-and-records.md:1822
 msgid "`push` / `pop` at the end, `unshift` / `shift` at the start, `splice` anywhere - they change the array"
 msgstr "`push` / `pop` в края, `unshift` / `shift` в началото, `splice` навсякъде - те променят array-я"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1824
+#: site/lectures/04-arrays-and-records.md:1823
 msgid "Copy"
 msgstr "Копие"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1824
+#: site/lectures/04-arrays-and-records.md:1823
 msgid "`slice(start, end)` (end not included), `[...arr]`, `concat` - new arrays"
 msgstr "`slice(start, end)` (end не се включва), `[...arr]`, `concat` - нови arrays"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1825
+#: site/lectures/04-arrays-and-records.md:1824
 msgid "Search"
 msgstr "Търсене"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1825
+#: site/lectures/04-arrays-and-records.md:1824
 msgid "`indexOf` (index or -1), `includes` (true / false), `lastIndexOf`; exact `===` - normalise first"
 msgstr "`indexOf` (индекс или -1), `includes` (true / false), `lastIndexOf`; точно `===` - първо нормализирайте"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1826
+#: site/lectures/04-arrays-and-records.md:1825
 msgid "Strings"
 msgstr "Strings"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1826
+#: site/lectures/04-arrays-and-records.md:1825
 msgid "`split(sep)` -> array of strings; `join(sep)` -> string; `\"\".split(\",\")` is `[\"\"]`"
 msgstr "`split(sep)` -> array от strings; `join(sep)` -> string; `\"\".split(\",\")` е `[\"\"]`"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1827
+#: site/lectures/04-arrays-and-records.md:1826
 msgid "Loops"
 msgstr "Loops"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1827
+#: site/lectures/04-arrays-and-records.md:1826
 msgid "`for...of` for elements, `for` with `i` for indexes and backwards; not `for...in`"
 msgstr "`for...of` за елементите, `for` с `i` за индексите и назад; не `for...in`"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1828
+#: site/lectures/04-arrays-and-records.md:1827
 msgid "Patterns"
 msgstr "Модели"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1828
+#: site/lectures/04-arrays-and-records.md:1827
 msgid "Accumulator (sum, count), max from `arr[0]`, collect with `push`, search with `break`"
 msgstr "Акумулатор (сума, брой), максимум от `arr[0]`, събиране с `push`, търсене с `break`"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1829
+#: site/lectures/04-arrays-and-records.md:1828
 msgid "Tables"
 msgstr "Таблици"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1829
+#: site/lectures/04-arrays-and-records.md:1828
 msgid "`matrix[row][col]`; nested loops"
 msgstr "`matrix[row][col]`; вложени loops"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1830
+#: site/lectures/04-arrays-and-records.md:1829
 msgid "Records"
 msgstr "Записи"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1830
+#: site/lectures/04-arrays-and-records.md:1829
 msgid "An array of objects; find, count, collect in one pass; no search inside a loop"
 msgstr "Array от обекти; намиране, броене, събиране с едно обхождане; без търсене в loop"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1831
+#: site/lectures/04-arrays-and-records.md:1830
 msgid "Old style"
 msgstr "Стар стил"
 
 #. table cell
-#: site/lectures/04-arrays-and-records.md:1831
+#: site/lectures/04-arrays-and-records.md:1830
 msgid "`new Array(...)`, `indexOf(x) !== -1`, `for (var i ...)`, `!arr.length` - read it, write the modern form"
 msgstr "`new Array(...)`, `indexOf(x) !== -1`, `for (var i ...)`, `!arr.length` - четете го, пишете модерната форма"
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1833
+#: site/lectures/04-arrays-and-records.md:1832
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1835
+#: site/lectures/04-arrays-and-records.md:1834
 msgid "`04-arrays-and-records/homework.js` (in the homework repository): the names in a packed firmware string, alert lines from three lists, the empty pools and a packed setting in the records export, and two more loop tasks: even / odd numbers, and a bug to fix in a game loop."
 msgstr "`04-arrays-and-records/homework.js` (в homework repository): имената в пакетиран string с firmware нива, редове за alert от три списъка, празните pools и една пакетирана настройка в експорта със записи, и още две задачи с loops: четни / нечетни числа и бъг за поправяне в loop-а на една игра."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1839
+#: site/lectures/04-arrays-and-records.md:1838
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1841
+#: site/lectures/04-arrays-and-records.md:1840
 msgid "Optional: take one of your own rules and find every array in it. Where does each one come from (the report, `split`, the rule itself)? Is there an `indexOf(...) !== -1` or a `for...in` over an array you would modernise? Does the rule change an array of `doc`?"
 msgstr "По желание: вземете едно от вашите правила и намерете всеки array в него. Откъде идва всеки (от отчета, от `split`, от самото правило)? Има ли `indexOf(...) !== -1` или `for...in` върху array, които бихте модернизирали? Променя ли правилото array от `doc`?"
 
 #. heading 2
-#: site/lectures/04-arrays-and-records.md:1846
+#: site/lectures/04-arrays-and-records.md:1845
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1848
+#: site/lectures/04-arrays-and-records.md:1847
 msgid "MDN: [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [Indexed collections](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections), [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split), [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
 msgstr "MDN: [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), [Indexed collections](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections), [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split), [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1853
+#: site/lectures/04-arrays-and-records.md:1852
 msgid "javascript.info: [Arrays](https://javascript.info/array), [Array methods](https://javascript.info/array-methods) (the first part; the rest is session 7)"
 msgstr "javascript.info: [Arrays](https://javascript.info/array), [Array methods](https://javascript.info/array-methods) (първата част; останалото е в занятие 7)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1856
+#: site/lectures/04-arrays-and-records.md:1855
 msgid "Eloquent JavaScript (4th edition): [Data Structures: Objects and Arrays](https://eloquentjavascript.net/04_data.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Data Structures: Objects and Arrays](https://eloquentjavascript.net/04_data.html)"
 
 #. paragraph
-#: site/lectures/04-arrays-and-records.md:1858
+#: site/lectures/04-arrays-and-records.md:1857
 msgid "**Next session:** functions. The helpers you used ready-made - `versionBelow`, `asList`, `capitalize` - you write yourself, and you learn to read the older `function (x) { ... }` code in existing rules."
 msgstr "**Следващото занятие:** функции. Helper функциите, които използвахте готови - `versionBelow`, `asList`, `capitalize` - ще напишете сами и ще се научите да четете по-стария код `function (x) { ... }` в съществуващите правила."
 

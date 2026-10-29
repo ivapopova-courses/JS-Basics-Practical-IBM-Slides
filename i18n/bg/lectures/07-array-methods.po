@@ -285,8 +285,8 @@ msgstr "`forEach` не връща **нищо** (`undefined`). Той е за **�
 
 #. paragraph
 #: site/lectures/07-array-methods.md:230
-msgid "An old task - the total of the sales:"
-msgstr "Стара задача - общата сума на продажбите:"
+msgid "The total of the sales:"
+msgstr "Общата сума на продажбите:"
 
 #. heading 3
 #: site/lectures/07-array-methods.md:244
@@ -305,8 +305,8 @@ msgstr "Промяна на елементите"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:265
-msgid "Another old task: add `isAdmin` to every user. `forEach` can change the objects in the array:"
-msgstr "Още една стара задача: добавете `isAdmin` към всеки потребител. `forEach` може да промени обектите в array-я:"
+msgid "Another task: add `isAdmin` to every user. `forEach` can change the objects in the array:"
+msgstr "Още една задача: добавете `isAdmin` към всеки потребител. `forEach` може да промени обектите в array-я:"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:281
@@ -350,8 +350,8 @@ msgstr "С индекса (вторият аргумент):"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:330
-msgid "Two old tasks on a list of cities - the names only, and each name changed with a dictionary (lecture 6):"
-msgstr "Две стари задачи върху списък от градове - само имената, и всяко име, сменено чрез dictionary (лекция 6):"
+msgid "Two tasks on a list of cities - the names only, and each name changed with a dictionary (lecture 6):"
+msgstr "Две задачи върху списък от градове - само имената, и всяко име, сменено чрез dictionary (лекция 6):"
 
 #. heading 3
 #: site/lectures/07-array-methods.md:350
@@ -395,8 +395,8 @@ msgstr "`filter` извиква callback-а за всеки елемент и з
 
 #. paragraph
 #: site/lectures/07-array-methods.md:428
-msgid "The old task - the cities with more than 340,000 people:"
-msgstr "Старата задача - градовете с повече от 340 000 жители:"
+msgid "The cities with more than 340,000 people:"
+msgstr "Градовете с повече от 340 000 жители:"
 
 #. heading 3
 #: site/lectures/07-array-methods.md:442
@@ -575,8 +575,8 @@ msgstr "Сумата на четните числа"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:669
-msgid "An old example - with `reduce` only, and with `filter` + `reduce`:"
-msgstr "Стар пример - само с `reduce` и с `filter` + `reduce`:"
+msgid "Two ways - with `reduce` only, and with `filter` + `reduce`:"
+msgstr "Два начина - само с `reduce` и с `filter` + `reduce`:"
 
 #. heading 3
 #: site/lectures/07-array-methods.md:683
@@ -690,13 +690,13 @@ msgstr "Сортиране на записи"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:792
-msgid "Records are sorted by one of their keys. The old task - the cities by population, highest first:"
-msgstr "Записите се сортират по някой от ключовете си. Старата задача - градовете по население, най-голямото първо:"
+msgid "Records are sorted by one of their keys. For example, the cities by population, highest first:"
+msgstr "Записите се сортират по някой от ключовете си. Например градовете по население, най-голямото първо:"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:806
-msgid "An old homework writes one compare function for **any** key:"
-msgstr "Старо домашно пише една функция за сравнение за **всеки** ключ:"
+msgid "One compare function can sort by **any** key:"
+msgstr "Една функция за сравнение може да сортира по **всеки** ключ:"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:823
@@ -710,8 +710,8 @@ msgstr "Няколко ключа"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:829
-msgid "Sort by the first key; when it is equal (the result is `0`), use the second. `||` does it in one line: `0` is falsy, so `||` moves on to the next comparison. An old task - books by `id`, then by title:"
-msgstr "Сортирайте по първия ключ; когато той е равен (резултатът е `0`), използвайте втория. `||` прави това на един ред: `0` е falsy, затова `||` преминава към следващото сравнение. Стара задача - книги по `id`, после по заглавие:"
+msgid "Sort by the first key; when it is equal (the result is `0`), use the second. `||` does it in one line: `0` is falsy, so `||` moves on to the next comparison. For example, books by `id`, then by title:"
+msgstr "Сортирайте по първия ключ; когато той е равен (резултатът е `0`), използвайте втория. `||` прави това на един ред: `0` е falsy, затова `||` преминава към следващото сравнение. Например книги по `id`, после по заглавие:"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:845
@@ -775,13 +775,13 @@ msgstr "`map` и `filter` връщат arrays - затова можете вед
 
 #. paragraph
 #: site/lectures/07-array-methods.md:925
-msgid "Read a chain from top to bottom: each line takes the array of the line above. Two old homework tasks as chains:"
-msgstr "Четете веригата отгоре надолу: всеки ред взема array-я от реда над него. Две стари задачи от домашно като вериги:"
+msgid "Read a chain from top to bottom: each line takes the array of the line above. Two tasks as chains:"
+msgstr "Четете веригата отгоре надолу: всеки ред взема array-я от реда над него. Две задачи като вериги:"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:942
-msgid "The other old tasks of this kind are in practice task 5."
-msgstr "Другите стари задачи от този вид са в задача 5 за упражнение."
+msgid "More tasks of this kind are in practice task 5."
+msgstr "Още задачи от този вид има в задача 5 за упражнение."
 
 #. box title
 #: site/lectures/07-array-methods.md:944
@@ -900,8 +900,8 @@ msgstr "Четири начина да се напише едно и също г
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1045
-msgid "An old advanced task compared several solutions. All four give `{ \"Global Resources\": [...], \"Enclosures\": [...], \"Pools\": [...] }`:"
-msgstr "Стара advanced задача сравняваше няколко решения. И четирите дават `{ \"Global Resources\": [...], \"Enclosures\": [...], \"Pools\": [...] }`:"
+msgid "The same task can be solved in several ways. All four give `{ \"Global Resources\": [...], \"Enclosures\": [...], \"Pools\": [...] }`:"
+msgstr "Същата задача може да се реши по няколко начина. И четирите дават `{ \"Global Resources\": [...], \"Enclosures\": [...], \"Pools\": [...] }`:"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1085
@@ -920,8 +920,8 @@ msgstr "**`Object.groupBy`** е най-краткият. Той е нов (ES202
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1092
-msgid "The old task also had a \"short\" form: `acc[r.group] = (acc[r.group] || []).concat(r);`. It works, but `concat` builds a **new** array for every record and copies the old one into it - with thousands of records that is much slower than `push`."
-msgstr "Старата задача имаше и \"кратка\" форма: `acc[r.group] = (acc[r.group] || []).concat(r);`. Работи, но `concat` създава **нов** array за всеки запис и копира стария в него - с хиляди записи това е много по-бавно от `push`."
+msgid "You may also meet a \"short\" form: `acc[r.group] = (acc[r.group] || []).concat(r);`. It works, but `concat` builds a **new** array for every record and copies the old one into it - with thousands of records that is much slower than `push`."
+msgstr "Може да срещнете и \"кратка\" форма: `acc[r.group] = (acc[r.group] || []).concat(r);`. Работи, но `concat` създава **нов** array за всеки запис и копира стария в него - с хиляди записи това е много по-бавно от `push`."
 
 #. box title
 #: site/lectures/07-array-methods.md:1097
@@ -1315,8 +1315,8 @@ msgstr "79-те записа от `report-records.json`: групиране, в�
 
 #. table cell
 #: site/lectures/07-array-methods.md:1569
-msgid "The old tasks with `map`, `filter`, `reduce`, `find` and `sort`: cities, todos, products, books"
-msgstr "Старите задачи с `map`, `filter`, `reduce`, `find` и `sort`: градове, todos, продукти, книги"
+msgid "Classic tasks with `map`, `filter`, `reduce`, `find` and `sort`: cities, todos, products, books"
+msgstr "Класически задачи с `map`, `filter`, `reduce`, `find` и `sort`: градове, todos, продукти, книги"
 
 #. heading 2
 #: site/lectures/07-array-methods.md:1571

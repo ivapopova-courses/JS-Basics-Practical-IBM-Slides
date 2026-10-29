@@ -227,7 +227,7 @@ numbers.forEach((number, index) => {
 `forEach` returns **nothing** (`undefined`). It is for **side effects**: printing,
 adding to a total, pushing into another array.
 
-An old task - the total of the sales:
+The total of the sales:
 
 ```js run
 const sales = [
@@ -262,7 +262,7 @@ loop with `break`.
 
 ### Changing the elements
 
-Another old task: add `isAdmin` to every user. `forEach` can change the objects
+Another task: add `isAdmin` to every user. `forEach` can change the objects
 in the array:
 
 ```js run
@@ -327,7 +327,7 @@ const output = input.map((e, i) => e.toUpperCase() + i);
 console.log(output);                // [ 'A0', 'B1', 'C2' ]
 ```
 
-Two old tasks on a list of cities - the names only, and each name changed with a
+Two tasks on a list of cities - the names only, and each name changed with a
 dictionary (lecture 6):
 
 ```js run
@@ -425,7 +425,7 @@ console.log(`input: ${input}`);     // input: 0,1,2,3,4
 console.log(`output: ${output}`);   // output: 0,2,4
 ```
 
-The old task - the cities with more than 340,000 people:
+The cities with more than 340,000 people:
 
 ```js run
 const cities = [
@@ -500,7 +500,7 @@ console.log(input.findIndex(x => x > 3));   // 3
 console.log(input.find(x => x > 10));       // undefined
 console.log(input.findIndex(x => x > 10));  // -1
 
-// the old task: the first city with more than 500,000 people
+// the first city with more than 500,000 people
 const cities = [
     { name: "Sofia", population: 1_236_000 },
     { name: "Plovdiv", population: 343_424 },
@@ -666,7 +666,7 @@ when there were no enclosures.)
 
 ### The sum of the even numbers
 
-An old example - with `reduce` only, and with `filter` + `reduce`:
+Two ways - with `reduce` only, and with `filter` + `reduce`:
 
 ```js run
 const input = [1, 2, 3, 4];
@@ -789,7 +789,7 @@ console.log([...levels].sort((a, b) => compareVersions(b, a)));       // highest
 
 ### Sorting records
 
-Records are sorted by one of their keys. The old task - the cities by population,
+Records are sorted by one of their keys. For example, the cities by population,
 highest first:
 
 ```js run
@@ -803,7 +803,7 @@ const sortedCities = [...cities].sort((a, b) => b.population - a.population);
 console.log(sortedCities.map(c => c.name));     // [ 'Sofia', 'Plovdiv', 'Varna', 'Burgas' ]
 ```
 
-An old homework writes one compare function for **any** key:
+One compare function can sort by **any** key:
 
 ```js run
 const todos = [
@@ -827,8 +827,8 @@ and compare `rank[a.priority] - rank[b.priority]`.
 ### Several keys
 
 Sort by the first key; when it is equal (the result is `0`), use the second. `||`
-does it in one line: `0` is falsy, so `||` moves on to the next comparison. An old
-task - books by `id`, then by title:
+does it in one line: `0` is falsy, so `||` moves on to the next comparison. For
+example, books by `id`, then by title:
 
 ```js run
 const books = [
@@ -923,7 +923,7 @@ console.log(text);      // ENC-01 (2.14); ENC-02 (2.10); ENC-04 (2.10)
 ```
 
 Read a chain from top to bottom: each line takes the array of the line above. Two
-old homework tasks as chains:
+tasks as chains:
 
 ```js run
 // TASK 1: the words that start with a given letter
@@ -939,7 +939,7 @@ const sumOfSquaredEvens = arr =>
 console.log(sumOfSquaredEvens([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));     // 220
 ```
 
-The other old tasks of this kind are in practice task 5.
+More tasks of this kind are in practice task 5.
 
 ::: tip Debugging a chain
 When a chain gives a wrong result, cut it: put the first two lines into a
@@ -1042,7 +1042,7 @@ records of the group in an array.
 
 ### Four ways to write the same grouping
 
-An old advanced task compared several solutions. All four give
+The same task can be solved in several ways. All four give
 `{ "Global Resources": [...], "Enclosures": [...], "Pools": [...] }`:
 
 ```js run
@@ -1089,7 +1089,7 @@ console.log(byGroup4);
   `[Object: null prototype] { ... }` - it works like any other object, it only has
   no inherited keys such as `toString`.
 
-The old task also had a "short" form:
+You may also meet a "short" form:
 `acc[r.group] = (acc[r.group] || []).concat(r);`. It works, but `concat` builds a
 **new** array for every record and copies the old one into it - with thousands of
 records that is much slower than `push`.
@@ -1566,7 +1566,7 @@ print `OK` or `FAIL`.
 | 2 | `task2-enclosures.js` | Questions about the enclosures, one method each: ids, outdated, first not normal, all normal?, lowest firmware, a summary text |
 | 3 | `task3-sort.js` | Sort numbers, names, versions and records - by several keys, without changing the input |
 | 4 | `task4-group-records.js` | The 79 records of `report-records.json`: group, nest by group and item, an index, unique values, totals |
-| 5 | `task5-classic-methods.js` | The old tasks with `map`, `filter`, `reduce`, `find` and `sort`: cities, todos, products, books |
+| 5 | `task5-classic-methods.js` | Classic tasks with `map`, `filter`, `reduce`, `find` and `sort`: cities, todos, products, books |
 
 ## Summary
 

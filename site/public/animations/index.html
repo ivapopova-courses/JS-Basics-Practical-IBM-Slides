@@ -122,7 +122,6 @@ body {
 .card h3 a:focus-visible { outline: none; }
 .desc { margin: 0; font-size: .9rem; line-height: 1.4; }
 .file { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
-.file .old { font-family: var(--sans); font-style: italic; }
 .scen { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: auto; padding-top: .3rem; }
 .scen a {
     position: relative; z-index: 1;
@@ -315,7 +314,7 @@ function render() {
                     </div>
                     <h3><a href="${esc(href(a.file))}">${esc(a.title)}</a></h3>
                     <p class="desc">${esc(a.desc)}</p>
-                    <div class="file">${esc(name)}${a.old ? ' <span class="old">(already used in the slides)</span>' : ''}</div>
+                    <div class="file">${esc(name)}</div>
                     <nav class="scen" aria-label="Scenarios">${a.scenarios.map((s, i) =>
                         `<a href="${esc(href(a.file, '#' + (i + 1)))}"${a.adv.includes(i + 1) ? ' class="adv"' : ''}>${i + 1}. ${esc(s)}</a>`).join('')}</nav>
                 </article>`;

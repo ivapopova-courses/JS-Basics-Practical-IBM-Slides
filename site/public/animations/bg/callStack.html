@@ -756,7 +756,7 @@ const SCENARIOS = [
         { line: 5, text: `Отпечатва се 1 2 3, а не 0 2 3 - това е <b>бъг</b>. Същото става и с "", false и null. Стойностите по подразбиране от ES6 нямат този проблем.`,
           do: s => { rd(s, 'o2', 'x', 'y', 'z'); log(s, '1 2 3'); }, reveal: ['con'],
           fly: [['v:o2.x', 'con', '1'], ['v:o2.y', 'con', '2'], ['v:o2.z', 'con', '3']] },
-        { line: -1, text: `<b>Обобщение:</b> предпочитайте <code>function f(x = 1)</code> - стойността по подразбиране се взима само ако аргументът е undefined. Трикът <code>x = x || 1</code> заменя всяка falsy стойност. <b>Бележка към слайда:</b> там пише <code>let x = x || 1;</code>, но с let се получава <code>SyntaxError: Identifier 'x' has already been declared</code>, защото параметърът x вече е локална променлива.`,
+        { line: -1, text: `<b>Обобщение:</b> предпочитайте <code>function f(x = 1)</code> - стойността по подразбиране се взима само ако аргументът е undefined. Трикът <code>x = x || 1</code> заменя всяка falsy стойност. <b>Бележка:</b> честа грешка е да се пише <code>let x = x || 1;</code> - с let се получава <code>SyntaxError: Identifier 'x' has already been declared</code>, защото параметърът x вече е локална променлива.`,
           do: s => { pop(s); unmk(s, 'd1'); } },
     ],
 },

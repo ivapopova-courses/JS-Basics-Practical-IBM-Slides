@@ -621,7 +621,7 @@ const SCENARIOS = [
           hops: [{ n: null, line: 0, do: s => decl(s, 'age', '18') }, { n: null, line: 1, do: s => decl(s, 'status', 'undefined') }] },
         { text: `<code>18 > 18</code> -> <span class="x">false</span> (18 is not greater than 18). <code>18 < 18</code> is also false, and when the left side of <code>&&</code> is false, the right side is not even calculated. No condition is met...`,
           hops: [{ n: 'c1', r: ['age'], do: s => chk(s, 'c1', '18 > 18', false) }, { n: 'c2', r: ['age'], do: s => chk(s, 'c2', '18 < 18 && ...', false) }] },
-        { text: `...so <b>else</b> runs: "child" is <span class="w">written</span> into status. This is the bug from the slides: an 18-year-old person is a "child", because the value 18 does not fall into either of the first two conditions.`,
+        { text: `...so <b>else</b> runs: "child" is <span class="w">written</span> into status. This is the bug: an 18-year-old person is a "child", because the value 18 does not fall into either of the first two conditions.`,
           hops: [{ n: 'child', do: s => set(s, 'status', '"child"') }] },
         { text: `<b>child</b> is printed. The fix is <code>age >= 18</code> in the first condition - then 18 leads to "adult". (With age = 12 we also get "child" - decide whether that is the behaviour you want.)`, check: true,
           hops: [{ n: 'out', r: ['status'], do: s => log(s, 'child') }] },
@@ -699,7 +699,7 @@ const SCENARIOS = [
         e('cond', 'end', [P('cond', 'r'), [458, 145], [458, 455], P('end', 'r')], 'false', [365, 135], 'start', 'no');
     }),
     steps: [
-        { text: `<code>while</code> repeats the body <b>as long as</b> the condition is true. There are no separate init and increment parts: the variable is created before the loop and is changed <b>in the body</b>. The example is from the slides: the user has 5 tries.` },
+        { text: `<code>while</code> repeats the body <b>as long as</b> the condition is true. There are no separate init and increment parts: the variable is created before the loop and is changed <b>in the body</b>. In the example the user has 5 tries.` },
         { text: `<code>let userTries = 5;</code> - before the loop we create the counter of tries.`,
           hops: [{ n: 'start', do: s => decl(s, 'userTries', '5') }] },
         { text: `Checking the condition: JavaScript <span class="r">reads</span> userTries and calculates <code>5 > 0</code> -> <span class="y">true</span>. We enter the body.`,
@@ -744,7 +744,7 @@ const SCENARIOS = [
               log(s, '^C', true);
               s.warn = 'stopped with Ctrl + C';
           } },
-        { text: `<b>Summary:</b> while checks the condition <b>before</b> every iteration. We use it when we do not know in advance how many times the loop will repeat (as in "guess the number" from the slides). When the number is known, for is clearer: <code>for (let userTries = 5; userTries > 0; userTries--)</code>.` },
+        { text: `<b>Summary:</b> while checks the condition <b>before</b> every iteration. We use it when we do not know in advance how many times the loop will repeat (as in a "guess the number" game). When the number is known, for is clearer: <code>for (let userTries = 5; userTries > 0; userTries--)</code>.` },
     ],
 },
 // ---------------------------------------------------------------- 4
@@ -791,7 +791,7 @@ const SCENARIOS = [
           hops: [{ n: 'dc', r: ['x'], do: s => chk(s, 'dc', '11 < 5', false) }] },
         { text: `"x = 11" is printed. With the same condition, the body of do-while ran <b>1</b> time, and the body of while - <b>0</b> times.`, check: true,
           hops: [{ n: 'end', r: ['x'], do: s => log(s, 'x = 11') }] },
-        { text: `<b>Summary:</b> while: condition -> body (0 or more times). do-while: body -> condition (<b>at least once</b>). That is why do-while fits "guess the number" from the slides: the user must enter a number at least once before there is anything to compare.` },
+        { text: `<b>Summary:</b> while: condition -> body (0 or more times). do-while: body -> condition (<b>at least once</b>). That is why do-while fits a "guess the number" game: the user must enter a number at least once before there is anything to compare.` },
     ],
 },
 // ---------------------------------------------------------------- 5
@@ -906,7 +906,7 @@ const SCENARIOS = [
         e('oinc', 'oc', [P('oinc', 'l'), [18, 550], [18, 115], P('oc', 'l')]);
     }, [{ x: 262, y: 160, w: 298, h: 316, lab: 'inner loop', lp: [552, 468] }]),
     steps: [
-        { text: `<b>Advanced.</b> A loop in a loop (nested loops): for every row (i) the inner loop (j) adds one star. In the slides the "half tree" uses <code>"*".repeat(i)</code> and treeDeep = 5; here we write the inner loop ourselves, with treeDeep = 3, to see what happens.` },
+        { text: `<b>Advanced.</b> A loop in a loop (nested loops): for every row (i) the inner loop (j) adds one star. The "half tree" can also be drawn with <code>"*".repeat(i)</code>; here we write the inner loop ourselves, with treeDeep = 3, to see what happens.` },
         { text: `<code>let treeDeep = 3;</code> - how many rows the tree will have.`,
           hops: [{ n: null, line: 0, do: s => decl(s, 'treeDeep', '3') }] },
         { text: `The outer loop starts with init: <code>let i = 1</code>.`,
@@ -941,7 +941,7 @@ const SCENARIOS = [
           hops: [nl.oinc(3)] },
         { text: `<code>4 <= 3</code> -> <span class="x">false</span>: the outer loop ends. The tree is ready.`, check: true,
           hops: [nl.oc(4, false), { n: 'end', do: s => drop(s, 'i') }] },
-        { text: `<b>Summary:</b> the inner loop runs <b>completely</b> on every iteration of the outer one and starts from the beginning each time (j = 1). Here the outer body ran 3 times, and the inner one - 1 + 2 + 3 = <b>6</b> times. <code>"*".repeat(i)</code> from the slides does the work of our inner loop.` },
+        { text: `<b>Summary:</b> the inner loop runs <b>completely</b> on every iteration of the outer one and starts from the beginning each time (j = 1). Here the outer body ran 3 times, and the inner one - 1 + 2 + 3 = <b>6</b> times. <code>"*".repeat(i)</code> does the work of our inner loop.` },
     ],
 },
 // ---------------------------------------------------------------- 7
@@ -996,7 +996,7 @@ const SCENARIOS = [
           hops: [{ n: 'lb', do: s => { log(s, 'Banana is yellow.'); s.dim = ['cb', 'ld']; } }] },
         { text: `<code>break</code> finally ends the switch, and the execution goes on after it: "End". default does not run.`, check: true,
           hops: [{ n: 'brk' }, { n: 'end', do: s => log(s, 'End') }] },
-        { text: `<b>Summary:</b> case sets only <b>where</b> the execution starts, and <code>break</code> sets where it stops. Put break at the end of every case (as in the slides). Sometimes fall-through is on purpose: <code>case "apple": case "cherry":</code> - shared code for several values.` },
+        { text: `<b>Summary:</b> case sets only <b>where</b> the execution starts, and <code>break</code> sets where it stops. Put break at the end of every case. Sometimes fall-through is on purpose: <code>case "apple": case "cherry":</code> - shared code for several values.` },
     ],
 },
 ];
