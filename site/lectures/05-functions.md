@@ -708,24 +708,21 @@ the `return` line.
 
 ### Several results: return an array or an object
 
-A function returns **one** value. When you need more, return an object (or an
-array) that holds them:
+A function returns **one** value. When you need more, return an array (or an
+object) that holds them:
 
 ```js run
 function splitVersion(version) {
     const parts = version.split(".");
-    return {
-        major: Number(parts[0]),
-        minor: Number(parts[1] ?? 0),
-        rest: parts.slice(2).join(".")
-    };
+    // [major, minor, rest]
+    return [Number(parts[0]), Number(parts[1] ?? 0), parts.slice(2).join(".")];
 }
 
 const v = splitVersion("4.2.1.7");
-console.log(v.major, v.minor, v.rest);      // 4 2 1.7
+console.log(v[0], v[1], v[2]);      // 4 2 1.7
 ```
 
-(Session 6 shows a short way to unpack it: `const { major, minor } = splitVersion(...)`.)
+(Session 6 shows a short way to unpack it: `const [major, minor, rest] = splitVersion(...)`.)
 
 **Check yourself:** `logEvenElements(arr)` prints the even elements
 of an array, and `findMaxEven(arr)` returns the largest even element. Which one
