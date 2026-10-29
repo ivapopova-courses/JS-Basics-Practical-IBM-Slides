@@ -29,6 +29,13 @@ title: 5. Functions, and reading older code
 - read an older rule - `var`, nested helpers, `function (x) { return ...; }`
   callbacks, `try / catch` - and modernise it step by step.
 
+::: tip Sections marked (advanced) or (optional)
+This lecture has more than fits into one session. Sections marked **(advanced)**
+go deeper, and sections marked **(optional)** add one more example of a topic you
+already know. In class we may skip them - read them at home. The homework does not
+need them.
+:::
+
 Where this fits in the sample check rule - today's rule is built from **small
 helper functions**. The number in each comment is the section of this lecture:
 
@@ -431,7 +438,7 @@ question to `versionBelow(level, "4.2")`. Give parameters clear names
 (`current`, `minimum`), and check the order when you call a helper.
 :::
 
-### Any number of arguments: `arguments` and `...rest`
+### Any number of arguments: `arguments` and `...rest` (advanced)
 
 MDN: [The arguments object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)
 
@@ -476,7 +483,7 @@ logAll("[CHK-0132] ", "firmware below 4.2", "remote login enabled");
 
 `Math.max(3, 9, 4)` is a built-in function of the same kind (session 8).
 
-### Example: the area of a rectangle
+### Example: the area of a rectangle (optional)
 
 A function `rectangleArea(width, height)`, used for the rooms of a flat:
 
@@ -1391,7 +1398,7 @@ hello();                        // Hello! - the same function, another name
 **Functions are values:** [2. A function is a value](../animations/functionsAsValues.html#2){target="_blank"}
 :::
 
-### Anonymous functions
+### Anonymous functions (optional)
 
 A function **without a name** is an **anonymous function**. It is used where the
 function is needed only as a value: assigned to a variable, put into an array or
@@ -1762,7 +1769,7 @@ console.log(countIf(encs, enc => enc.firmware === "2.10"));    // 2
 A long callback with several statements stays readable as an arrow with braces
 and `return` - or, better, becomes a **named** helper.
 
-### Pitfall: an arrow after `||`
+### Pitfall: an arrow after `||` (advanced)
 
 An arrow function cannot stand directly after an operator like `||`. Put it in
 brackets:
@@ -1774,7 +1781,7 @@ cb = cb || () => {};            // SyntaxError: Malformed arrow function paramet
 cb = cb || (() => {});          // ok
 ```
 
-### What arrow functions do not have
+### What arrow functions do not have (advanced)
 
 - **No name of their own** - they are always anonymous. When assigned to a
   variable, they take its name for error messages (`const isHdd = enc => ...`
@@ -2116,7 +2123,7 @@ The suffix (`-B00`), versions like `42107-C00` or `XR420_117`, and other formats
 come in session 8. With one shared helper, that fix will be made **once** - not in
 every rule.
 
-### Helpers that return text
+### Helpers that return text (optional)
 
 Existing rules often turn a comparison into a status and an action text, with one
 small helper each:
@@ -2299,15 +2306,6 @@ again; `let` for loop counters and for values that change (`lowest`).
 `x => parseInt(x, 10) || 0`. `(a === undefined || a === null) ? "" : String(a)`
 becomes `String(a ?? "")`.
 
-**Step 4. Modern forms for the rest.** `indexOf("XR-2") !== 0` means "does not
-start with" - `!model.startsWith("XR-2")` (session 8). `new Object()` plus
-`output["..."] = ...` becomes an object literal. The long path gets `?.` and a
-fallback, in its own helper.
-
-**Step 5. The catch-all `try / catch`.** Replace it with guard clauses for the data
-that can be missing. The `try` hid the missing `extended_info` - now the rule
-checks what it needs and **still** reports the device.
-
 The result:
 
 ```js run
@@ -2315,55 +2313,50 @@ function emit(id, details) {
     console.log("ALERT for " + id + ": " + JSON.stringify(details));
 }
 
-const EXPECTED_FIRMWARE = "2.14";
+function cmpVer(a, b) {
+    const as = String(a ?? "").split(".").map(x => parseInt(x, 10) || 0);
+    const bs = String(b ?? "").split(".").map(x => parseInt(x, 10) || 0);
 
-function compareVersions(a, b) {
-    const pa = String(a ?? "").split(".").map(x => parseInt(x, 10) || 0);
-    const pb = String(b ?? "").split(".").map(x => parseInt(x, 10) || 0);
-    const n = Math.max(pa.length, pb.length);
+    const n = Math.max(as.length, bs.length);
     for (let i = 0; i < n; i++) {
-        const x = pa[i] ?? 0;
-        const y = pb[i] ?? 0;
-        if (x !== y) return x < y ? -1 : 1;
+        const ai = (i < as.length) ? as[i] : 0;
+        const bi = (i < bs.length) ? bs[i] : 0;
+        if (ai < bi) return -1;
+        if (ai > bi) return 1;
     }
     return 0;
 }
 
-function lowestFirmware(list, type) {
+function getLowestFirmware(list, type) {
     let lowest;
-    for (const e of list) {
-        if (!e || e.type !== type) continue;
+    for (let i = 0; i < list.length; i++) {
+        const e = list[i] || {};
+        if (e.type !== type) continue;
         if (e.state && e.state !== "normal") continue;
-        if (lowest === undefined || compareVersions(e.firmware, lowest) < 0) lowest = e.firmware;
+        if (lowest === undefined || cmpVer(e.firmware, lowest) < 0) lowest = e.firmware;
     }
     return lowest;
 }
 
-function deviceName(doc) {
-    return doc.inventory?.extended_info?.json?.data?.system?.name
-        ?? doc.status?.device_alias
-        ?? "unknown device";
-}
-
 function rule(doc) {  // never change this line
-    const model = doc.overview?.model;
-    if (typeof model !== "string" || !model.startsWith("XR-2")) return;
+    try {
+        const model = doc.overview.model;
+        if (!model || String(model).indexOf("XR-2") !== 0) return;
 
-    const enclosures = doc.inventory?.enclosures;
-    if (!Array.isArray(enclosures)) return;
+        const expected = "2.14";
+        const lowest = getLowestFirmware(doc.inventory.enclosures, "SSD-24");
 
-    const lowest = lowestFirmware(enclosures, "SSD-24");
-    if (lowest === undefined || compareVersions(lowest, EXPECTED_FIRMWARE) >= 0) return;
-
-    emit(doc.status?.device_alias, {
-        "check": "CHK-0211",
-        "details": [{
-            "Device": deviceName(doc),
-            "Model": model,
-            "Level": doc.inventory.details?.firmware_level ?? "",
-            "SSD-24 firmware": `${lowest} (expected >= ${EXPECTED_FIRMWARE})`
-        }]
-    });
+        if (lowest !== undefined && cmpVer(lowest, expected) < 0) {
+            const output = new Object();
+            output["Device"] = doc.inventory.extended_info.json.data.system.name;
+            output["Model"] = model;
+            output["Level"] = doc.inventory.details.firmware_level;
+            output["SSD-24 firmware"] = lowest + " (expected >= " + expected + ")";
+            emit(doc.status.device_alias, { "check": "CHK-0211", "details": [output] });
+        }
+    } catch (err) {
+        return;
+    }
 }
 
 console.log("example JSON document:");
@@ -2381,26 +2374,29 @@ rule({
 console.log("(end)");
 ```
 
-Now the second report gets its alert, with `LAB-DEV-05` as the device name.
+The alerts are the same as before. The second report still gets **no** alert: the
+`try` still hides the missing `extended_info` (question 3 above).
 
 **Check yourself:**
 
-1. In the modern rule, `if (lowest === undefined || compareVersions(...) >= 0) return;`
-   replaces `if (lowest !== undefined && cmpVer(...) < 0) { ... }`. Why are they
-   the same condition, turned around? (Lecture 3: De Morgan.)
-2. Which of the new functions are pure?
-3. The modern rule has one global, `EXPECTED_FIRMWARE`. Why is it `const`, and
-   why is it outside `rule`?
+1. `if (lowest !== undefined && cmpVer(lowest, expected) < 0) { ... }` can also be
+   written as a guard clause: `if (lowest === undefined || cmpVer(lowest, expected) >= 0) return;`,
+   and the alert code after it. Why is it the same condition, turned around?
+   (Lecture 3: De Morgan.)
+2. Which of the functions are pure?
+3. `expected` is a fixed setting of the rule. Where would you put it, and how
+   would you declare it?
 
 ::: details Answer
 1. "Stop if not (A and B)" is "stop if (not A) or (not B)": not
    `lowest !== undefined` is `lowest === undefined`, and not `< 0` is `>= 0`. The
    guard clause stops early, so the alert code is not nested in an `if`.
-2. `compareVersions`, `lowestFirmware` and `deviceName` - they only read their
-   arguments and return a value. `rule` is not: it calls `emit` (that is its job).
-3. It is a fixed setting of the rule - it never changes, so `const`, as the
-   guidelines ask. At the top it is easy to find and to update when a new level
-   is recommended, without reading the code of `rule`.
+2. `cmpVer` and `getLowestFirmware` - they only read their arguments and return a
+   value. `rule` is not: it calls `emit` (that is its job).
+3. At the top of the file, outside `rule`: `const EXPECTED_FIRMWARE = "2.14";`.
+   It never changes, so `const`, as the guidelines ask (section 7). At the top it
+   is easy to find and to update when a new level is recommended, without reading
+   the code of `rule`.
 :::
 
 ## 14. Practice

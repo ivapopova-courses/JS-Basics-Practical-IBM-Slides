@@ -46,6 +46,7 @@ Written in Latin letters, without quotes or backticks. Plural in English
 | autocomplete, build | |
 | command palette, DevTools, Source Control, IDE | names of tools and panels |
 | (advanced) | the marker of the animation scenarios: keep "(advanced)" |
+| (optional) | the marker of lecture sections that add one more example: keep "(optional)" |
 | Run, Edit, Reset, Present, OK, FAIL | buttons and output of the site and the tasks |
 
 ## Translated
