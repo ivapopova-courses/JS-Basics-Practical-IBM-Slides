@@ -835,9 +835,25 @@ console.log("global firstName:", firstName);        // Ada - not changed
 **Variable scope:** [3. Shadowing](../animations/scopeChain.html#3){target="_blank"}
 :::
 
-Parameters shadow too. In rules this is common and fine: the helper's
-parameter `doc` hides nothing important, because the helper works only with
-what it gets.
+A **parameter** is a local variable too, so it shadows in the same way. You
+will see this often in existing rules: a helper inside `rule` has its own
+parameter named `doc`, which hides the `doc` of `rule`:
+
+```js run
+function rule(doc) {
+    function getModel(doc) {            // this doc hides the doc of rule
+        return doc.overview.model;      // the parameter - what the call passed in
+    }
+
+    console.log(getModel(doc));                                 // XR-220
+    console.log(getModel({ overview: { model: "XR-210" } }));   // XR-210
+}
+
+rule(doc);
+```
+
+This is fine: inside `getModel`, `doc` is always the value of the call, so the
+helper works only with what it gets.
 
 **Check yourself:** before you run it, write down the three lines it prints.
 
@@ -1024,15 +1040,15 @@ let model = "XR-220";
 
 ### Special features of `const` (advanced)
 
-`const` creates a variable that cannot be **assigned** again:
+`const` creates a variable that cannot be **assigned** again. The error stops the
+program, so the last line does not run:
 
 ```js run
 const GOLDEN_RATIO = 1.618;
-try {
-    GOLDEN_RATIO = 2;
-} catch (err) {
-    console.log(err.name + ": " + err.message);    // TypeError: Assignment to constant variable.
-}
+console.log(GOLDEN_RATIO);      // 1.618
+
+GOLDEN_RATIO = 2;               // TypeError: Assignment to constant variable.
+console.log(GOLDEN_RATIO);      // not printed
 ```
 
 It must get its value in the declaration: `const GOLDEN_RATIO;` is
@@ -1141,11 +1157,8 @@ function foo() {
 A function **expression** is a value in a variable. Only the variable is hoisted:
 
 ```js run
-try {
-    console.log(foo());     // TypeError: foo is not a function
-} catch (err) {
-    console.log(err.name + ": " + err.message);
-}
+console.log(foo);           // undefined - the variable is known, the function not yet
+console.log(foo());         // TypeError: foo is not a function
 
 var foo = function () {
     return "I am foo() and I work!";
