@@ -144,7 +144,7 @@ All of them are old enough for any rule engine (ES5, 2009; `find` and `findIndex
 ES2015) - except a few newer ones, marked in the sections below.
 
 ::: info Animations
-**Functions are values:** [3. Callbacks](../animations/functionsAsValues.html#3){target="_blank"};
+**Functions are values:** [4. Callbacks](../animations/functionsAsValues.html#4){target="_blank"};
 **Functions and data:** [5. A callback, call by call](../animations/functionsAndData.html#5){target="_blank"}
 :::
 

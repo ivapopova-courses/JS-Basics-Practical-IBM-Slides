@@ -360,10 +360,6 @@ property on the **function** object, `x` and `y` are never set, and `foo` gets t
 array. A call `foo()` after it is `TypeError: foo is not a function`. Put `;` after every
 assignment - also after a function expression - and the bug cannot happen.
 
-::: info Animation
-**Functions are values:** [7. A forgotten `;` (advanced)](../animations/functionsAsValues.html#7){target="_blank"}
-:::
-
 ### Which one to use?
 
 Both work. In rules and helper files, the most common choice is:
@@ -1364,6 +1360,12 @@ Because of this, functions are called **first-class citizens** (*first-class
 functions*). This is the basis of almost every modern JavaScript library - and of
 the array methods in session 7.
 
+::: info Animation
+**Functions are values:** [1. Like `5` and `[1, 2, 3]`](../animations/functionsAsValues.html#1){target="_blank"} -
+a number, an array and a function, side by side: the same steps work for all
+three, and only the function can be called.
+:::
+
 ```js run
 function greet() {
     console.log("Hello!");
@@ -1376,7 +1378,7 @@ hello();                        // Hello! - the same function, another name
 ```
 
 ::: info Animation
-**Functions are values:** [1. A function is a value](../animations/functionsAsValues.html#1){target="_blank"}
+**Functions are values:** [2. A function is a value](../animations/functionsAsValues.html#2){target="_blank"}
 :::
 
 ### Anonymous functions
@@ -1408,7 +1410,7 @@ What does `foobar[2]()` do? `foobar[2]` is `undefined`, and `undefined()` is
 helper name inside an object.
 
 ::: info Animation
-**Functions are values:** [2. In arrays and objects](../animations/functionsAsValues.html#2){target="_blank"}
+**Functions are values:** [3. In arrays and objects](../animations/functionsAsValues.html#3){target="_blank"}
 :::
 
 A real use: a table of checks, each one a small function. The rule runs them all:
@@ -1477,7 +1479,7 @@ before the call), prints 2 and returns `undefined`. `caller` gets `undefined`, a
 `f()` fails. Without `()` - the function; with `()` - its result.
 
 ::: info Animation
-**Functions are values:** [3. Callbacks](../animations/functionsAsValues.html#3){target="_blank"}
+**Functions are values:** [4. Callbacks](../animations/functionsAsValues.html#4){target="_blank"}
 :::
 
 ### Why callbacks: one loop, many questions
@@ -1596,7 +1598,7 @@ bar();
 ```
 
 ::: info Animation
-**Functions are values:** [4. A function returns a function](../animations/functionsAsValues.html#4){target="_blank"}
+**Functions are values:** [5. A function returns a function](../animations/functionsAsValues.html#5){target="_blank"}
 :::
 
 A useful example: `compose(f, g)` returns a **new**
@@ -1703,7 +1705,7 @@ console.log(`circleArea(2) = ${circleArea(2)}`);    // circleArea(2) = undefined
 This is the most common bug with arrow functions. If you add braces, add `return`.
 
 ::: info Animation
-**Functions are values:** [5. Arrow functions](../animations/functionsAsValues.html#5){target="_blank"}
+**Functions are values:** [6. Arrow functions](../animations/functionsAsValues.html#6){target="_blank"}
 :::
 
 ### Returning an object
@@ -1854,7 +1856,7 @@ console.log(other());       // 1
 ```
 
 ::: info Animation
-**Functions are values:** [6. Closure (advanced)](../animations/functionsAsValues.html#6){target="_blank"}
+**Functions are values:** [7. Closure (advanced)](../animations/functionsAsValues.html#7){target="_blank"}
 :::
 
 A practical closure: a **function factory**. It takes a setting and returns a
@@ -1937,7 +1939,7 @@ rarely needed. You still meet it in older code.
 
 ::: info Animation
 **Variable scope:** [6. IIFE (advanced)](../animations/scopeChain.html#6){target="_blank"};
-**Functions are values:** [4. A function returns a function](../animations/functionsAsValues.html#4){target="_blank"} (the IIFE at the end)
+**Functions are values:** [5. A function returns a function](../animations/functionsAsValues.html#5){target="_blank"} (the IIFE at the end)
 :::
 
 ### A function that calls itself (advanced)

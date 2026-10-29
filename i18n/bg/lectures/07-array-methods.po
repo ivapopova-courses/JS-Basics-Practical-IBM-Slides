@@ -225,8 +225,8 @@ msgstr "Анимации"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:147
-msgid "**Functions are values:** [3. Callbacks](../animations/functionsAsValues.html#3){target=\"_blank\"}; **Functions and data:** [5. A callback, call by call](../animations/functionsAndData.html#5){target=\"_blank\"}"
-msgstr "**Функциите са стойности:** [3. Callbacks](../animations/functionsAsValues.html#3){target=\"_blank\"}; **Функциите и данните:** [5. Callback, извикване по извикване](../animations/functionsAndData.html#5){target=\"_blank\"}"
+msgid "**Functions are values:** [4. Callbacks](../animations/functionsAsValues.html#4){target=\"_blank\"}; **Functions and data:** [5. A callback, call by call](../animations/functionsAndData.html#5){target=\"_blank\"}"
+msgstr "**Функциите са стойности:** [4. Callbacks](../animations/functionsAsValues.html#4){target=\"_blank\"}; **Функциите и данните:** [5. Callback, извикване по извикване](../animations/functionsAndData.html#5){target=\"_blank\"}"
 
 #. heading 3
 #: site/lectures/07-array-methods.md:151
@@ -1482,6 +1482,9 @@ msgstr "Упражнения: [JavaScript array exercises](https://www.w3resourc
 #: site/lectures/07-array-methods.md:1621
 msgid "**Next session:** strings, regular expressions, dates and numbers - clean the version formats of your products, read the patterns in existing rules, and turn the many date formats of the reports into dates you can compare."
 msgstr "**Следващото занятие:** strings, regular expressions, дати и числа - изчистване на форматите на версиите на вашите продукти, четене на шаблоните в съществуващи правила и превръщане на многото формати на дати в отчетите в дати, които можете да сравнявате."
+
+#~ msgid "**Functions are values:** [3. Callbacks](../animations/functionsAsValues.html#3){target=\"_blank\"}; **Functions and data:** [5. A callback, call by call](../animations/functionsAndData.html#5){target=\"_blank\"}"
+#~ msgstr "**Функциите са стойности:** [3. Callbacks](../animations/functionsAsValues.html#3){target=\"_blank\"}; **Функциите и данните:** [5. Callback, извикване по извикване](../animations/functionsAndData.html#5){target=\"_blank\"}"
 
 #~ msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
 #~ msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."

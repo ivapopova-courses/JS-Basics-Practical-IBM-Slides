@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Функциите са стойности</title>
 <!--
-    Step-by-step animation: functions are values (objects in the heap), callbacks,
-    returning functions, arrow functions, closures and the missing ';' bug.
+    Step-by-step animation: functions are values (objects in the heap), side by
+    side with a number and an array, callbacks, returning functions, arrow
+    functions and closures.
     Self-contained (no external files), so it works offline and inside an iframe.
     Deep link: functionsAsValues.html#3 (scenario 3) or #3.5 (scenario 3, step 5).
     Theme: ?theme=dark or ?theme=light. Self-test of every step: #selftest
@@ -175,7 +176,32 @@ body {
 /* ---------- memory ---------- */
 .mem-wrap { flex: 1; min-height: 0; display: flex; gap: 1rem; }
 .stack-panel { flex: none; width: 23.5rem; display: flex; flex-direction: column; }
-.heap-panel { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.heap-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .7rem; }
+.heap-panel { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+
+/* the table "what can you do with the value?" (only in scenarios with board: true) */
+.board-panel[hidden] { display: none; }
+.board { display: grid; grid-template-columns: auto repeat(5, minmax(0, 1fr)); gap: .25rem .4rem; align-items: center; }
+.bh {
+    padding: .15rem .1rem; border-radius: .3rem;
+    font-size: .64rem; font-weight: 700; line-height: 1.15; text-align: center;
+    color: var(--muted);
+    transition: background .25s, color .25s;
+}
+.bh.cur { background: var(--write-bg); color: var(--ink); }
+.brow { padding-right: .5rem; font-family: var(--mono); font-size: .9rem; font-weight: 700; white-space: nowrap; }
+.brow.fn { color: var(--ref); }
+.bc {
+    display: flex; align-items: center; justify-content: center; gap: .25rem;
+    height: 1.5rem;
+    border: 1.5px dashed var(--line); border-radius: .4rem;
+    font-size: .74rem; font-weight: 700;
+}
+.bc.cur { border-color: var(--muted); }
+.bc.yes { border: 1.5px solid var(--var-border); background: var(--var-bg); color: var(--var-ink); }
+.bc.no { border: 1.5px solid var(--err); background: var(--err-bg); color: var(--err); }
+.bc.fresh { animation: pop .45s both; }
+.bc svg { width: .85rem; height: .85rem; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* stack frames */
 .frames { flex: 1; min-height: 0; display: flex; flex-direction: column-reverse; gap: .45rem; }
@@ -438,9 +464,15 @@ body {
                     <div class="panel-title"><span>Stack (рамки)</span><span class="note">най-горната се изпълнява</span></div>
                     <div class="frames" id="stack"></div>
                 </div>
-                <div class="panel heap-panel">
-                    <div class="panel-title"><span>Heap - обектите</span><span class="note">адресите са примерни</span></div>
-                    <div class="heap" id="heap"></div>
+                <div class="heap-col">
+                    <div class="panel board-panel" id="boardPanel" hidden>
+                        <div class="panel-title"><span>Какво можем да правим със стойността?</span><span class="note">функцията може и да се извика</span></div>
+                        <div class="board" id="board"></div>
+                    </div>
+                    <div class="panel heap-panel">
+                        <div class="panel-title"><span>Heap - обектите</span><span class="note">адресите са примерни</span></div>
+                        <div class="heap" id="heap"></div>
+                    </div>
                 </div>
             </div>
             <div class="legend" id="legend"></div>
@@ -535,9 +567,13 @@ function ev(s, src, res = '', ref = null) { s.eval = { src, res, ref }; }
 function noev(s) { s.eval = null; }
 function log(s, text, err = false) { s.console.push({ text, err }); }
 function code(s, i, text) { s.code[i] = text; }
+// a cell of the table "what can you do with the value?": row 0 = 5,
+// 1 = [1, 2, 3], 2 = function; col = BOARD_COLS; v = 'y' (yes) or 'n' (no)
+function mark(s, row, col, v = 'y') { s.board[row][col] = v; s.bcol = col; }
 
 // ---------------------------------------------------------------------------
 // Scenarios
+//   sc.board    - show the table "what can you do with the value?"
 //   step.line   - active code line (0-based), a range [from, to], or -1
 //   step.wait   - lines of calls that wait for the running function to return
 //   step.do     - changes to the state
@@ -551,6 +587,74 @@ function code(s, i, text) { s.code[i] = text; }
 const C0 = .4;   // x of the first heap column (rem)
 
 const SCENARIOS = [
+{
+    tab: 'Като 5 и [1, 2, 3]',
+    board: true,
+    code: [
+        'let n = 5;',
+        'let a = [1, 2, 3];',
+        'let f = function (x) { return x * 2; };',
+        'let list = [n, a, f];',
+        'function echo(v) {',
+        '    console.log(typeof v);',
+        '    return v;',
+        '}',
+        'let n2 = echo(n);      // number',
+        'let a2 = echo(a);      // object',
+        'let f2 = echo(f);      // function',
+        'console.log(f2(n2));   // 10',
+        'n2();                  // ?',
+    ],
+    steps: [
+        { line: -1, text: `Вече познавате два вида стойности: <b>число</b> като <code>5</code> и <b>масив</b> като <code>[1, 2, 3]</code>. Функцията също е стойност. Слагаме трите една до друга и правим с всяка от тях <b>едни и същи неща</b>. Таблицата горе вдясно събира резултатите. Натиснете <kbd>Напред</kbd>.` },
+        { line: [4, 7], text: `Преди да се изпълни първият ред, декларацията <code>function echo(v) {...}</code> създава обект-функция и променливата echo (hoisting). echo е помощна функция за после: отпечатва типа на стойността, която получава, и я връща обратно.`,
+          do: s => { hfn(s, 5000, 15, 12, ['function echo(v) {', '  console.log(typeof v);', '  return v;', '}'], 'echo'); decl(s, 'g.echo', 'function'); set(s, 'g.echo', 5000); },
+          fly: [['h:5000', 'v:g.echo', '5000']] },
+        { line: 0, text: `<code>5</code> е числов литерал. Числото е малко, затова в променливата n се <span class="w">записва</span> самата стойност.`,
+          do: s => { decl(s, 'g.n'); ev(s, '5', '5'); set(s, 'g.n', '5'); mark(s, 0, 0); },
+          fly: [['res', 'v:g.n', '5']] },
+        { line: 1, text: `<code>[1, 2, 3]</code> е литерал на масив. Той създава обект-масив в heap (5100), а в a се <span class="w">записва</span> <b>референция</b> към него.`,
+          do: s => { noev(s); harr(s, 5100, 15, .4, ['1', '2', '3']); decl(s, 'g.a'); set(s, 'g.a', 5100); mark(s, 1, 0); },
+          fly: [['h:5100', 'v:g.a', '5100']] },
+        { line: 2, text: `<code>function (x) {...}</code> е литерал на функция (function израз). Той създава обект-функция в heap (5200) - <b>точно като масива</b> - и референция към нея отива в f. Кодът вътре <b>не</b> се изпълнява: само се запазва.`,
+          do: s => { hfn(s, 5200, 15, 6.8, ['function (x) { return x * 2; }'], 'f'); decl(s, 'g.f'); set(s, 'g.f', 5200); mark(s, 2, 0); },
+          fly: [['h:5200', 'v:g.f', '5200']] },
+        { line: 3, text: `<code>[n, a, f]</code> - трите стойности се <span class="r">четат</span> и се копират в нов масив: числото 5, референцията към масива и референцията към функцията. Функцията може да бъде <b>елемент на масив</b> като всяка друга стойност.`,
+          do: s => { read(s, 'g.n', 'g.a', 'g.f'); harr(s, 5300, C0, .4, ['5', 5100, 5200]); decl(s, 'g.list'); set(s, 'g.list', 5300); [0, 1, 2].forEach(i => mark(s, i, 1)); },
+          fly: [['v:g.n', 'h:5300.0', '5'], ['v:g.a', 'h:5300.1', '5100'], ['v:g.f', 'h:5300.2', '5200'], ['h:5300', 'v:g.list', '5300']] },
+        { line: 5, wait: [8], text: `<code>echo(n)</code> - аргументът n се <span class="r">чете</span> (5) и се копира в параметъра v на нова рамка. echo отпечатва <code>typeof v</code>: number.`,
+          do: s => { read(s, 'g.n'); frame(s, 'e1', 'echo(v)', 5000); decl(s, 'e1.v', 'параметър'); set(s, 'e1.v', '5'); log(s, 'number'); mark(s, 0, 2); },
+          fly: [['v:g.n', 'v:e1.v', '5']], reveal: ['con'] },
+        { line: 8, text: `<code>return v;</code> връща стойността обратно: резултатът от <code>echo(n)</code> е 5. Рамката се маха и 5 се <span class="w">записва</span> в n2.`,
+          do: s => { popf(s); decl(s, 'g.n2'); ev(s, 'echo(n)', '5'); set(s, 'g.n2', '5'); mark(s, 0, 3); },
+          fly: [['res', 'v:g.n2', '5']] },
+        { line: 5, wait: [9], text: `<code>echo(a)</code> - сега аргументът е масивът: v получава копие на <b>референцията</b> (5100) и сочи към същия масив. typeof на масив е object.`,
+          do: s => { noev(s); read(s, 'g.a'); frame(s, 'e2', 'echo(v)', 5000); decl(s, 'e2.v', 'параметър'); set(s, 'e2.v', 5100); log(s, 'object'); mark(s, 1, 2); },
+          fly: [['v:g.a', 'v:e2.v', '5100']], reveal: ['con'] },
+        { line: 9, text: `echo връща референцията и тя се <span class="w">записва</span> в a2. a2 сочи към <b>същия</b> масив като a - не се създава нов масив.`,
+          do: s => { popf(s); decl(s, 'g.a2'); ev(s, 'echo(a)', '5100', 5100); set(s, 'g.a2', 5100); mark(s, 1, 3); },
+          fly: [['res', 'v:g.a2', '5100']] },
+        { line: 5, wait: [10], text: `<code>echo(f)</code> - функцията се подава <b>точно като масива</b>: v получава референцията ѝ (5200). След f няма <code>()</code>, затова функцията не се изпълнява - само се предава. typeof отпечатва function.`,
+          do: s => { noev(s); read(s, 'g.f'); frame(s, 'e3', 'echo(v)', 5000); decl(s, 'e3.v', 'параметър'); set(s, 'e3.v', 5200); log(s, 'function'); mark(s, 2, 2); },
+          fly: [['v:g.f', 'v:e3.v', '5200']], reveal: ['con'] },
+        { line: 10, text: `echo връща функцията и референцията се <span class="w">записва</span> в f2. Сега f, f2 и <code>list[2]</code> сочат към <b>същата</b> функция.`,
+          do: s => { popf(s); decl(s, 'g.f2'); ev(s, 'echo(f)', '5200', 5200); set(s, 'g.f2', 5200); mark(s, 2, 3); },
+          fly: [['res', 'v:g.f2', '5200']] },
+        { line: 2, wait: [11], text: `<code>f2(n2)</code> - единственото, което може само функцията: <code>()</code> я <b>извиква</b>. JavaScript следва стрелката от f2 до функцията и започва нова рамка с x = 5 (стойността на n2). Рамката се казва f(x) - това е името на функцията.`,
+          do: s => { s.bcol = 4; read(s, 'g.f2', 'g.n2'); frame(s, 'k1', 'f(x)', 5200); decl(s, 'k1.x', 'параметър'); set(s, 'k1.x', '5'); ev(s, 'x * 2', '10'); },
+          fly: [['v:g.f2', 'h:5200', '5200'], ['v:g.n2', 'v:k1.x', '5']], chain: true, reveal: ['res'] },
+        { line: 11, text: `Функцията връща 10, рамката ѝ се маха и console.log отпечатва 10. Функцията с <code>()</code> след нея дава своя <b>резултат</b> - тук число.`,
+          do: s => { popf(s); ev(s, 'f2(n2)', '10'); log(s, '10'); mark(s, 2, 4); },
+          fly: [['res', 'con', '10']] },
+        { line: 12, text: `А <code>n2()</code>? В n2 е числото 5. Може ли число да се извика? Помислете, преди да продължите.`,
+          do: s => { s.bcol = 4; ev(s, 'n2'); } },
+        { line: 12, text: `Не: <b>TypeError: n2 is not a function</b>. <code>()</code> работи само с функция. <code>a2()</code> би дало същата грешка - и масив не може да се извика.`,
+          do: s => { read(s, 'g.n2'); s.hl['g.n2'] = 'error'; s.err = true; ev(s, 'n2', '5'); log(s, 'Uncaught TypeError: n2 is not a function', true); code(s, 12, 'n2();                  // TypeError'); mark(s, 0, 4, 'n'); mark(s, 1, 4, 'n'); },
+          reveal: ['res', 'con'] },
+        { line: -1, text: `<b>Обобщение:</b> функцията е стойност като <code>5</code> и <code>[1, 2, 3]</code>: можем да я пазим в променлива или в масив, да я подаваме като аргумент и да я връщаме. Пази се и се копира <b>като масива</b> - като референция. Единственото допълнително: <code>()</code> я извиква. Това означава "first-class functions".`,
+          do: noev },
+    ],
+},
 {
     tab: 'Функцията е стойност',
     code: [
@@ -717,7 +821,7 @@ const SCENARIOS = [
         '})();',
     ],
     steps: [
-        { line: -1, text: `Функцията може да <b>върне</b> (return) друга функция - нали е стойност. Ще разгледаме <code>foo()()</code> от слайдовете и <b>IIFE</b> - функция, която се извиква веднага, щом бъде създадена.` },
+        { line: -1, text: `Функцията може да <b>върне</b> (return) друга функция - нали е стойност. Ще разгледаме <code>foo()()</code> и <b>IIFE</b> - функция, която се извиква веднага, щом бъде създадена.` },
         { line: [0, 4], text: `Декларацията създава обект-функция foo (5000) и променлива foo с референция към него.`,
           do: s => {
               hfn(s, 5000, C0, .4, ['function foo() {', '  return function () {', "    console.log(`I'm the returned function`);", '  };', '}'], 'foo');
@@ -869,47 +973,6 @@ const SCENARIOS = [
           do: noev },
     ],
 },
-{
-    tab: "Забравена ';'",
-    advanced: true,
-    code: [
-        'let x, y;',
-        'let foo = function () {',
-        '    console.log(`Foo`);',
-        "}   // you must have ';' here",
-        '[x, y] = [1, 2];',
-        'console.log(x, y);   // ?',
-        'foo();',
-    ],
-    steps: [
-        { line: -1, text: `<b>За напреднали.</b> Слайдовете предупреждават: ако забравим <code>;</code> след function израз, в x и y ще има undefined вместо 1 и 2. Нека видим какво <b>всъщност</b> прави JavaScript с този код.` },
-        { line: [1, 4], text: `JavaScript слага автоматично <code>;</code> в края на ред само ако следващият ред <b>не може</b> да продължи израза (ASI - Automatic Semicolon Insertion). Ред 5 започва с <code>[</code>, а <code>[</code> може да продължи израз (както в <code>arr[0]</code>). Затова двата реда се четат като <b>един</b> израз.`,
-          do: s => ev(s, 'let foo = function () {...}[x, y] = [1, 2];') },
-        { line: 0, text: `<code>let x, y;</code> - две променливи със стойност undefined.`,
-          do: s => { noev(s); decl(s, 'g.x'); set(s, 'g.x', 'undefined'); decl(s, 'g.y'); set(s, 'g.y', 'undefined'); decl(s, 'g.foo'); } },
-        { line: [1, 3], text: `Изчислява се function изразът: създава се обект-функция (5000). Тя все още <b>не</b> е записана във foo - изразът продължава.`,
-          do: s => { hfn(s, 5000, C0, .4, ['function () {', '  console.log(`Foo`);', '}']); ev(s, 'function () {...}', '5000', 5000); } },
-        { line: 4, text: `<code>[x, y]</code> след функцията означава <b>достъп до свойство</b> (като <code>obj["name"]</code>). В скобите <code>x, y</code> е <b>операторът запетая</b>: връща последната стойност - y, т.е. undefined. Името на свойството става низът "undefined".`,
-          do: s => { read(s, 'g.x', 'g.y'); ev(s, 'function () {...}[x, y]', 'свойство "undefined"'); },
-          fly: [['v:g.x', 'ev', 'undefined'], ['v:g.y', 'ev', 'undefined']] },
-        { line: 4, text: `<code>= [1, 2]</code> - създава се масивът [1, 2] и се <span class="w">записва</span> в свойството "undefined" на <b>функцията</b> (функциите са обекти и могат да имат свойства). x и y изобщо не се променят!`,
-          do: s => { harr(s, 5100, 19, 8, ['1', '2']); hput(s, 5000, 'undefined', 5100); ev(s, '[1, 2]', '5100', 5100); },
-          fly: [['h:5100', 'h:5000.undefined', '5100']] },
-        { line: [1, 4], text: `Присвояването също е израз и стойността му е присвоената стойност - масивът. Именно тя се <span class="w">записва</span> във foo! Към функцията (5000) не сочи никоя променлива - тя е недостъпна.`,
-          do: s => { set(s, 'g.foo', 5100); garbage(s, 5000); },
-          fly: [['res', 'v:g.foo', '5100']] },
-        { line: 5, text: `Какво ще отпечата <code>console.log(x, y)</code>? А какво ще стане на ред 7? Помислете, преди да продължите.`,
-          do: noev },
-        { line: 5, text: `Отпечатва се <b>undefined undefined</b> - точно както казват слайдовете. x и y не са получили 1 и 2.`,
-          do: s => { read(s, 'g.x', 'g.y'); log(s, 'undefined undefined'); code(s, 5, 'console.log(x, y);   // undefined undefined'); },
-          fly: [['v:g.x', 'con', 'undefined'], ['v:g.y', 'con', 'undefined']] },
-        { line: 6, text: `А във foo има масив, не функция: <b>TypeError: foo is not a function</b>. Значи бъгът е по-голям, отколкото изглежда - развалена е и самата функция.`,
-          do: s => { read(s, 'g.foo'); s.hl['g.foo'] = 'error'; hread(s, 5100); s.err = true; ev(s, 'foo', '5100 (масив)', 5100); log(s, 'Uncaught TypeError: foo is not a function', true); },
-          reveal: ['con'] },
-        { line: -1, text: `<b>Решение:</b> слагайте <code>;</code> след всяка команда, особено след function израз: <code>let foo = function () {...};</code>. Тогава <code>[x, y] = [1, 2];</code> е отделна команда - деструктуриращо присвояване (destructuring) - и x = 1, y = 2. Най-опасни са редовете, които започват с <code>[</code> или <code>(</code>.`,
-          do: noev },
-    ],
-},
 ];
 
 // ---------------------------------------------------------------------------
@@ -920,10 +983,11 @@ function computeStates(sc) {
         line: -1, wait: [], code: sc.code.slice(),
         frames: [{ id: 'g', title: 'global', fn: null, vars: [] }],
         heap: {}, eval: null, console: [], hl: {}, hhl: {}, err: false,
+        board: sc.board ? [0, 1, 2].map(() => BOARD_COLS.map(() => '')) : null, bcol: -1,
     };
     return sc.steps.map(step => {
         s = JSON.parse(JSON.stringify(s));
-        s.hl = {}; s.hhl = {}; s.err = false;
+        s.hl = {}; s.hhl = {}; s.err = false; s.bcol = -1;
         s.line = step.line;
         s.wait = step.wait || [];
         if (step.do) step.do(s);
@@ -1099,6 +1163,36 @@ function renderConsole(s) {
     box.scrollTop = box.scrollHeight;
 }
 
+const BOARD_COLS = ['в променлива', 'в масив', 'като аргумент', 'като резултат', 'извикване: ( )'];
+const BOARD_ROWS = ['5', '[1, 2, 3]', 'function'];
+const ICON_YES = '<svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>';
+const ICON_NO = '<svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
+
+function renderBoard(s, prev, step) {
+    const panel = $('#boardPanel');
+    panel.hidden = !s.board;
+    if (!s.board) return;
+    // a new answer appears when the flying values have landed
+    const n = prev && step.fly ? step.fly.length : 0;
+    const delay = n ? FLY_MS + (n - 1) * (step.chain ? FLY_MS : STAGGER) : 0;
+    let html = '<span></span>' + BOARD_COLS.map((c, j) =>
+        `<span class="bh${s.bcol === j ? ' cur' : ''}">${esc(c)}</span>`).join('');
+    s.board.forEach((row, i) => {
+        html += `<code class="brow${i === 2 ? ' fn' : ''}">${esc(BOARD_ROWS[i])}</code>`;
+        row.forEach((v, j) => {
+            const cls = ['bc'];
+            if (v === 'y') cls.push('yes');
+            if (v === 'n') cls.push('no');
+            if (s.bcol === j) cls.push('cur');
+            const fresh = prev && prev.board[i][j] !== v;
+            if (fresh) cls.push('fresh');
+            const body = v === 'y' ? ICON_YES + 'да' : v === 'n' ? ICON_NO + 'не' : '';
+            html += `<span class="${cls.join(' ')}"${fresh && delay ? ` style="animation-delay:${delay}ms"` : ''}>${body}</span>`;
+        });
+    });
+    $('#board').innerHTML = html;
+}
+
 function renderLegend(sc) {
     $('#legend').innerHTML = [
         '<span><i class="sw var"></i>променлива / параметър</span>',
@@ -1252,6 +1346,7 @@ function render(animate) {
 
     renderCode(s, prev);
     renderStack(s, prev, step);
+    renderBoard(s, prev, step);
     renderHeap(s, prev);
     renderEval(s);
     renderConsole(s);
@@ -1272,6 +1367,8 @@ function render(animate) {
     drawArrows(s, step, !!prev);
     requestAnimationFrame(() => {
         if (tk !== token) return;
+        // the footer may have changed the height of the console: show its last line
+        $('#console').scrollTop = $('#console').scrollHeight;
         drawArrows(s, step, !!prev);
         if (prev) playFlights(step, tk);
     });

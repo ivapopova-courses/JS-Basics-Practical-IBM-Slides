@@ -163,14 +163,15 @@ why a `var` is `undefined` before its line, and what the TDZ of `let` / `const` 
 [7. TDZ: time, not place (advanced)](animations/hoisting.html#7){target="_blank"}
 
 **[Functions are values](animations/functionsAsValues.html){target="_blank"}** -
-functions in variables, arrays and objects; callbacks; arrow functions; closures.
-[1. A function is a value](animations/functionsAsValues.html#1){target="_blank"},
-[2. In arrays and objects](animations/functionsAsValues.html#2){target="_blank"},
-[3. Callbacks](animations/functionsAsValues.html#3){target="_blank"},
-[4. A function returns a function](animations/functionsAsValues.html#4){target="_blank"},
-[5. Arrow functions](animations/functionsAsValues.html#5){target="_blank"},
-[6. Closure (advanced)](animations/functionsAsValues.html#6){target="_blank"},
-[7. A forgotten `;` (advanced)](animations/functionsAsValues.html#7){target="_blank"}
+a function side by side with a number and an array; functions in variables, arrays
+and objects; callbacks; arrow functions; closures.
+[1. Like `5` and `[1, 2, 3]`](animations/functionsAsValues.html#1){target="_blank"},
+[2. A function is a value](animations/functionsAsValues.html#2){target="_blank"},
+[3. In arrays and objects](animations/functionsAsValues.html#3){target="_blank"},
+[4. Callbacks](animations/functionsAsValues.html#4){target="_blank"},
+[5. A function returns a function](animations/functionsAsValues.html#5){target="_blank"},
+[6. Arrow functions](animations/functionsAsValues.html#6){target="_blank"},
+[7. Closure (advanced)](animations/functionsAsValues.html#7){target="_blank"}
 
 **[Functions and data](animations/functionsAndData.html){target="_blank"}** -
 what a function gets: a copy of a number or a string, a reference to an array or
