@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 290" width="920" height="290" role="img">
+<title>The terminal: the prompt and a command</title>
+<defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b616b"/></marker></defs>
+<rect x="10" y="80" width="900" height="160" rx="8" fill="#f3f1ec" stroke="#8c8578" stroke-width="2"/>
+<text x="24" y="120" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#7b48c4" textLength="27.6" lengthAdjust="spacingAndGlyphs" xml:space="preserve">PS </text>
+<text x="51.599999999999994" y="120" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#3b6fc4" textLength="368.0" lengthAdjust="spacingAndGlyphs" xml:space="preserve">C:\Users\you\JS_Basics_Course\playground</text>
+<text x="419.6" y="120" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#1f2328" textLength="18.4" lengthAdjust="spacingAndGlyphs" xml:space="preserve">&gt; </text>
+<text x="438.0" y="120" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="700" fill="#1f2328" textLength="119.6" lengthAdjust="spacingAndGlyphs" xml:space="preserve">node hello.js</text>
+<text x="24" y="148" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#5b616b" textLength="174.8" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Hello from Node.js!</text>
+<text x="24" y="170" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#5b616b" textLength="73.6" lengthAdjust="spacingAndGlyphs" xml:space="preserve">v24.11.0</text>
+<text x="24" y="212" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#1f2328" textLength="414.0" lengthAdjust="spacingAndGlyphs" xml:space="preserve">PS C:\Users\you\JS_Basics_Course\playground&gt; </text>
+<rect x="440.0" y="198" width="9" height="18" fill="#1f2328"/>
+<path d="M25.0,104 L25.0,98 L43.6,98 L43.6,104" fill="none" stroke="#5b616b" stroke-width="1.6"/>
+<path d="M34.3,98 L34.3,52" fill="none" stroke="#5b616b" stroke-width="1.6" stroke-dasharray="3 3"/>
+<text x="25" y="22" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">PS: PowerShell</text>
+<text x="25" y="41" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">(cmd: no PS)</text>
+<path d="M52.6,104 L52.6,98 L418.6,98 L418.6,104" fill="none" stroke="#5b616b" stroke-width="1.6"/>
+<path d="M235.6,98 L235.6,52" fill="none" stroke="#5b616b" stroke-width="1.6" stroke-dasharray="3 3"/>
+<text x="235.60000000000002" y="22" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">the current folder:</text>
+<text x="235.60000000000002" y="41" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">the commands work here</text>
+<path d="M439.0,104 L439.0,98 L556.6,98 L556.6,104" fill="none" stroke="#5b616b" stroke-width="1.6"/>
+<path d="M497.8,98 L497.8,52" fill="none" stroke="#5b616b" stroke-width="1.6" stroke-dasharray="3 3"/>
+<text x="556.6" y="22" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="end" xml:space="preserve">your command;</text>
+<text x="556.6" y="41" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="end" xml:space="preserve">Enter runs it</text>
+<path d="M214.0,155 L263.2,155" fill="none" stroke="#5b616b" stroke-width="1.6"/>
+<text x="271.2" y="160" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">what the program prints</text>
+<path d="M444.99999999999994,262 L444.99999999999994,222" fill="none" stroke="#5b616b" stroke-width="2.2" marker-end="url(#head)"/>
+<text x="433.99999999999994" y="278" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="end" xml:space="preserve">the prompt again: ready for the next command</text>
+</svg>

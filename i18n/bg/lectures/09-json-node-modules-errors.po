@@ -101,7 +101,7 @@ msgstr "1. JSON: форматът"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:81
 msgid "MDN: [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)"
-msgstr ""
+msgstr "MDN: [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:83
@@ -291,7 +291,7 @@ msgstr "2. `JSON.parse` и `JSON.stringify`"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:163
 msgid "MDN: [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)"
-msgstr ""
+msgstr "MDN: [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:165
@@ -396,7 +396,7 @@ msgstr "`process`: работещата програма"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:309
 msgid "Node.js: [process](https://nodejs.org/api/process.html)"
-msgstr ""
+msgstr "Node.js: [process](https://nodejs.org/api/process.html)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:326
@@ -421,7 +421,7 @@ msgstr "Обектът `console`"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:343
 msgid "MDN: [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
-msgstr ""
+msgstr "MDN: [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:345
@@ -456,7 +456,7 @@ msgstr "4. Файлове: `fs` и `path`"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:399
 msgid "Node.js: [File system](https://nodejs.org/api/fs.html), [Path](https://nodejs.org/api/path.html)"
-msgstr ""
+msgstr "Node.js: [File system](https://nodejs.org/api/fs.html), [Path](https://nodejs.org/api/path.html)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:401
@@ -669,7 +669,7 @@ msgid "Import"
 msgstr "Import"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:563 site/lectures/09-json-node-modules-errors.md:1483
+#: site/lectures/09-json-node-modules-errors.md:563 site/lectures/09-json-node-modules-errors.md:1484
 msgid "Files"
 msgstr "Файлове"
 
@@ -706,7 +706,7 @@ msgstr "CommonJS: `module.exports` и `require`"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:568
 msgid "Node.js: [Modules: CommonJS modules](https://nodejs.org/api/modules.html)"
-msgstr ""
+msgstr "Node.js: [Modules: CommonJS modules](https://nodejs.org/api/modules.html)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:570
@@ -751,7 +751,7 @@ msgstr "ES modules: `export` и `import`"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:618
 msgid "MDN: [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export), [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)"
-msgstr ""
+msgstr "MDN: [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export), [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:620
@@ -846,7 +846,7 @@ msgstr "Видовете грешки"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:706
 msgid "MDN: [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)"
-msgstr ""
+msgstr "MDN: [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error)"
 
 #. table cell
 #: site/lectures/09-json-node-modules-errors.md:708
@@ -911,7 +911,7 @@ msgstr "В правилата почти всяка грешка е `TypeError` 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:739
 msgid "MDN: [try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)"
-msgstr ""
+msgstr "MDN: [try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:749
@@ -941,7 +941,7 @@ msgstr "`throw`: хвърлете собствена грешка"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:814
 msgid "MDN: [throw](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw)"
-msgstr ""
+msgstr "MDN: [throw](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:816
@@ -1116,7 +1116,7 @@ msgstr "Event loop"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1072
 msgid "MDN: [JavaScript execution model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model)"
-msgstr ""
+msgstr "MDN: [JavaScript execution model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1074
@@ -1136,7 +1136,7 @@ msgstr "От callbacks към promises"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1086
 msgid "MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)"
-msgstr ""
+msgstr "MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1088
@@ -1156,7 +1156,7 @@ msgstr "`async` и `await`"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1141
 msgid "MDN: [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)"
-msgstr ""
+msgstr "MDN: [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1143
@@ -1191,7 +1191,7 @@ msgstr "9. `fetch`: JSON от уеб API"
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1189
 msgid "MDN: [Window: fetch() method](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)"
-msgstr ""
+msgstr "MDN: [Window: fetch() method](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)"
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1191
@@ -1400,248 +1400,251 @@ msgstr "Във вашето копие на Homework repository първо из�
 
 #. paragraph
 #: site/lectures/09-json-node-modules-errors.md:1463
-msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
-msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
+msgid "Each file is split into parts. A part has its description, then the `your code` lines - write your code between them - and right after them its checks, which print `OK` or `FAIL`."
+msgstr "Всеки файл е разделен на части. Всяка част има описание, след него редовете `your code` - пишете кода си между тях - и веднага след тях нейните проверки, които отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1466
+#: site/lectures/09-json-node-modules-errors.md:1467
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1466
+#: site/lectures/09-json-node-modules-errors.md:1467
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1466
+#: site/lectures/09-json-node-modules-errors.md:1467
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1468
+#: site/lectures/09-json-node-modules-errors.md:1469
 msgid "Predict 20 results: `JSON.stringify` and `JSON.parse`, the error types, `try` / `finally`"
 msgstr "Предвидете 20 резултата: `JSON.stringify` и `JSON.parse`, видовете грешки, `try` / `finally`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1469
+#: site/lectures/09-json-node-modules-errors.md:1470
 msgid "Parse safely (with the file name in the error), remove a BOM, stringify with fixed keys and indentation, compare without key order, mask values"
 msgstr "Безопасно разчитане (с името на файла в грешката), махане на BOM, stringify с фиксирани ключове и отстъпи, сравняване без значение от реда на ключовете, маскиране на стойности"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1470
+#: site/lectures/09-json-node-modules-errors.md:1471
 msgid "Turn your helpers into a CommonJS module; `task3-module.js` loads it with `require` and checks it"
 msgstr "Превърнете helper функциите си в CommonJS модул; `task3-module.js` го зарежда с `require` и го проверява"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1471
+#: site/lectures/09-json-node-modules-errors.md:1472
 msgid "The old tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), a `ReportError` class, `requireField`, the type of an error"
 msgstr "Старите задачи (`calculateArea`, `retryOperation`, `checkUserPermission`), клас `ReportError`, `requireField`, видът на една грешка"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1472
+#: site/lectures/09-json-node-modules-errors.md:1473
 msgid "The local rule runner: read the reports of a folder, load a rule with a fake `emit`, collect alerts and errors"
 msgstr "Локалният runner за правила: прочитане на отчетите от папка, зареждане на правило с фалшив `emit`, събиране на alerts и грешки"
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1474
+#: site/lectures/09-json-node-modules-errors.md:1475
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1476
+#: site/lectures/09-json-node-modules-errors.md:1477
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1476
+#: site/lectures/09-json-node-modules-errors.md:1477
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1478
+#: site/lectures/09-json-node-modules-errors.md:1479
 msgid "JSON"
 msgstr "JSON"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1478
+#: site/lectures/09-json-node-modules-errors.md:1479
 msgid "Text; double quotes; no trailing comma, comments, `undefined`, `NaN`; six types; `null` = \"known to be empty\""
 msgstr "Текст; двойни кавички; без запетая накрая, коментари, `undefined`, `NaN`; шест типа; `null` = \"известно е, че е празно\""
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1479
+#: site/lectures/09-json-node-modules-errors.md:1480
 msgid "Text -> values; throws `SyntaxError` - parse in a `try` and say which file failed; a reviver for dates"
 msgstr "Текст -> стойности; хвърля `SyntaxError` - разчитайте в `try` и казвайте кой файл е сгрешен; reviver за дати"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1480
+#: site/lectures/09-json-node-modules-errors.md:1481
 msgid "Values -> text; `(value, null, 2)` for people; a replacer chooses or masks keys; drops `undefined` and functions"
 msgstr "Стойности -> текст; `(value, null, 2)` за хора; replacer избира или маскира ключове; маха `undefined` и функциите"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1481
+#: site/lectures/09-json-node-modules-errors.md:1482
 msgid "Node.js"
 msgstr "Node.js"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1481
+#: site/lectures/09-json-node-modules-errors.md:1482
 msgid "`node file.js`; `process.argv`, `process.env`, `process.exitCode`; `__dirname` vs `process.cwd()`"
 msgstr "`node file.js`; `process.argv`, `process.env`, `process.exitCode`; `__dirname` срещу `process.cwd()`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1482
+#: site/lectures/09-json-node-modules-errors.md:1483
 msgid "`log`, `warn`, `error` (stderr), `table`, `dir` with `{ depth: null }`, `group`, `count`, `time`, `assert`"
 msgstr "`log`, `warn`, `error` (stderr), `table`, `dir` с `{ depth: null }`, `group`, `count`, `time`, `assert`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1483
+#: site/lectures/09-json-node-modules-errors.md:1484
 msgid "`fs.readFileSync(f, \"utf8\")`, `writeFileSync`, `readdirSync`; paths with `path.join`"
 msgstr "`fs.readFileSync(f, \"utf8\")`, `writeFileSync`, `readdirSync`; пътища с `path.join`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1484
+#: site/lectures/09-json-node-modules-errors.md:1485
 msgid "npm"
 msgstr "npm"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1484
+#: site/lectures/09-json-node-modules-errors.md:1485
 msgid "`npm init -y`; `package.json` scripts and dependencies; `node_modules/` not in Git; `package-lock.json` in Git; `npx`"
 msgstr "`npm init -y`; scripts и зависимости в `package.json`; `node_modules/` не е в Git; `package-lock.json` е в Git; `npx`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1485
+#: site/lectures/09-json-node-modules-errors.md:1486
 msgid "CommonJS"
 msgstr "CommonJS"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1485
+#: site/lectures/09-json-node-modules-errors.md:1486
 msgid "`module.exports = { ... }`; `require(\"./file.js\")`; runs once, cached; the course library uses it"
 msgstr "`module.exports = { ... }`; `require(\"./file.js\")`; изпълнява се веднъж, кешира се; курсовата библиотека го използва"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1486
+#: site/lectures/09-json-node-modules-errors.md:1487
 msgid "ES modules"
 msgstr "ES modules"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1486
+#: site/lectures/09-json-node-modules-errors.md:1487
 msgid "`export` / `export default`, `import { a } from \"./file.mjs\"`; `.mjs` or `\"type\": \"module\"`"
 msgstr "`export` / `export default`, `import { a } from \"./file.mjs\"`; `.mjs` или `\"type\": \"module\"`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1487
+#: site/lectures/09-json-node-modules-errors.md:1488
 msgid "Errors"
 msgstr "Грешки"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1487
+#: site/lectures/09-json-node-modules-errors.md:1488
 msgid "`Error` objects: `name`, `message`, `stack`, `cause`; `TypeError`, `ReferenceError`, `SyntaxError`, `RangeError`"
 msgstr "Обекти `Error`: `name`, `message`, `stack`, `cause`; `TypeError`, `ReferenceError`, `SyntaxError`, `RangeError`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1488
+#: site/lectures/09-json-node-modules-errors.md:1489
 msgid "`catch` for errors you can handle; `finally` always runs; check the type and rethrow the rest"
 msgstr "`catch` за грешки, които можете да обработите; `finally` винаги се изпълнява; проверете вида и хвърлете останалите нататък"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1489
+#: site/lectures/09-json-node-modules-errors.md:1490
 msgid "Throw `Error` objects, never strings; custom classes with `extends Error`"
 msgstr "Хвърляйте обекти `Error`, никога strings; собствени класове с `extends Error`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1490
+#: site/lectures/09-json-node-modules-errors.md:1491
 msgid "Catch-all"
 msgstr "Catch-all"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1490
+#: site/lectures/09-json-node-modules-errors.md:1491
 msgid "`catch (err) { return; }` hides bugs and misses alerts - guard clauses instead"
 msgstr "`catch (err) { return; }` крие бъгове и пропуска alerts - вместо това guard clauses"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1491
+#: site/lectures/09-json-node-modules-errors.md:1492
 msgid "Async"
 msgstr "Async"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1491
+#: site/lectures/09-json-node-modules-errors.md:1492
 msgid "Promises: pending -> fulfilled / rejected; `.then` / `.catch`; `async` functions and `await`; `Promise.all`"
 msgstr "Promises: pending -> fulfilled / rejected; `.then` / `.catch`; `async` функции и `await`; `Promise.all`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1492
+#: site/lectures/09-json-node-modules-errors.md:1493
 msgid "`await fetch(url)`, check `response.ok`, `await response.json()`"
 msgstr "`await fetch(url)`, проверете `response.ok`, `await response.json()`"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1493
+#: site/lectures/09-json-node-modules-errors.md:1494
 msgid "Local runs"
 msgstr "Локално изпълнение"
 
 #. table cell
-#: site/lectures/09-json-node-modules-errors.md:1493
+#: site/lectures/09-json-node-modules-errors.md:1494
 msgid "Load the rule unchanged with a fake `emit` and `require`; run it on a folder; print every error"
 msgstr "Заредете правилото без промени с фалшиви `emit` и `require`; изпълнете го върху папка; отпечатвайте всяка грешка"
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1495
+#: site/lectures/09-json-node-modules-errors.md:1496
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1497
+#: site/lectures/09-json-node-modules-errors.md:1498
 msgid "`09-json-node-modules-errors/homework.js` (in the homework repository): load all reports of a folder with `fs/promises` and `Promise.all`, a `fetchJson` that checks the status (tested with a fake `fetch`), and a summary of the runner's alerts and errors."
 msgstr "`09-json-node-modules-errors/homework.js` (в homework repository): зареждане на всички отчети от папка с `fs/promises` и `Promise.all`, `fetchJson`, който проверява статуса (тестван с фалшив `fetch`), и обобщение на alerts и грешките от runner-а."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1501
+#: site/lectures/09-json-node-modules-errors.md:1502
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1503
+#: site/lectures/09-json-node-modules-errors.md:1504
 msgid "**Course project:** make `library.js` a clean CommonJS module, add `run-rule.js` (practice task 5) to your repository, and run one of your real rules (with an anonymised sample) locally. Add `package.json` with a script `\"run-rule\"`."
 msgstr "**Курсов проект:** направете `library.js` чист CommonJS модул, добавете `run-rule.js` (задача 5 за упражнение) в repository-то си и изпълнете локално едно от истинските си правила (с анонимизиран примерен документ). Добавете `package.json` със script `\"run-rule\"`."
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1506
+#: site/lectures/09-json-node-modules-errors.md:1507
 msgid "Optional: find a rule of yours with a catch-all `try`. Which errors could it hide? Rewrite it with guard clauses and run both versions on your samples."
 msgstr "По желание: намерете ваше правило с `try`, който хваща всичко. Какви грешки би могъл да скрие? Пренапишете го с guard clauses и изпълнете двете версии върху примерните си документи."
 
 #. heading 2
-#: site/lectures/09-json-node-modules-errors.md:1509
+#: site/lectures/09-json-node-modules-errors.md:1510
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1511
+#: site/lectures/09-json-node-modules-errors.md:1512
 msgid "MDN: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify), [Control flow and error handling](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling), [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises), [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
 msgstr "MDN: [Working with JSON](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/JSON), [JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse), [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify), [Control flow and error handling](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling), [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error), [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises), [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch), [console](https://developer.mozilla.org/en-US/docs/Web/API/console)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1521
+#: site/lectures/09-json-node-modules-errors.md:1522
 msgid "Node.js: [Introduction to Node.js](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs), [Reading files](https://nodejs.org/en/learn/manipulating-files/reading-files-with-nodejs), [Modules: CommonJS](https://nodejs.org/api/modules.html), [Modules: ECMAScript modules](https://nodejs.org/api/esm.html), [An introduction to the npm package manager](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager), [The Node.js event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)"
 msgstr "Node.js: [Introduction to Node.js](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs), [Reading files](https://nodejs.org/en/learn/manipulating-files/reading-files-with-nodejs), [Modules: CommonJS](https://nodejs.org/api/modules.html), [Modules: ECMAScript modules](https://nodejs.org/api/esm.html), [An introduction to the npm package manager](https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager), [The Node.js event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1527
+#: site/lectures/09-json-node-modules-errors.md:1528
 msgid "javascript.info: [JSON methods](https://javascript.info/json), [Error handling](https://javascript.info/error-handling), [Modules](https://javascript.info/modules-intro), [Promises, async/await](https://javascript.info/async)"
 msgstr "javascript.info: [JSON methods](https://javascript.info/json), [Error handling](https://javascript.info/error-handling), [Modules](https://javascript.info/modules-intro), [Promises, async/await](https://javascript.info/async)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1531
+#: site/lectures/09-json-node-modules-errors.md:1532
 msgid "Tools: [JSONLint](https://jsonlint.com/), [JavaScript Visualizer 9000](https://www.jsv9000.app/)"
 msgstr "Инструменти: [JSONLint](https://jsonlint.com/), [JavaScript Visualizer 9000](https://www.jsv9000.app/)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1532
+#: site/lectures/09-json-node-modules-errors.md:1533
 msgid "Video: [Everything You Need to Know About Node.js Event Loop](https://www.youtube.com/watch?v=PNa9OMajw9w) (Bert Belder)"
 msgstr "Видео: [Everything You Need to Know About Node.js Event Loop](https://www.youtube.com/watch?v=PNa9OMajw9w) (Bert Belder)"
 
 #. paragraph
-#: site/lectures/09-json-node-modules-errors.md:1534
+#: site/lectures/09-json-node-modules-errors.md:1535
 msgid "**Next session:** tests with `node:test`, JSDoc types and `// @ts-check`, a linter, the Git workflow with branches and pull requests - and the review of your course project."
 msgstr "**Следващото занятие:** тестове с `node:test`, JSDoc типове и `// @ts-check`, linter, работа с Git с branches и pull requests - и прегледът на вашия курсов проект."
+
+#~ msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
+#~ msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
 
 #~ msgid "Finish the five practice tasks - every check must print `OK`."
 #~ msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

@@ -111,7 +111,7 @@ msgstr "1. Какво е обект?"
 #. paragraph
 #: site/lectures/06-objects.md:94
 msgid "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects)"
-msgstr ""
+msgstr "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects)"
 
 #. paragraph
 #: site/lectures/06-objects.md:96
@@ -139,7 +139,7 @@ msgid "Array"
 msgstr "Array"
 
 #. table cell
-#: site/lectures/06-objects.md:139 site/lectures/06-objects.md:1606
+#: site/lectures/06-objects.md:139 site/lectures/06-objects.md:1610
 msgid "Object"
 msgstr "Обект"
 
@@ -231,7 +231,7 @@ msgstr "Обектният литерал - предпочитаният нач�
 #. paragraph
 #: site/lectures/06-objects.md:171
 msgid "MDN: [Object initializer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)"
-msgstr ""
+msgstr "MDN: [Object initializer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)"
 
 #. paragraph
 #: site/lectures/06-objects.md:173
@@ -301,7 +301,7 @@ msgstr "3. Четене и запис на properties"
 #. paragraph
 #: site/lectures/06-objects.md:263
 msgid "MDN: [Property accessors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors)"
-msgstr ""
+msgstr "MDN: [Property accessors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors)"
 
 #. heading 3
 #: site/lectures/06-objects.md:265
@@ -346,7 +346,7 @@ msgstr "Липсващ ключ, добавяне, изтриване"
 #. paragraph
 #: site/lectures/06-objects.md:332
 msgid "MDN: [delete](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete)"
-msgstr ""
+msgstr "MDN: [delete](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete)"
 
 #. paragraph
 #: site/lectures/06-objects.md:334
@@ -376,7 +376,7 @@ msgstr "Съществува ли ключът?"
 #. paragraph
 #: site/lectures/06-objects.md:356
 msgid "MDN: [Object.hasOwn()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn), [in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in)"
-msgstr ""
+msgstr "MDN: [Object.hasOwn()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn), [in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in)"
 
 #. paragraph
 #: site/lectures/06-objects.md:358
@@ -476,7 +476,7 @@ msgstr "Optional chaining `?.` и `??` (ES2020)"
 #. paragraph
 #: site/lectures/06-objects.md:438
 msgid "MDN: [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)"
-msgstr ""
+msgstr "MDN: [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)"
 
 #. paragraph
 #: site/lectures/06-objects.md:440
@@ -571,7 +571,7 @@ msgstr "6. Обектите като dictionaries"
 #. paragraph
 #: site/lectures/06-objects.md:559
 msgid "MDN: [Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), [Object.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)"
-msgstr ""
+msgstr "MDN: [Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), [Object.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)"
 
 #. paragraph
 #: site/lectures/06-objects.md:561
@@ -646,7 +646,7 @@ msgstr "По-старият цикъл: `for...in`"
 #. paragraph
 #: site/lectures/06-objects.md:620
 msgid "MDN: [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in)"
-msgstr ""
+msgstr "MDN: [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in)"
 
 #. paragraph
 #: site/lectures/06-objects.md:622
@@ -681,7 +681,7 @@ msgstr "От двойки обратно към обект (ES2019)"
 #. paragraph
 #: site/lectures/06-objects.md:668
 msgid "MDN: [Object.fromEntries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries)"
-msgstr ""
+msgstr "MDN: [Object.fromEntries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries)"
 
 #. paragraph
 #: site/lectures/06-objects.md:670
@@ -851,7 +851,7 @@ msgstr "Три вида \"копие\""
 #. paragraph
 #: site/lectures/06-objects.md:827
 msgid "MDN: [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)"
-msgstr ""
+msgstr "MDN: [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)"
 
 #. table cell
 #: site/lectures/06-objects.md:829
@@ -941,7 +941,7 @@ msgstr "9. Spread, rest и destructuring"
 #. paragraph
 #: site/lectures/06-objects.md:890
 msgid "MDN: [Spread syntax (...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring)"
-msgstr ""
+msgstr "MDN: [Spread syntax (...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring)"
 
 #. paragraph
 #: site/lectures/06-objects.md:892
@@ -1051,7 +1051,7 @@ msgstr "`this` се решава от извикването"
 #. paragraph
 #: site/lectures/06-objects.md:1081
 msgid "MDN: [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)"
-msgstr ""
+msgstr "MDN: [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)"
 
 #. paragraph
 #: site/lectures/06-objects.md:1083
@@ -1141,7 +1141,7 @@ msgstr "Синтаксисът class (ES6)"
 #. paragraph
 #: site/lectures/06-objects.md:1244
 msgid "MDN: [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
-msgstr ""
+msgstr "MDN: [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 
 #. paragraph
 #: site/lectures/06-objects.md:1246
@@ -1343,248 +1343,253 @@ msgstr "Във вашето копие на Homework repository първо вз�
 msgid "`data/sample-asset.json` has two new parts (`inventory.modules`, `inventory.labels`) - the pull brings them too."
 msgstr "`data/sample-asset.json` има две нови части (`inventory.modules`, `inventory.labels`) - pull-ът ги донася също."
 
-#. table cell
+#. paragraph
 #: site/lectures/06-objects.md:1594
+msgid "Each file is split into parts. A part has its description, then the `your code` lines - write your code between them - and right after them its checks, which print `OK` or `FAIL`."
+msgstr "Всеки файл е разделен на части. Всяка част има описание, след него редовете `your code` - пишете кода си между тях - и веднага след тях нейните проверки, които отпечатват `OK` или `FAIL`."
+
+#. table cell
+#: site/lectures/06-objects.md:1598
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/06-objects.md:1594
+#: site/lectures/06-objects.md:1598
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/06-objects.md:1594
+#: site/lectures/06-objects.md:1598
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/06-objects.md:1596
+#: site/lectures/06-objects.md:1600
 msgid "Predict 20 results: dot and brackets, missing keys, `in`, `?.`, `??`, references, spread, destructuring"
 msgstr "Предсказвате 20 резултата: точка и скоби, липсващи ключове, `in`, `?.`, `??`, референции, spread, destructuring"
 
 #. table cell
-#: site/lectures/06-objects.md:1597
+#: site/lectures/06-objects.md:1601
 msgid "**The course project starts:** `get(obj, path, fallback)` with a string or an array path, and all the edge cases"
 msgstr "**Курсовият проект започва:** `get(obj, path, fallback)` с път като string или array, и всички гранични случаи"
 
 #. table cell
-#: site/lectures/06-objects.md:1598
+#: site/lectures/06-objects.md:1602
 msgid "The dictionaries of `report-dictionary.json`: keys, values, information in the keys, counting and grouping"
 msgstr "Dictionaries в `report-dictionary.json`: ключове, стойности, информация в ключовете, броене и групиране"
 
 #. table cell
-#: site/lectures/06-objects.md:1599
+#: site/lectures/06-objects.md:1603
 msgid "The flattened export `report-export.json`: read single values, rebuild records from parallel arrays, compare with the nested document"
 msgstr "Сплесканият експорт `report-export.json`: четене на единични стойности, възстановяване на записи от успоредни arrays, сравнение с вложения документ"
 
 #. table cell
-#: site/lectures/06-objects.md:1600
+#: site/lectures/06-objects.md:1604
 msgid "The old tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person"
 msgstr "Старите задачи: factory, class, `swap` с destructuring, `createPerson` със съкратени properties и метод, `combineArrays`, най-младият човек"
 
 #. heading 2
-#: site/lectures/06-objects.md:1602
+#: site/lectures/06-objects.md:1606
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/06-objects.md:1604
+#: site/lectures/06-objects.md:1608
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/06-objects.md:1604
+#: site/lectures/06-objects.md:1608
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/06-objects.md:1606
+#: site/lectures/06-objects.md:1610
 msgid "Properties `key: value`; keys are strings; values of any type; a method is a function value"
 msgstr "Properties `key: value`; ключовете са strings; стойности от всеки тип; методът е стойност-функция"
 
 #. table cell
-#: site/lectures/06-objects.md:1607
+#: site/lectures/06-objects.md:1611
 msgid "Literal"
 msgstr "Литерал"
 
 #. table cell
-#: site/lectures/06-objects.md:1607
+#: site/lectures/06-objects.md:1611
 msgid "`{ a: 1, \"b c\": 2, [expr]: 3, name }` - quotes for keys with spaces, dashes, dots; shorthand; computed keys"
 msgstr "`{ a: 1, \"b c\": 2, [expr]: 3, name }` - кавички за ключове с интервали, тирета, точки; съкратени properties; изчислявани ключове"
 
 #. table cell
-#: site/lectures/06-objects.md:1608
+#: site/lectures/06-objects.md:1612
 msgid "Access"
 msgstr "Достъп"
 
 #. table cell
-#: site/lectures/06-objects.md:1608
+#: site/lectures/06-objects.md:1612
 msgid "`obj.key` - written key; `obj[expr]` - calculated key; missing key -> `undefined`; writing creates; `delete` removes"
 msgstr "`obj.key` - написан ключ; `obj[expr]` - изчислен ключ; липсващ ключ -> `undefined`; записът създава; `delete` премахва"
 
 #. table cell
-#: site/lectures/06-objects.md:1609
+#: site/lectures/06-objects.md:1613
 msgid "Key exists?"
 msgstr "Има ли ключ?"
 
 #. table cell
-#: site/lectures/06-objects.md:1609
+#: site/lectures/06-objects.md:1613
 msgid "`in` (also inherited), `hasOwnProperty` (older), `Object.hasOwn` (ES2022); often better: check the value"
 msgstr "`in` (и наследените), `hasOwnProperty` (по-старо), `Object.hasOwn` (ES2022); често по-добре: проверете стойността"
 
 #. table cell
-#: site/lectures/06-objects.md:1610
+#: site/lectures/06-objects.md:1614
 msgid "Long paths"
 msgstr "Дълги пътища"
 
 #. table cell
-#: site/lectures/06-objects.md:1610
+#: site/lectures/06-objects.md:1614
 msgid "One dot at a time; a key of `undefined` is a `TypeError`; `?.` stops at `undefined` / `null`; `??` gives a fallback"
 msgstr "По една точка; ключ на `undefined` е `TypeError`; `?.` спира при `undefined` / `null`; `??` дава резервна стойност"
 
 #. table cell
-#: site/lectures/06-objects.md:1611
+#: site/lectures/06-objects.md:1615
 msgid "Walks a path from data; array path for keys with dots; fallback instead of errors"
 msgstr "Обхожда път от данните; път като array за ключове с точки; fallback вместо грешки"
 
 #. table cell
-#: site/lectures/06-objects.md:1612
+#: site/lectures/06-objects.md:1616
 msgid "Dictionary"
 msgstr "Dictionary"
 
 #. table cell
-#: site/lectures/06-objects.md:1612
+#: site/lectures/06-objects.md:1616
 msgid "Keys are ids; `Object.keys` / `values` / `entries`; `for...in` + `hasOwnProperty` in older code; information in the key"
 msgstr "Ключовете са id-та; `Object.keys` / `values` / `entries`; `for...in` + `hasOwnProperty` в по-стария код; информация в ключа"
 
 #. table cell
-#: site/lectures/06-objects.md:1613
+#: site/lectures/06-objects.md:1617
 msgid "Shapes"
 msgstr "Форми"
 
 #. table cell
-#: site/lectures/06-objects.md:1613
+#: site/lectures/06-objects.md:1617
 msgid "List of records, dictionary by id, flattened `\"a.b.c\": [values]` - convert once, at the start"
 msgstr "Списък от записи, dictionary по id, сплескано `\"a.b.c\": [values]` - преобразувайте веднъж, в началото"
 
 #. table cell
-#: site/lectures/06-objects.md:1614
+#: site/lectures/06-objects.md:1618
 msgid "Order of keys"
 msgstr "Ред на ключовете"
 
 #. table cell
-#: site/lectures/06-objects.md:1614
+#: site/lectures/06-objects.md:1618
 msgid "Integer-like keys first (sorted), then creation order - it is the column order of an alert"
 msgstr "Ключовете като цели числа първи (сортирани), после по реда на създаване - това е редът на колоните на alert"
 
 #. table cell
-#: site/lectures/06-objects.md:1615
+#: site/lectures/06-objects.md:1619
 msgid "Copies"
 msgstr "Копия"
 
 #. table cell
-#: site/lectures/06-objects.md:1615
+#: site/lectures/06-objects.md:1619
 msgid "`=` shares; `{ ...obj }` copies one level; `structuredClone` copies all levels; do not change `doc`"
 msgstr "`=` споделя; `{ ...obj }` копира едно ниво; `structuredClone` копира всички нива; не променяйте `doc`"
 
 #. table cell
-#: site/lectures/06-objects.md:1616
+#: site/lectures/06-objects.md:1620
 msgid "Spread pours out (calls, arrays, objects); rest collects (parameters, destructuring)"
 msgstr "Spread изсипва (извиквания, arrays, обекти); rest събира (параметри, destructuring)"
 
 #. table cell
-#: site/lectures/06-objects.md:1617
+#: site/lectures/06-objects.md:1621
 msgid "Destructuring"
 msgstr "Destructuring"
 
 #. table cell
-#: site/lectures/06-objects.md:1617
+#: site/lectures/06-objects.md:1621
 msgid "`const [a, b] = arr;` by position; `const { x, y: z = 0 } = obj;` by name; also in parameters"
 msgstr "`const [a, b] = arr;` по позиция; `const { x, y: z = 0 } = obj;` по име; също и в параметрите"
 
 #. table cell
-#: site/lectures/06-objects.md:1618
+#: site/lectures/06-objects.md:1622
 msgid "The object before the dot at the call; lost when a method is passed on; arrows have none"
 msgstr "Обектът преди точката при извикването; губи се, когато методът се подаде нататък; arrow функциите нямат свой"
 
 #. table cell
-#: site/lectures/06-objects.md:1619
+#: site/lectures/06-objects.md:1623
 msgid "Many objects"
 msgstr "Много обекти"
 
 #. table cell
-#: site/lectures/06-objects.md:1619
+#: site/lectures/06-objects.md:1623
 msgid "Factory function (best for rules), constructor with `new`, `class` with `constructor`, methods, `static`, `extends` / `super`"
 msgstr "Factory функция (най-добра за правилата), конструктор с `new`, `class` с `constructor`, методи, `static`, `extends` / `super`"
 
 #. table cell
-#: site/lectures/06-objects.md:1620
+#: site/lectures/06-objects.md:1624
 msgid "Old style"
 msgstr "Стар стил"
 
 #. table cell
-#: site/lectures/06-objects.md:1620
+#: site/lectures/06-objects.md:1624
 msgid "`new Object()`, `obj[\"k\"] = v`, `for (var k in obj)` + `hasOwnProperty`, `a && a.b && a.b.c` - read it, modernise it"
 msgstr "`new Object()`, `obj[\"k\"] = v`, `for (var k in obj)` + `hasOwnProperty`, `a && a.b && a.b.c` - четете го, модернизирайте го"
 
 #. heading 2
-#: site/lectures/06-objects.md:1622
+#: site/lectures/06-objects.md:1626
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/06-objects.md:1624
+#: site/lectures/06-objects.md:1628
 msgid "`06-objects/homework.js` (in the homework repository): the details object of an alert with a fixed column order, settings merged with defaults, and a rule that reads the dictionary of drives - without changing the report."
 msgstr "`06-objects/homework.js` (в homework repository): обектът с детайли на alert с фиксиран ред на колоните, настройки, обединени със стойности по подразбиране, и правило, което чете dictionary от дискове - без да променя отчета."
 
 #. paragraph
-#: site/lectures/06-objects.md:1627
+#: site/lectures/06-objects.md:1631
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/06-objects.md:1629
+#: site/lectures/06-objects.md:1633
 msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`). From the next session on, the library grows."
 msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`). От следващото занятие нататък библиотеката расте."
 
 #. paragraph
-#: site/lectures/06-objects.md:1631
+#: site/lectures/06-objects.md:1635
 msgid "Optional: open one of your real reports and find each of the shapes of section 7. Which paths do your rules read again and again? Write them down as `get` paths."
 msgstr "По желание: отворете един от вашите истински отчети и намерете всяка от формите от раздел 7. Кои пътища правилата ви четат отново и отново? Запишете ги като пътища за `get`."
 
 #. heading 2
-#: site/lectures/06-objects.md:1635
+#: site/lectures/06-objects.md:1639
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/06-objects.md:1637
+#: site/lectures/06-objects.md:1641
 msgid "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring), [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 msgstr "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring), [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1644
+#: site/lectures/06-objects.md:1648
 msgid "MDN exercises: [Test your skills: Object basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Test_your_skills/Object_basics)"
 msgstr "Упражнения в MDN: [Test your skills: Object basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Test_your_skills/Object_basics)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1645
+#: site/lectures/06-objects.md:1649
 msgid "javascript.info: [Objects](https://javascript.info/object), [Object references and copying](https://javascript.info/object-copy), [Object methods, \"this\"](https://javascript.info/object-methods), [Destructuring assignment](https://javascript.info/destructuring-assignment), [Classes](https://javascript.info/classes)"
 msgstr "javascript.info: [Objects](https://javascript.info/object), [Object references and copying](https://javascript.info/object-copy), [Object methods, \"this\"](https://javascript.info/object-methods), [Destructuring assignment](https://javascript.info/destructuring-assignment), [Classes](https://javascript.info/classes)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1650
+#: site/lectures/06-objects.md:1654
 msgid "Exercises: [JavaScript Object - Exercises](https://www.w3resource.com/javascript-exercises/javascript-object-exercises.php) (w3resource)"
 msgstr "Упражнения: [JavaScript Object - Exercises](https://www.w3resource.com/javascript-exercises/javascript-object-exercises.php) (w3resource)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1651
+#: site/lectures/06-objects.md:1655
 msgid "Video: [Modern JavaScript Tutorial #5 - Objects](https://www.youtube.com/watch?v=X0ipw1k7ygU)"
 msgstr "Видео: [Modern JavaScript Tutorial #5 - Objects](https://www.youtube.com/watch?v=X0ipw1k7ygU)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1653
+#: site/lectures/06-objects.md:1657
 msgid "**Next session:** array methods - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - and grouping thousands of records into a dictionary once, instead of searching them again and again. The course project starts for real: choose the product, the sample documents and the first helpers."
 msgstr "**Следващото занятие:** методи на arrays - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - и групиране на хиляди записи в dictionary веднъж, вместо да ги търсите отново и отново. Курсовият проект започва истински: изберете продукта, примерните документи и първите helper функции."
 

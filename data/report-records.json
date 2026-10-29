@@ -1,0 +1,802 @@
+{
+  "_note": "MADE-UP example JSON document for the course. All names, ids and values are invented; only the shape is typical of the JSON a device sends.",
+  "report_type": "array_report",
+  "array_report": {
+    "device": "AR-905",
+    "device_id": "LABARR02",
+    "reported_at": 1791657884130,
+    "reported_ms": "1791657884130",
+    "collected_at": "2026-10-10 13:44:44",
+    "Release": "",
+    "scenario": "INVENTORY",
+    "records": [
+      {
+        "kind": "INV",
+        "group": "Global Resources",
+        "item": "SYS",
+        "code": "DS",
+        "label": "Displayable Message",
+        "value": "System VPD",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Global Resources",
+        "item": "SYS",
+        "code": "BU",
+        "label": "Release",
+        "value": "10.12.39.0",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Global Resources",
+        "item": "SYS",
+        "code": "FN",
+        "label": "Family",
+        "value": "AR9",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Global Resources",
+        "item": "SYS",
+        "code": "CN",
+        "label": "Client Name",
+        "value": "Demo Lab",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "System Firmware",
+        "item": "FW",
+        "code": "FV",
+        "label": "Firmware levels",
+        "value": "Core_1 11562024112780A00701;Svc 20042024073181CF0681;Boot 11242024120381E00109",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Partitions",
+        "item": "P1",
+        "code": "NT",
+        "label": "Network",
+        "value": "dns=10.0.0.53,proxy=,mode=2",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Partitions",
+        "item": "P1",
+        "code": "SN",
+        "label": "Settings",
+        "value": "SA=2,SG=2,SN=2,SS=2,KC=2,NC=2",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Partitions",
+        "item": "P2",
+        "code": "NT",
+        "label": "Network",
+        "value": "dns=10.0.0.53,proxy=10.0.0.80:3128,mode=2",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Partitions",
+        "item": "P2",
+        "code": "SN",
+        "label": "Settings",
+        "value": "SA=2,SG=1,SN=2,SS=2,KC=2,NC=2",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Attached Consoles",
+        "item": "SYS",
+        "code": "AC",
+        "label": "Attached consoles",
+        "value": "CON-01;CON-02",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-01",
+        "code": "TY",
+        "label": "Type",
+        "value": "SSD-24",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-01",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.14",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-01",
+        "code": "ST",
+        "label": "State",
+        "value": "normal",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-01",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "31",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-02",
+        "code": "TY",
+        "label": "Type",
+        "value": "SSD-24",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-02",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.14",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-02",
+        "code": "ST",
+        "label": "State",
+        "value": "normal",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-02",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "34",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-03",
+        "code": "TY",
+        "label": "Type",
+        "value": "SSD-24",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-03",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.14",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-03",
+        "code": "ST",
+        "label": "State",
+        "value": "normal",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-03",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "37",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-04",
+        "code": "TY",
+        "label": "Type",
+        "value": "SSD-24",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-04",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.10",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-04",
+        "code": "ST",
+        "label": "State",
+        "value": "normal",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-04",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "29",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-05",
+        "code": "TY",
+        "label": "Type",
+        "value": "SSD-24",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-05",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.14",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-05",
+        "code": "ST",
+        "label": "State",
+        "value": "normal",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-05",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "32",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-06",
+        "code": "TY",
+        "label": "Type",
+        "value": "SSD-24",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-06",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.14",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-06",
+        "code": "ST",
+        "label": "State",
+        "value": "normal",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-06",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "35",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-07",
+        "code": "TY",
+        "label": "Type",
+        "value": "HDD-12",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-07",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.14",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-07",
+        "code": "ST",
+        "label": "State",
+        "value": "degraded",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-07",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "38",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-08",
+        "code": "TY",
+        "label": "Type",
+        "value": "HDD-12",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-08",
+        "code": "FW",
+        "label": "Firmware",
+        "value": "2.14",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-08",
+        "code": "ST",
+        "label": "State",
+        "value": "normal",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Enclosures",
+        "item": "ENC-08",
+        "code": "TP",
+        "label": "Temperature C",
+        "value": "30",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-001",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-1",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-001",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "7168",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-001",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-002",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-1",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-002",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "10752",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-002",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-003",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-2",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-003",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "3584",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-003",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-004",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-2",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-004",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "7168",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-004",
+        "code": "RL",
+        "label": "Protection",
+        "value": "mirror",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-005",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-3",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-005",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "0",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-005",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-006",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-3",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-006",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "3584",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-006",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-007",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-4",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-007",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "7168",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-007",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-008",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-4",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-008",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "10752",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-008",
+        "code": "RL",
+        "label": "Protection",
+        "value": "mirror",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-009",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-5",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-009",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "3584",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-009",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-010",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-5",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-010",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "0",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-010",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-011",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-6",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-011",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "10752",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-011",
+        "code": "RL",
+        "label": "Protection",
+        "value": "parity",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-012",
+        "code": "AR",
+        "label": "Array",
+        "value": "ARR-6",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-012",
+        "code": "CP",
+        "label": "Capacity GiB",
+        "value": "3584",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "INV",
+        "group": "Pools",
+        "item": "POOL-012",
+        "code": "RL",
+        "label": "Protection",
+        "value": "mirror",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02"
+      },
+      {
+        "kind": "TRACK",
+        "full_path": "/data/inv/LABARR02.inv",
+        "captured": "2026-10-08-23.00.36",
+        "serial": "LABARR02",
+        "load_status": "0"
+      }
+    ]
+  }
+}

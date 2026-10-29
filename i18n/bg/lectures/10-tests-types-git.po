@@ -141,7 +141,7 @@ msgstr "2. `assert`: проверките"
 #. paragraph
 #: site/lectures/10-tests-types-git.md:138
 msgid "Node.js: [Assert](https://nodejs.org/api/assert.html)"
-msgstr ""
+msgstr "Node.js: [Assert](https://nodejs.org/api/assert.html)"
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:140
@@ -216,7 +216,7 @@ msgstr "3. `node:test`: test runner-ът"
 #. paragraph
 #: site/lectures/10-tests-types-git.md:197
 msgid "Node.js: [Test runner](https://nodejs.org/api/test.html)"
-msgstr ""
+msgstr "Node.js: [Test runner](https://nodejs.org/api/test.html)"
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:222
@@ -476,7 +476,7 @@ msgstr "Синтаксисът на типовете"
 #. paragraph
 #: site/lectures/10-tests-types-git.md:417
 msgid "TypeScript: [JSDoc Reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)"
-msgstr ""
+msgstr "TypeScript: [JSDoc Reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)"
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:419
@@ -691,7 +691,7 @@ msgstr "ESLint: подозрителен код"
 #. paragraph
 #: site/lectures/10-tests-types-git.md:609
 msgid "ESLint: [Rules Reference](https://eslint.org/docs/latest/rules/)"
-msgstr ""
+msgstr "ESLint: [Rules Reference](https://eslint.org/docs/latest/rules/)"
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:611
@@ -1230,8 +1230,8 @@ msgstr "Във вашето копие на Homework repository първо из�
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:1052
-msgid "Each file explains the task at the top. Tasks 2 and 4 have two files: in the `.test.js` file you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`."
-msgstr "Всеки файл обяснява задачата в началото. Задачи 2 и 4 имат по два файла: във файла `.test.js` пишете тестове; файлът `-check.js` ги изпълнява и отпечатва `OK` или `FAIL`."
+msgid "Each file has the description of a part right before its `your code` lines, and its checks right after them. Tasks 2 and 4 have two files: in the `.test.js` file you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`."
+msgstr "Всеки файл има описанието на всяка част точно преди нейните редове `your code`, а проверките ѝ - веднага след тях. Задачи 2 и 4 имат по два файла: във файла `.test.js` пишете тестове; файлът `-check.js` ги изпълнява и отпечатва `OK` или `FAIL`."
 
 #. table cell
 #: site/lectures/10-tests-types-git.md:1056
@@ -1411,7 +1411,7 @@ msgstr "`10-tests-types-git/` (в homework repository): напишете `fleetS
 #. paragraph
 #: site/lectures/10-tests-types-git.md:1090
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:1092
@@ -1487,6 +1487,9 @@ msgstr "Видеа: [Git Tutorial for Beginners: Command-Line Fundamentals](http
 #: site/lectures/10-tests-types-git.md:1124
 msgid "**This was the last session.** Thank you for the questions and the work. Keep the library growing - one helper, one test, one rule at a time."
 msgstr "**Това беше последното занятие.** Благодаря за въпросите и за работата. Нека библиотеката продължава да расте - по една helper функция, един тест, едно правило наведнъж."
+
+#~ msgid "Each file explains the task at the top. Tasks 2 and 4 have two files: in the `.test.js` file you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`."
+#~ msgstr "Всеки файл обяснява задачата в началото. Задачи 2 и 4 имат по два файла: във файла `.test.js` пишете тестове; файлът `-check.js` ги изпълнява и отпечатва `OK` или `FAIL`."
 
 #~ msgid "Finish the five practice tasks - every check must print `OK`."
 #~ msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

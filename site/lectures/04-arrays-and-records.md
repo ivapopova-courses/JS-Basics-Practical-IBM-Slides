@@ -1797,7 +1797,7 @@ rule({
 In your copy of the Homework repository, first get the new tasks:
 
 ```bash
-git pull upstream main
+git pull --no-rebase --no-edit upstream main
 node 04-arrays-and-records/practice/task1-predict.js
 ```
 

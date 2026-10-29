@@ -1,0 +1,21 @@
+{
+  "_note": "MADE-UP example JSON document for the course. All names, ids and values are invented; only the shape is typical of the JSON a device sends.",
+  "status": {
+    "device_alias": "D4F7B0C53E2A6699",
+    "epoch": "1791511202"
+  },
+  "overview": {
+    "model": "XR-220",
+    "serial_number": "SN3T8V61",
+    "version": "4.2.0.5"
+  },
+  "inventory": {
+    "device_alias": "D4F7B0C53E2A6699",
+    "enclosures": {
+      "id": "ENC-01",
+      "type": "SSD-24",
+      "firmware": "2.10",
+      "state": "failed"
+    }
+  }
+}

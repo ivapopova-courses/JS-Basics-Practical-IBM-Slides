@@ -1,0 +1,49 @@
+/* A diagram or a screenshot, opened bigger over the whole page (zoomImages.js) */
+.vp-doc img.diagram,
+.vp-doc img.screenshot {
+  cursor: zoom-in;
+}
+.zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  overflow: auto;
+  padding: 24px;
+  background: var(--vp-c-bg);
+  cursor: zoom-out;
+}
+.zoom-overlay img {
+  display: block;
+  margin: auto;            /* centred, and still scrolls from the left edge when wider */
+  max-width: none;
+  height: auto;
+}
+.zoom-overlay img.screenshot {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+}
+/* the diagrams have dark text on a transparent background: inverted in dark mode,
+   as on the page (diagram.css) */
+.dark .zoom-overlay img.diagram {
+  filter: invert(0.88) hue-rotate(180deg);
+}
+.zoom-close {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 50%;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+  cursor: pointer;
+}
+.zoom-close:hover {
+  background: var(--vp-c-default-soft);
+}

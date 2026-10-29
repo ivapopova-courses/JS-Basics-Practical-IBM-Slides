@@ -16,9 +16,21 @@ the JSON a device sends.
   `const doc = require("../../data/sample-asset.json");`
 - The document grows during the course: a lecture adds a new part when it needs
   one (for example `inventory.modules` in lecture 6). This page always shows the
-  current version. After `git pull upstream main` your copy is the same.
+  current version. After `git pull --no-rebase --no-edit upstream main` your copy is the same.
 
 ## The whole document
+
+Open it in the viewer: <DataFile file="sample-asset.json" />
+
+::: tip Explore the data files
+A click on a file name opens the file in a viewer. **Tree** shows the levels of
+the document: open and close them with the arrows. **Paths** lists every value
+with its full path, and the filter finds a key or a value. **Tables** shows every
+list of records (and every dictionary of records) as a table. **Text** shows the
+file as it is, with line numbers. A click on a value shows the path to it the way
+your code reads it - `doc.inventory.modules["12_4.20"].status` - and **Copy**
+copies the path. **Download** saves the file.
+:::
 
 ```json
 <!--@include: @/../data/sample-asset.json-->
@@ -53,9 +65,9 @@ in. They are in the same folder `data/` of the homework repository:
 
 | File | Shape | Used in |
 |---|---|---|
-| [report-records.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-records.json) | a flat list of 79 key/value records `{ group, item, code, label, value }` that must be grouped | sessions 4, 7 and 8 |
-| [report-dictionary.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-dictionary.json) | dictionaries keyed by ids, with dots in the keys; dates and versions in mixed formats | sessions 5 - 8 |
-| [report-export.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-export.json) | the same deep document twice: nested (`_source`) and as a flattened export (`fields`, where every key is a whole path: `"a.b.c": [value]`) | sessions 6 and 8 |
-| [reports/](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/tree/main/data/reports) | five small reports in the shape of `doc`, for running a rule on a folder: one fine, one with problems, another model, one with missing parts, and one that is not valid JSON - on purpose | sessions 9 and 10 |
+| <DataFile file="report-records.json" /> | a flat list of 79 key/value records `{ group, item, code, label, value }` that must be grouped | sessions 4, 7 and 8 |
+| <DataFile file="report-dictionary.json" /> | dictionaries keyed by ids, with dots in the keys; dates and versions in mixed formats | sessions 5 - 8 |
+| <DataFile file="report-export.json" /> | the same deep document twice: nested (`_source`) and as a flattened export (`fields`, where every key is a whole path: `"a.b.c": [value]`) | sessions 6 and 8 |
+| [reports/](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/tree/main/data/reports) | five small reports in the shape of `doc`, for running a rule on a folder: <DataFile file="reports/lab-dev-01.json" /> fine, <DataFile file="reports/lab-dev-02.json" /> with problems, <DataFile file="reports/lab-dev-03.json" /> another model, <DataFile file="reports/lab-dev-04.json" /> with missing parts, and <DataFile file="reports/lab-dev-05.json" /> not valid JSON - on purpose | sessions 9 and 10 |
 
 Each task file says at the top which file it uses and what to look for in it.

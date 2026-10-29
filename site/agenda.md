@@ -18,18 +18,20 @@ device (`doc`) and a check rule.
 
 ## Sessions
 
+The dates may change: the [Calendar](/calendar) always shows the current ones.
+
 |  | Date   | Topic |
 |---------|--------|-------|
 | 1 | Tue 06.10 | [Getting started](/lectures/01-getting-started): course setup, how a program runs, what a variable is |
 | 2 | Wed 14.10 | [Variables, types and operators](/lectures/02-variables-and-types) |
 | 3 | Wed 21.10 | [Comparisons, logic, conditions and loops](/lectures/03-conditions-and-loops) |
 | 4 | Fri 23.10 | [Arrays and lists of records](/lectures/04-arrays-and-records) |
-| 5 | Wed 28.10 | [Functions, and reading older code](/lectures/05-functions) |
-| 6 | Fri 30.10 | [Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects) |
-| 7 | Wed 04.11 | [Array methods: transforming, grouping and indexing data](/lectures/07-array-methods); project kickoff |
-| 8 | Fri 06.11 | [Strings, regular expressions, dates and numbers](/lectures/08-strings-regex-dates) |
-| 9 | Wed 11.11 | [JSON, Node.js, modules and errors; running rules locally](/lectures/09-json-node-modules-errors) |
-| 10 | Fri 13.11 | [Tests, JSDoc types and code quality; Git workflow; project review](/lectures/10-tests-types-git) |
+| 5 | Fri 30.10 | [Functions, and reading older code](/lectures/05-functions) |
+| 6 | Tue 03.11 | [Objects: deep paths, dictionaries, different data shapes](/lectures/06-objects) |
+| 7 | Fri 06.11 | [Array methods: transforming, grouping and indexing data](/lectures/07-array-methods); project kickoff |
+| 8 | Tue 10.11 | [Strings, regular expressions, dates and numbers](/lectures/08-strings-regex-dates) |
+| 9 | Fri 13.11 | [JSON, Node.js, modules and errors; running rules locally](/lectures/09-json-node-modules-errors) |
+| 10 | Tue 17.11 | [Tests, JSDoc types and code quality; Git workflow; project review](/lectures/10-tests-types-git) |
 
 ## Session details
 

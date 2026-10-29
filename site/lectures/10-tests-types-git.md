@@ -1045,13 +1045,13 @@ The minimum for the review: the library as a CommonJS module with JSDoc, tests w
 In your copy of the Homework repository, first get the new tasks:
 
 ```bash
-git pull upstream main
+git pull --no-rebase --no-edit upstream main
 node 10-tests-types-git/practice/task1-predict.js
 ```
 
-Each file explains the task at the top. Tasks 2 and 4 have two files: in the
-`.test.js` file you write tests; the `-check.js` file runs them and prints `OK` or
-`FAIL`.
+Each file has the description of a part right before its `your code` lines, and
+its checks right after them. Tasks 2 and 4 have two files: in the `.test.js` file
+you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`.
 
 | Task | File | What you do |
 |------|------|-------------|

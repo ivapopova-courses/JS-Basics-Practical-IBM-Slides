@@ -1,0 +1,21 @@
+/* The ProgressBG logo in the footer (config.mjs): small and a bit faded */
+.VPFooter .footer-logo {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 6px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.VPFooter .footer-logo:hover {
+  opacity: 1;
+}
+.VPFooter .footer-logo img {
+  height: 32px;
+  width: auto;
+}
+/* the logo has black text: give it a light background in dark mode */
+.dark .VPFooter .footer-logo {
+  background: #f6f6f7;
+  border-radius: 6px;
+  padding: 3px 6px;
+}

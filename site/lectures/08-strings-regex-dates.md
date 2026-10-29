@@ -1305,12 +1305,13 @@ console.log("(end)");
 In your copy of the Homework repository, first get the new tasks:
 
 ```bash
-git pull upstream main
+git pull --no-rebase --no-edit upstream main
 node 08-strings-regex-dates/practice/task1-predict.js
 ```
 
-Each file explains the task at the top. Write your code between the `your code`
-lines; the checks at the bottom print `OK` or `FAIL`.
+Each file is split into parts. A part has its description, then the `your code`
+lines - write your code between them - and right after them its checks, which
+print `OK` or `FAIL`.
 
 | Task | File | What you do |
 |------|------|-------------|

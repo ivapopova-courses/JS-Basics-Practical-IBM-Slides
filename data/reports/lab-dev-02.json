@@ -1,0 +1,49 @@
+{
+  "_note": "MADE-UP example JSON document for the course. All names, ids and values are invented; only the shape is typical of the JSON a device sends.",
+  "status": {
+    "device_alias": "B2D5F8A31C0E4477",
+    "epoch": "1791684002"
+  },
+  "overview": {
+    "model": "XR-210",
+    "serial_number": "SN7K2M15",
+    "version": "4.1.9.3"
+  },
+  "inventory": {
+    "device_alias": "B2D5F8A31C0E4477",
+    "details": {
+      "remote_login_enabled": "yes",
+      "locale": "en_US",
+      "firmware_level": "4.1.9.3 (build 419.3.2603020800)"
+    },
+    "extended_info": {
+      "json": {
+        "data": {
+          "system": {
+            "name": "LAB-DEV-02"
+          }
+        }
+      }
+    },
+    "enclosures": [
+      {
+        "id": "ENC-01",
+        "type": "SSD-24",
+        "firmware": "2.10",
+        "state": "normal"
+      },
+      {
+        "id": "ENC-02",
+        "type": "HDD-12",
+        "firmware": "2.14",
+        "state": "degraded"
+      },
+      {
+        "id": "ENC-03",
+        "type": "HDD-12",
+        "firmware": "2.9",
+        "state": "normal"
+      }
+    ]
+  }
+}

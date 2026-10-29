@@ -51,6 +51,39 @@ Every lecture adds the pieces you need to write more of this.
 
 ## 1. About the course
 
+### The trainer
+
+**Iva Popova** - [LinkedIn](https://www.linkedin.com/in/ivapopova/)
+
+**Teaching experience**
+
+- 5 years as a teaching assistant at the Technical University of Sofia: "Programming
+  Languages", "Discrete Mathematics", "Expert Systems and Artificial Intelligence".
+- 7+ years at leading private training centres: "Databases (MySQL)", "Front-End
+  Development", "Python", "Machine Learning".
+- More than 650 students have finished these courses successfully.
+- Corporate courses for: A1 Bulgaria, Advanced Nutrients, Advent Group, BILLA
+  Bulgaria, BORICA, CDS Bulgaria, Debt Collection Agency (DCA), DIGITALL, IBM
+  Bulgaria, ICT Strypes, ISI Emerging Markets (EMIS), Javelin Group, KITT.bg,
+  National Social Security Institute (NSSI), Software AG, TAL Engineering, UniCredit
+  Bulbank, Vivacom, VMware.
+
+**Professional experience**
+
+- 7+ years as a software engineer (4 of them as a senior engineer and team lead) in
+  international IT companies: Comptel (now part of Nokia), Internet Securities,
+  Datamax, Experian.
+- 6+ years as a researcher and consultant in an artificial intelligence start-up:
+  sentiment analysis, ontologies, natural language processing (NLP) and large
+  language models (LLMs).
+
+**Education**
+
+- Secondary school: the National Vocational High School of Computer Technologies
+  and Systems, Pravets.
+- Master of Engineering in Computer Systems, Technical University of Sofia.
+- PhD student in Artificial Intelligence Systems, Technical University of Sofia.
+
 ### The goal
 
 **A deep, solid knowledge of the basics of JavaScript.** Not only *what* to
@@ -194,14 +227,16 @@ it in the course; what matters most is that you learn your editor well.
 
 ### The parts of the window
 
-- **Activity Bar** (the icons on the left): Explorer, Search, Source Control (Git),
-  Run and Debug, Extensions.
-- **Explorer**: the files of the open folder. Open a folder with **File > Open
-  Folder** - VSCode works best with a whole folder (a *workspace*), not single files.
-- **Editor**: the open files, in tabs; split it with `Ctrl+\`.
-- **Panel** (bottom): the **Terminal** (`` Ctrl+` ``), Problems, Output.
-- **Status Bar** (bottom line): the Git branch, errors and warnings, the language
-  of the file.
+![VSCode with the Homework folder: 1 the Activity Bar, 2 the Explorer, 3 the editor, 4 the terminal in the panel, 5 the Status Bar](/diagrams/vscode-window.svg){.diagram width=950 height=560}
+
+1. **Activity Bar** (the icons on the left): Explorer, Search, Source Control (Git),
+   Run and Debug, Extensions.
+2. **Explorer**: the files of the open folder. Open a folder with **File > Open
+   Folder** - VSCode works best with a whole folder (a *workspace*), not single files.
+3. **Editor**: the open files, in tabs; split it with `Ctrl+\`.
+4. **Panel** (bottom): the **Terminal** (`` Ctrl+` ``), Problems, Output.
+5. **Status Bar** (bottom line): the Git branch, errors and warnings, the language
+   of the file.
 
 See [User Interface](https://code.visualstudio.com/docs/getstarted/userinterface)
 in the VSCode docs.
@@ -233,9 +268,12 @@ On macOS use `Cmd` instead of `Ctrl` and `Option` instead of `Alt`. The full lis
 ### Extensions and themes
 
 The Extensions view (`Ctrl+Shift+X`) installs extensions from the marketplace. For
-this course nothing extra is required - JavaScript support is built in. Change the
-color theme with **File > Preferences > Theme > Color Theme**, or "color theme" in
-the Command Palette.
+the first sessions nothing extra is required - JavaScript support is built in.
+From lecture 10 on, **ESLint** and **Prettier** help; the Homework folder
+recommends them, and VSCode offers to install them when you open it (see
+[VSCode extensions](/how-to#vscode-extensions)). Change the color theme with
+**File > Preferences > Theme > Color Theme**, or "color theme" in the Command
+Palette.
 
 ## 4. Git and GitHub
 
@@ -426,7 +464,7 @@ git remote add origin https://github.com/<your-user>/<your-repo>.git
 git push -u origin main                    # your copy: your solutions go here
 
 # before each session
-git pull upstream main
+git pull --no-rebase --no-edit upstream main
 ```
 
 Branches, merging, conflicts and the pull-request workflow come in session 10.
@@ -551,6 +589,14 @@ and run it from the terminal, in the folder of the file:
 ```bash
 node hello.js
 ```
+
+Before the cursor, the terminal always shows the **prompt**. It ends with the
+**current folder**: a command works on the files of this folder, so `node hello.js`
+works only in the folder of `hello.js`. Look at the prompt before you press
+`Enter` - most "file not found" errors come from a command typed in the wrong
+folder.
+
+![The parts of the prompt: PS for PowerShell, the current folder, then your command; under it what the program prints, then the prompt again](/diagrams/terminal-prompt.svg){.diagram width=920 height=290}
 
 In VSCode: open the folder, open the terminal (`` Ctrl+` ``), type
 `node hello.js`. (Old course materials used a `.vscode/tasks.json` file and

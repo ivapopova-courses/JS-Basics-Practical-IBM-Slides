@@ -50,128 +50,143 @@ msgstr "Задачите го зареждат с `require` (обяснено в
 
 #. paragraph
 #: site/example-document.md:17
-msgid "The document grows during the course: a lecture adds a new part when it needs one (for example `inventory.modules` in lecture 6). This page always shows the current version. After `git pull upstream main` your copy is the same."
-msgstr "Документът расте по време на курса: лекция добавя нова част, когато ѝ трябва (например `inventory.modules` в лекция 6). Тази страница винаги показва текущата версия. След `git pull upstream main` вашето копие е същото."
+msgid "The document grows during the course: a lecture adds a new part when it needs one (for example `inventory.modules` in lecture 6). This page always shows the current version. After `git pull --no-rebase --no-edit upstream main` your copy is the same."
+msgstr "Документът расте по време на курса: лекция добавя нова част, когато ѝ трябва (например `inventory.modules` в лекция 6). Тази страница винаги показва текущата версия. След `git pull --no-rebase --no-edit upstream main` вашето копие е същото."
 
 #. heading 2
 #: site/example-document.md:21
 msgid "The whole document"
 msgstr "Целият документ"
 
+#. paragraph
+#: site/example-document.md:23
+msgid "Open it in the viewer: <DataFile file=\"sample-asset.json\" />"
+msgstr "Отворете го в прегледа: <DataFile file=\"sample-asset.json\" />"
+
+#. box title
+#: site/example-document.md:25
+msgid "Explore the data files"
+msgstr "Разгледайте файловете с данни"
+
+#. paragraph
+#: site/example-document.md:26
+msgid "A click on a file name opens the file in a viewer. **Tree** shows the levels of the document: open and close them with the arrows. **Paths** lists every value with its full path, and the filter finds a key or a value. **Tables** shows every list of records (and every dictionary of records) as a table. **Text** shows the file as it is, with line numbers. A click on a value shows the path to it the way your code reads it - `doc.inventory.modules[\"12_4.20\"].status` - and **Copy** copies the path. **Download** saves the file."
+msgstr "Щракване върху името на файл го отваря в преглед. **Дърво** показва нивата на документа: отваряйте и затваряйте ги със стрелките. **Пътища** изброява всяка стойност с пълния ѝ път, а филтърът намира ключ или стойност. **Таблици** показва всеки списък от записи (и всеки речник от записи) като таблица. **Текст** показва файла такъв, какъвто е, с номера на редовете. Щракване върху стойност показва пътя до нея така, както го чете вашият код - `doc.inventory.modules[\"12_4.20\"].status` - а **Копирай** копира пътя. **Изтегли** запазва файла."
+
 #. heading 2
-#: site/example-document.md:27
+#: site/example-document.md:39
 msgid "Print it in an example"
 msgstr "Отпечатване в пример"
 
 #. paragraph
-#: site/example-document.md:29
+#: site/example-document.md:41
 msgid "`console.log(doc)` prints an object on one line, and shows the deeper levels only as `[Object]`. To see a part of the document indented, turn it into text with `JSON.stringify(value, null, 2)` (2 = two spaces per level; more about JSON in session 9):"
 msgstr "`console.log(doc)` отпечатва обекта на един ред и показва по-дълбоките нива само като `[Object]`. За да видите част от документа с отстъпи, превърнете я в текст с `JSON.stringify(value, null, 2)` (2 = два интервала на ниво; повече за JSON в занятие 9):"
 
 #. paragraph
-#: site/example-document.md:39
+#: site/example-document.md:51
 msgid "Change the path and press **Run** to look at another part, or print the whole document with `JSON.stringify(doc, null, 2)`. `console.dir(doc, { depth: null })` also shows every level (on one line), and `console.table(doc.inventory.enclosures)` shows a list of records as a table (session 7)."
 msgstr "Сменете пътя и натиснете **Run**, за да разгледате друга част, или отпечатайте целия документ с `JSON.stringify(doc, null, 2)`. `console.dir(doc, { depth: null })` също показва всички нива (на един ред), а `console.table(doc.inventory.enclosures)` показва списък от записи като таблица (занятие 7)."
 
 #. box title
-#: site/example-document.md:44
+#: site/example-document.md:56
 msgid "Every Run starts with a fresh copy"
 msgstr "Всяко изпълнение започва с ново копие"
 
 #. paragraph
-#: site/example-document.md:45
+#: site/example-document.md:57
 msgid "An example that changes `doc` (adds, changes or deletes a key) changes only its own copy. The file and the other examples on the page stay the same."
 msgstr "Пример, който променя `doc` (добавя, променя или изтрива ключ), променя само собственото си копие. Файлът и другите примери на страницата остават същите."
 
 #. heading 2
-#: site/example-document.md:49
+#: site/example-document.md:61
 msgid "The other data files of the homework"
 msgstr "Другите файлове с данни на домашните"
 
 #. paragraph
-#: site/example-document.md:51
+#: site/example-document.md:63
 msgid "Some tasks use bigger made-up documents, in the other shapes the real data comes in. They are in the same folder `data/` of the homework repository:"
 msgstr "Някои задачи използват по-големи измислени документи - в другите форми, в които идват истинските данни. Те са в същата папка `data/` на homework repository:"
 
 #. table cell
-#: site/example-document.md:54
+#: site/example-document.md:66
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/example-document.md:54
+#: site/example-document.md:66
 msgid "Shape"
 msgstr "Форма"
 
 #. table cell
-#: site/example-document.md:54
+#: site/example-document.md:66
 msgid "Used in"
 msgstr "Използва се в"
 
 #. table cell
-#: site/example-document.md:56
-msgid "[report-records.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-records.json)"
-msgstr "[report-records.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-records.json)"
-
-#. table cell
-#: site/example-document.md:56
+#: site/example-document.md:68
 msgid "a flat list of 79 key/value records `{ group, item, code, label, value }` that must be grouped"
 msgstr "плосък списък от 79 записа ключ/стойност `{ group, item, code, label, value }`, които трябва да се групират"
 
 #. table cell
-#: site/example-document.md:56
+#: site/example-document.md:68
 msgid "sessions 4, 7 and 8"
 msgstr "занятия 4, 7 и 8"
 
 #. table cell
-#: site/example-document.md:57
-msgid "[report-dictionary.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-dictionary.json)"
-msgstr "[report-dictionary.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-dictionary.json)"
-
-#. table cell
-#: site/example-document.md:57
+#: site/example-document.md:69
 msgid "dictionaries keyed by ids, with dots in the keys; dates and versions in mixed formats"
 msgstr "dictionaries с ключове id, с точки в ключовете; дати и версии в смесени формати"
 
 #. table cell
-#: site/example-document.md:57
+#: site/example-document.md:69
 msgid "sessions 5 - 8"
 msgstr "занятия 5 - 8"
 
 #. table cell
-#: site/example-document.md:58
-msgid "[report-export.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-export.json)"
-msgstr "[report-export.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-export.json)"
-
-#. table cell
-#: site/example-document.md:58
+#: site/example-document.md:70
 msgid "the same deep document twice: nested (`_source`) and as a flattened export (`fields`, where every key is a whole path: `\"a.b.c\": [value]`)"
 msgstr "един и същ дълбок документ два пъти: вложен (`_source`) и като сплескан (flattened) експорт (`fields`, където всеки ключ е цял път: `\"a.b.c\": [value]`)"
 
 #. table cell
-#: site/example-document.md:58
+#: site/example-document.md:70
 msgid "sessions 6 and 8"
 msgstr "занятия 6 и 8"
 
 #. table cell
-#: site/example-document.md:59
+#: site/example-document.md:71
 msgid "[reports/](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/tree/main/data/reports)"
 msgstr "[reports/](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/tree/main/data/reports)"
 
 #. table cell
-#: site/example-document.md:59
-msgid "five small reports in the shape of `doc`, for running a rule on a folder: one fine, one with problems, another model, one with missing parts, and one that is not valid JSON - on purpose"
-msgstr "пет малки отчета във формата на `doc`, за изпълнение на правило върху папка: един без проблеми, един с проблеми, друг модел, един с липсващи части и един, който не е валиден JSON - нарочно"
+#: site/example-document.md:71
+msgid "five small reports in the shape of `doc`, for running a rule on a folder: <DataFile file=\"reports/lab-dev-01.json\" /> fine, <DataFile file=\"reports/lab-dev-02.json\" /> with problems, <DataFile file=\"reports/lab-dev-03.json\" /> another model, <DataFile file=\"reports/lab-dev-04.json\" /> with missing parts, and <DataFile file=\"reports/lab-dev-05.json\" /> not valid JSON - on purpose"
+msgstr "пет малки доклада във формата на `doc`, за пускане на правило върху папка: <DataFile file=\"reports/lab-dev-01.json\" /> е наред, <DataFile file=\"reports/lab-dev-02.json\" /> има проблеми, <DataFile file=\"reports/lab-dev-03.json\" /> е друг модел, <DataFile file=\"reports/lab-dev-04.json\" /> има липсващи части, а <DataFile file=\"reports/lab-dev-05.json\" /> не е валиден JSON - нарочно"
 
 #. table cell
-#: site/example-document.md:59
+#: site/example-document.md:71
 msgid "sessions 9 and 10"
 msgstr "занятия 9 и 10"
 
 #. paragraph
-#: site/example-document.md:61
+#: site/example-document.md:73
 msgid "Each task file says at the top which file it uses and what to look for in it."
 msgstr "Всеки файл със задача казва в началото кой файл използва и какво да търсите в него."
+
+#~ msgid "The document grows during the course: a lecture adds a new part when it needs one (for example `inventory.modules` in lecture 6). This page always shows the current version. After `git pull upstream main` your copy is the same."
+#~ msgstr "Документът расте по време на курса: лекция добавя нова част, когато ѝ трябва (например `inventory.modules` в лекция 6). Тази страница винаги показва текущата версия. След `git pull upstream main` вашето копие е същото."
+
+#~ msgid "[report-records.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-records.json)"
+#~ msgstr "[report-records.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-records.json)"
+
+#~ msgid "[report-dictionary.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-dictionary.json)"
+#~ msgstr "[report-dictionary.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-dictionary.json)"
+
+#~ msgid "[report-export.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-export.json)"
+#~ msgstr "[report-export.json](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework/blob/main/data/report-export.json)"
+
+#~ msgid "five small reports in the shape of `doc`, for running a rule on a folder: one fine, one with problems, another model, one with missing parts, and one that is not valid JSON - on purpose"
+#~ msgstr "пет малки отчета във формата на `doc`, за изпълнение на правило върху папка: един без проблеми, един с проблеми, друг модел, един с липсващи части и един, който не е валиден JSON - нарочно"
 
 #~ msgid "The main parts"
 #~ msgstr "Основните части"

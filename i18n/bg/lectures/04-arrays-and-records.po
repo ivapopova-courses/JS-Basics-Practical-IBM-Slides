@@ -236,7 +236,7 @@ msgstr "Последният елемент"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:233
 msgid "MDN: [Array.prototype.at()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at)"
-msgstr ""
+msgstr "MDN: [Array.prototype.at()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:235
@@ -266,7 +266,7 @@ msgstr "3. Property-то `length`"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:256
 msgid "MDN: [Array: length](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/length)"
-msgstr ""
+msgstr "MDN: [Array: length](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/length)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:258
@@ -371,7 +371,7 @@ msgstr "Array ли е? `Array.isArray`"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:383
 msgid "MDN: [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)"
-msgstr ""
+msgstr "MDN: [Array.isArray()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:385
@@ -446,7 +446,7 @@ msgstr "В края и в началото: `push`, `pop`, `unshift`, `shift`"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:453
 msgid "MDN: [Array.prototype.push()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push), [Array.prototype.pop()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop), [Array.prototype.unshift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift), [Array.prototype.shift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift)"
-msgstr ""
+msgstr "MDN: [Array.prototype.push()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push), [Array.prototype.pop()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop), [Array.prototype.unshift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift), [Array.prototype.shift()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift)"
 
 #. table cell
 #: site/lectures/04-arrays-and-records.md:455 site/lectures/04-arrays-and-records.md:681
@@ -496,47 +496,47 @@ msgstr "премахва **първия** елемент"
 #. box title
 #: site/lectures/04-arrays-and-records.md:462
 msgid "How to read an MDN reference page"
-msgstr ""
+msgstr "Как да четете страница от референцията на MDN"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:463
 msgid "Open the page of `push` above. Every reference page has the same parts:"
-msgstr ""
+msgstr "Отворете страницата на `push` по-горе. Всяка страница от референцията има едни и същи части:"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:465
 msgid "**The title.** `Array.prototype.push()` is a method of every array: you call it as `arr.push(...)`. A title without `prototype`, like `Array.isArray()`, is called on `Array` itself: `Array.isArray(x)`."
-msgstr ""
+msgstr "**Заглавието.** `Array.prototype.push()` е метод на всеки array: извиквате го като `arr.push(...)`. Заглавие без `prototype`, като `Array.isArray()`, се извиква на самия `Array`: `Array.isArray(x)`."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:468
 msgid "**Syntax.** The ways to call it, one per line. A parameter that appears only in some lines can be left out."
-msgstr ""
+msgstr "**Syntax (синтаксис).** Начините да го извикате, по един на ред. Параметър, който се появява само в някои от редовете, може да се пропусне."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:470
 msgid "**Parameters.** What each argument means. \"Optional\" means you may leave it out."
-msgstr ""
+msgstr "**Parameters (параметри).** Какво означава всеки аргумент. \"Optional\" означава, че може да го пропуснете."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:471
 msgid "**Return value.** What the call gives back. For `push`: the new length, not the array - the column \"Returns\" in the table above."
-msgstr ""
+msgstr "**Return value (връщана стойност).** Какво връща извикването. За `push`: новата дължина, а не array-я - колоната \"Връща\" в таблицата по-горе."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:473
 msgid "**Description.** The details. For arrays it says if the method changes the array (\"a mutating method\") or returns a new one - see [Which methods change the array?](#which-methods-change-the-array) below."
-msgstr ""
+msgstr "**Description (описание).** Подробностите. За arrays там пише дали методът променя array-я (\"a mutating method\") или връща нов - вижте [Кои методи променят array-я?](#which-methods-change-the-array) по-долу."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:476
 msgid "**Examples.** Short code you can paste into the editor and run."
-msgstr ""
+msgstr "**Examples (примери).** Кратък код, който може да поставите в редактора и да изпълните."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:477
 msgid "**Browser compatibility.** Since when the feature works. The table has a column for Node.js too. For a feature newer than ES2020, check that your rule engine supports it."
-msgstr ""
+msgstr "**Browser compatibility (съвместимост с браузърите).** От коя версия нататък работи възможността. Таблицата има колона и за Node.js. За възможност, по-нова от ES2020, проверете дали вашият rule engine я поддържа."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:505
@@ -561,7 +561,7 @@ msgstr "`slice` - копиране на част"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:548
 msgid "MDN: [Array.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)"
-msgstr ""
+msgstr "MDN: [Array.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:550
@@ -581,7 +581,7 @@ msgstr "`splice` - премахване, вмъкване или замяна, �
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:574
 msgid "MDN: [Array.prototype.splice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)"
-msgstr ""
+msgstr "MDN: [Array.prototype.splice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:576
@@ -626,7 +626,7 @@ msgstr "Съединяване на arrays: `concat` и spread"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:623
 msgid "MDN: [Array.prototype.concat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), [Spread syntax (...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)"
-msgstr ""
+msgstr "MDN: [Array.prototype.concat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), [Spread syntax (...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:635
@@ -686,7 +686,7 @@ msgstr "6. Търсене: `indexOf`, `includes`, `lastIndexOf`"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:679
 msgid "MDN: [Array.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf), [Array.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes), [Array.prototype.lastIndexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf)"
-msgstr ""
+msgstr "MDN: [Array.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf), [Array.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes), [Array.prototype.lastIndexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf)"
 
 #. table cell
 #: site/lectures/04-arrays-and-records.md:683
@@ -806,7 +806,7 @@ msgstr "`split` - от string към array"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:787
 msgid "MDN: [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split)"
-msgstr ""
+msgstr "MDN: [String.prototype.split()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:789
@@ -876,7 +876,7 @@ msgstr "`join` - от array към string"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:901
 msgid "MDN: [Array.prototype.join()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join)"
-msgstr ""
+msgstr "MDN: [Array.prototype.join()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:903
@@ -946,7 +946,7 @@ msgstr "`for...of` - елементите, без индекса"
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:991
 msgid "MDN: [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
-msgstr ""
+msgstr "MDN: [for...of](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)"
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:993
@@ -1606,7 +1606,7 @@ msgstr "`04-arrays-and-records/homework.js` (в homework repository): имена
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1839
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
 #: site/lectures/04-arrays-and-records.md:1841

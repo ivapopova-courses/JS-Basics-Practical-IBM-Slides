@@ -105,1468 +105,1556 @@ msgstr "1. За курса"
 
 #. heading 3
 #: site/lectures/01-getting-started.md:54
+msgid "The trainer"
+msgstr "Преподавателят"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:56
+msgid "**Iva Popova** - [LinkedIn](https://www.linkedin.com/in/ivapopova/)"
+msgstr "**Ива Попова** - [LinkedIn](https://www.linkedin.com/in/ivapopova/)"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:58
+msgid "**Teaching experience**"
+msgstr "**Преподавателски опит**"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:60
+msgid "5 years as a teaching assistant at the Technical University of Sofia: \"Programming Languages\", \"Discrete Mathematics\", \"Expert Systems and Artificial Intelligence\"."
+msgstr "5 години като асистент в Технически университет - София: \"Програмни езици\", \"Дискретна математика\", \"Експертни системи и изкуствен интелект\"."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:62
+msgid "7+ years at leading private training centres: \"Databases (MySQL)\", \"Front-End Development\", \"Python\", \"Machine Learning\"."
+msgstr "7+ години към водещи частни учебни центрове: \"Databases (MySQL)\", \"Front-End Development\", \"Python\", \"Machine Learning\"."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:64
+msgid "More than 650 students have finished these courses successfully."
+msgstr "Повече от 650 успешно завършили курсисти."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:65
+msgid "Corporate courses for: A1 Bulgaria, Advanced Nutrients, Advent Group, BILLA Bulgaria, BORICA, CDS Bulgaria, Debt Collection Agency (DCA), DIGITALL, IBM Bulgaria, ICT Strypes, ISI Emerging Markets (EMIS), Javelin Group, KITT.bg, National Social Security Institute (NSSI), Software AG, TAL Engineering, UniCredit Bulbank, Vivacom, VMware."
+msgstr "Специализирани корпоративни обучения за: A1 Bulgaria, Advanced Nutrients, Advent Group, BILLA Bulgaria, BORICA, CDS Bulgaria, Debt Collection Agency (DCA), DIGITALL, IBM Bulgaria, ICT Strypes, ISI Emerging Markets (EMIS), Javelin Group, KITT.bg, Национален осигурителен институт (НОИ), Software AG, TAL Engineering, UniCredit Bulbank, Vivacom, VMware."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:71
+msgid "**Professional experience**"
+msgstr "**Професионален опит**"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:73
+msgid "7+ years as a software engineer (4 of them as a senior engineer and team lead) in international IT companies: Comptel (now part of Nokia), Internet Securities, Datamax, Experian."
+msgstr "7+ години като софтуерен инженер (4 от които като старши инженер и ръководител на екип) в международни IT компании: Comptel (днес част от Nokia), Internet Securities, Datamax, Experian."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:76
+msgid "6+ years as a researcher and consultant in an artificial intelligence start-up: sentiment analysis, ontologies, natural language processing (NLP) and large language models (LLMs)."
+msgstr "6+ години като изследовател и консултант в стартъп компания в областта на изкуствения интелект: анализ на настроения (sentiment analysis), онтологии, обработка на естествен език (NLP) и големи езикови модели (LLM)."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:80
+msgid "**Education**"
+msgstr "**Образование**"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:82
+msgid "Secondary school: the National Vocational High School of Computer Technologies and Systems, Pravets."
+msgstr "Средно образование: Национална професионална гимназия по компютърни технологии и системи (НПГ по КТС) - Правец."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:84
+msgid "Master of Engineering in Computer Systems, Technical University of Sofia."
+msgstr "Магистър инженер по компютърни системи, Технически университет - София."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:85
+msgid "PhD student in Artificial Intelligence Systems, Technical University of Sofia."
+msgstr "Докторант по системи с изкуствен интелект, Технически университет - София."
+
+#. heading 3
+#: site/lectures/01-getting-started.md:87
 msgid "The goal"
 msgstr "Целта"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:56
+#: site/lectures/01-getting-started.md:89
 msgid "**A deep, solid knowledge of the basics of JavaScript.** Not only *what* to write, but also *how* and *why* the code works - so that you read and write JavaScript with ease and confidence, in any project:"
 msgstr "**Задълбочено и солидно познаване на основите на JavaScript.** Не само *какво* да напишете, но и *как* и *защо* работи кодът - за да четете и пишете JavaScript с лекота и увереност, във всеки проект:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:60
+#: site/lectures/01-getting-started.md:93
 msgid "the core of the language: values and types, operators, conditions and loops, arrays, functions, objects, strings, regular expressions, dates and numbers, JSON, modules and errors;"
 msgstr "ядрото на езика: стойности и типове, оператори, условия и loops, arrays, функции, обекти, strings, regular expressions, дати и числа, JSON, модули и грешки;"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:63
+#: site/lectures/01-getting-started.md:96
 msgid "what happens under the hood: values and references in memory, scope and closures, the call stack;"
 msgstr "какво се случва под капака: стойности и референции в паметта, scope и closures, call stack-ът;"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:65
+#: site/lectures/01-getting-started.md:98
 msgid "modern JavaScript, and the older style you meet in existing code - so you can read it with ease and modernise it;"
 msgstr "модерният JavaScript и по-старият стил, който срещате в съществуващия код - за да го четете с лекота и да го модернизирате;"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:67
+#: site/lectures/01-getting-started.md:100
 msgid "the everyday tools: Node.js, VSCode, Git and GitHub, tests, JSDoc types, ESLint and Prettier."
 msgstr "ежедневните инструменти: Node.js, VSCode, Git и GitHub, тестове, JSDoc типове, ESLint и Prettier."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:70
+#: site/lectures/01-getting-started.md:103
 msgid "**Applied to your work:** read and write check rules over large, deeply nested JSON documents with confidence, and build, test and document a small helper library for the JSON of one product. The focus is where your work needs it most: functions, arrays, objects, methods and properties."
 msgstr "**Приложено към вашата работа:** да четете и пишете уверено правила за проверка върху големи, дълбоко вложени JSON документи и да изградите, тествате и документирате малка библиотека с helper функции за JSON-а на един продукт. Фокусът е там, където работата ви има най-голяма нужда: функции, arrays, обекти, методи и properties."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:75
+#: site/lectures/01-getting-started.md:108
 msgid "The sessions"
 msgstr "Занятията"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:77
+#: site/lectures/01-getting-started.md:110
 msgid "10 sessions of 4 academic hours. The full plan is on the [Agenda](/agenda) page:"
 msgstr "10 занятия по 4 учебни часа. Пълният план е на страницата [Програма](/agenda):"
 
 #. table cell
-#: site/lectures/01-getting-started.md:79
+#: site/lectures/01-getting-started.md:112
 msgid "Session"
 msgstr "Занятие"
 
 #. table cell
-#: site/lectures/01-getting-started.md:79 site/lectures/01-getting-started.md:710
+#: site/lectures/01-getting-started.md:112 site/lectures/01-getting-started.md:756
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/01-getting-started.md:81
+#: site/lectures/01-getting-started.md:114
 msgid "Getting started (today)"
 msgstr "Първи стъпки (днес)"
 
 #. table cell
-#: site/lectures/01-getting-started.md:82
+#: site/lectures/01-getting-started.md:115
 msgid "Variables, types, operators; conditions and loops"
 msgstr "Variables, типове, оператори; условия и loops"
 
 #. table cell
-#: site/lectures/01-getting-started.md:83
+#: site/lectures/01-getting-started.md:116
 msgid "Arrays and lists of records"
 msgstr "Arrays и списъци от записи"
 
 #. table cell
-#: site/lectures/01-getting-started.md:84
+#: site/lectures/01-getting-started.md:117
 msgid "Functions, and reading older code"
 msgstr "Функции и четене на по-стар код"
 
 #. table cell
-#: site/lectures/01-getting-started.md:85
+#: site/lectures/01-getting-started.md:118
 msgid "Objects: deep paths, dictionaries, data shapes"
 msgstr "Обекти: дълбоки пътища, dictionaries, форми на данните"
 
 #. table cell
-#: site/lectures/01-getting-started.md:86
+#: site/lectures/01-getting-started.md:119
 msgid "Array methods: transforming, grouping and indexing data; project kickoff"
 msgstr "Методи на arrays: трансформиране, групиране и индексиране на данни; старт на проекта"
 
 #. table cell
-#: site/lectures/01-getting-started.md:87
+#: site/lectures/01-getting-started.md:120
 msgid "Strings, regular expressions, dates and numbers"
 msgstr "Strings, регулярни изрази, дати и числа"
 
 #. table cell
-#: site/lectures/01-getting-started.md:88
+#: site/lectures/01-getting-started.md:121
 msgid "JSON, Node.js, modules and errors; running rules locally"
 msgstr "JSON, Node.js, модули и грешки; локално изпълнение на правила"
 
 #. table cell
-#: site/lectures/01-getting-started.md:89
+#: site/lectures/01-getting-started.md:122
 msgid "Tests, JSDoc types and code quality; Git workflow; project review"
 msgstr "Тестове, JSDoc типове и качество на кода; работа с Git; преглед на проекта"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:91
+#: site/lectures/01-getting-started.md:124
 msgid "Every example is shown on the kind of data you work with: the JSON report of one device (`doc`) and a check rule. The reports in this course are **made up** - the names and values are invented, the shapes are realistic."
 msgstr "Всеки пример е показан върху данните, с които работите: JSON отчетът на едно устройство (`doc`) и правило за проверка. Отчетите в този курс са **измислени** - имената и стойностите са измислени, формите са реалистични."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:95
+#: site/lectures/01-getting-started.md:128
 msgid "How we work"
 msgstr "Как работим"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:97
+#: site/lectures/01-getting-started.md:130
 msgid "**Theory with many examples.** Every lecture page has runnable examples: press **Run** under an example, change it with **Edit**, run it again (see [How to use these pages](/how-to))."
 msgstr "**Теория с много примери.** Всяка страница с лекция има примери, които се изпълняват: натиснете **Run** под примера, променете го с **Edit**, изпълнете го отново (вижте [Как да използвате тези страници](/how-to))."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:100
+#: site/lectures/01-getting-started.md:133
 msgid "**Practice in VSCode.** Each session has practice tasks that check themselves and print `OK` or `FAIL`, and a short homework. The homework is reviewed at the start of the next session."
 msgstr "**Упражнения във VSCode.** Всяко занятие има задачи за упражнение, които се проверяват сами и отпечатват `OK` или `FAIL`, и кратко домашно. Домашното се преглежда в началото на следващото занятие."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:103
+#: site/lectures/01-getting-started.md:136
 msgid "**Questions at any time.** Do not wait for the end of the session - interrupt with a question whenever something is not clear. Feedback by mail is welcome at any time too: what helps, what does not, what is hard."
 msgstr "**Въпроси по всяко време.** Не чакайте края на занятието - прекъснете с въпрос, щом нещо не е ясно. Обратна връзка по мейл също е добре дошла по всяко време: какво помага, какво не, какво е трудно."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:106
+#: site/lectures/01-getting-started.md:139
 msgid "**Doing beats listening.** People keep much more of what they practise and explain to others than of what they only hear or read. That is why most of the time goes to examples, tasks and code review."
 msgstr "**Правенето е по-силно от слушането.** Хората запомнят много повече от това, което упражняват и обясняват на другите, отколкото от това, което само чуват или четат. Затова повечето време отива за примери, задачи и code review."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:110
+#: site/lectures/01-getting-started.md:143
 msgid "The materials"
 msgstr "Материалите"
 
 #. table cell
-#: site/lectures/01-getting-started.md:112
+#: site/lectures/01-getting-started.md:145
 msgid "What"
 msgstr "Какво"
 
 #. table cell
-#: site/lectures/01-getting-started.md:112 site/lectures/01-getting-started.md:461
+#: site/lectures/01-getting-started.md:145 site/lectures/01-getting-started.md:499
 msgid "Where"
 msgstr "Къде"
 
 #. table cell
-#: site/lectures/01-getting-started.md:114
+#: site/lectures/01-getting-started.md:147
 msgid "The lectures (this site)"
 msgstr "Лекциите (този сайт)"
 
 #. table cell
-#: site/lectures/01-getting-started.md:115
+#: site/lectures/01-getting-started.md:148
 msgid "Practice tasks and homework"
 msgstr "Задачи за упражнение и домашни"
 
 #. table cell
-#: site/lectures/01-getting-started.md:116
+#: site/lectures/01-getting-started.md:149
 msgid "The code written in class"
 msgstr "Кодът, писан в час"
 
 #. table cell
-#: site/lectures/01-getting-started.md:117
+#: site/lectures/01-getting-started.md:150
 msgid "Step-by-step animations"
 msgstr "Анимации стъпка по стъпка"
 
 #. table cell
-#: site/lectures/01-getting-started.md:117
+#: site/lectures/01-getting-started.md:150
 msgid "[Animations](/under-the-hood)"
 msgstr "[Анимации](/under-the-hood)"
 
 #. table cell
-#: site/lectures/01-getting-started.md:118 site/lectures/01-getting-started.md:120
+#: site/lectures/01-getting-started.md:151 site/lectures/01-getting-started.md:153
 msgid "The course project"
 msgstr "Курсовият проект"
 
 #. table cell
-#: site/lectures/01-getting-started.md:118
+#: site/lectures/01-getting-started.md:151
 msgid "[Course project](/project)"
 msgstr "[Курсов проект](/project)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:122
+#: site/lectures/01-getting-started.md:155
 msgid "A small **helper library** for the JSON of one product, which makes it simpler and safer to read properties in check rules. It grows during the course - the first function comes in session 5 - and is presented in session 10. Start thinking now: which product, which reports, which lines do you write again and again in your rules?"
 msgstr "Малка **библиотека с helper функции** за JSON-а на един продукт, която прави четенето на properties в правилата за проверка по-просто и по-безопасно. Тя расте по време на курса - първата функция идва в занятие 5 - и се представя в занятие 10. Започнете да мислите още сега: кой продукт, кои отчети, кои редове пишете отново и отново в правилата си?"
 
 #. heading 2
-#: site/lectures/01-getting-started.md:128
+#: site/lectures/01-getting-started.md:161
 msgid "2. Setting up the environment"
 msgstr "2. Настройка на средата"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:130
+#: site/lectures/01-getting-started.md:163
 msgid "You need four things. Install them before session 2."
 msgstr "Трябват ви четири неща. Инсталирайте ги преди занятие 2."
 
 #. table cell
-#: site/lectures/01-getting-started.md:132
+#: site/lectures/01-getting-started.md:165
 msgid "Tool"
 msgstr "Инструмент"
 
 #. table cell
-#: site/lectures/01-getting-started.md:132
+#: site/lectures/01-getting-started.md:165
 msgid "What for"
 msgstr "За какво"
 
 #. table cell
-#: site/lectures/01-getting-started.md:132
+#: site/lectures/01-getting-started.md:165
 msgid "Get it"
 msgstr "Откъде"
 
 #. table cell
-#: site/lectures/01-getting-started.md:132
+#: site/lectures/01-getting-started.md:165
 msgid "Check it"
 msgstr "Проверка"
 
 #. table cell
-#: site/lectures/01-getting-started.md:134
+#: site/lectures/01-getting-started.md:167
 msgid "**Node.js** (the LTS version)"
 msgstr "**Node.js** (версията LTS)"
 
 #. table cell
-#: site/lectures/01-getting-started.md:134
+#: site/lectures/01-getting-started.md:167
 msgid "runs JavaScript files on your computer"
 msgstr "изпълнява JavaScript файлове на компютъра ви"
 
 #. table cell
-#: site/lectures/01-getting-started.md:135
+#: site/lectures/01-getting-started.md:168
 msgid "**VSCode**"
 msgstr "**VSCode**"
 
 #. table cell
-#: site/lectures/01-getting-started.md:135
+#: site/lectures/01-getting-started.md:168
 msgid "the editor we use in the course"
 msgstr "редакторът, който използваме в курса"
 
 #. table cell
-#: site/lectures/01-getting-started.md:135
+#: site/lectures/01-getting-started.md:168
 msgid "open it"
 msgstr "отворете го"
 
 #. table cell
-#: site/lectures/01-getting-started.md:136 site/lectures/01-getting-started.md:269
+#: site/lectures/01-getting-started.md:169 site/lectures/01-getting-started.md:307
 msgid "**Git**"
 msgstr "**Git**"
 
 #. table cell
-#: site/lectures/01-getting-started.md:136
+#: site/lectures/01-getting-started.md:169
 msgid "version control: saves the history of your files"
 msgstr "контрол на версиите: пази историята на файловете ви"
 
 #. table cell
-#: site/lectures/01-getting-started.md:137
+#: site/lectures/01-getting-started.md:170
 msgid "**A GitHub account**"
 msgstr "**Акаунт в GitHub**"
 
 #. table cell
-#: site/lectures/01-getting-started.md:137
+#: site/lectures/01-getting-started.md:170
 msgid "hosts your repositories online"
 msgstr "пази вашите repositories онлайн"
 
 #. table cell
-#: site/lectures/01-getting-started.md:137
+#: site/lectures/01-getting-started.md:170
 msgid "sign in"
 msgstr "влезте в него"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:139
+#: site/lectures/01-getting-started.md:172
 msgid "Check the installations in a terminal (on Windows: PowerShell or Command Prompt; in VSCode: **Terminal > New Terminal**):"
 msgstr "Проверете инсталациите в терминал (на Windows: PowerShell или Command Prompt; във VSCode: **Terminal > New Terminal**):"
 
 #. box title
-#: site/lectures/01-getting-started.md:148
+#: site/lectures/01-getting-started.md:181
 msgid "Node.js LTS"
 msgstr "Node.js LTS"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:149
+#: site/lectures/01-getting-started.md:182
 msgid "Install the **LTS** (\"long-term support\") version of Node.js - it is the stable one. This course is tested with Node.js 24."
 msgstr "Инсталирайте версията **LTS** (\"long-term support\", с дългосрочна поддръжка) на Node.js - тя е стабилната. Курсът е тестван с Node.js 24."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:153
+#: site/lectures/01-getting-started.md:186
 msgid "A folder for the course"
 msgstr "Папка за курса"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:155
+#: site/lectures/01-getting-started.md:188
 msgid "Keep the course in one folder, for example `JS_Basics_Course/`. Inside it, the repositories you clone in this session (section 4) and a folder for your own experiments:"
 msgstr "Дръжте курса в една папка, например `JS_Basics_Course/`. В нея - repositories, които клонирате на това занятие (раздел 4), и папка за ваши собствени опити:"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:166
+#: site/lectures/01-getting-started.md:199
 msgid "File and folder names"
 msgstr "Имена на файлове и папки"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:168
+#: site/lectures/01-getting-started.md:201
 msgid "Names that work everywhere save you trouble later - on servers, in Git, in the terminal:"
 msgstr "Имена, които работят навсякъде, ви спестяват проблеми по-късно - на сървърите, в Git, в терминала:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:171
+#: site/lectures/01-getting-started.md:204
 msgid "use only Latin letters, digits, `-` and `_`;"
 msgstr "използвайте само латински букви, цифри, `-` и `_`;"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:172
+#: site/lectures/01-getting-started.md:205
 msgid "no spaces: separate words with `-`, `_` or *camelCase* (`versionCheck.js`);"
 msgstr "без интервали: разделяйте думите с `-`, `_` или *camelCase* (`versionCheck.js`);"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:173
+#: site/lectures/01-getting-started.md:206
 msgid "remember that Linux (and most servers) treats `Rule.js` and `rule.js` as two different files - Windows does not."
 msgstr "помнете, че Linux (и повечето сървъри) третира `Rule.js` и `rule.js` като два различни файла - Windows не."
 
 #. heading 2
-#: site/lectures/01-getting-started.md:176
+#: site/lectures/01-getting-started.md:209
 msgid "3. Writing code: VSCode"
 msgstr "3. Писане на код: VSCode"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:178
+#: site/lectures/01-getting-started.md:211
 msgid "Text editors and IDEs"
 msgstr "Текстови редактори и IDE"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:180
+#: site/lectures/01-getting-started.md:213
 msgid "A **text editor** edits text files and highlights the syntax. An **IDE** (Integrated Development Environment) adds tools: running and debugging, testing, refactoring, version control, project-wide search and navigation."
 msgstr "**Текстовият редактор** редактира текстови файлове и оцветява синтаксиса. **IDE** (Integrated Development Environment, интегрирана среда за разработка) добавя инструменти: изпълнение и debugging, тестване, рефакториране, контрол на версиите, търсене и навигация в целия проект."
 
 #. table cell
-#: site/lectures/01-getting-started.md:184 site/lectures/01-getting-started.md:461
+#: site/lectures/01-getting-started.md:217 site/lectures/01-getting-started.md:499
 msgid "Examples"
 msgstr "Примери"
 
 #. table cell
-#: site/lectures/01-getting-started.md:186
+#: site/lectures/01-getting-started.md:219
 msgid "Text editors"
 msgstr "Текстови редактори"
 
 #. table cell
-#: site/lectures/01-getting-started.md:186
+#: site/lectures/01-getting-started.md:219
 msgid "Notepad++ (Windows), Sublime Text, **Visual Studio Code**"
 msgstr "Notepad++ (Windows), Sublime Text, **Visual Studio Code**"
 
 #. table cell
-#: site/lectures/01-getting-started.md:187
+#: site/lectures/01-getting-started.md:220
 msgid "IDEs"
 msgstr "IDE"
 
 #. table cell
-#: site/lectures/01-getting-started.md:187
+#: site/lectures/01-getting-started.md:220
 msgid "WebStorm, IntelliJ IDEA, Eclipse, NetBeans, Visual Studio"
 msgstr "WebStorm, IntelliJ IDEA, Eclipse, NetBeans, Visual Studio"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:189
+#: site/lectures/01-getting-started.md:222
 msgid "VSCode sits in the middle: a light editor that becomes an IDE with extensions. It is free and open-source, runs on Linux, Windows and macOS, has excellent JavaScript support out of the box, a built-in terminal, a debugger and Git integration, and a huge [extensions marketplace](https://marketplace.visualstudio.com/vscode). We use it in the course; what matters most is that you learn your editor well."
 msgstr "VSCode е по средата: лек редактор, който става IDE с разширения. Безплатен е и open-source, работи на Linux, Windows и macOS, има отлична поддръжка на JavaScript още при инсталация, вграден терминал, debugger и интеграция с Git, и огромен [пазар с разширения](https://marketplace.visualstudio.com/vscode). Използваме го в курса; най-важното е да овладеете добре своя редактор."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:195
+#: site/lectures/01-getting-started.md:228
 msgid "The parts of the window"
 msgstr "Частите на прозореца"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:197
+#: site/lectures/01-getting-started.md:230
+msgid "![VSCode with the Homework folder: 1 the Activity Bar, 2 the Explorer, 3 the editor, 4 the terminal in the panel, 5 the Status Bar](/diagrams/vscode-window.svg){.diagram width=950 height=560}"
+msgstr "![VSCode с папката Homework: 1 Activity Bar, 2 Explorer, 3 редакторът, 4 терминалът в панела, 5 Status Bar](/diagrams/vscode-window.svg){.diagram width=950 height=560}"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:232
 msgid "**Activity Bar** (the icons on the left): Explorer, Search, Source Control (Git), Run and Debug, Extensions."
 msgstr "**Activity Bar** (иконите вляво): Explorer, Search, Source Control (Git), Run and Debug, Extensions."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:199
+#: site/lectures/01-getting-started.md:234
 msgid "**Explorer**: the files of the open folder. Open a folder with **File > Open Folder** - VSCode works best with a whole folder (a *workspace*), not single files."
 msgstr "**Explorer**: файловете на отворената папка. Отворете папка с **File > Open Folder** - VSCode работи най-добре с цяла папка (*workspace*), а не с отделни файлове."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:201
+#: site/lectures/01-getting-started.md:236
 msgid "**Editor**: the open files, in tabs; split it with `Ctrl+\\`."
 msgstr "**Editor**: отворените файлове, в табове; разделете го с `Ctrl+\\`."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:202
+#: site/lectures/01-getting-started.md:237
 msgid "**Panel** (bottom): the **Terminal** (`` Ctrl+` ``), Problems, Output."
 msgstr "**Panel** (долу): **Terminal** (`` Ctrl+` ``), Problems, Output."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:203
+#: site/lectures/01-getting-started.md:238
 msgid "**Status Bar** (bottom line): the Git branch, errors and warnings, the language of the file."
 msgstr "**Status Bar** (най-долният ред): Git branch-ът, грешките и предупрежденията, езикът на файла."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:206
+#: site/lectures/01-getting-started.md:241
 msgid "See [User Interface](https://code.visualstudio.com/docs/getstarted/userinterface) in the VSCode docs."
 msgstr "Вижте [User Interface](https://code.visualstudio.com/docs/getstarted/userinterface) в документацията на VSCode."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:209
+#: site/lectures/01-getting-started.md:244
 msgid "The Command Palette"
 msgstr "Command Palette"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:211
+#: site/lectures/01-getting-started.md:246
 msgid "`Ctrl+Shift+P` (macOS: `Cmd+Shift+P`) opens the **Command Palette**: every command of VSCode and its extensions, with search by any part of the name. If you do not know the shortcut for something, type its name there - \"toggle terminal\", \"format document\", \"change language mode\". `Ctrl+P` opens a file by name."
 msgstr "`Ctrl+Shift+P` (macOS: `Cmd+Shift+P`) отваря **Command Palette**: всяка команда на VSCode и неговите разширения, с търсене по произволна част от името. Ако не знаете клавишната комбинация за нещо, напишете името му там - \"toggle terminal\", \"format document\", \"change language mode\". `Ctrl+P` отваря файл по име."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:216
+#: site/lectures/01-getting-started.md:251
 msgid "Shortcuts worth learning first"
 msgstr "Клавишни комбинации, които си струва да научите първо"
 
 #. table cell
-#: site/lectures/01-getting-started.md:218
+#: site/lectures/01-getting-started.md:253
 msgid "Shortcut (Windows / Linux)"
 msgstr "Комбинация (Windows / Linux)"
 
 #. table cell
-#: site/lectures/01-getting-started.md:218
+#: site/lectures/01-getting-started.md:253
 msgid "Does"
 msgstr "Прави"
 
 #. table cell
-#: site/lectures/01-getting-started.md:220
+#: site/lectures/01-getting-started.md:255
 msgid "Command Palette"
 msgstr "Command Palette"
 
 #. table cell
-#: site/lectures/01-getting-started.md:221
+#: site/lectures/01-getting-started.md:256
 msgid "open a file by name"
 msgstr "отваря файл по име"
 
 #. table cell
-#: site/lectures/01-getting-started.md:222
+#: site/lectures/01-getting-started.md:257
 msgid "show / hide the terminal"
 msgstr "показва / скрива терминала"
 
 #. table cell
-#: site/lectures/01-getting-started.md:223
+#: site/lectures/01-getting-started.md:258
 msgid "comment / uncomment the line"
 msgstr "коментира / разкоментира реда"
 
 #. table cell
-#: site/lectures/01-getting-started.md:224
+#: site/lectures/01-getting-started.md:259
 msgid "move the line up / down"
 msgstr "мести реда нагоре / надолу"
 
 #. table cell
-#: site/lectures/01-getting-started.md:225
+#: site/lectures/01-getting-started.md:260
 msgid "copy the line down"
 msgstr "копира реда надолу"
 
 #. table cell
-#: site/lectures/01-getting-started.md:226
+#: site/lectures/01-getting-started.md:261
 msgid "select the next match of the selected word"
 msgstr "избира следващото съвпадение на избраната дума"
 
 #. table cell
-#: site/lectures/01-getting-started.md:227
+#: site/lectures/01-getting-started.md:262
 msgid "rename a variable everywhere"
 msgstr "преименува variable навсякъде"
 
 #. table cell
-#: site/lectures/01-getting-started.md:228
+#: site/lectures/01-getting-started.md:263
 msgid "format the document"
 msgstr "форматира документа"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:230
+#: site/lectures/01-getting-started.md:265
 msgid "On macOS use `Cmd` instead of `Ctrl` and `Option` instead of `Alt`. The full lists: [keyboard reference sheets](https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_keyboard-reference-sheets)."
 msgstr "На macOS използвайте `Cmd` вместо `Ctrl` и `Option` вместо `Alt`. Пълните списъци: [keyboard reference sheets](https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_keyboard-reference-sheets)."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:233
+#: site/lectures/01-getting-started.md:268
 msgid "Extensions and themes"
 msgstr "Разширения и теми"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:235
-msgid "The Extensions view (`Ctrl+Shift+X`) installs extensions from the marketplace. For this course nothing extra is required - JavaScript support is built in. Change the color theme with **File > Preferences > Theme > Color Theme**, or \"color theme\" in the Command Palette."
-msgstr "Изгледът Extensions (`Ctrl+Shift+X`) инсталира разширения от пазара. За този курс не е нужно нищо допълнително - поддръжката на JavaScript е вградена. Сменете цветовата тема с **File > Preferences > Theme > Color Theme** или с \"color theme\" в Command Palette."
+#: site/lectures/01-getting-started.md:270
+msgid "The Extensions view (`Ctrl+Shift+X`) installs extensions from the marketplace. For the first sessions nothing extra is required - JavaScript support is built in. From lecture 10 on, **ESLint** and **Prettier** help; the Homework folder recommends them, and VSCode offers to install them when you open it (see [VSCode extensions](/how-to#vscode-extensions)). Change the color theme with **File > Preferences > Theme > Color Theme**, or \"color theme\" in the Command Palette."
+msgstr "Изгледът Extensions (`Ctrl+Shift+X`) инсталира разширения от пазара. За първите занятия не е нужно нищо допълнително - поддръжката на JavaScript е вградена. От лекция 10 нататък помагат **ESLint** и **Prettier**; папката Homework ги препоръчва и VSCode предлага да ги инсталира, когато я отворите (вижте [Разширения за VSCode](/how-to#vscode-extensions)). Сменете цветовата тема с **File > Preferences > Theme > Color Theme** или с \"color theme\" в Command Palette."
 
 #. heading 2
-#: site/lectures/01-getting-started.md:240
+#: site/lectures/01-getting-started.md:278
 msgid "4. Git and GitHub"
 msgstr "4. Git и GitHub"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:242
+#: site/lectures/01-getting-started.md:280
 msgid "What they are"
 msgstr "Какво са"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:244
+#: site/lectures/01-getting-started.md:282
 msgid "**Git** is a **version control system** (VCS): it records the changes to your files over time, so that you can see the history, compare versions and go back to any earlier one."
 msgstr "**Git** е **система за контрол на версиите** (VCS, version control system): записва промените във файловете ви във времето, така че да виждате историята, да сравнявате версии и да се връщате към всяка по-ранна."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:247
+#: site/lectures/01-getting-started.md:285
 msgid "**GitHub** is a website that hosts Git repositories online and adds tools for working together: pull requests, code review, issues. (GitLab and Bitbucket are similar services.)"
 msgstr "**GitHub** е уебсайт, който пази Git repositories онлайн и добавя инструменти за съвместна работа: pull requests, code review, issues. (GitLab и Bitbucket са подобни услуги.)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:251
+#: site/lectures/01-getting-started.md:289
 msgid "Git is the tool; GitHub is one place to keep and share what Git records. Rules, like any code, are best kept in Git: every change has a history and a reason."
 msgstr "Git е инструментът; GitHub е едно място, където да пазите и споделяте това, което Git записва. Правилата, както всеки код, е най-добре да се пазят в Git: всяка промяна има история и причина."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:254
+#: site/lectures/01-getting-started.md:292
 msgid "Why version control"
 msgstr "Защо контрол на версиите"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:256
+#: site/lectures/01-getting-started.md:294
 msgid "**History**: every saved state, with who changed what, when and why."
 msgstr "**История**: всяко запазено състояние, с това кой какво е променил, кога и защо."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:257
+#: site/lectures/01-getting-started.md:295
 msgid "**Going back**: a change broke something - return to the last working version."
 msgstr "**Връщане назад**: промяна е счупила нещо - върнете се към последната работеща версия."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:258
+#: site/lectures/01-getting-started.md:296
 msgid "**Working together**: several people change the same project without overwriting each other's work."
 msgstr "**Съвместна работа**: няколко души променят един и същ проект, без да презаписват работата си."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:260
+#: site/lectures/01-getting-started.md:298
 msgid "**Branches**: try a new feature apart from the main code, and merge it when it is ready (session 10)."
 msgstr "**Branches**: изпробвайте нова функционалност отделно от основния код и я слейте, когато е готова (занятие 10)."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:263
+#: site/lectures/01-getting-started.md:301
 msgid "Local, centralized and distributed"
 msgstr "Локални, централизирани и разпределени"
 
 #. table cell
-#: site/lectures/01-getting-started.md:265
+#: site/lectures/01-getting-started.md:303
 msgid "Kind"
 msgstr "Вид"
 
 #. table cell
-#: site/lectures/01-getting-started.md:265
+#: site/lectures/01-getting-started.md:303
 msgid "Where the history is"
 msgstr "Къде е историята"
 
 #. table cell
-#: site/lectures/01-getting-started.md:265
+#: site/lectures/01-getting-started.md:303
 msgid "Example"
 msgstr "Пример"
 
 #. table cell
-#: site/lectures/01-getting-started.md:267
+#: site/lectures/01-getting-started.md:305
 msgid "local"
 msgstr "локални"
 
 #. table cell
-#: site/lectures/01-getting-started.md:267
+#: site/lectures/01-getting-started.md:305
 msgid "only on your computer"
 msgstr "само на вашия компютър"
 
 #. table cell
-#: site/lectures/01-getting-started.md:267
+#: site/lectures/01-getting-started.md:305
 msgid "old tools, rarely used today"
 msgstr "стари инструменти, рядко използвани днес"
 
 #. table cell
-#: site/lectures/01-getting-started.md:268
+#: site/lectures/01-getting-started.md:306
 msgid "centralized"
 msgstr "централизирани"
 
 #. table cell
-#: site/lectures/01-getting-started.md:268
+#: site/lectures/01-getting-started.md:306
 msgid "on one server; everyone works against it"
 msgstr "на един сървър; всички работят с него"
 
 #. table cell
-#: site/lectures/01-getting-started.md:268
+#: site/lectures/01-getting-started.md:306
 msgid "Subversion (SVN)"
 msgstr "Subversion (SVN)"
 
 #. table cell
-#: site/lectures/01-getting-started.md:269
+#: site/lectures/01-getting-started.md:307
 msgid "distributed"
 msgstr "разпределени"
 
 #. table cell
-#: site/lectures/01-getting-started.md:269
+#: site/lectures/01-getting-started.md:307
 msgid "**every** copy has the full history; servers are for sharing"
 msgstr "**всяко** копие има цялата история; сървърите са за споделяне"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:271
+#: site/lectures/01-getting-started.md:309
 msgid "The main ideas"
 msgstr "Основните идеи"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:273
+#: site/lectures/01-getting-started.md:311
 msgid "**Working directory** - the files you edit."
 msgstr "**Работна директория** (working directory) - файловете, които редактирате."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:274
+#: site/lectures/01-getting-started.md:312
 msgid "**Repository** (repo) - the project's files plus their whole history. Your **local** repository is on your computer; a **remote** repository (for example on GitHub) is shared."
 msgstr "**Repository** (repo) - файловете на проекта плюс цялата им история. **Локалното** ви repository е на компютъра ви; **отдалеченото** (remote) repository (например в GitHub) е споделено."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:277
+#: site/lectures/01-getting-started.md:315
 msgid "**Commit** - a saved snapshot of your changes, with a message, in your local repository."
 msgstr "**Commit** - запазена моментна снимка на промените ви, със съобщение, в локалното ви repository."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:279
+#: site/lectures/01-getting-started.md:317
 msgid "**Push** - send your commits to the remote repository."
 msgstr "**Push** - изпращане на вашите commits към отдалеченото repository."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:280
+#: site/lectures/01-getting-started.md:318
 msgid "**Pull** - bring the commits from the remote repository into yours."
 msgstr "**Pull** - взимане на commits от отдалеченото repository във вашето."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:281
+#: site/lectures/01-getting-started.md:319
 msgid "**Clone** - copy a remote repository to your computer, with its whole history."
 msgstr "**Clone** - копиране на отдалечено repository на компютъра ви, с цялата му история."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:283
+#: site/lectures/01-getting-started.md:321
 msgid "Set up Git once"
 msgstr "Настройте Git веднъж"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:285
+#: site/lectures/01-getting-started.md:323
 msgid "Tell Git your name and email - they are stored in every commit. Use the email of your GitHub account, so that GitHub shows the commits as yours:"
 msgstr "Кажете на Git името и имейла си - те се записват във всеки commit. Използвайте имейла на акаунта си в GitHub, за да показва GitHub commits като ваши:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:300
+#: site/lectures/01-getting-started.md:338
 msgid "Without `--global`, the setting applies only to the repository you are in."
 msgstr "Без `--global` настройката важи само за repository, в което се намирате."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:302
+#: site/lectures/01-getting-started.md:340
 msgid "A new repository: `git init`"
 msgstr "Ново repository: `git init`"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:309
+#: site/lectures/01-getting-started.md:347
 msgid "The three areas, and `git add` / `git commit`"
 msgstr "Трите области и `git add` / `git commit`"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:311
+#: site/lectures/01-getting-started.md:349
 msgid "A change goes through three areas:"
 msgstr "Една промяна минава през три области:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:313
+#: site/lectures/01-getting-started.md:351
 msgid "**Working directory** - you edit a file. Git sees that it changed."
 msgstr "**Работна директория** - редактирате файл. Git вижда, че се е променил."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:314
+#: site/lectures/01-getting-started.md:352
 msgid "**Staging area** (the *index*) - `git add` puts the change into the next commit. You choose what goes in."
 msgstr "**Staging area** (*index*) - `git add` слага промяната в следващия commit. Вие избирате какво влиза."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:316
+#: site/lectures/01-getting-started.md:354
 msgid "**Repository** - `git commit` saves the staged changes as a snapshot."
 msgstr "**Repository** - `git commit` запазва подготвените промени като моментна снимка."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:328
+#: site/lectures/01-getting-started.md:366
 msgid "Older materials use `git reset HEAD -- <file>` to unstage - it does the same."
 msgstr "По-старите материали използват `git reset HEAD -- <file>`, за да махнат файл от staging - прави същото."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:330
+#: site/lectures/01-getting-started.md:368
 msgid "Good commit messages"
 msgstr "Добри съобщения на commits"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:332
+#: site/lectures/01-getting-started.md:370
 msgid "Short, specific, in the imperative: say what the commit **does**."
 msgstr "Кратки, конкретни, в повелително наклонение: кажете какво **прави** commit-ът."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:333
+#: site/lectures/01-getting-started.md:371
 msgid "One logical change per commit."
 msgstr "Една логическа промяна на commit."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:334
+#: site/lectures/01-getting-started.md:372
 msgid "Look at the changes before you commit (`git status`, `git diff`)."
 msgstr "Погледнете промените, преди да направите commit (`git status`, `git diff`)."
 
 #. table cell
-#: site/lectures/01-getting-started.md:336
+#: site/lectures/01-getting-started.md:374
 msgid "Good"
 msgstr "Добре"
 
 #. table cell
-#: site/lectures/01-getting-started.md:336
+#: site/lectures/01-getting-started.md:374
 msgid "Not helpful"
 msgstr "Не помага"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:341
+#: site/lectures/01-getting-started.md:379
 msgid "`git status` and `git log`"
 msgstr "`git status` и `git log`"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:343
+#: site/lectures/01-getting-started.md:381
 msgid "`git status` shows where every change is: modified but not staged, staged, or untracked (new files Git does not know yet). It also says what to do next:"
 msgstr "`git status` показва къде е всяка промяна: променена, но не в staging, в staging или untracked (нови файлове, които Git още не познава). Казва и какво да направите след това:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:357
+#: site/lectures/01-getting-started.md:395
 msgid "`git log` shows the history, newest first: the commit id (*hash*), the author, the date and the message. `git log --oneline` gives one line per commit."
 msgstr "`git log` показва историята, най-новото първо: id-то на commit-а (*hash*), автора, датата и съобщението. `git log --oneline` дава по един ред на commit."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:362
+#: site/lectures/01-getting-started.md:400
 msgid "A file named `.gitignore` in the root of the repository lists the files Git should **not** track - generated files, logs, local settings, passwords and keys:"
 msgstr "Файл с име `.gitignore` в корена на repository изброява файловете, които Git **не** трябва да следи - генерирани файлове, логове, локални настройки, пароли и ключове:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:375
+#: site/lectures/01-getting-started.md:413
 msgid "GitHub keeps [ready-made `.gitignore` templates](https://github.com/github/gitignore) for many languages; the `Node.gitignore` one fits JavaScript projects."
 msgstr "GitHub пази [готови шаблони за `.gitignore`](https://github.com/github/gitignore) за много езици; шаблонът `Node.gitignore` пасва на JavaScript проекти."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:378
+#: site/lectures/01-getting-started.md:416
 msgid "From your computer to GitHub"
 msgstr "От компютъра ви към GitHub"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:380
+#: site/lectures/01-getting-started.md:418
 msgid "On GitHub, create a **new empty repository** (no README, licence or `.gitignore` - they would clash with your local history)."
 msgstr "В GitHub създайте **ново празно repository** (без README, лиценз или `.gitignore` - те биха влезли в конфликт с локалната ви история)."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:382
+#: site/lectures/01-getting-started.md:420
 msgid "Connect your local repository to it and push:"
 msgstr "Свържете локалното си repository с него и направете push:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:390
+#: site/lectures/01-getting-started.md:428
 msgid "**Signing in.** VSCode signs you in to GitHub with your account, in the browser. On the command line, GitHub does not accept your password: it asks for a **personal access token** (GitHub > Settings > Developer settings > Personal access tokens) or uses SSH keys. Keep tokens secret, like passwords."
 msgstr "**Влизане.** VSCode ви вписва в GitHub с акаунта ви, в браузъра. В командния ред GitHub не приема паролата ви: иска **personal access token** (GitHub > Settings > Developer settings > Personal access tokens) или използва SSH ключове. Пазете token-ите в тайна, като паролите."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:395
+#: site/lectures/01-getting-started.md:433
 msgid "From GitHub to your computer: `git clone`"
 msgstr "От GitHub към компютъра ви: `git clone`"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:401
+#: site/lectures/01-getting-started.md:439
 msgid "This creates a folder with the repository's files and history. In a cloned repository, `git pull` brings the latest changes."
 msgstr "Това създава папка с файловете и историята на repository. В клонирано repository `git pull` взима последните промени."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:404
+#: site/lectures/01-getting-started.md:442
 msgid "Git in VSCode"
 msgstr "Git във VSCode"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:406
+#: site/lectures/01-getting-started.md:444
 msgid "The **Source Control** view (`Ctrl+Shift+G`) does the same without commands: it lists the changed files, stages them with `+`, commits with the message box, and pushes / pulls with **Sync Changes**. **Publish Branch** creates the GitHub repository and pushes in one step. Use whichever you like - the commands are good to know, because every tutorial and every error message uses them."
 msgstr "Изгледът **Source Control** (`Ctrl+Shift+G`) прави същото без команди: изброява променените файлове, слага ги в staging с `+`, прави commit с полето за съобщение и прави push / pull със **Sync Changes**. **Publish Branch** създава repository в GitHub и прави push с една стъпка. Използвайте което ви харесва - командите е добре да ги знаете, защото всеки tutorial и всяко съобщение за грешка ги използва."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:412
+#: site/lectures/01-getting-started.md:450
 msgid "The course repositories"
 msgstr "Repositories на курса"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:414
+#: site/lectures/01-getting-started.md:452
 msgid "**Labs** - the code written in class. Clone it once, then `git pull` before each session. You only read it."
 msgstr "**Labs** - кодът, писан в час. Клонирайте го веднъж, после `git pull` преди всяко занятие. Само го четете."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:416
+#: site/lectures/01-getting-started.md:454
 msgid "**Homework** - the practice tasks and homework. You keep **your own** copy on GitHub, and still get the new tasks from the course repository. The [Homework README](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework#readme) has the exact steps; in short:"
 msgstr "**Homework** - задачите за упражнение и домашните. Пазите **собствено** копие в GitHub и пак взимате новите задачи от repository на курса. [README на Homework](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework#readme) има точните стъпки; накратко:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:432
+#: site/lectures/01-getting-started.md:470
 msgid "Branches, merging, conflicts and the pull-request workflow come in session 10."
 msgstr "Branches, сливане (merge), конфликти и работата с pull requests идват в занятие 10."
 
 #. heading 2
-#: site/lectures/01-getting-started.md:434
+#: site/lectures/01-getting-started.md:472
 msgid "5. What is JavaScript?"
 msgstr "5. Какво е JavaScript?"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:436
+#: site/lectures/01-getting-started.md:474
 msgid "**JavaScript** is a programming language that started in web browsers and now runs almost everywhere."
 msgstr "**JavaScript** е език за програмиране, който започва в уеб браузърите, а днес се изпълнява почти навсякъде."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:439
+#: site/lectures/01-getting-started.md:477
 msgid "On a web page, the three languages share the work:"
 msgstr "В една уеб страница трите езика си поделят работата:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:441
+#: site/lectures/01-getting-started.md:479
 msgid "**HTML** - the structure (headings, paragraphs, forms);"
 msgstr "**HTML** - структурата (заглавия, абзаци, форми);"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:442
+#: site/lectures/01-getting-started.md:480
 msgid "**CSS** - the look (colours, layout);"
 msgstr "**CSS** - външният вид (цветове, подредба);"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:443
+#: site/lectures/01-getting-started.md:481
 msgid "**JavaScript** - the behaviour (react to clicks, change the page, talk to servers)."
 msgstr "**JavaScript** - поведението (реагира на кликове, променя страницата, говори със сървъри)."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:445
+#: site/lectures/01-getting-started.md:483
 msgid "Some characteristics:"
 msgstr "Някои характеристики:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:447
+#: site/lectures/01-getting-started.md:485
 msgid "It was designed to be easy to start with, even for beginners - and then grew enormously."
 msgstr "Създаден е така, че да се започва лесно, дори от начинаещи - а после се разраства огромно."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:449
+#: site/lectures/01-getting-started.md:487
 msgid "It is **dynamically typed**: a variable can hold a value of any type, and the type is checked while the program runs (lecture 2)."
 msgstr "Той е **динамично типизиран**: една variable може да съдържа стойност от всеки тип, а типът се проверява, докато програмата се изпълнява (лекция 2)."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:451
+#: site/lectures/01-getting-started.md:489
 msgid "It is usually called a **scripting** language: the source code is run directly, without a separate build step that you have to do."
 msgstr "Обикновено се нарича **скриптов** език: изходният код се изпълнява директно, без отделна стъпка за компилиране, която вие трябва да направите."
 
 #. box title
-#: site/lectures/01-getting-started.md:454
+#: site/lectures/01-getting-started.md:492
 msgid "Java and JavaScript"
 msgstr "Java и JavaScript"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:455
+#: site/lectures/01-getting-started.md:493
 msgid "The names are similar for marketing reasons only. Java and JavaScript are as related as *car* and *carpet*."
 msgstr "Имената си приличат само заради маркетинга. Java и JavaScript са толкова свързани, колкото *кола* и *колан*."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:459
+#: site/lectures/01-getting-started.md:497
 msgid "Where JavaScript runs"
 msgstr "Къде се изпълнява JavaScript"
 
 #. table cell
-#: site/lectures/01-getting-started.md:463
+#: site/lectures/01-getting-started.md:501
 msgid "browsers"
 msgstr "браузъри"
 
 #. table cell
-#: site/lectures/01-getting-started.md:463
+#: site/lectures/01-getting-started.md:501
 msgid "every interactive web page and web app"
 msgstr "всяка интерактивна уеб страница и уеб приложение"
 
 #. table cell
-#: site/lectures/01-getting-started.md:464
+#: site/lectures/01-getting-started.md:502
 msgid "servers and tools"
 msgstr "сървъри и инструменти"
 
 #. table cell
-#: site/lectures/01-getting-started.md:464
+#: site/lectures/01-getting-started.md:502
 msgid "**Node.js**: web servers, command-line tools, build tools"
 msgstr "**Node.js**: уеб сървъри, инструменти за командния ред, инструменти за build"
 
 #. table cell
-#: site/lectures/01-getting-started.md:465
+#: site/lectures/01-getting-started.md:503
 msgid "desktop apps"
 msgstr "desktop приложения"
 
 #. table cell
-#: site/lectures/01-getting-started.md:465
+#: site/lectures/01-getting-started.md:503
 msgid "apps built with Electron (VSCode itself is one)"
 msgstr "приложения, направени с Electron (самият VSCode е такова)"
 
 #. table cell
-#: site/lectures/01-getting-started.md:466
+#: site/lectures/01-getting-started.md:504
 msgid "mobile apps"
 msgstr "мобилни приложения"
 
 #. table cell
-#: site/lectures/01-getting-started.md:466
+#: site/lectures/01-getting-started.md:504
 msgid "React Native and similar frameworks"
 msgstr "React Native и подобни frameworks"
 
 #. table cell
-#: site/lectures/01-getting-started.md:467
+#: site/lectures/01-getting-started.md:505
 msgid "inside other programs"
 msgstr "в други програми"
 
 #. table cell
-#: site/lectures/01-getting-started.md:467
+#: site/lectures/01-getting-started.md:505
 msgid "rule engines, databases, automation tools - a host program runs small scripts written by its users"
 msgstr "rule engines, бази данни, инструменти за автоматизация - програма-домакин изпълнява малки скриптове, написани от потребителите ѝ"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:469
+#: site/lectures/01-getting-started.md:507
 msgid "Your check rules are the last kind: a **rule engine** runs your JavaScript for every report. In the browser, JavaScript changes pages, reacts to the user, draws graphics, plays media, uses maps and many other *APIs* (Application Programming Interfaces). In this course we use only the language itself and Node.js - no web pages."
 msgstr "Вашите правила за проверка са последният вид: **rule engine** изпълнява вашия JavaScript за всеки отчет. В браузъра JavaScript променя страници, реагира на потребителя, рисува графики, пуска медия, използва карти и много други *API* (Application Programming Interfaces). В този курс използваме само самия език и Node.js - без уеб страници."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:475
+#: site/lectures/01-getting-started.md:513
 msgid "A short history"
 msgstr "Кратка история"
 
 #. table cell
-#: site/lectures/01-getting-started.md:477
+#: site/lectures/01-getting-started.md:515
 msgid "Year"
 msgstr "Година"
 
 #. table cell
-#: site/lectures/01-getting-started.md:477
+#: site/lectures/01-getting-started.md:515
 msgid "What happened"
 msgstr "Какво се случва"
 
 #. table cell
-#: site/lectures/01-getting-started.md:479
+#: site/lectures/01-getting-started.md:517
 msgid "Brendan Eich creates the first version in **10 days**, for the Netscape Navigator browser. Its names: Mocha, LiveScript, then JavaScript."
 msgstr "Брендън Айк (Brendan Eich) създава първата версия за **10 дни**, за браузъра Netscape Navigator. Имената му: Mocha, LiveScript, после JavaScript."
 
 #. table cell
-#: site/lectures/01-getting-started.md:480
+#: site/lectures/01-getting-started.md:518
 msgid "The language is standardised by Ecma International as **ECMAScript** (standard ECMA-262). \"ECMAScript\" is the language standard; \"JavaScript\" is what everyone calls it."
 msgstr "Езикът е стандартизиран от Ecma International като **ECMAScript** (стандарт ECMA-262). \"ECMAScript\" е стандартът на езика; \"JavaScript\" е името, с което всички го наричат."
 
 #. table cell
-#: site/lectures/01-getting-started.md:481
+#: site/lectures/01-getting-started.md:519
 msgid "early 2000s"
 msgstr "началото на 2000-те"
 
 #. table cell
-#: site/lectures/01-getting-started.md:481
+#: site/lectures/01-getting-started.md:519
 msgid "Douglas Crockford popularises **JSON** (JavaScript Object Notation) - the data format of your reports."
 msgstr "Дъглас Крокфорд (Douglas Crockford) популяризира **JSON** (JavaScript Object Notation) - форматът на данните на вашите отчети."
 
 #. table cell
-#: site/lectures/01-getting-started.md:482
+#: site/lectures/01-getting-started.md:520
 msgid "\"Ajax\": pages load data without reloading. Libraries like jQuery follow."
 msgstr "\"Ajax\": страниците зареждат данни, без да се презареждат. Следват библиотеки като jQuery."
 
 #. table cell
-#: site/lectures/01-getting-started.md:483
+#: site/lectures/01-getting-started.md:521
 msgid "Google releases the fast **V8** engine with its Chrome browser."
 msgstr "Google пуска бързия engine **V8** заедно с браузъра Chrome."
 
 #. table cell
-#: site/lectures/01-getting-started.md:484
+#: site/lectures/01-getting-started.md:522
 msgid "**Node.js** (built on V8) brings JavaScript to servers. ES5 improves the language."
 msgstr "**Node.js** (построен върху V8) пренася JavaScript на сървърите. ES5 подобрява езика."
 
 #. table cell
-#: site/lectures/01-getting-started.md:485
+#: site/lectures/01-getting-started.md:523
 msgid "Microsoft releases **TypeScript**: JavaScript with types."
 msgstr "Microsoft пуска **TypeScript**: JavaScript с типове."
 
 #. table cell
-#: site/lectures/01-getting-started.md:486
+#: site/lectures/01-getting-started.md:524
 msgid "**ES6 / ES2015** - the biggest update: `let` / `const`, arrow functions, classes, modules. Since then a new version comes **every year**: ES2016, ES2017, ..."
 msgstr "**ES6 / ES2015** - най-голямото обновление: `let` / `const`, arrow functions, класове, модули. Оттогава нова версия излиза **всяка година**: ES2016, ES2017, ..."
 
 #. table cell
-#: site/lectures/01-getting-started.md:487
+#: site/lectures/01-getting-started.md:525
 msgid "today"
 msgstr "днес"
 
 #. table cell
-#: site/lectures/01-getting-started.md:487
+#: site/lectures/01-getting-started.md:525
 msgid "The committee **TC39** develops the language in the open ([proposals on GitHub](https://github.com/tc39/proposals)). Optional chaining `?.` came in ES2020; a new edition is published every June."
 msgstr "Комитетът **TC39** развива езика публично ([proposals в GitHub](https://github.com/tc39/proposals)). Optional chaining `?.` идва в ES2020; ново издание излиза всеки юни."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:489
+#: site/lectures/01-getting-started.md:527
 msgid "Why this matters to you: your rule engine supports **some** version of ECMAScript. Code written for a newer version may not run there. The lectures mark features newer than ES2020 with a short note, so that you can check them."
 msgstr "Защо това е важно за вас: вашият rule engine поддържа **някоя** версия на ECMAScript. Код, написан за по-нова версия, може да не работи там. Лекциите отбелязват възможностите, по-нови от ES2020, с кратка бележка, за да можете да ги проверите."
 
 #. heading 2
-#: site/lectures/01-getting-started.md:493
+#: site/lectures/01-getting-started.md:531
 msgid "6. Running JavaScript"
 msgstr "6. Изпълнение на JavaScript"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:495
+#: site/lectures/01-getting-started.md:533
 msgid "In this site"
 msgstr "В този сайт"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:497
+#: site/lectures/01-getting-started.md:535
 msgid "The fastest way: press **Run** under any example. The code runs in your browser, and what `console.log` prints appears under the example."
 msgstr "Най-бързият начин: натиснете **Run** под който и да е пример. Кодът се изпълнява в браузъра ви, а това, което отпечатва `console.log`, се появява под примера."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:506
+#: site/lectures/01-getting-started.md:544
 msgid "`console.log(...)` prints its value - our main tool to see what a program does. `doc` is the example JSON document; it is ready in every example on this site."
 msgstr "`console.log(...)` отпечатва стойността си - основният ни инструмент, за да видим какво прави една програма. `doc` е примерният JSON документ; той е готов във всеки пример на този сайт."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:509
+#: site/lectures/01-getting-started.md:547
 msgid "The whole document, with a map of its parts, is on the page [The example JSON document](../example-document)."
 msgstr "Целият документ, с карта на частите му, е на страницата [Примерният JSON документ](../example-document)."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:512
+#: site/lectures/01-getting-started.md:550
 msgid "In the browser"
 msgstr "В браузъра"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:514
+#: site/lectures/01-getting-started.md:552
 msgid "Every browser has developer tools with a **console**: press `F12` (or `Ctrl+Shift+I`, macOS `Cmd+Option+I`) and open the **Console** tab. Type JavaScript and press `Enter`:"
 msgstr "Всеки браузър има инструменти за разработчици с **конзола**: натиснете `F12` (или `Ctrl+Shift+I`, macOS `Cmd+Option+I`) и отворете таба **Console**. Пишете JavaScript и натиснете `Enter`:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:522
+#: site/lectures/01-getting-started.md:560
 msgid "A web page includes JavaScript with the `<script>` element - the code itself, or a file with `src`:"
 msgstr "Уеб страницата включва JavaScript с елемента `<script>` - самия код или файл чрез `src`:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:533
+#: site/lectures/01-getting-started.md:571
 msgid "With `src`, the code between the tags is **ignored**."
 msgstr "Със `src` кодът между таговете се **пренебрегва**."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:534
+#: site/lectures/01-getting-started.md:572
 msgid "A page can have many `<script>` elements, in `<head>` or `<body>`."
 msgstr "Една страница може да има много елементи `<script>`, в `<head>` или в `<body>`."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:535
+#: site/lectures/01-getting-started.md:573
 msgid "The browser reads the page from top to bottom and **stops** at a script until it has run. Put scripts at the end of `<body>`, or add `defer` to a script in `<head>` (`<script src=\"app.js\" defer></script>`), so that the page shows first."
 msgstr "Браузърът чете страницата отгоре надолу и **спира** при скрипт, докато той не се изпълни. Слагайте скриптовете в края на `<body>` или добавете `defer` към скрипт в `<head>` (`<script src=\"app.js\" defer></script>`), за да се покаже страницата първо."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:539
+#: site/lectures/01-getting-started.md:577
 msgid "With Node.js in the terminal"
 msgstr "С Node.js в терминала"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:541
+#: site/lectures/01-getting-started.md:579
 msgid "This is how you run the practice tasks, and how you will test rules locally (session 9). Create a file `hello.js`:"
 msgstr "Така изпълнявате задачите за упражнение и така ще тествате правила локално (занятие 9). Създайте файл `hello.js`:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:549
+#: site/lectures/01-getting-started.md:587
 msgid "and run it from the terminal, in the folder of the file:"
 msgstr "и го изпълнете от терминала, в папката на файла:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:555
+#: site/lectures/01-getting-started.md:593
+msgid "Before the cursor, the terminal always shows the **prompt**. It ends with the **current folder**: a command works on the files of this folder, so `node hello.js` works only in the folder of `hello.js`. Look at the prompt before you press `Enter` - most \"file not found\" errors come from a command typed in the wrong folder."
+msgstr "Преди курсора терминалът винаги показва **промпт** (prompt). Той завършва с **текущата папка**: командата работи с файловете на тази папка, затова `node hello.js` работи само в папката на `hello.js`. Поглеждайте промпта, преди да натиснете `Enter` - повечето грешки \"file not found\" идват от команда, написана в грешната папка."
+
+#. paragraph
+#: site/lectures/01-getting-started.md:599
+msgid "![The parts of the prompt: PS for PowerShell, the current folder, then your command; under it what the program prints, then the prompt again](/diagrams/terminal-prompt.svg){.diagram width=920 height=290}"
+msgstr "![Частите на промпта: PS за PowerShell, текущата папка, после вашата команда; под нея това, което програмата отпечатва, после отново промптът](/diagrams/terminal-prompt.svg){.diagram width=920 height=290}"
+
+#. paragraph
+#: site/lectures/01-getting-started.md:601
 msgid "In VSCode: open the folder, open the terminal (`` Ctrl+` ``), type `node hello.js`. (Old course materials used a `.vscode/tasks.json` file and `Ctrl+Shift+B` for this - the terminal is simpler.) VSCode can also run and debug a file with **Run > Run Without Debugging** (`Ctrl+F5`)."
 msgstr "Във VSCode: отворете папката, отворете терминала (`` Ctrl+` ``), напишете `node hello.js`. (Старите материали на курса използваха файл `.vscode/tasks.json` и `Ctrl+Shift+B` за това - терминалът е по-прост.) VSCode може и да изпълни и debug-не файл с **Run > Run Without Debugging** (`Ctrl+F5`)."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:560
+#: site/lectures/01-getting-started.md:606
 msgid "`node` without a file starts an interactive console (a *REPL*): type JavaScript, see the result; `.exit` or `Ctrl+C` twice to leave."
 msgstr "`node` без файл стартира интерактивна конзола (*REPL*): пишете JavaScript, виждате резултата; `.exit` или два пъти `Ctrl+C` за изход."
 
 #. heading 2
-#: site/lectures/01-getting-started.md:563
+#: site/lectures/01-getting-started.md:609
 msgid "7. How a program runs"
 msgstr "7. Как се изпълнява една програма"
 
 #. heading 3
-#: site/lectures/01-getting-started.md:565
+#: site/lectures/01-getting-started.md:611
 msgid "Machine code, compilers and interpreters"
 msgstr "Машинен код, компилатори и интерпретатори"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:567
+#: site/lectures/01-getting-started.md:613
 msgid "The processor understands only **machine code** - very simple instructions in binary. Every program in a \"human\" language must be translated first. There are two classic ways:"
 msgstr "Процесорът разбира само **машинен код** - много прости инструкции в двоичен вид. Всяка програма на \"човешки\" език трябва първо да бъде преведена. Има два класически начина:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:571
+#: site/lectures/01-getting-started.md:617
 msgid "A **compiler** translates the **whole** program into machine code first; then the translated program runs. Like a translator who reads the whole book first, then translates it. (C, C++, Go)"
 msgstr "**Компилаторът** превежда **цялата** програма на машинен код първо; после преведената програма се изпълнява. Като преводач, който първо прочита цялата книга, а после я превежда. (C, C++, Go)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:574
+#: site/lectures/01-getting-started.md:620
 msgid "An **interpreter** translates one statement, runs it, then goes on to the next. Like an interpreter who translates sentence by sentence. (JavaScript, Python, PHP, Ruby were designed this way.)"
 msgstr "**Интерпретаторът** превежда една инструкция, изпълнява я и продължава със следващата. Като преводач, който превежда изречение по изречение. (JavaScript, Python, PHP, Ruby са замислени така.)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:578
+#: site/lectures/01-getting-started.md:624
 msgid "Modern **JavaScript engines** combine both: they start running the code quickly, watch which parts run often, and compile those \"hot\" parts into fast machine code while the program runs (*just-in-time*, JIT, compilation)."
 msgstr "Модерните **JavaScript engines** съчетават двете: започват да изпълняват кода бързо, следят кои части се изпълняват често и компилират тези \"горещи\" части до бърз машинен код, докато програмата работи (*just-in-time*, JIT, компилация)."
 
 #. heading 3
-#: site/lectures/01-getting-started.md:582
+#: site/lectures/01-getting-started.md:628
 msgid "The JavaScript engine"
 msgstr "JavaScript engine-ът"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:584
+#: site/lectures/01-getting-started.md:630
 msgid "The **engine** is the program that runs JavaScript: **V8** (Chrome, Node.js, and many other programs), SpiderMonkey (Firefox), JavaScriptCore (Safari). Roughly:"
 msgstr "**Engine**-ът е програмата, която изпълнява JavaScript: **V8** (Chrome, Node.js и много други програми), SpiderMonkey (Firefox), JavaScriptCore (Safari). Грубо казано:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:587
+#: site/lectures/01-getting-started.md:633
 msgid "it splits the text into **tokens** (words: `let`, `x`, `=`, `5`);"
 msgstr "разделя текста на **tokens** (думи: `let`, `x`, `=`, `5`);"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:588
+#: site/lectures/01-getting-started.md:634
 msgid "it builds a tree of the program's structure (the **AST**, abstract syntax tree); a syntax error is found here, before anything runs;"
 msgstr "изгражда дърво на структурата на програмата (**AST**, abstract syntax tree); синтактичната грешка се открива тук, преди нещо да се изпълни;"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:590
+#: site/lectures/01-getting-started.md:636
 msgid "it turns the tree into **bytecode** and runs it;"
 msgstr "превръща дървото в **bytecode** и го изпълнява;"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:591
+#: site/lectures/01-getting-started.md:637
 msgid "it compiles the \"hot\" code into optimised machine code."
 msgstr "компилира \"горещия\" код до оптимизиран машинен код."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:593
+#: site/lectures/01-getting-started.md:639
 msgid "The engine knows only the **language**. Everything else comes from the **environment** that hosts it: the browser gives `document` and `alert`, Node.js gives `process` and files, and your rule engine gives `emit` and the `doc` of each report. `console` is given by almost every environment."
 msgstr "Engine-ът познава само **езика**. Всичко останало идва от **средата** (environment), която го приютява: браузърът дава `document` и `alert`, Node.js дава `process` и файловете, а вашият rule engine дава `emit` и `doc` на всеки отчет. `console` се дава от почти всяка среда."
 
 #. box title
-#: site/lectures/01-getting-started.md:598 site/lectures/01-getting-started.md:656 site/lectures/01-getting-started.md:678
+#: site/lectures/01-getting-started.md:644 site/lectures/01-getting-started.md:702 site/lectures/01-getting-started.md:724
 msgid "Animation"
 msgstr "Анимация"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:599
+#: site/lectures/01-getting-started.md:645
 msgid "**How JavaScript runs your code:** [1. Translators](../animations/jsEngine.html#1){target=\"_blank\"}, [2. Tokens](../animations/jsEngine.html#2){target=\"_blank\"}, [3. AST](../animations/jsEngine.html#3){target=\"_blank\"}, [4. Two phases](../animations/jsEngine.html#4){target=\"_blank\"}, [5. Engine and environment](../animations/jsEngine.html#5){target=\"_blank\"}, [6. Bytecode (advanced)](../animations/jsEngine.html#6){target=\"_blank\"}, [7. Hot code (advanced)](../animations/jsEngine.html#7){target=\"_blank\"}"
 msgstr "**Как JavaScript изпълнява кода ви:** [1. Преводачи](../animations/jsEngine.html#1){target=\"_blank\"}, [2. Tokens](../animations/jsEngine.html#2){target=\"_blank\"}, [3. AST](../animations/jsEngine.html#3){target=\"_blank\"}, [4. Двете фази](../animations/jsEngine.html#4){target=\"_blank\"}, [5. Engine и среда](../animations/jsEngine.html#5){target=\"_blank\"}, [6. Bytecode (advanced)](../animations/jsEngine.html#6){target=\"_blank\"}, [7. Горещ код (advanced)](../animations/jsEngine.html#7){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/01-getting-started.md:609
+#: site/lectures/01-getting-started.md:655
 msgid "8. The structure of a program"
 msgstr "8. Структурата на една програма"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:611
+#: site/lectures/01-getting-started.md:657
 msgid "A JavaScript program is a sequence of **statements** - instructions, run one after the other, **from top to bottom**. Conditions, loops and functions (sessions 3-5) change that order."
 msgstr "Една JavaScript програма е поредица от **statements** - инструкции, изпълнявани една след друга, **отгоре надолу**. Условията, loops и функциите (занятия 3-5) променят този ред."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:615
+#: site/lectures/01-getting-started.md:661
 msgid "A **statement** does something: `let answer = 42;`, `console.log(answer);`."
 msgstr "**Statement** прави нещо: `let answer = 42;`, `console.log(answer);`."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:616
+#: site/lectures/01-getting-started.md:662
 msgid "An **expression** gives a value: `42`, `answer`, `2 + 3`, `doc.overview.model`. Expressions are the parts statements are built from."
 msgstr "**Expression** дава стойност: `42`, `answer`, `2 + 3`, `doc.overview.model`. Expressions са частите, от които се изграждат statements."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:618
+#: site/lectures/01-getting-started.md:664
 msgid "Statements end with `;`."
 msgstr "Statements завършват с `;`."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:619
+#: site/lectures/01-getting-started.md:665
 msgid "A group of statements in `{` `}` is a **block**."
 msgstr "Група statements във `{` `}` е **блок**."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:620
+#: site/lectures/01-getting-started.md:666
 msgid "`//` starts a **comment**: text for people, ignored by JavaScript."
 msgstr "`//` започва **коментар**: текст за хората, който JavaScript пренебрегва."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:622
+#: site/lectures/01-getting-started.md:668
 msgid "Compared with a natural language:"
 msgstr "В сравнение с естествен език:"
 
 #. table cell
-#: site/lectures/01-getting-started.md:624
+#: site/lectures/01-getting-started.md:670
 msgid "A language like English"
 msgstr "Език като българския"
 
 #. table cell
-#: site/lectures/01-getting-started.md:624 site/lectures/01-getting-started.md:717
+#: site/lectures/01-getting-started.md:670 site/lectures/01-getting-started.md:763
 msgid "JavaScript"
 msgstr "JavaScript"
 
 #. table cell
-#: site/lectures/01-getting-started.md:626
+#: site/lectures/01-getting-started.md:672
 msgid "a book, a story"
 msgstr "книга, разказ"
 
 #. table cell
-#: site/lectures/01-getting-started.md:626
+#: site/lectures/01-getting-started.md:672
 msgid "a program, a script"
 msgstr "програма, скрипт"
 
 #. table cell
-#: site/lectures/01-getting-started.md:627
+#: site/lectures/01-getting-started.md:673
 msgid "a paragraph"
 msgstr "абзац"
 
 #. table cell
-#: site/lectures/01-getting-started.md:627
+#: site/lectures/01-getting-started.md:673
 msgid "a block `{ ... }`"
 msgstr "блок `{ ... }`"
 
 #. table cell
-#: site/lectures/01-getting-started.md:628
+#: site/lectures/01-getting-started.md:674
 msgid "a sentence"
 msgstr "изречение"
 
 #. table cell
-#: site/lectures/01-getting-started.md:628
+#: site/lectures/01-getting-started.md:674
 msgid "a statement"
 msgstr "statement"
 
 #. table cell
-#: site/lectures/01-getting-started.md:629
+#: site/lectures/01-getting-started.md:675
 msgid "a word"
 msgstr "дума"
 
 #. table cell
-#: site/lectures/01-getting-started.md:629
+#: site/lectures/01-getting-started.md:675
 msgid "a token"
 msgstr "token"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:650
+#: site/lectures/01-getting-started.md:696
 msgid "The old slides also showed `alert(\"Welcome\")` and `document.body.style.backgroundColor = \"red\"` - these work only in a browser (`alert` and `document` come from the browser, not from the language). In this site they would show a message box and colour the page; in Node.js and in a rule engine they do not exist."
 msgstr "Старите слайдове показваха и `alert(\"Welcome\")` и `document.body.style.backgroundColor = \"red\"` - те работят само в браузъра (`alert` и `document` идват от браузъра, а не от езика). В този сайт те биха показали прозорче със съобщение и биха оцветили страницата; в Node.js и в rule engine те не съществуват."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:657
+#: site/lectures/01-getting-started.md:703
 msgid "**How an expression is evaluated:** [6. Statement vs expression (advanced)](../animations/expressionEvaluation.html#6){target=\"_blank\"}"
 msgstr "**Как се изчислява един израз:** [6. Statement срещу expression (advanced)](../animations/expressionEvaluation.html#6){target=\"_blank\"}"
 
 #. heading 2
-#: site/lectures/01-getting-started.md:660
+#: site/lectures/01-getting-started.md:706
 msgid "9. What is a variable?"
 msgstr "9. Какво е variable?"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:662
+#: site/lectures/01-getting-started.md:708
 msgid "A **variable** is like a label on a box: the box holds a value, and the label is the name you use to reach it. More exactly, a variable is a **name** for a place in memory (RAM) that holds a value the program needs. You choose the name, following a few rules (lecture 2). Once the variable exists, you can store values in it and read them back."
 msgstr "**Variable** е като етикет на кутия: кутията съдържа стойност, а етикетът е името, с което я достигате. По-точно, variable е **име** на място в паметта (RAM), което пази стойност, нужна на програмата. Вие избирате името, като спазвате няколко правила (лекция 2). Щом variable-ата съществува, можете да записвате стойности в нея и да ги четете обратно."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:679
+#: site/lectures/01-getting-started.md:725
 msgid "**Variables in memory:** [1. Declaring and assigning](../animations/variablesInMemory.html#1){target=\"_blank\"}"
 msgstr "**Variables в паметта:** [1. Деклариране и присвояване](../animations/variablesInMemory.html#1){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:682
+#: site/lectures/01-getting-started.md:728
 msgid "On the report - variables give names to the values a rule reads:"
 msgstr "В отчета - variables дават имена на стойностите, които правилото чете:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:690
+#: site/lectures/01-getting-started.md:736
 msgid "How to declare variables (`let`, `const`), how to name them, and what types of values they hold is the start of [lecture 2](/lectures/02-variables-and-types)."
 msgstr "Как се декларират variables (`let`, `const`), как се именуват и какви типове стойности съдържат е началото на [лекция 2](/lectures/02-variables-and-types)."
 
 #. heading 2
-#: site/lectures/01-getting-started.md:693
+#: site/lectures/01-getting-started.md:739
 msgid "10. Practice"
 msgstr "10. Упражнения"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:695
+#: site/lectures/01-getting-started.md:741
 msgid "In class, step by step:"
 msgstr "В час, стъпка по стъпка:"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:697
+#: site/lectures/01-getting-started.md:743
 msgid "Check `node -v` and `git -v` in a terminal; set `user.name` and `user.email`."
 msgstr "Проверете `node -v` и `git -v` в терминал; задайте `user.name` и `user.email`."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:698
+#: site/lectures/01-getting-started.md:744
 msgid "Create `JS_Basics_Course/playground/`, open it in VSCode, create `hello.js` with two `console.log` lines, and run it with `node hello.js`."
 msgstr "Създайте `JS_Basics_Course/playground/`, отворете я във VSCode, създайте `hello.js` с два реда `console.log` и я изпълнете с `node hello.js`."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:700
+#: site/lectures/01-getting-started.md:746
 msgid "Make it a repository: `git init`, `git add .`, `git commit -m \"Add hello.js\"`. Look at `git status` and `git log --oneline` before and after."
 msgstr "Направете я repository: `git init`, `git add .`, `git commit -m \"Add hello.js\"`. Погледнете `git status` и `git log --oneline` преди и след това."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:702
+#: site/lectures/01-getting-started.md:748
 msgid "Create an empty repository on GitHub, connect it with `git remote add origin ...`, and `git push -u origin main`. Refresh the page on GitHub."
 msgstr "Създайте празно repository в GitHub, свържете го с `git remote add origin ...` и направете `git push -u origin main`. Презаредете страницата в GitHub."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:704
+#: site/lectures/01-getting-started.md:750
 msgid "Change `hello.js`, commit, push again - once with commands, once with the Source Control view of VSCode."
 msgstr "Променете `hello.js`, направете commit и push отново - веднъж с команди, веднъж с изгледа Source Control на VSCode."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:706
+#: site/lectures/01-getting-started.md:752
 msgid "Clone the Labs repository, and set up the Homework repository as in section 4."
 msgstr "Клонирайте Labs repository и настройте Homework repository, както е в раздел 4."
 
 #. heading 2
-#: site/lectures/01-getting-started.md:708
+#: site/lectures/01-getting-started.md:754
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/01-getting-started.md:710
+#: site/lectures/01-getting-started.md:756
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/01-getting-started.md:712
+#: site/lectures/01-getting-started.md:758
 msgid "The course"
 msgstr "Курсът"
 
 #. table cell
-#: site/lectures/01-getting-started.md:712
+#: site/lectures/01-getting-started.md:758
 msgid "Rules over JSON reports; 10 sessions; the site, Homework and Labs repositories; a helper library as the project"
 msgstr "Правила върху JSON отчети; 10 занятия; сайтът, Homework и Labs repositories; библиотека с helper функции като проект"
 
 #. table cell
-#: site/lectures/01-getting-started.md:713
+#: site/lectures/01-getting-started.md:759
 msgid "Tools"
 msgstr "Инструменти"
 
 #. table cell
-#: site/lectures/01-getting-started.md:713
+#: site/lectures/01-getting-started.md:759
 msgid "Node.js LTS (`node -v`), VSCode, Git (`git -v`), a GitHub account"
 msgstr "Node.js LTS (`node -v`), VSCode, Git (`git -v`), акаунт в GitHub"
 
 #. table cell
-#: site/lectures/01-getting-started.md:714
+#: site/lectures/01-getting-started.md:760
 msgid "VSCode"
 msgstr "VSCode"
 
 #. table cell
-#: site/lectures/01-getting-started.md:714
+#: site/lectures/01-getting-started.md:760
 msgid "Open a folder; `Ctrl+Shift+P` Command Palette; `` Ctrl+` `` terminal; Source Control view"
 msgstr "Отворете папка; `Ctrl+Shift+P` Command Palette; `` Ctrl+` `` терминал; изгледът Source Control"
 
 #. table cell
-#: site/lectures/01-getting-started.md:715
+#: site/lectures/01-getting-started.md:761
 msgid "Git"
 msgstr "Git"
 
 #. table cell
-#: site/lectures/01-getting-started.md:715
+#: site/lectures/01-getting-started.md:761
 msgid "Working directory -> `git add` -> staging -> `git commit` -> repository; `status`, `log`, `.gitignore`"
 msgstr "Работна директория -> `git add` -> staging -> `git commit` -> repository; `status`, `log`, `.gitignore`"
 
 #. table cell
-#: site/lectures/01-getting-started.md:716
+#: site/lectures/01-getting-started.md:762
 msgid "GitHub"
 msgstr "GitHub"
 
 #. table cell
-#: site/lectures/01-getting-started.md:717
+#: site/lectures/01-getting-started.md:763
 msgid "The language of the web, also in Node.js and inside other programs (rule engines); standard: ECMAScript, a new version every year"
 msgstr "Езикът на уеба, също и в Node.js и в други програми (rule engines); стандарт: ECMAScript, нова версия всяка година"
 
 #. table cell
-#: site/lectures/01-getting-started.md:718
+#: site/lectures/01-getting-started.md:764
 msgid "Running it"
 msgstr "Изпълнение"
 
 #. table cell
-#: site/lectures/01-getting-started.md:718
+#: site/lectures/01-getting-started.md:764
 msgid "The Run buttons of this site; the browser console (`F12`); `node file.js` in the terminal"
 msgstr "Бутоните Run на този сайт; конзолата на браузъра (`F12`); `node file.js` в терминала"
 
 #. table cell
-#: site/lectures/01-getting-started.md:719
+#: site/lectures/01-getting-started.md:765
 msgid "How it runs"
 msgstr "Как се изпълнява"
 
 #. table cell
-#: site/lectures/01-getting-started.md:719
+#: site/lectures/01-getting-started.md:765
 msgid "Engine (V8): tokens -> AST -> bytecode -> hot code; the environment gives `console`, `document`, `emit`"
 msgstr "Engine (V8): tokens -> AST -> bytecode -> горещ код; средата дава `console`, `document`, `emit`"
 
 #. table cell
-#: site/lectures/01-getting-started.md:720
+#: site/lectures/01-getting-started.md:766
 msgid "Structure"
 msgstr "Структура"
 
 #. table cell
-#: site/lectures/01-getting-started.md:720
+#: site/lectures/01-getting-started.md:766
 msgid "Statements run top to bottom, end with `;`; expressions give values; blocks `{ }`; comments `//`"
 msgstr "Statements се изпълняват отгоре надолу и завършват с `;`; expressions дават стойности; блокове `{ }`; коментари `//`"
 
 #. table cell
-#: site/lectures/01-getting-started.md:721
+#: site/lectures/01-getting-started.md:767
 msgid "Variable"
 msgstr "Variable"
 
 #. table cell
-#: site/lectures/01-getting-started.md:721
+#: site/lectures/01-getting-started.md:767
 msgid "A name for a value in memory; details in lecture 2"
 msgstr "Име на стойност в паметта; подробности в лекция 2"
 
 #. heading 2
-#: site/lectures/01-getting-started.md:723
+#: site/lectures/01-getting-started.md:769
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:725
+#: site/lectures/01-getting-started.md:771
 msgid "Install Node.js (LTS), VSCode and Git, and create a GitHub account (if you do not have one). Check the versions in a terminal."
 msgstr "Инсталирайте Node.js (LTS), VSCode и Git и си създайте акаунт в GitHub (ако нямате). Проверете версиите в терминал."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:727
+#: site/lectures/01-getting-started.md:773
 msgid "Do steps 2-6 of the practice, if you did not finish them in class: a `hello.js` in a repository of your own on GitHub, Labs cloned, Homework set up with `upstream` and `origin` (see the [Homework README](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework#readme))."
 msgstr "Направете стъпки 2-6 от упражненията, ако не сте ги довършили в час: `hello.js` във ваше собствено repository в GitHub, клониран Labs, Homework настроен с `upstream` и `origin` (вижте [README на Homework](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework#readme))."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:731
+#: site/lectures/01-getting-started.md:777
 msgid "Spend 15 minutes in VSCode: the Command Palette, the shortcuts table of section 3, a color theme you like."
 msgstr "Отделете 15 минути във VSCode: Command Palette, таблицата с клавишни комбинации от раздел 3, цветова тема, която ви харесва."
 
 #. paragraph
-#: site/lectures/01-getting-started.md:733
+#: site/lectures/01-getting-started.md:779
 msgid "Think about the course project: which product's reports would you start with?"
 msgstr "Помислете за курсовия проект: с отчетите на кой продукт бихте започнали?"
 
 #. heading 2
-#: site/lectures/01-getting-started.md:735
+#: site/lectures/01-getting-started.md:781
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:737
+#: site/lectures/01-getting-started.md:783
 msgid "VSCode: [documentation](https://code.visualstudio.com/docs), [Basic editing](https://code.visualstudio.com/docs/editor/codebasics), [Using Git in VSCode](https://code.visualstudio.com/docs/sourcecontrol/overview), [Extension Marketplace](https://code.visualstudio.com/docs/editor/extension-marketplace)"
 msgstr "VSCode: [документация](https://code.visualstudio.com/docs), [Basic editing](https://code.visualstudio.com/docs/editor/codebasics), [Using Git in VSCode](https://code.visualstudio.com/docs/sourcecontrol/overview), [Extension Marketplace](https://code.visualstudio.com/docs/editor/extension-marketplace)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:741
+#: site/lectures/01-getting-started.md:787
 msgid "Git: [Pro Git book](https://git-scm.com/book/en/v2) (free; chapters 1-2 cover today), [Adding a local repository to GitHub](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github), [Authenticating with the command line](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#authenticating-with-the-command-line)"
 msgstr "Git: [книгата Pro Git](https://git-scm.com/book/en/v2) (безплатна; глави 1-2 покриват днешното), [Adding a local repository to GitHub](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github), [Authenticating with the command line](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#authenticating-with-the-command-line)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:744
+#: site/lectures/01-getting-started.md:790
 msgid "JavaScript: [MDN - What is JavaScript?](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/What_is_JavaScript), [javascript.info - An introduction](https://javascript.info/intro), [Node.js - Introduction](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs)"
 msgstr "JavaScript: [MDN - What is JavaScript?](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/What_is_JavaScript), [javascript.info - An introduction](https://javascript.info/intro), [Node.js - Introduction](https://nodejs.org/en/learn/getting-started/introduction-to-nodejs)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:747
+#: site/lectures/01-getting-started.md:793
 msgid "History: [JavaScript on Wikipedia](https://en.wikipedia.org/wiki/JavaScript), [Brendan Eich](https://en.wikipedia.org/wiki/Brendan_Eich), [ECMA-262](https://ecma-international.org/publications-and-standards/standards/ecma-262/)"
 msgstr "История: [JavaScript в Wikipedia](https://en.wikipedia.org/wiki/JavaScript), [Brendan Eich](https://en.wikipedia.org/wiki/Brendan_Eich), [ECMA-262](https://ecma-international.org/publications-and-standards/standards/ecma-262/)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:749
+#: site/lectures/01-getting-started.md:795
 msgid "The engine: [V8](https://v8.dev/)"
 msgstr "Engine-ът: [V8](https://v8.dev/)"
 
 #. paragraph
-#: site/lectures/01-getting-started.md:751
+#: site/lectures/01-getting-started.md:797
 msgid "**Next session:** variables, types and operators - `let` and `const`, numbers and strings, and turning the strings of a report into numbers."
 msgstr "**Следващото занятие:** variables, типове и оператори - `let` и `const`, числа и strings и превръщане на strings от отчета в числа."
+
+#~ msgid "The Extensions view (`Ctrl+Shift+X`) installs extensions from the marketplace. For this course nothing extra is required - JavaScript support is built in. Change the color theme with **File > Preferences > Theme > Color Theme**, or \"color theme\" in the Command Palette."
+#~ msgstr "Изгледът Extensions (`Ctrl+Shift+X`) инсталира разширения от пазара. За този курс не е нужно нищо допълнително - поддръжката на JavaScript е вградена. Сменете цветовата тема с **File > Preferences > Theme > Color Theme** или с \"color theme\" в Command Palette."
 
 #~ msgid "**Read and write check rules over JSON documents with confidence, and build, test and document a small helper library for the JSON of one product.**"
 #~ msgstr "**Да четете и пишете уверено правила за проверка върху JSON документи и да изградите, тествате и документирате малка библиотека с helper функции за JSON-а на един продукт.**"

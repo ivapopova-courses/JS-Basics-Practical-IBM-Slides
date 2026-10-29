@@ -251,7 +251,7 @@ msgstr "Първо погледнете данните: `console.table`"
 #. paragraph
 #: site/lectures/07-array-methods.md:181
 msgid "MDN: [console.table()](https://developer.mozilla.org/en-US/docs/Web/API/console/table_static)"
-msgstr ""
+msgstr "MDN: [console.table()](https://developer.mozilla.org/en-US/docs/Web/API/console/table_static)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:183
@@ -271,7 +271,7 @@ msgstr "2. `forEach` - направи нещо с всеки елемент"
 #. paragraph
 #: site/lectures/07-array-methods.md:202
 msgid "MDN: [Array.prototype.forEach()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)"
-msgstr ""
+msgstr "MDN: [Array.prototype.forEach()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:204
@@ -331,7 +331,7 @@ msgstr "3. `map` - нов array, по един резултат за всеки 
 #. paragraph
 #: site/lectures/07-array-methods.md:294
 msgid "MDN: [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)"
-msgstr ""
+msgstr "MDN: [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:296
@@ -386,7 +386,7 @@ msgstr "4. `filter` - елементите, които минават"
 #. paragraph
 #: site/lectures/07-array-methods.md:411
 msgid "MDN: [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)"
-msgstr ""
+msgstr "MDN: [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:413
@@ -436,7 +436,7 @@ msgstr "5. `find`, `findIndex`, `some` и `every`"
 #. paragraph
 #: site/lectures/07-array-methods.md:486
 msgid "MDN: [Array.prototype.find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [Array.prototype.findIndex()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex), [Array.prototype.some()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some), [Array.prototype.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)"
-msgstr ""
+msgstr "MDN: [Array.prototype.find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [Array.prototype.findIndex()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex), [Array.prototype.some()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some), [Array.prototype.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:488
@@ -521,7 +521,7 @@ msgstr "6. `reduce` - много стойности в една"
 #. paragraph
 #: site/lectures/07-array-methods.md:598
 msgid "MDN: [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce)"
-msgstr ""
+msgstr "MDN: [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:600
@@ -601,7 +601,7 @@ msgstr "7. Сортиране: `sort` и `toSorted`"
 #. paragraph
 #: site/lectures/07-array-methods.md:717
 msgid "MDN: [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), [Array.prototype.toSorted()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted)"
-msgstr ""
+msgstr "MDN: [Array.prototype.sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), [Array.prototype.toSorted()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:719
@@ -764,7 +764,7 @@ msgid "8. Chaining, `flat` and `flatMap` - and when a loop is clearer"
 msgstr "8. Вериги, `flat` и `flatMap` - и кога loop е по-ясен"
 
 #. heading 3
-#: site/lectures/07-array-methods.md:912 site/lectures/07-array-methods.md:1582
+#: site/lectures/07-array-methods.md:912 site/lectures/07-array-methods.md:1583
 msgid "Chains"
 msgstr "Вериги"
 
@@ -801,7 +801,7 @@ msgstr "`flat` и `flatMap` (ES2019)"
 #. paragraph
 #: site/lectures/07-array-methods.md:952
 msgid "MDN: [Array.prototype.flat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat), [Array.prototype.flatMap()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap)"
-msgstr ""
+msgstr "MDN: [Array.prototype.flat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat), [Array.prototype.flatMap()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:954
@@ -821,7 +821,7 @@ msgstr "`Array.from` с функция"
 #. paragraph
 #: site/lectures/07-array-methods.md:974
 msgid "MDN: [Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)"
-msgstr ""
+msgstr "MDN: [Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:976
@@ -881,7 +881,7 @@ msgstr "9. Групиране на записи"
 #. paragraph
 #: site/lectures/07-array-methods.md:1020
 msgid "MDN: [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy)"
-msgstr ""
+msgstr "MDN: [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1022
@@ -996,7 +996,7 @@ msgstr "`Object.create(null)` - или `Map` - избягва това. (`Object
 #. paragraph
 #: site/lectures/07-array-methods.md:1225
 msgid "MDN: [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)"
-msgstr ""
+msgstr "MDN: [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1227
@@ -1081,7 +1081,7 @@ msgstr "`Set`: уникални стойности"
 #. paragraph
 #: site/lectures/07-array-methods.md:1273
 msgid "MDN: [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)"
-msgstr ""
+msgstr "MDN: [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1275
@@ -1275,213 +1275,216 @@ msgstr "Във вашето копие на Homework repository първо из�
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1559
-msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
-msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
+msgid "Each file is split into parts. A part has its description, then the `your code` lines - write your code between them - and right after them its checks, which print `OK` or `FAIL`."
+msgstr "Всеки файл е разделен на части. Всяка част има описание, след него редовете `your code` - пишете кода си между тях - и веднага след тях нейните проверки, които отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/07-array-methods.md:1562
+#: site/lectures/07-array-methods.md:1563
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1562
+#: site/lectures/07-array-methods.md:1563
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1562
+#: site/lectures/07-array-methods.md:1563
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1564
+#: site/lectures/07-array-methods.md:1565
 msgid "Predict 20 results: `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort`, `flat`, `Set`"
 msgstr "Предвидете 20 резултата: `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort`, `flat`, `Set`"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1565
+#: site/lectures/07-array-methods.md:1566
 msgid "Questions about the enclosures, one method each: ids, outdated, first not normal, all normal?, lowest firmware, a summary text"
 msgstr "Въпроси за enclosures, всеки с един метод: id-та, остарели, първият ненормален, всички ли са нормални?, най-ниският firmware, обобщителен текст"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1566
+#: site/lectures/07-array-methods.md:1567
 msgid "Sort numbers, names, versions and records - by several keys, without changing the input"
 msgstr "Сортиране на числа, имена, версии и записи - по няколко ключа, без да се променят входните данни"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1567
+#: site/lectures/07-array-methods.md:1568
 msgid "The 79 records of `report-records.json`: group, nest by group and item, an index, unique values, totals"
 msgstr "79-те записа от `report-records.json`: групиране, влагане по група и item, индекс, уникални стойности, суми"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1568
+#: site/lectures/07-array-methods.md:1569
 msgid "The old tasks with `map`, `filter`, `reduce`, `find` and `sort`: cities, todos, products, books"
 msgstr "Старите задачи с `map`, `filter`, `reduce`, `find` и `sort`: градове, todos, продукти, книги"
 
 #. heading 2
-#: site/lectures/07-array-methods.md:1570
+#: site/lectures/07-array-methods.md:1571
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1572
+#: site/lectures/07-array-methods.md:1573
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1572
+#: site/lectures/07-array-methods.md:1573
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1574
+#: site/lectures/07-array-methods.md:1575
 msgid "Callbacks"
 msgstr "Callbacks"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1574
+#: site/lectures/07-array-methods.md:1575
 msgid "The method calls your function with `(element, index, array)`; arrow or `function` - both work"
 msgstr "Методът извиква вашата функция с `(element, index, array)`; arrow или `function` - и двете работят"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1575
+#: site/lectures/07-array-methods.md:1576
 msgid "Side effects only; returns `undefined`; no `break`"
 msgstr "Само странични ефекти; връща `undefined`; без `break`"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1576
+#: site/lectures/07-array-methods.md:1577
 msgid "A new array, same length - one returned value per element; `({ ... })` for objects; not `.map(parseInt)`"
 msgstr "Нов array със същата дължина - по една върната стойност за всеки елемент; `({ ... })` за обекти; не `.map(parseInt)`"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1577
+#: site/lectures/07-array-methods.md:1578
 msgid "A new array with the elements whose callback is truthy; `.length` counts; `filter(Boolean)` drops empty values"
 msgstr "Нов array с елементите, чийто callback е truthy; `.length` брои; `filter(Boolean)` маха празните стойности"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1578
+#: site/lectures/07-array-methods.md:1579
 msgid "The first match / its index; `undefined` / `-1` when none - check before use"
 msgstr "Първото съвпадение / неговия индекс; `undefined` / `-1`, когато няма - проверявайте преди употреба"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1579
+#: site/lectures/07-array-methods.md:1580
 msgid "At least one / all; stop early; `[].every(...)` is `true`"
 msgstr "Поне един / всички; спират рано; `[].every(...)` е `true`"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1580
+#: site/lectures/07-array-methods.md:1581
 msgid "Accumulator from element to element; always give the initial value"
 msgstr "Акумулатор от елемент на елемент; винаги давайте начална стойност"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1581
+#: site/lectures/07-array-methods.md:1582
 msgid "In place; without a compare function sorts as strings; `a - b`, `localeCompare`, `compareVersions`; several keys with `\\|\\|`; sort a copy (`[...arr]`, `toSorted`)"
 msgstr "На място; без функция за сравнение сортира като strings; `a - b`, `localeCompare`, `compareVersions`; няколко ключа с `\\|\\|`; сортирайте копие (`[...arr]`, `toSorted`)"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1582
+#: site/lectures/07-array-methods.md:1583
 msgid "One method per line; each line takes the array above; cut it to debug"
 msgstr "По един метод на ред; всеки ред взема array-я отгоре; разрежете веригата, за да намерите грешката"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1583
+#: site/lectures/07-array-methods.md:1584
 msgid "Flatten nested lists; `flatMap` for elements that give several values"
 msgstr "Сплескват вложени списъци; `flatMap` за елементи, които дават няколко стойности"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1584
+#: site/lectures/07-array-methods.md:1585
 msgid "Grouping"
 msgstr "Групиране"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1584
+#: site/lectures/07-array-methods.md:1585
 msgid "One pass into `{ key: [records] }`; loop, `reduce` or `Object.groupBy` (ES2024); two levels for record lists"
 msgstr "Едно обхождане до `{ key: [records] }`; loop, `reduce` или `Object.groupBy` (ES2024); две нива за списъци от записи"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1585
+#: site/lectures/07-array-methods.md:1586
 msgid "Index"
 msgstr "Индекс"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1585
+#: site/lectures/07-array-methods.md:1586
 msgid "Build once, look up many times; object (watch inherited keys) or `Map`"
 msgstr "Изградете веднъж, търсете много пъти; обект (внимавайте с наследените ключове) или `Map`"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1586
+#: site/lectures/07-array-methods.md:1587
 msgid "Unique values; `new Set(list)`, `size`, `has`, `[...set]`"
 msgstr "Уникални стойности; `new Set(list)`, `size`, `has`, `[...set]`"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1587
+#: site/lectures/07-array-methods.md:1588
 msgid "Records as a table - look at the data first"
 msgstr "Записи като таблица - първо погледнете данните"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1588
+#: site/lectures/07-array-methods.md:1589
 msgid "Old style"
 msgstr "Стар стил"
 
 #. table cell
-#: site/lectures/07-array-methods.md:1588
+#: site/lectures/07-array-methods.md:1589
 msgid "`function (x) { return ...; }`, `forEach` + `push`, string comparisons of versions, boolean compare functions - read it, modernise it"
 msgstr "`function (x) { return ...; }`, `forEach` + `push`, сравняване на версии като strings, функции за сравнение, връщащи boolean - четете го, модернизирайте го"
 
 #. heading 2
-#: site/lectures/07-array-methods.md:1590
+#: site/lectures/07-array-methods.md:1591
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1592
+#: site/lectures/07-array-methods.md:1593
 msgid "`07-array-methods/homework.js` (in the homework repository): outdated modules from a dictionary, sorted; a pool report from the record list; and an index for a whole set of lookups."
 msgstr "`07-array-methods/homework.js` (в homework repository): остарели модули от dictionary, сортирани; отчет за pools от списъка от записи; и индекс за цял набор от търсения."
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1595
+#: site/lectures/07-array-methods.md:1596
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1597
+#: site/lectures/07-array-methods.md:1598
 msgid "**Course project:** create your repository (section 12) with `library.js`, `try.js` and two or three anonymised sample documents. Put in your `get`, `compareVersions`, `versionBelow` and `groupBy`, export them, and run `try.js`."
 msgstr "**Курсов проект:** създайте своето repository (раздел 12) с `library.js`, `try.js` и два или три анонимизирани примерни документа. Сложете в него своите `get`, `compareVersions`, `versionBelow` и `groupBy`, експортирайте ги и изпълнете `try.js`."
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1600
+#: site/lectures/07-array-methods.md:1601
 msgid "Optional: take one of your rules and find every loop in it. Which could be a method? Which should stay a loop?"
 msgstr "По желание: вземете едно от правилата си и намерете всеки loop в него. Кой би могъл да е метод? Кой трябва да остане loop?"
 
 #. heading 2
-#: site/lectures/07-array-methods.md:1603
+#: site/lectures/07-array-methods.md:1604
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1605
+#: site/lectures/07-array-methods.md:1606
 msgid "MDN: [Array methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#instance_methods), [map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), [reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce), [sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), [find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy), [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set), [console.table()](https://developer.mozilla.org/en-US/docs/Web/API/console/table_static)"
 msgstr "MDN: [Методи на Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#instance_methods), [map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), [reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce), [sort()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort), [find()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find), [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy), [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set), [console.table()](https://developer.mozilla.org/en-US/docs/Web/API/console/table_static)"
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1615
+#: site/lectures/07-array-methods.md:1616
 msgid "javascript.info: [Array methods](https://javascript.info/array-methods), [Map and Set](https://javascript.info/map-set)"
 msgstr "javascript.info: [Array methods](https://javascript.info/array-methods), [Map and Set](https://javascript.info/map-set)"
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1617
+#: site/lectures/07-array-methods.md:1618
 msgid "Eloquent JavaScript (4th edition): [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1618
+#: site/lectures/07-array-methods.md:1619
 msgid "Exercises: [JavaScript array exercises](https://www.w3resource.com/javascript-exercises/javascript-array-exercises.php) (w3resource)"
 msgstr "Упражнения: [JavaScript array exercises](https://www.w3resource.com/javascript-exercises/javascript-array-exercises.php) (w3resource)"
 
 #. paragraph
-#: site/lectures/07-array-methods.md:1620
+#: site/lectures/07-array-methods.md:1621
 msgid "**Next session:** strings, regular expressions, dates and numbers - clean the version formats of your products, read the patterns in existing rules, and turn the many date formats of the reports into dates you can compare."
 msgstr "**Следващото занятие:** strings, regular expressions, дати и числа - изчистване на форматите на версиите на вашите продукти, четене на шаблоните в съществуващи правила и превръщане на многото формати на дати в отчетите в дати, които можете да сравнявате."
+
+#~ msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
+#~ msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
 
 #~ msgid "Finish the five practice tasks - every check must print `OK`."
 #~ msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

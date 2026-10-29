@@ -1,0 +1,237 @@
+{
+  "_note": "MADE-UP example JSON document for the course. All names, ids and values are invented; only the shape is typical of the JSON a device sends.",
+  "_index": "events-2026.10.15",
+  "_id": "evt-7f3c2a91",
+  "_source": {
+    "reported_at": "2026-10-15 01:25:37",
+    "reported_ms": 1792027537206,
+    "body": {
+      "report_type": "inventory",
+      "device_event": {
+        "device_id": "EDGE-77Q",
+        "device_type": "edge-cluster",
+        "software": {
+          "name": "Platform",
+          "version": "3.8.1"
+        }
+      },
+      "device_event_detail": {
+        "header": {
+          "component": "reporting"
+        },
+        "body": {
+          "description": "daily device inventory",
+          "payload": {
+            "platform_info": {
+              "name": "edgecluster",
+              "env": "hw",
+              "platform": "rack-hw",
+              "version": "3.8.1",
+              "status": "Ready",
+              "selftest_status": "passed"
+            },
+            "cluster_info": {
+              "os_version": "5.16.27",
+              "os_version_major": "5.16",
+              "workload": {
+                "hostname": "edge.lab-site-03.example.invalid",
+                "nodes": 6,
+                "pods": 412,
+                "services": 88,
+                "restart_count": 0,
+                "storage_classes": [
+                  "fast-block",
+                  "fast-file",
+                  "archive",
+                  "scratch"
+                ]
+              },
+              "node_disks": [
+                {
+                  "node_name": "node-01",
+                  "total_gb": 1863,
+                  "used_gb": 402.6,
+                  "available_gb": 1460.4,
+                  "percent_used": 21.6
+                },
+                {
+                  "node_name": "node-02",
+                  "total_gb": 1863,
+                  "used_gb": 1675.1,
+                  "available_gb": 187.9,
+                  "percent_used": 89.9
+                },
+                {
+                  "node_name": "node-03",
+                  "total_gb": 1863,
+                  "used_gb": 0,
+                  "available_gb": 1863,
+                  "percent_used": 0
+                }
+              ]
+            },
+            "upgrade_history": [
+              {
+                "from": "3.7.2",
+                "to": "3.8.0",
+                "started": "2026-05-02 09:14:00",
+                "finished": "2026-05-02 10:02:31",
+                "result": "success"
+              },
+              {
+                "from": "3.8.0",
+                "to": "3.8.1",
+                "started": "2026-08-19 21:00:05",
+                "finished": "",
+                "result": "running"
+              }
+            ],
+            "rack": {
+              "location": {
+                "site": "LAB-SITE-03",
+                "room": {
+                  "name": "R2",
+                  "row": {
+                    "id": "C",
+                    "position": {
+                      "u_from": 12,
+                      "u_to": 20
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "fields": {
+    "body.report_type": [
+      "inventory"
+    ],
+    "body.device_event.device_id": [
+      "EDGE-77Q"
+    ],
+    "body.device_event.device_type": [
+      "edge-cluster"
+    ],
+    "body.device_event.software.name": [
+      "Platform"
+    ],
+    "body.device_event.software.version": [
+      "3.8.1"
+    ],
+    "body.device_event_detail.header.component": [
+      "reporting"
+    ],
+    "body.device_event_detail.body.description": [
+      "daily device inventory"
+    ],
+    "body.device_event_detail.body.payload.platform_info.name": [
+      "edgecluster"
+    ],
+    "body.device_event_detail.body.payload.platform_info.env": [
+      "hw"
+    ],
+    "body.device_event_detail.body.payload.platform_info.platform": [
+      "rack-hw"
+    ],
+    "body.device_event_detail.body.payload.platform_info.version": [
+      "3.8.1"
+    ],
+    "body.device_event_detail.body.payload.platform_info.status": [
+      "Ready"
+    ],
+    "body.device_event_detail.body.payload.platform_info.selftest_status": [
+      "passed"
+    ],
+    "body.device_event_detail.body.payload.cluster_info.os_version": [
+      "5.16.27"
+    ],
+    "body.device_event_detail.body.payload.cluster_info.os_version_major": [
+      "5.16"
+    ],
+    "body.device_event_detail.body.payload.cluster_info.workload.hostname": [
+      "edge.lab-site-03.example.invalid"
+    ],
+    "body.device_event_detail.body.payload.cluster_info.workload.nodes": [
+      6
+    ],
+    "body.device_event_detail.body.payload.cluster_info.workload.pods": [
+      412
+    ],
+    "body.device_event_detail.body.payload.cluster_info.workload.services": [
+      88
+    ],
+    "body.device_event_detail.body.payload.cluster_info.workload.restart_count": [
+      0
+    ],
+    "body.device_event_detail.body.payload.cluster_info.workload.storage_classes": [
+      "fast-block",
+      "fast-file",
+      "archive",
+      "scratch"
+    ],
+    "body.device_event_detail.body.payload.cluster_info.node_disks.node_name": [
+      "node-01",
+      "node-02",
+      "node-03"
+    ],
+    "body.device_event_detail.body.payload.cluster_info.node_disks.total_gb": [
+      1863,
+      1863,
+      1863
+    ],
+    "body.device_event_detail.body.payload.cluster_info.node_disks.used_gb": [
+      402.6,
+      1675.1,
+      0
+    ],
+    "body.device_event_detail.body.payload.cluster_info.node_disks.available_gb": [
+      1460.4,
+      187.9,
+      1863
+    ],
+    "body.device_event_detail.body.payload.cluster_info.node_disks.percent_used": [
+      21.6,
+      89.9,
+      0
+    ],
+    "body.device_event_detail.body.payload.upgrade_history.from": [
+      "3.7.2",
+      "3.8.0"
+    ],
+    "body.device_event_detail.body.payload.upgrade_history.to": [
+      "3.8.0",
+      "3.8.1"
+    ],
+    "body.device_event_detail.body.payload.upgrade_history.started": [
+      "2026-05-02 09:14:00",
+      "2026-08-19 21:00:05"
+    ],
+    "body.device_event_detail.body.payload.upgrade_history.finished": [
+      "2026-05-02 10:02:31",
+      ""
+    ],
+    "body.device_event_detail.body.payload.upgrade_history.result": [
+      "success",
+      "running"
+    ],
+    "body.device_event_detail.body.payload.rack.location.site": [
+      "LAB-SITE-03"
+    ],
+    "body.device_event_detail.body.payload.rack.location.room.name": [
+      "R2"
+    ],
+    "body.device_event_detail.body.payload.rack.location.room.row.id": [
+      "C"
+    ],
+    "body.device_event_detail.body.payload.rack.location.room.row.position.u_from": [
+      12
+    ],
+    "body.device_event_detail.body.payload.rack.location.room.row.position.u_to": [
+      20
+    ]
+  }
+}

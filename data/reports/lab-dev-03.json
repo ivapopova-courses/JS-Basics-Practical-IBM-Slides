@@ -1,0 +1,37 @@
+{
+  "_note": "MADE-UP example JSON document for the course. All names, ids and values are invented; only the shape is typical of the JSON a device sends.",
+  "status": {
+    "device_alias": "C3E6A9B42D1F5588",
+    "epoch": "1791597602"
+  },
+  "overview": {
+    "model": "XR-300",
+    "serial_number": "SN9P4R27",
+    "version": "5.0.3.2"
+  },
+  "inventory": {
+    "device_alias": "C3E6A9B42D1F5588",
+    "details": {
+      "remote_login_enabled": "yes",
+      "locale": "en_US",
+      "firmware_level": "5.0.3.2 (build 503.2.2608120900)"
+    },
+    "extended_info": {
+      "json": {
+        "data": {
+          "system": {
+            "name": "LAB-DEV-03"
+          }
+        }
+      }
+    },
+    "enclosures": [
+      {
+        "id": "ENC-01",
+        "type": "SSD-48",
+        "firmware": "3.02",
+        "state": "normal"
+      }
+    ]
+  }
+}

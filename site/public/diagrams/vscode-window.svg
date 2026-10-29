@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 560" width="950" height="560" role="img">
+<title>VSCode with the Homework folder</title>
+<defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b616b"/></marker></defs>
+<g transform="translate(30,0)">
+<rect x="10" y="10" width="900" height="540" rx="8" fill="#ffffff" stroke="#8c8578" stroke-width="1.5"/>
+<rect x="11" y="11" width="898" height="30" rx="7" fill="#ebe8e1"/>
+<text x="24" y="31" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">File   Edit   Selection   View   Go   Run   Terminal   Help</text>
+<rect x="470" y="17" width="300" height="18" rx="5" fill="#ffffff" stroke="#8c8578" stroke-width="1.5"/>
+<text x="620" y="30" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">JS-Basics-Practical-IBM-Homework</text>
+<rect x="11" y="41" width="44" height="479" rx="0" fill="#ebe8e1"/>
+<rect x="11" y="44" width="3" height="32" fill="#3b6fc4"/>
+<path d="M24,51 h11 l5,5 v15 h-16 z M29,51 v-3 h11 l5,5 v15 h-5" fill="none" stroke="#5b616b" stroke-width="1.8"/>
+<circle cx="31" cy="98" r="6" fill="none" stroke="#5b616b" stroke-width="1.8"/><path d="M35,103 L41,109" fill="none" stroke="#5b616b" stroke-width="1.8"/>
+<circle cx="27" cy="134" r="3" fill="none" stroke="#5b616b" stroke-width="1.8"/><circle cx="27" cy="152" r="3" fill="none" stroke="#5b616b" stroke-width="1.8"/><circle cx="39" cy="140" r="3" fill="none" stroke="#5b616b" stroke-width="1.8"/><path d="M27,137 v12 M39,143 q0,6 -12,6" fill="none" stroke="#5b616b" stroke-width="1.8"/>
+<path d="M25,174 L39,182 L25,190 z" fill="none" stroke="#5b616b" stroke-width="1.8"/>
+<path d="M23,212 h7 v7 h-7 z M23,221 h7 v7 h-7 z M32,221 h7 v7 h-7 z M34,208 h7 v7 h-7 z" fill="none" stroke="#5b616b" stroke-width="1.8"/>
+<rect x="55" y="41" width="280" height="479" rx="0" fill="#f7f6f3"/>
+<text x="70" y="62" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="700" fill="#5b616b" text-anchor="start" xml:space="preserve">EXPLORER</text>
+<text x="66" y="86" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="10" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">v JS-BASICS-PRACTICAL-IBM-HOMEWORK</text>
+<text x="78" y="110" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">&gt; .vscode</text>
+<text x="78" y="132" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">&gt; 02-variables-and-types</text>
+<text x="78" y="154" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">&gt; 03-conditions-and-loops</text>
+<text x="78" y="176" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">&gt; 04-arrays-and-records</text>
+<text x="78" y="198" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">v 05-functions</text>
+<text x="94" y="220" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">v practice</text>
+<text x="110" y="242" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">task1-predict.js</text>
+<rect x="56" y="249" width="278" height="21" rx="0" fill="#e3edfb"/>
+<text x="110" y="264" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">task2-versions.js</text>
+<text x="110" y="286" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">...</text>
+<text x="94" y="308" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">homework.js</text>
+<text x="78" y="330" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">&gt; data</text>
+<text x="78" y="352" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">check.js</text>
+<text x="78" y="374" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">package.json</text>
+<text x="78" y="396" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">README.md</text>
+<rect x="335" y="41" width="574" height="30" rx="0" fill="#f7f6f3"/>
+<rect x="335" y="41" width="160" height="30" rx="0" fill="#ffffff"/>
+<rect x="335" y="41" width="160" height="2" fill="#3b6fc4"/>
+<text x="349" y="61" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">task2-versions.js</text>
+<rect x="377" y="168" width="515" height="64" rx="0" fill="#fdebd3"/>
+<text x="370" y="98" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">46</text>
+<text x="385" y="98" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">// == Part 2: versionBelow(current, minimum) ==</text>
+<text x="370" y="119" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">47</text>
+<text x="385" y="119" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">// true if current is lower than minimum.</text>
+<text x="370" y="140" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">48</text>
+<text x="385" y="140" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve"></text>
+<text x="370" y="161" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">49</text>
+<text x="385" y="161" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">function versionBelow(current, minimum) {</text>
+<text x="370" y="182" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">50</text>
+<text x="385" y="182" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">    // ---- your code: part 2 ----</text>
+<text x="370" y="203" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">51</text>
+<text x="385" y="203" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">    return compareVersions(current, minimum) &lt; 0;</text>
+<text x="370" y="224" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">52</text>
+<text x="385" y="224" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">    // ---- end of your code ----</text>
+<text x="370" y="245" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">53</text>
+<text x="385" y="245" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">}</text>
+<text x="370" y="266" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">54</text>
+<text x="385" y="266" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve"></text>
+<text x="370" y="287" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">55</text>
+<text x="385" y="287" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">check("versionBelow", versionBelow("2.9", "2.14"), true);</text>
+<path d="M335,315 H909" stroke="#8c8578" stroke-width="1.5"/>
+<text x="349" y="337" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">PROBLEMS     OUTPUT     DEBUG CONSOLE</text>
+<text x="605" y="337" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">TERMINAL</text>
+<rect x="605" y="343" width="60" height="2" fill="#3b6fc4"/>
+<text x="740" y="337" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">powershell</text>
+<text x="812" y="338" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#5b616b" text-anchor="start" xml:space="preserve">+</text>
+<path d="M828,330 l4,4 l4,-4" fill="none" stroke="#5b616b" stroke-width="1.8"/>
+<path d="M850,327 h14 M853,327 v-2 h8 v2 M852,329 l1,12 h8 l1,-12" fill="none" stroke="#5b616b" stroke-width="1.8"/>
+<text x="349" y="368" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="11.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">PS C:\Users\you\JS_Basics_Course\JS-Basics-Practical-IBM-Homework&gt;</text>
+<text x="349" y="388" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="11.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">  node 05-functions/practice/task2-versions.js</text>
+<text x="349" y="408" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="11.5" font-weight="400" fill="#4f8a45" text-anchor="start" xml:space="preserve">OK   versionBelow "2.10" "2.14"</text>
+<text x="349" y="428" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="11.5" font-weight="400" fill="#c4302b" text-anchor="start" xml:space="preserve">FAIL status OK: got "Below recommended", expected "OK"</text>
+<text x="349" y="448" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="11.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">...</text>
+<text x="349" y="468" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="11.5" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">16 of 18 checks passed</text>
+<rect x="11" y="520" width="898" height="29" rx="0" fill="#e3edfb"/>
+<path d="M11,520 H909" stroke="#3b6fc4" stroke-width="1.5"/>
+<text x="24" y="539" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">main</text>
+<text x="895" y="539" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="end" xml:space="preserve">Ln 51, Col 50    Spaces: 4    UTF-8    LF    JavaScript</text>
+<circle cx="-14" cy="143" r="12" fill="#c4302b"/>
+<text x="-14" y="148" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle" xml:space="preserve">1</text>
+<circle cx="160" cy="57" r="12" fill="#c4302b"/>
+<text x="160" y="62" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle" xml:space="preserve">2</text>
+<circle cx="520" cy="56" r="12" fill="#c4302b"/>
+<text x="520" y="61" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle" xml:space="preserve">3</text>
+<circle cx="703" cy="333" r="12" fill="#c4302b"/>
+<text x="703" y="338" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle" xml:space="preserve">4</text>
+<circle cx="500" cy="535" r="12" fill="#c4302b"/>
+<text x="500" y="540" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle" xml:space="preserve">5</text>
+</g>
+</svg>

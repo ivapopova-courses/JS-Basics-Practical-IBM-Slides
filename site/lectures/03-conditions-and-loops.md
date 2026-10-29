@@ -1315,7 +1315,7 @@ rule(doc);
 In your copy of the Homework repository, first get the new tasks:
 
 ```bash
-git pull upstream main
+git pull --no-rebase --no-edit upstream main
 node 03-conditions-and-loops/practice/task1-predict.js
 ```
 

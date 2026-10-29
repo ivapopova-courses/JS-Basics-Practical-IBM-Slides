@@ -455,7 +455,7 @@ console.log(reportDate.toISOString());
 
 ## 8. Practice
 
-Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-and-homework); before the session: `git pull upstream main`) and run the tasks from the terminal, in the repository root:
+Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-and-homework); before the session: `git pull --no-rebase --no-edit upstream main`) and run the tasks from the terminal, in the repository root:
 
 ```bash
 node 02-variables-and-types/practice/task1-rule-variables.js

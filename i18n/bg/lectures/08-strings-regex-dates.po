@@ -126,7 +126,7 @@ msgstr "2. Методи на strings"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:135
 msgid "MDN: [String: instance methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#instance_methods)"
-msgstr ""
+msgstr "MDN: [String: instance methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#instance_methods)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:137
@@ -139,7 +139,7 @@ msgid "Group"
 msgstr "Група"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:139 site/lectures/08-strings-regex-dates.md:1328
+#: site/lectures/08-strings-regex-dates.md:139 site/lectures/08-strings-regex-dates.md:1329
 msgid "Methods"
 msgstr "Методи"
 
@@ -206,7 +206,7 @@ msgstr "Малки и главни букви, празно пространст
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:152
 msgid "MDN: [String.prototype.toLowerCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase), [String.prototype.toUpperCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase), [String.prototype.trim()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim)"
-msgstr ""
+msgstr "MDN: [String.prototype.toLowerCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase), [String.prototype.toUpperCase()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase), [String.prototype.trim()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:154
@@ -226,7 +226,7 @@ msgstr "Търсене"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:172
 msgid "MDN: [String.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes), [String.prototype.startsWith()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith), [String.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf)"
-msgstr ""
+msgstr "MDN: [String.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes), [String.prototype.startsWith()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith), [String.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:188
@@ -251,7 +251,7 @@ msgstr "Изрязване на част: `slice` и `substring`"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:199
 msgid "MDN: [String.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice), [String.prototype.substring()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring)"
-msgstr ""
+msgstr "MDN: [String.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice), [String.prototype.substring()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:201
@@ -276,7 +276,7 @@ msgstr "Промяна: `replace`, `replaceAll`, `padStart`, `repeat`"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:232
 msgid "MDN: [String.prototype.replace()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace), [String.prototype.replaceAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replaceAll), [String.prototype.padStart()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)"
-msgstr ""
+msgstr "MDN: [String.prototype.replace()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace), [String.prototype.replaceAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replaceAll), [String.prototype.padStart()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:248
@@ -336,7 +336,7 @@ msgstr "4. Символи и кодировки"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:325
 msgid "MDN: [UTF-16 characters, Unicode code points, and grapheme clusters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)"
-msgstr ""
+msgstr "MDN: [UTF-16 characters, Unicode code points, and grapheme clusters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)"
 
 #. heading 3
 #: site/lectures/08-strings-regex-dates.md:327
@@ -481,7 +481,7 @@ msgstr "5. Regular expressions: шаблони за текст"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:439
 msgid "MDN: [Regular expressions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)"
-msgstr ""
+msgstr "MDN: [Regular expressions (ръководство)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:441
@@ -526,7 +526,7 @@ msgstr "Градивните елементи"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:483
 msgid "MDN: [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet)"
-msgstr ""
+msgstr "MDN: [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:485
@@ -696,7 +696,7 @@ msgstr "Capture groups: `match`"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:572
 msgid "MDN: [String.prototype.match()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)"
-msgstr ""
+msgstr "MDN: [String.prototype.match()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:574
@@ -729,14 +729,14 @@ msgid "`(?:...)` is a group that does **not** capture - only for grouping, as in
 msgstr "`(?:...)` е група, която **не** запазва (capture) - само за групиране, като в `/\\d+(?:\\.\\d+)+/` от примерното правило: \"цифри, после (точка и цифри) веднъж или повече пъти\"."
 
 #. heading 3
-#: site/lectures/08-strings-regex-dates.md:621 site/lectures/08-strings-regex-dates.md:1334
+#: site/lectures/08-strings-regex-dates.md:621 site/lectures/08-strings-regex-dates.md:1335
 msgid "Flags"
 msgstr "Флагове"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:623
 msgid "MDN: [Advanced searching with flags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags)"
-msgstr ""
+msgstr "MDN: [Advanced searching with flags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags)"
 
 #. table cell
 #: site/lectures/08-strings-regex-dates.md:625
@@ -781,7 +781,7 @@ msgstr "Всички съвпадения с техните групи: `matchAl
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:644
 msgid "MDN: [String.prototype.matchAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll)"
-msgstr ""
+msgstr "MDN: [String.prototype.matchAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:646
@@ -816,7 +816,7 @@ msgstr "Капан: `g` и `test` помнят докъде са стигнал�
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:695
 msgid "MDN: [RegExp.prototype.test()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test), [RegExp: lastIndex](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastIndex)"
-msgstr ""
+msgstr "MDN: [RegExp.prototype.test()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test), [RegExp: lastIndex](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastIndex)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:697
@@ -1071,7 +1071,7 @@ msgstr "Закръгляне и форматиране"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:855
 msgid "MDN: [Number.prototype.toFixed()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed), [Math.round()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round)"
-msgstr ""
+msgstr "MDN: [Number.prototype.toFixed()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed), [Math.round()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:873
@@ -1081,7 +1081,7 @@ msgstr "`toFixed` връща **string** - подходящо за текст н�
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:878
 msgid "MDN: [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)"
-msgstr ""
+msgstr "MDN: [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:880
@@ -1136,7 +1136,7 @@ msgstr "Големи числа: id-тата са strings"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:914
 msgid "MDN: [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)"
-msgstr ""
+msgstr "MDN: [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:916
@@ -1156,7 +1156,7 @@ msgstr "10. Дати"
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:935
 msgid "MDN: [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)"
-msgstr ""
+msgstr "MDN: [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:937
@@ -1211,7 +1211,7 @@ msgstr "Разчитане на форматите на датите в исти
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1017
 msgid "MDN: [Date time string format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format), [Date.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse)"
-msgstr ""
+msgstr "MDN: [Date time string format](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format), [Date.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse)"
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1019
@@ -1360,238 +1360,241 @@ msgstr "Във вашето копие на Homework repository първо из�
 
 #. paragraph
 #: site/lectures/08-strings-regex-dates.md:1312
-msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
-msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
+msgid "Each file is split into parts. A part has its description, then the `your code` lines - write your code between them - and right after them its checks, which print `OK` or `FAIL`."
+msgstr "Всеки файл е разделен на части. Всяка част има описание, след него редовете `your code` - пишете кода си между тях - и веднага след тях нейните проверки, които отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1315
+#: site/lectures/08-strings-regex-dates.md:1316
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1315
+#: site/lectures/08-strings-regex-dates.md:1316
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1315
+#: site/lectures/08-strings-regex-dates.md:1316
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1317
+#: site/lectures/08-strings-regex-dates.md:1318
 msgid "Predict 20 results: string methods, `Number`, `Math`, regular expressions, dates"
 msgstr "Предвидете 20 резултата: методи на strings, `Number`, `Math`, regular expressions, дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1318
+#: site/lectures/08-strings-regex-dates.md:1319
 msgid "Clean and examine values: trim, case, empty words, ids, lines with `\\r\\n`, packed values"
 msgstr "Изчистване и изследване на стойности: trim, малки и главни букви, празни думи, id-та, редове с `\\r\\n`, пакетирани стойности"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1319
+#: site/lectures/08-strings-regex-dates.md:1320
 msgid "Write the patterns: a four-digit type, a module key, a dotted version, settings with `matchAll`, an id cleaned with `replace`"
 msgstr "Напишете шаблоните: четирицифрен тип, ключ на модул, версия с точки, настройки с `matchAll`, id, изчистено с `replace`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1320
+#: site/lectures/08-strings-regex-dates.md:1321
 msgid "`normalizeVersion` for every format of the table in section 8, then sort and compare"
 msgstr "`normalizeVersion` за всеки формат от таблицата в раздел 8, после сортиране и сравняване"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1321
+#: site/lectures/08-strings-regex-dates.md:1322
 msgid "EPOCH seconds and milliseconds, three date formats of real exports, days between, the age of a report"
 msgstr "EPOCH в секунди и милисекунди, три формата на дати от истински експорти, дни между две дати, възрастта на отчет"
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1323
+#: site/lectures/08-strings-regex-dates.md:1324
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1325
+#: site/lectures/08-strings-regex-dates.md:1326
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1325
+#: site/lectures/08-strings-regex-dates.md:1326
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1327
+#: site/lectures/08-strings-regex-dates.md:1328
 msgid "Strings"
 msgstr "Strings"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1327
+#: site/lectures/08-strings-regex-dates.md:1328
 msgid "Immutable - every method returns a new string; `String(x ?? \"\")` before calling methods"
 msgstr "Immutable - всеки метод връща нов string; `String(x ?? \"\")` преди да извиквате методи"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1329
+#: site/lectures/08-strings-regex-dates.md:1330
 msgid "Older forms"
 msgstr "По-стари форми"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1329
+#: site/lectures/08-strings-regex-dates.md:1330
 msgid "`indexOf(...) !== -1`, `substring`, `substr` (deprecated), `charAt` - read them, write the modern form"
 msgstr "`indexOf(...) !== -1`, `substring`, `substr` (deprecated), `charAt` - четете ги, пишете модерната форма"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1330
+#: site/lectures/08-strings-regex-dates.md:1331
 msgid "Wrappers"
 msgstr "Обвивки"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1330
+#: site/lectures/08-strings-regex-dates.md:1331
 msgid "`\"a\".toUpperCase()` works by boxing; never `new String` / `new Number` / `new Boolean`"
 msgstr "`\"a\".toUpperCase()` работи чрез boxing; никога `new String` / `new Number` / `new Boolean`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1331
+#: site/lectures/08-strings-regex-dates.md:1332
 msgid "Encoding"
 msgstr "Кодиране"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1331
+#: site/lectures/08-strings-regex-dates.md:1332
 msgid "Characters are code points; UTF-8 in files (1-4 bytes); `length` counts code units; `\\r\\n` vs `\\n` - split with `/\\r?\\n/`"
 msgstr "Символите са code points; UTF-8 във файловете (1-4 байта); `length` брои code units; `\\r\\n` срещу `\\n` - разделяйте с `/\\r?\\n/`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1332
+#: site/lectures/08-strings-regex-dates.md:1333
 msgid "Regex"
 msgstr "Regex"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1332
+#: site/lectures/08-strings-regex-dates.md:1333
 msgid "`/pattern/flags`; `\\d \\w \\s .`, `[...]`, `* + ? {n,m}`, `^ $ \\b`, `( )`, `\\|`; test it on regex101"
 msgstr "`/pattern/flags`; `\\d \\w \\s .`, `[...]`, `* + ? {n,m}`, `^ $ \\b`, `( )`, `\\|`; изпробвайте го в regex101"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1333
+#: site/lectures/08-strings-regex-dates.md:1334
 msgid "Methods with regex"
 msgstr "Методи с regex"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1333
+#: site/lectures/08-strings-regex-dates.md:1334
 msgid "`test` (true / false), `match` (groups or `null`), `matchAll` (all, with groups), `replace` (`$1`, a function), `split`"
 msgstr "`test` (true / false), `match` (групи или `null`), `matchAll` (всички, с групите), `replace` (`$1`, функция), `split`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1334
+#: site/lectures/08-strings-regex-dates.md:1335
 msgid "`g` all, `i` ignore case, `m` multiline; never `g` with `test`"
 msgstr "`g` всички, `i` без значение малки или главни, `m` многоредов режим; никога `g` с `test`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1335
+#: site/lectures/08-strings-regex-dates.md:1336
 msgid "Versions"
 msgstr "Версии"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1335
+#: site/lectures/08-strings-regex-dates.md:1336
 msgid "Normalise every format to dotted numbers, then `compareVersions` - one helper in the library"
 msgstr "Нормализирайте всеки формат до числа с точки, после `compareVersions` - една helper функция в библиотеката"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1336
+#: site/lectures/08-strings-regex-dates.md:1337
 msgid "Numbers"
 msgstr "Числа"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1336
+#: site/lectures/08-strings-regex-dates.md:1337
 msgid "`Number(\"\")` is 0; `Number.isNaN`, `Number.isFinite`; `toFixed` gives a string; long ids stay strings"
 msgstr "`Number(\"\")` е 0; `Number.isNaN`, `Number.isFinite`; `toFixed` дава string; дългите id-та остават strings"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1338
+#: site/lectures/08-strings-regex-dates.md:1339
 msgid "Dates"
 msgstr "Дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1338
+#: site/lectures/08-strings-regex-dates.md:1339
 msgid "Milliseconds since 1970 UTC; EPOCH seconds * 1000; months from 0; `toISOString()` for UTC text"
 msgstr "Милисекунди от 1970 г. UTC; EPOCH в секунди * 1000; месеците от 0; `toISOString()` за текст в UTC"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1339
+#: site/lectures/08-strings-regex-dates.md:1340
 msgid "Parsing dates"
 msgstr "Разчитане на дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1339
+#: site/lectures/08-strings-regex-dates.md:1340
 msgid "Only ISO is reliable; other formats: regex + `Date.UTC`; check `Number.isNaN(d.getTime())`"
 msgstr "Само ISO е надежден; другите формати: regex + `Date.UTC`; проверявайте `Number.isNaN(d.getTime())`"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1340
+#: site/lectures/08-strings-regex-dates.md:1341
 msgid "Date math"
 msgstr "Сметки с дати"
 
 #. table cell
-#: site/lectures/08-strings-regex-dates.md:1340
+#: site/lectures/08-strings-regex-dates.md:1341
 msgid "`b - a` gives ms; 1 day = 86,400,000 ms; compare with `<` or `getTime()`"
 msgstr "`b - a` дава ms; 1 ден = 86 400 000 ms; сравнявайте с `<` или `getTime()`"
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1342
+#: site/lectures/08-strings-regex-dates.md:1343
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1344
+#: site/lectures/08-strings-regex-dates.md:1345
 msgid "`08-strings-regex-dates/homework.js` (in the homework repository): parse the firmware string of the records export, the age of every module of the dictionary report, and a report line with formatted numbers and dates."
 msgstr "`08-strings-regex-dates/homework.js` (в homework repository): разчитане на string-а с firmware от експорта със записи, възрастта на всеки модул от отчета с dictionaries и ред от отчет с форматирани числа и дати."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1347
+#: site/lectures/08-strings-regex-dates.md:1348
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1349
+#: site/lectures/08-strings-regex-dates.md:1350
 msgid "**Course project:** add `normalizeVersion` (for the formats of **your** product) and a date parser for its timestamp formats to `library.js`. Collect real examples of every format in a comment above each helper."
 msgstr "**Курсов проект:** добавете в `library.js` `normalizeVersion` (за форматите на **вашия** продукт) и функция за разчитане на форматите на времената му. Съберете истински примери за всеки формат в коментар над всяка helper функция."
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1352
+#: site/lectures/08-strings-regex-dates.md:1353
 msgid "Optional: find every regular expression in your rules. Paste each into regex101 and write a one-line comment that says what it matches."
 msgstr "По желание: намерете всеки regular expression във вашите правила. Поставете всеки в regex101 и напишете коментар от един ред, който казва с какво съвпада."
 
 #. heading 2
-#: site/lectures/08-strings-regex-dates.md:1355
+#: site/lectures/08-strings-regex-dates.md:1356
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1357
+#: site/lectures/08-strings-regex-dates.md:1358
 msgid "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Regular expressions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions), [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet), [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math), [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), [Standard built-in objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)"
 msgstr "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Regular expressions (ръководство)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions), [Regular expression syntax cheat sheet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet), [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), [Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math), [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), [Standard built-in objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1364
+#: site/lectures/08-strings-regex-dates.md:1365
 msgid "javascript.info: [Strings](https://javascript.info/string), [Regular expressions](https://javascript.info/regular-expressions), [Date and time](https://javascript.info/date), [Numbers](https://javascript.info/number), [Methods of primitives](https://javascript.info/primitives-methods)"
 msgstr "javascript.info: [Strings](https://javascript.info/string), [Regular expressions](https://javascript.info/regular-expressions), [Date and time](https://javascript.info/date), [Numbers](https://javascript.info/number), [Methods of primitives](https://javascript.info/primitives-methods)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1369
+#: site/lectures/08-strings-regex-dates.md:1370
 msgid "Tools: [regex101.com](https://regex101.com/) - test and explain patterns"
 msgstr "Инструменти: [regex101.com](https://regex101.com/) - изпробване и обяснение на шаблони"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1370
+#: site/lectures/08-strings-regex-dates.md:1371
 msgid "Encodings: [The Absolute Minimum Every Software Developer Must Know About Unicode](https://tonsky.me/blog/unicode/) (Nikita Prokopov)"
 msgstr "Кодировки: [The Absolute Minimum Every Software Developer Must Know About Unicode](https://tonsky.me/blog/unicode/) (Nikita Prokopov)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1371
+#: site/lectures/08-strings-regex-dates.md:1372
 msgid "Old reading: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
 msgstr "Стара статия: [The Secret Life of JavaScript Primitives](https://javascriptweblog.wordpress.com/2010/09/27/the-secret-life-of-javascript-primitives/)"
 
 #. paragraph
-#: site/lectures/08-strings-regex-dates.md:1373
+#: site/lectures/08-strings-regex-dates.md:1374
 msgid "**Next session:** JSON, Node.js, modules and errors - read sample documents from files, turn your `library.js` into a real module, handle errors without hiding them, fetch JSON from a web API, and run a rule locally on a folder of reports."
 msgstr "**Следващото занятие:** JSON, Node.js, модули и грешки - четене на примерни документи от файлове, превръщане на `library.js` в истински модул, обработка на грешки, без да се крият, изтегляне на JSON от уеб API и локално изпълнение на правило върху папка с отчети."
+
+#~ msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
+#~ msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките най-долу отпечатват `OK` или `FAIL`."
 
 #~ msgid "Finish the five practice tasks - every check must print `OK`."
 #~ msgstr "Завършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

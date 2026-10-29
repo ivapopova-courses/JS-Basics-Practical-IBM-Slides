@@ -1,0 +1,46 @@
+/* The top bar must fit the screen also with the long Bulgarian site title.
+   Below 960px (no side menu yet), the title is cut with "..." instead of pushing
+   the search, the menus and the buttons off the screen. */
+@media (max-width: 959px) {
+  .VPNavBar .container > .title {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .VPNavBarTitle .title {
+    min-width: 0;
+  }
+  .VPNavBarTitle .title span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+/* From 768px the top bar shows the menus too: the search button shows only its
+   icon there, as on a phone, so that the title keeps more room */
+@media (min-width: 768px) and (max-width: 959px) {
+  .VPNavBarSearch .DocSearch-Button-Placeholder,
+  .VPNavBarSearch .DocSearch-Button-Keys {
+    display: none;
+  }
+  .VPNavBarSearch .DocSearch-Button {
+    padding: 0 12px;
+  }
+}
+
+/* From 960px (with the side menu) the course-kit gives the title box a padding
+   with the selector ".VPNavBar.has-sidebar .title" - and the title link inside the
+   box has the class "title" too. The padding was counted twice, and the last letter
+   of "Practical JavaScript Basics" was cut. Only the box keeps the padding; a title
+   that is still too long (Bulgarian) ends with "...". */
+@media (min-width: 960px) {
+  .VPNavBar.has-sidebar .VPNavBarTitle .title {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .VPNavBarTitle .title span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

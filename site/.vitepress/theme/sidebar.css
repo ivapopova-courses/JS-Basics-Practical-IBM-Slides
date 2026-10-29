@@ -1,0 +1,6 @@
+/* Unreleased lectures: listed in the side menu without a link (config.mjs),
+   shown grey so they do not look clickable */
+.VPSidebarItem.level-1:not(.is-link) > .item > .text {
+  color: var(--vp-c-text-3);
+  cursor: default;
+}

@@ -101,7 +101,7 @@ msgstr "`let` и `const`"
 #. paragraph
 #: site/lectures/02-variables-and-types.md:64
 msgid "MDN: [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)"
-msgstr ""
+msgstr "MDN: [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)"
 
 #. table cell
 #: site/lectures/02-variables-and-types.md:66
@@ -171,7 +171,7 @@ msgstr "Strict mode: без случайни variables"
 #. paragraph
 #: site/lectures/02-variables-and-types.md:95
 msgid "MDN: [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
-msgstr ""
+msgstr "MDN: [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:97
@@ -281,7 +281,7 @@ msgstr "3. Примитивни типове"
 #. paragraph
 #: site/lectures/02-variables-and-types.md:159
 msgid "MDN: [JavaScript data types and data structures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures)"
-msgstr ""
+msgstr "MDN: [JavaScript data types and data structures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:161
@@ -336,7 +336,7 @@ msgstr "(Има още два - `bigint` и `symbol`, но рядко трябв
 #. paragraph
 #: site/lectures/02-variables-and-types.md:176
 msgid "MDN: [typeof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof)"
-msgstr ""
+msgstr "MDN: [typeof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof)"
 
 #. heading 3
 #: site/lectures/02-variables-and-types.md:187
@@ -371,7 +371,7 @@ msgstr "Strings"
 #. paragraph
 #: site/lectures/02-variables-and-types.md:212
 msgid "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)"
-msgstr ""
+msgstr "MDN: [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:214
@@ -506,7 +506,7 @@ msgstr "Приоритет"
 #. paragraph
 #: site/lectures/02-variables-and-types.md:333
 msgid "MDN: [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence)"
-msgstr ""
+msgstr "MDN: [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:335
@@ -566,7 +566,7 @@ msgstr "От string към number"
 #. paragraph
 #: site/lectures/02-variables-and-types.md:391
 msgid "MDN: [Number() constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number), [parseInt()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt), [parseFloat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat)"
-msgstr ""
+msgstr "MDN: [Number() constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/Number), [parseInt()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt), [parseFloat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:403
@@ -635,8 +635,8 @@ msgstr "8. Упражнения"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:458
-msgid "Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-and-homework); before the session: `git pull upstream main`) and run the tasks from the terminal, in the repository root:"
-msgstr "Отворете във VSCode вашето копие на [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) (първия път: вижте [Как да ползвате тези страници](/how-to#practice-and-homework); преди занятието: `git pull upstream main`) и пускайте задачите от терминала, в основната папка на repository-то:"
+msgid "Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-and-homework); before the session: `git pull --no-rebase --no-edit upstream main`) and run the tasks from the terminal, in the repository root:"
+msgstr "Отворете във VSCode вашето копие на [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) (първия път: вижте [Как да ползвате тези страници](/how-to#practice-and-homework); преди занятието: `git pull --no-rebase --no-edit upstream main`) и пускайте задачите от терминала, в основната папка на repository-то:"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:464
@@ -766,7 +766,7 @@ msgstr "`02-variables-and-types/homework.js` (в homework repository): обоб�
 #. paragraph
 #: site/lectures/02-variables-and-types.md:490
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:492
@@ -776,27 +776,30 @@ msgstr "По желание: вземете JSON документ, който п
 #. heading 2
 #: site/lectures/02-variables-and-types.md:495
 msgid "Read more"
-msgstr ""
+msgstr "Още за четене"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:497
 msgid "MDN: [Grammar and types](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types), [JavaScript data types and data structures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures), [Expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators), [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence), [Type coercion](https://developer.mozilla.org/en-US/docs/Glossary/Type_coercion)"
-msgstr ""
+msgstr "MDN: [Grammar and types](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types), [JavaScript data types and data structures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Data_structures), [Expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators), [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence), [Type coercion](https://developer.mozilla.org/en-US/docs/Glossary/Type_coercion)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:502
 msgid "javascript.info: [Variables](https://javascript.info/variables), [Data types](https://javascript.info/types), [Type conversions](https://javascript.info/type-conversions), [Basic operators, maths](https://javascript.info/operators)"
-msgstr ""
+msgstr "javascript.info: [Variables](https://javascript.info/variables), [Data types](https://javascript.info/types), [Type conversions](https://javascript.info/type-conversions), [Basic operators, maths](https://javascript.info/operators)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:506
 msgid "Eloquent JavaScript (4th edition): [Values, Types, and Operators](https://eloquentjavascript.net/01_values.html)"
-msgstr ""
+msgstr "Eloquent JavaScript (4-то издание): [Values, Types, and Operators](https://eloquentjavascript.net/01_values.html)"
 
 #. paragraph
 #: site/lectures/02-variables-and-types.md:508
 msgid "**Next session:** comparisons, logical operators, conditions and loops - and the `if` of the sample rule."
 msgstr "**Следващото занятие:** сравнения, логически оператори, условия и loops - и `if` от примерното правило."
+
+#~ msgid "Open your copy of the [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) in VSCode (first time: see [How to use these pages](/how-to#practice-and-homework); before the session: `git pull upstream main`) and run the tasks from the terminal, in the repository root:"
+#~ msgstr "Отворете във VSCode вашето копие на [Homework repository](https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework) (първия път: вижте [Как да ползвате тези страници](/how-to#practice-and-homework); преди занятието: `git pull upstream main`) и пускайте задачите от терминала, в основната папка на repository-то:"
 
 #~ msgid "Finish the four practice tasks - every check must print `OK`."
 #~ msgstr "Довършете четирите задачи за упражнение - всяка проверка трябва да извежда `OK`."

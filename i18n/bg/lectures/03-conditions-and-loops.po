@@ -171,7 +171,7 @@ msgstr "`===` срещу `==`"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:121
 msgid "MDN: [Strict equality (===)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality), [Equality (==)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality)"
-msgstr ""
+msgstr "MDN: [Strict equality (===)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality), [Equality (==)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:123
@@ -316,7 +316,7 @@ msgstr "3. Логически оператори"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:250
 msgid "MDN: [Logical AND (&&)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND), [Logical OR (||)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR), [Logical NOT (!)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_NOT)"
-msgstr ""
+msgstr "MDN: [Logical AND (&&)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND), [Logical OR (||)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR), [Logical NOT (!)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_NOT)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:252
@@ -381,7 +381,7 @@ msgstr "Приоритет и скоби"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:291
 msgid "MDN: [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence)"
-msgstr ""
+msgstr "MDN: [Operator precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:293
@@ -426,7 +426,7 @@ msgstr "4. Truthy и falsy"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:322
 msgid "MDN: [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)"
-msgstr ""
+msgstr "MDN: [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:324
@@ -601,7 +601,7 @@ msgstr "`??` - nullish coalescing операторът (ES2020)"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:470
 msgid "MDN: [Nullish coalescing operator (??)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)"
-msgstr ""
+msgstr "MDN: [Nullish coalescing operator (??)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:472
@@ -631,7 +631,7 @@ msgstr "Логическо присвояване (ES2021)"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:493
 msgid "MDN: [Logical OR assignment (||=)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR_assignment), [Nullish coalescing assignment (??=)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)"
-msgstr ""
+msgstr "MDN: [Logical OR assignment (||=)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR_assignment), [Nullish coalescing assignment (??=)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)"
 
 #. box title
 #: site/lectures/03-conditions-and-loops.md:505
@@ -656,7 +656,7 @@ msgstr "6. Условни конструкции"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:516
 msgid "MDN: [if...else](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else)"
-msgstr ""
+msgstr "MDN: [if...else](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:566
@@ -766,7 +766,7 @@ msgstr "`return` приключва функцията. Функциите ид�
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:746
 msgid "MDN: [switch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch)"
-msgstr ""
+msgstr "MDN: [switch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:748
@@ -821,7 +821,7 @@ msgstr "8. Условният (тернарен) оператор"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:820
 msgid "MDN: [Conditional (ternary) operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator)"
-msgstr ""
+msgstr "MDN: [Conditional (ternary) operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:826
@@ -856,7 +856,7 @@ msgstr "9. Statements и expressions"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:864
 msgid "MDN: [Statements and declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements), [Expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators)"
-msgstr ""
+msgstr "MDN: [Statements and declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements), [Expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:866
@@ -891,7 +891,7 @@ msgstr "10. Loops"
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:900
 msgid "MDN: [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration), [for](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for), [while](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/while)"
-msgstr ""
+msgstr "MDN: [Loops and iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration), [for](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for), [while](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/while)"
 
 #. paragraph
 #: site/lectures/03-conditions-and-loops.md:902

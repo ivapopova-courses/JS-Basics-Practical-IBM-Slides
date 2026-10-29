@@ -23,6 +23,11 @@ msgstr "JavaScript на практика"
 msgid "JavaScript basics for beginners, on real-world JSON data"
 msgstr "Основи на JavaScript за начинаещи, върху реални JSON данни"
 
+#. footer
+#: site/.vitepress/config.mjs
+msgid "Created for"
+msgstr "Създаден за"
+
 #. top menu
 #: site/.vitepress/config.mjs
 msgid "Agenda"
@@ -47,6 +52,11 @@ msgstr "Курс"
 #: site/.vitepress/config.mjs
 msgid "Home"
 msgstr "Начало"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "Calendar"
+msgstr "Календар"
 
 #. side menu
 #: site/.vitepress/config.mjs

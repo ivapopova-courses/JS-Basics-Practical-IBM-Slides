@@ -1584,12 +1584,16 @@ console.log("(end)");
 In your copy of the Homework repository, first get the new tasks:
 
 ```bash
-git pull upstream main
+git pull --no-rebase --no-edit upstream main
 node 06-objects/practice/task1-predict.js
 ```
 
 `data/sample-asset.json` has two new parts (`inventory.modules`,
 `inventory.labels`) - the pull brings them too.
+
+Each file is split into parts. A part has its description, then the `your code`
+lines - write your code between them - and right after them its checks, which
+print `OK` or `FAIL`.
 
 | Task | File | What you do |
 |------|------|-------------|

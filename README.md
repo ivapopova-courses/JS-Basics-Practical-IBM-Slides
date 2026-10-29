@@ -40,7 +40,8 @@ npm run build        # static site in site/.vitepress/dist (for GitHub Pages)
   lecture" column, to any width from 0 (hidden) to 640 px; or click the edge and
   use the Left / Right arrows (Shift for bigger steps). A hidden panel leaves a
   tab at the window edge - click it to show the panel again. Double-click the
-  edge to reset. Remembered per browser.
+  edge to reset. Remembered per browser. The "In this lecture" column shows from a
+  1152px wide window (`asideMinWidth` in `.vitepress/config.mjs`; VitePress: 1280px).
 - **Run / Edit / Reset** under the examples: the code runs in the browser; the
   example JSON document is available as `doc`.
 
@@ -50,17 +51,29 @@ npm run build        # static site in site/.vitepress/dist (for GitHub Pages)
 site/                          the course site (VitePress)
     index.md                   home page: the 10 sessions
     agenda.md                  course agenda
-    how-to.md, project.md
+    calendar.md                the session calendar (Google Calendar, embedded) and its iCal address
+    how-to.md, example-document.md, project.md
     lectures/NN-topic.md       one page per lecture
     under-the-hood.md          the animations, by session
     public/animations/         step-by-step animations (self-contained HTML, English)
     public/animations/bg/      the same animations in Bulgarian (EN / BG button in each)
-    .vitepress/config.mjs      sidebar, nav, the "js run" and "::: trainer" extensions
-    .vitepress/theme/          RunCode.vue (runnable code), ModeToggles.vue, custom.css;
-                               LangSwitch.vue (the EN / BG button)
+    public/diagrams/           SVG diagrams, English and bg/ - made by tools/make-diagrams.py
+    public/extensions.json     the recommended VSCode extensions (same as Homework/.vscode/)
+    public/images/             the ProgressBG logo of the footer
+    .vitepress/config.mjs      sidebar, nav, footer, the release of lectures (see below)
+    .vitepress/released.mjs    the last lecture shown on the public site
+    .vitepress/theme/          RunCode.vue + runInspect.js (runnable code, Node-like output),
+                               DataFile.vue + jsonPreview.js + dataFiles.js (the viewer of a
+                               data file), LangSwitch.vue (the EN / BG button), codeFold,
+                               scrollHash, zoomImages (a diagram opens bigger on a click),
+                               diagram.css, navbar.css (top bar on a phone, the whole site
+                               title next to the side menu), sidebar.css (grey unreleased
+                               lectures), footer.css (the logo)
     bg/                        GENERATED Bulgarian pages (git-ignored, see i18n/)
 i18n/                          translations: bg/*.po, the generator, translator guide, glossary
-data/sample-asset.json         MADE-UP example JSON document (same file as in Homework/data/)
+data/                          MADE-UP data files: COPIES of Homework/data/ (sample-asset.json,
+                               report-*.json, reports/*.json) - change both together
+tools/make-diagrams.py         writes site/public/diagrams/ (both languages) - run it after a change
 ```
 
 Practice files are in the Homework repository; students run
@@ -86,14 +99,51 @@ Workflow and details: [`i18n/README.md`](i18n/README.md).
 ## Writing a lecture
 
 - **Runnable code:** write ` ```js run ` instead of ` ```js `.
+- **Data files:** `<DataFile file="sample-asset.json" />` (or `"reports/lab-dev-05.json"`)
+  shows `data/<file>` as a button that opens a viewer of the JSON file: a tree, every
+  path with its value (with a filter), every list or dictionary of records as a table,
+  the file as text (a file that is not valid JSON shows the error of `JSON.parse` at its
+  line), and Download. A click on a value shows its path as code reads it
+  (`doc.inventory.modules["12_4.20"].status`), with Copy. Read in the browser
+  (`theme/jsonPreview.js`); used on `example-document.md`, works in lectures too.
+- **Diagrams:** `![Alt text](/diagrams/name.svg){.diagram width=920 height=380}`
+  (the size of the SVG: then the page does not jump when the image loads, and a link
+  to a section below it lands in the right place); add the drawing and its English
+  and Bulgarian texts to `tools/make-diagrams.py` and run it (`python3
+  tools/make-diagrams.py`). In dark mode the site inverts them (`theme/diagram.css`).
+  A click on a diagram opens it bigger, over the whole page (`theme/zoomImages.js`);
+  nothing to add in the page.
 - **Callouts:** `::: tip`, `::: warning`, `::: danger`, `::: info`, and
   `::: details Answer` for answers to check-yourself questions.
-- **New lecture:** add the page to `sidebar` in `.vitepress/config.mjs`, link it from
-  `index.md` and `agenda.md`, and put its practice files in `NN-topic/` of the Homework repository.
+- **New lecture:** add the page to `lectures` in `.vitepress/config.mjs`, link it from
+  `index.md` and `agenda.md`, and put its practice files in `NN-topic/` of the Homework
+  repository. This can be done long before the session: the public site shows it only
+  once it is released (next section).
 - **Before class:** run every practice file and solution with `node`, and click
   through the page in `npm run dev`.
 - **Translation:** after the English page is done, `npm run i18n:update`, then send
   the new `.po` file to the translator (`npm run i18n:pack`).
+
+## Releasing a lecture
+
+All lectures can be written in advance. The public site (`npm run build`, run by
+GitHub Actions) shows only the lectures up to the number in
+`site/.vitepress/released.mjs`. A lecture with a higher number has no page in
+either language and is not in the search; the side menu lists it as grey text, and
+every link to it (agenda, index, "see lecture N" in other lectures) is shown as
+plain text. The "Lectures" menu at the top opens the last released lecture.
+`npm run dev` and `TRAINER=1` builds show all lectures.
+
+On the session day (or just before it), `sh trainer/tools/release-session.sh NN`
+(in the private trainer repo) raises `releasedUpTo`, builds, commits, releases the
+homework of the session and asks before it pushes. By hand:
+
+1. Raise `releasedUpTo` in `site/.vitepress/released.mjs` to the session's number.
+2. `npm run build` - check that the new page is in `site/.vitepress/dist/lectures/`.
+3. Commit and push; GitHub Pages deploys.
+
+The source of unreleased lectures is still in the repository (and readable on
+GitHub); only the site hides it.
 
 ## Licence
 

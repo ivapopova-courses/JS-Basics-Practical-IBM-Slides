@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 380" width="920" height="380" role="img">
+<title>Трите копия на Homework repository</title>
+<defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b616b"/></marker></defs>
+<rect x="20" y="16" width="390" height="116" rx="10" fill="#e3edfb" stroke="#3b6fc4" stroke-width="2"/>
+<text x="34" y="42" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">Repository-то на курса (GitHub)</text>
+<text x="34" y="66" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="13" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">JS-Basics-Practical-IBM-Homework</text>
+<text x="34" y="87" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">име в Git: upstream</text>
+<text x="34" y="108" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">само преподавателят го променя</text>
+<rect x="510" y="16" width="390" height="116" rx="10" fill="#e2f2e0" stroke="#4f8a45" stroke-width="2"/>
+<text x="524" y="42" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">Вашето repository (GitHub)</text>
+<text x="524" y="66" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="13" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">your-user/JS-Basics-Practical-Homework</text>
+<text x="524" y="87" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">име в Git: origin</text>
+<text x="524" y="108" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">частно или публично; само вие го променяте</text>
+<rect x="210" y="252" width="500" height="112" rx="10" fill="#fdebd3" stroke="#c97a1c" stroke-width="2"/>
+<text x="224" y="278" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">Папката на вашия компютър</text>
+<text x="224" y="302" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="13" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">JS_Basics_Course/</text>
+<text x="224" y="323" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="13" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">    JS-Basics-Practical-IBM-Homework/</text>
+<text x="224" y="344" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">тук пишете и пускате кода, във VSCode</text>
+<path d="M110,134 L270,250" fill="none" stroke="#5b616b" stroke-width="2.2" marker-end="url(#head)" stroke-dasharray="6 4"/>
+<text x="52" y="178" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">git clone</text>
+<text x="52" y="197" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">веднъж, в началото</text>
+<path d="M250,134 L360,250" fill="none" stroke="#5b616b" stroke-width="2.2" marker-end="url(#head)"/>
+<text x="300" y="166" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">git pull ... upstream main</text>
+<text x="300" y="185" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">новите задачи, всяко занятие</text>
+<path d="M600,250 L700,134" fill="none" stroke="#5b616b" stroke-width="2.2" marker-end="url(#head)"/>
+<text x="668" y="196" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">git push</text>
+<text x="668" y="215" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="start" xml:space="preserve">вашите решения</text>
+</svg>

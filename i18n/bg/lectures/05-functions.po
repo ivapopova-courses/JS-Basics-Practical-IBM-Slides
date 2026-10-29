@@ -111,7 +111,7 @@ msgstr "1. Какво е функция?"
 #. paragraph
 #: site/lectures/05-functions.md:109
 msgid "MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions)"
-msgstr ""
+msgstr "MDN: [Functions (ръководство)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions)"
 
 #. paragraph
 #: site/lectures/05-functions.md:111
@@ -241,7 +241,7 @@ msgstr "Вариант 1: function declaration"
 #. paragraph
 #: site/lectures/05-functions.md:195
 msgid "MDN: [function declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)"
-msgstr ""
+msgstr "MDN: [function declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)"
 
 #. paragraph
 #: site/lectures/05-functions.md:203
@@ -326,7 +326,7 @@ msgstr "Вариант 2: function expression"
 #. paragraph
 #: site/lectures/05-functions.md:298
 msgid "MDN: [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)"
-msgstr ""
+msgstr "MDN: [function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)"
 
 #. paragraph
 #: site/lectures/05-functions.md:300
@@ -466,7 +466,7 @@ msgstr "Произволен брой аргументи: `arguments` и `...res
 #. paragraph
 #: site/lectures/05-functions.md:440
 msgid "MDN: [The arguments object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)"
-msgstr ""
+msgstr "MDN: [The arguments object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)"
 
 #. paragraph
 #: site/lectures/05-functions.md:442
@@ -516,7 +516,7 @@ msgstr "4. Стойности по подразбиране на парамет�
 #. paragraph
 #: site/lectures/05-functions.md:509
 msgid "MDN: [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)"
-msgstr ""
+msgstr "MDN: [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)"
 
 #. paragraph
 #: site/lectures/05-functions.md:511
@@ -576,7 +576,7 @@ msgstr "5. `return`: връщане на резултат"
 #. paragraph
 #: site/lectures/05-functions.md:583
 msgid "MDN: [return](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return)"
-msgstr ""
+msgstr "MDN: [return](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return)"
 
 #. paragraph
 #: site/lectures/05-functions.md:585
@@ -701,7 +701,7 @@ msgstr "6. Scope: къде се вижда една variable"
 #. paragraph
 #: site/lectures/05-functions.md:760
 msgid "MDN: [Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)"
-msgstr ""
+msgstr "MDN: [Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)"
 
 #. paragraph
 #: site/lectures/05-functions.md:762
@@ -851,7 +851,7 @@ msgstr "7. `let`, `const` и `var`"
 #. paragraph
 #: site/lectures/05-functions.md:969
 msgid "MDN: [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var), [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)"
-msgstr ""
+msgstr "MDN: [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var), [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), [const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)"
 
 #. paragraph
 #: site/lectures/05-functions.md:971
@@ -946,7 +946,7 @@ msgstr "Hoisting (advanced)"
 #. paragraph
 #: site/lectures/05-functions.md:1114
 msgid "MDN: [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting)"
-msgstr ""
+msgstr "MDN: [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting)"
 
 #. paragraph
 #: site/lectures/05-functions.md:1116
@@ -1216,7 +1216,7 @@ msgstr "Callbacks"
 #. paragraph
 #: site/lectures/05-functions.md:1435
 msgid "MDN: [Callback function](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function)"
-msgstr ""
+msgstr "MDN: [Callback function](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function)"
 
 #. paragraph
 #: site/lectures/05-functions.md:1437
@@ -1331,7 +1331,7 @@ msgstr "10. Arrow functions"
 #. paragraph
 #: site/lectures/05-functions.md:1629
 msgid "MDN: [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)"
-msgstr ""
+msgstr "MDN: [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)"
 
 #. paragraph
 #: site/lectures/05-functions.md:1631
@@ -1536,7 +1536,7 @@ msgstr "Closures"
 #. paragraph
 #: site/lectures/05-functions.md:1837
 msgid "MDN: [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)"
-msgstr ""
+msgstr "MDN: [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)"
 
 #. paragraph
 #: site/lectures/05-functions.md:1839
@@ -1965,258 +1965,261 @@ msgstr "Във вашето копие на Homework repository първо вз�
 
 #. paragraph
 #: site/lectures/05-functions.md:2386
-msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
-msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките в края отпечатват `OK` или `FAIL`."
+msgid "Each file is split into parts. A part has its description, then the `your code` lines - write your code between them - and right after them its checks, which print `OK` or `FAIL`."
+msgstr "Всеки файл е разделен на части. Всяка част има описание, след него редовете `your code` - пишете кода си между тях - и веднага след тях нейните проверки, които отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/05-functions.md:2389
+#: site/lectures/05-functions.md:2390
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/05-functions.md:2389
+#: site/lectures/05-functions.md:2390
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/05-functions.md:2389
+#: site/lectures/05-functions.md:2390
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/05-functions.md:2391
+#: site/lectures/05-functions.md:2392
 msgid "Predict 20 results: scope, shadowing, defaults, `return`, hoisting, arrow functions"
 msgstr "Предсказвате 20 резултата: scope, shadowing, стойности по подразбиране, `return`, hoisting, arrow functions"
 
 #. table cell
-#: site/lectures/05-functions.md:2392
+#: site/lectures/05-functions.md:2393
 msgid "`compareVersions`, `versionBelow` and `versionStatus` - with all the odd cases"
 msgstr "`compareVersions`, `versionBelow` и `versionStatus` - с всички странни случаи"
 
 #. table cell
-#: site/lectures/05-functions.md:2393
+#: site/lectures/05-functions.md:2394
 msgid "Small pure helpers: `asList`, `capitalize`, `lastPart`, `deviceName` with a default"
 msgstr "Малки чисти helper функции: `asList`, `capitalize`, `lastPart`, `deviceName` със стойност по подразбиране"
 
 #. table cell
-#: site/lectures/05-functions.md:2394
+#: site/lectures/05-functions.md:2395
 msgid "`customMap`, `customFilter`, `countIf`, `compose` - and use them with arrow functions on the enclosures"
 msgstr "`customMap`, `customFilter`, `countIf`, `compose` - и използването им с arrow functions върху enclosures"
 
 #. table cell
-#: site/lectures/05-functions.md:2395
+#: site/lectures/05-functions.md:2396
 msgid "Classic tasks as functions: area, sums, largest even number, best score, a table"
 msgstr "Класически задачи като функции: лице, суми, най-голямо четно число, най-добър резултат, таблица"
 
 #. heading 2
-#: site/lectures/05-functions.md:2397
+#: site/lectures/05-functions.md:2398
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/05-functions.md:2399
+#: site/lectures/05-functions.md:2400
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/05-functions.md:2399
+#: site/lectures/05-functions.md:2400
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/05-functions.md:2401
+#: site/lectures/05-functions.md:2402
 msgid "Function"
 msgstr "Функция"
 
 #. table cell
-#: site/lectures/05-functions.md:2401
+#: site/lectures/05-functions.md:2402
 msgid "A named sequence of actions; defined once, called many times; `f` is the function, `f()` calls it"
 msgstr "Именувана поредица от действия; дефинира се веднъж, извиква се много пъти; `f` е функцията, `f()` я извиква"
 
 #. table cell
-#: site/lectures/05-functions.md:2402
+#: site/lectures/05-functions.md:2403
 msgid "Declaration / expression"
 msgstr "Declaration / expression"
 
 #. table cell
-#: site/lectures/05-functions.md:2402
+#: site/lectures/05-functions.md:2403
 msgid "`function f() {}` (hoisted) / `const f = function () {};` (ends with `;`)"
 msgstr "`function f() {}` (издига се) / `const f = function () {};` (завършва с `;`)"
 
 #. table cell
-#: site/lectures/05-functions.md:2403
+#: site/lectures/05-functions.md:2404
 msgid "Parameters"
 msgstr "Параметри"
 
 #. table cell
-#: site/lectures/05-functions.md:2403
+#: site/lectures/05-functions.md:2404
 msgid "Local variables, filled **by position**; missing -> `undefined`, extra -> ignored; `...rest` for any number"
 msgstr "Локални variables, попълват се **по позиция**; липсващ -> `undefined`, излишен -> пренебрегва се; `...rest` за произволен брой"
 
 #. table cell
-#: site/lectures/05-functions.md:2404
+#: site/lectures/05-functions.md:2405
 msgid "Defaults"
 msgstr "Стойности по подразбиране"
 
 #. table cell
-#: site/lectures/05-functions.md:2404
+#: site/lectures/05-functions.md:2405
 msgid "`function f(x = 1)` - only for `undefined`; `x = x \\|\\| 1` also replaces `0`, `\"\"`, `false`, `null`"
 msgstr "`function f(x = 1)` - само за `undefined`; `x = x \\|\\| 1` заменя и `0`, `\"\"`, `false`, `null`"
 
 #. table cell
-#: site/lectures/05-functions.md:2405
+#: site/lectures/05-functions.md:2406
 msgid "Ends the function and gives the value; no `return` -> `undefined`; keep the value on the same line"
 msgstr "Прекратява функцията и дава стойността; без `return` -> `undefined`; дръжте стойността на същия ред"
 
 #. table cell
-#: site/lectures/05-functions.md:2406
+#: site/lectures/05-functions.md:2407
 msgid "Scope"
 msgstr "Scope"
 
 #. table cell
-#: site/lectures/05-functions.md:2406
+#: site/lectures/05-functions.md:2407
 msgid "Global, function, block (`let` / `const`); inner functions see outer variables, not the other way"
 msgstr "Глобален, на функцията, на блока (`let` / `const`); вътрешните функции виждат външните variables, а не обратното"
 
 #. table cell
-#: site/lectures/05-functions.md:2407
+#: site/lectures/05-functions.md:2408
 msgid "Function-scoped, can be declared again, hoisted as `undefined` - read it, write `let` / `const`"
 msgstr "Scope на функцията, може да се декларира отново, издига се като `undefined` - четете го, пишете `let` / `const`"
 
 #. table cell
-#: site/lectures/05-functions.md:2408
+#: site/lectures/05-functions.md:2409
 msgid "Hoisting"
 msgstr "Hoisting"
 
 #. table cell
-#: site/lectures/05-functions.md:2408
+#: site/lectures/05-functions.md:2409
 msgid "Declarations are known from the start of their scope; function declarations can be called early"
 msgstr "Декларациите са известни от началото на своя scope; function declarations могат да се извикат по-рано"
 
 #. table cell
-#: site/lectures/05-functions.md:2409
+#: site/lectures/05-functions.md:2410
 msgid "Arguments"
 msgstr "Аргументи"
 
 #. table cell
-#: site/lectures/05-functions.md:2409
+#: site/lectures/05-functions.md:2410
 msgid "Primitives are copied; arrays and objects are shared - do not change `doc`"
 msgstr "Примитивите се копират; arrays и обектите са общи - не променяйте `doc`"
 
 #. table cell
-#: site/lectures/05-functions.md:2410
+#: site/lectures/05-functions.md:2411
 msgid "Pure function"
 msgstr "Чиста функция"
 
 #. table cell
-#: site/lectures/05-functions.md:2410
+#: site/lectures/05-functions.md:2411
 msgid "Result depends only on the arguments; changes nothing outside"
 msgstr "Резултатът зависи само от аргументите; не променя нищо отвън"
 
 #. table cell
-#: site/lectures/05-functions.md:2411
+#: site/lectures/05-functions.md:2412
 msgid "Callback"
 msgstr "Callback"
 
 #. table cell
-#: site/lectures/05-functions.md:2411
+#: site/lectures/05-functions.md:2412
 msgid "A function passed to a function: `countIf(list, enc => ...)`; `f` not `f()`"
 msgstr "Функция, подадена на функция: `countIf(list, enc => ...)`; `f`, а не `f()`"
 
 #. table cell
-#: site/lectures/05-functions.md:2412
+#: site/lectures/05-functions.md:2413
 msgid "Arrow function"
 msgstr "Arrow function"
 
 #. table cell
-#: site/lectures/05-functions.md:2412
+#: site/lectures/05-functions.md:2413
 msgid "`x => expr` returns `expr`; with `{ }` you need `return`; `({ ... })` for an object"
 msgstr "`x => expr` връща `expr`; с `{ }` ви трябва `return`; `({ ... })` за обект"
 
 #. table cell
-#: site/lectures/05-functions.md:2413
+#: site/lectures/05-functions.md:2414
 msgid "Closure"
 msgstr "Closure"
 
 #. table cell
-#: site/lectures/05-functions.md:2413
+#: site/lectures/05-functions.md:2414
 msgid "An inner function keeps the variables of the outer one alive"
 msgstr "Вътрешната функция пази живи variables на външната"
 
 #. table cell
-#: site/lectures/05-functions.md:2414
+#: site/lectures/05-functions.md:2415
 msgid "Rule file"
 msgstr "Файл с правило"
 
 #. table cell
-#: site/lectures/05-functions.md:2414
+#: site/lectures/05-functions.md:2415
 msgid "Header comment, `const` settings, pure helpers, then `function rule(doc)`"
 msgstr "Коментар в началото, настройки с `const`, чисти helper функции, после `function rule(doc)`"
 
 #. table cell
-#: site/lectures/05-functions.md:2415
+#: site/lectures/05-functions.md:2416
 msgid "Old style"
 msgstr "Стар стил"
 
 #. table cell
-#: site/lectures/05-functions.md:2415
+#: site/lectures/05-functions.md:2416
 msgid "Helpers inside `rule`, `var`, `function (x) { return ...; }`, catch-all `try / catch` - read it, modernise step by step"
 msgstr "Helper функции в `rule`, `var`, `function (x) { return ...; }`, `try / catch`, който хваща всичко - четете го, модернизирайте стъпка по стъпка"
 
 #. heading 2
-#: site/lectures/05-functions.md:2417
+#: site/lectures/05-functions.md:2418
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/05-functions.md:2419
+#: site/lectures/05-functions.md:2420
 msgid "`05-functions/homework.js` (in the homework repository): the best version of a module in a report, a function factory for version checks, and an older rule split into helpers - with the same alerts."
 msgstr "`05-functions/homework.js` (в homework repository): най-високата версия на модул в отчет, фабрика за функции за проверка на версии и по-старо правило, разделено на helper функции - със същите alerts."
 
 #. paragraph
-#: site/lectures/05-functions.md:2422
+#: site/lectures/05-functions.md:2423
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
-msgstr ""
+msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2424
+#: site/lectures/05-functions.md:2425
 msgid "Optional: take one of your own rules. List its functions: where is each defined, what does it get, what does it return, is it pure? Is there a helper that other rules have a copy of? Which one would you move into a shared library first?"
 msgstr "По желание: вземете едно от вашите правила. Избройте функциите му: къде е дефинирана всяка, какво получава, какво връща, чиста ли е? Има ли helper функция, чието копие имат и други правила? Коя бихте преместили първо в обща библиотека?"
 
 #. heading 2
-#: site/lectures/05-functions.md:2429
+#: site/lectures/05-functions.md:2430
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/05-functions.md:2431
+#: site/lectures/05-functions.md:2432
 msgid "MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions), [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters), [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures), [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
 msgstr "MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions), [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters), [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures), [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2438
+#: site/lectures/05-functions.md:2439
 msgid "javascript.info: [Functions](https://javascript.info/function-basics), [Function expressions](https://javascript.info/function-expressions), [Arrow functions, the basics](https://javascript.info/arrow-functions-basics), [Variable scope, closure](https://javascript.info/closure), [The old \"var\"](https://javascript.info/var)"
 msgstr "javascript.info: [Functions](https://javascript.info/function-basics), [Function expressions](https://javascript.info/function-expressions), [Arrow functions, the basics](https://javascript.info/arrow-functions-basics), [Variable scope, closure](https://javascript.info/closure), [The old \"var\"](https://javascript.info/var)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2443
+#: site/lectures/05-functions.md:2444
 msgid "Eloquent JavaScript (4th edition): [Functions](https://eloquentjavascript.net/03_functions.html), [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Functions](https://eloquentjavascript.net/03_functions.html), [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2445
+#: site/lectures/05-functions.md:2446
 msgid "W3Schools: [Function definitions](https://www.w3schools.com/js/js_function_definition.asp)"
 msgstr "W3Schools: [Function definitions](https://www.w3schools.com/js/js_function_definition.asp)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2446
+#: site/lectures/05-functions.md:2447
 msgid "Videos: [Learn JavaScript ARROW FUNCTIONS in 8 minutes](https://www.youtube.com/watch?v=fRRRkognpOs), [How to use Arrow Functions](https://www.youtube.com/watch?v=Oy185MF8pnY)"
 msgstr "Видео: [Learn JavaScript ARROW FUNCTIONS in 8 minutes](https://www.youtube.com/watch?v=fRRRkognpOs), [How to use Arrow Functions](https://www.youtube.com/watch?v=Oy185MF8pnY)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2449
+#: site/lectures/05-functions.md:2450
 msgid "**Next session:** objects. Deep paths and keys with dots, dictionaries keyed by ids, the same data as an array in one report and as an object in another - and your first version of `get(doc, path, fallback)` for the course project."
 msgstr "**Следващото занятие:** обекти. Дълбоки пътища и ключове с точки, речници с ключове id, едни и същи данни като array в един отчет и като обект в друг - и първата ви версия на `get(doc, path, fallback)` за курсовия проект."
+
+#~ msgid "Each file explains the task at the top. Write your code between the `your code` lines; the checks at the bottom print `OK` or `FAIL`."
+#~ msgstr "Всеки файл обяснява задачата в началото. Пишете кода си между редовете `your code`; проверките в края отпечатват `OK` или `FAIL`."
 
 #~ msgid "Finish the five practice tasks - every check must print `OK`."
 #~ msgstr "Довършете петте задачи за упражнение - всяка проверка трябва да отпечата `OK`."

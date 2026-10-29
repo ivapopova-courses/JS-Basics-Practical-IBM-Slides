@@ -1,0 +1,7 @@
+{
+  "_note": "MADE-UP example JSON document for the course. All names, ids and values are invented; only the shape is typical of the JSON a device sends.",
+  "status": { "device_alias": "E5A8C1D64F3B7700", "epoch": "1791424802" },
+  "overview": { "model": "XR-210", "serial_number": "SN6W1X38", "version": "4.2.1.7" },
+  // a comment - not allowed in JSON
+  "inventory": { "enclosures": [] },
+}
