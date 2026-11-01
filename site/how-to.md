@@ -261,6 +261,16 @@ If **Install** does not work, ask your IT for the extensions in the table.
    what the check expects (`expected ...`). Fix your code and run the file again.
 6. Then go on with the next part: it starts right after the checks of this one.
 
+::: info Predict tasks
+In a predict task (`task1-predict.js`) you do not write code. You replace each
+`TODO` with what you think the expression gives, for example `"local"`, `3` or
+`undefined`. The file prints `OK`, `WRONG` or `TODO` (not answered yet) for each
+prediction, but never the real result, so run it as often as you like. Each part
+shows links to the lecture sections that explain it. For a `WRONG`, read the
+section again and change your prediction. Still `WRONG` after that? Write to the
+trainer, and we will discuss it in class.
+:::
+
 ### Save your work {#save-your-work}
 
 Save your solutions in your own repository at the end of each working day, and
