@@ -256,18 +256,31 @@ If **Install** does not work, ask your IT for the extensions in the table.
    You do not have to type the path: right-click the file in the Explorer >
    **Copy Relative Path**, then type `node ` in the terminal (with a space) and
    paste.
-5. Read the result: `OK` or `FAIL` for each check, and at the end a line like
-   `5 of 18 checks passed`. A `FAIL` line shows what your code gave (`got ...`) and
-   what the check expects (`expected ...`). Fix your code and run the file again.
+
+   Or let Node run the file again every time you save it. Keep this terminal open
+   next to the editor, and stop it with `Ctrl+C` when you go to another file:
+
+   ```bash
+   node --watch 05-functions/practice/task2-versions.js
+   ```
+
+   While some checks are not `OK`, Node adds the line `Failed running ... Waiting
+   for file changes`. That is normal: it only means "not all checks passed yet".
+5. Read the result. A line `-- Part N: ... ---` starts the checks of each part.
+   Each check prints `OK` (green), `FAIL` (red), or `TODO` (yellow: you have not
+   written any code in this part yet). Under a `FAIL` line you see what your code
+   gave (`got:`) and what the check expects (`expected:`). At the end you see one
+   line per part and a line like `5 of 18 checks passed`. Fix your code and run
+   the file again.
 6. Then go on with the next part: it starts right after the checks of this one.
 
 ::: info Predict tasks
 In a predict task (`task1-predict.js`) you do not write code. You replace each
 `TODO` with what you think the expression gives, for example `"local"`, `3` or
 `undefined`. The file prints `OK`, `WRONG` or `TODO` (not answered yet) for each
-prediction, but never the real result, so run it as often as you like. Each part
-shows links to the lecture sections that explain it. For a `WRONG`, read the
-section again and change your prediction. Still `WRONG` after that? Write to the
+prediction, but never the real result, so run it as often as you like. At the
+end, each part that is not all `OK` yet shows links to the lecture sections that
+explain it. For a `WRONG`, read the section again and change your prediction. Still `WRONG` after that? Write to the
 trainer, and we will discuss it in class.
 :::
 
