@@ -112,6 +112,8 @@ Use the same email as in your GitHub account.
    `https://github.com/your-user/JS-Basics-Practical-Homework.git`. Copy it (the copy button
    next to it). You need it in step 4.
 
+   ![GitHub after Create repository: the Quick setup box with HTTPS selected, the web address of the new repository and the copy button next to it](/images/github-hw-setup-new-repo-url.png){.screenshot width=1542 height=654}
+
 #### 4. Download the course repository and connect your own
 
 In VSCode, open the folder where you keep the course (**File > Open Folder**, for
