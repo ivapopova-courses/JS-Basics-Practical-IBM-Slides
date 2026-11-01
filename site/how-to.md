@@ -243,7 +243,8 @@ If **Install** does not work, ask your IT for the extensions in the table.
 2. In the Explorer, open the file of the task, for example
    `05-functions/practice/task2-versions.js`.
 3. Read the file from the top. From session 5 on, a task is split into parts.
-   Each part has a heading (`// == Part 1: ... ==`), its description, the
+   Each part starts with a line `// =====...` and a heading
+   (`// == Part 1: ... ==`), then its description, the
    `// ---- your code ... ----` lines, and right after them its checks. Write your
    code between `// ---- your code ... ----` and `// ---- end of your code ----`,
    and change nothing else in the file.

@@ -2190,51 +2190,56 @@ msgstr "Домашно"
 
 #. paragraph
 #: site/lectures/05-functions.md:2445
+msgid "Start with `05-functions/homework-small-functions.js` (in the homework repository): 20 small functions, from `square(x)` to a version split into numbers. You write each function yourself, from the word `function` to `return`. They use only sections 1 - 7 of this lecture and the earlier ones."
+msgstr "Започнете с `05-functions/homework-small-functions.js` (в homework repository): 20 малки функции, от `square(x)` до версия, разделена на числа. Всяка функция пишете сами, от думата `function` до `return`. Използват само раздели 1 - 7 от тази лекция и предишните лекции."
+
+#. paragraph
+#: site/lectures/05-functions.md:2449
 msgid "`05-functions/homework.js` (in the homework repository): the best version of a module in a report, a function factory for version checks, and an older rule split into helpers - with the same alerts."
 msgstr "`05-functions/homework.js` (в homework repository): най-високата версия на модул в отчет, фабрика за функции за проверка на версии и по-старо правило, разделено на helper функции - със същите alerts."
 
 #. paragraph
-#: site/lectures/05-functions.md:2448
+#: site/lectures/05-functions.md:2452
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2450
+#: site/lectures/05-functions.md:2454
 msgid "Optional: take one of your own rules. List its functions: where is each defined, what does it get, what does it return, is it pure? Is there a helper that other rules have a copy of? Which one would you move into a shared library first?"
 msgstr "По желание: вземете едно от вашите правила. Избройте функциите му: къде е дефинирана всяка, какво получава, какво връща, чиста ли е? Има ли helper функция, чието копие имат и други правила? Коя бихте преместили първо в обща библиотека?"
 
 #. heading 2
-#: site/lectures/05-functions.md:2455
+#: site/lectures/05-functions.md:2459
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/05-functions.md:2457
+#: site/lectures/05-functions.md:2461
 msgid "MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions), [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters), [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures), [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
 msgstr "MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions), [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters), [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures), [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2464
+#: site/lectures/05-functions.md:2468
 msgid "javascript.info: [Functions](https://javascript.info/function-basics), [Function expressions](https://javascript.info/function-expressions), [Arrow functions, the basics](https://javascript.info/arrow-functions-basics), [Variable scope, closure](https://javascript.info/closure), [The old \"var\"](https://javascript.info/var)"
 msgstr "javascript.info: [Functions](https://javascript.info/function-basics), [Function expressions](https://javascript.info/function-expressions), [Arrow functions, the basics](https://javascript.info/arrow-functions-basics), [Variable scope, closure](https://javascript.info/closure), [The old \"var\"](https://javascript.info/var)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2469
+#: site/lectures/05-functions.md:2473
 msgid "Eloquent JavaScript (4th edition): [Functions](https://eloquentjavascript.net/03_functions.html), [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Functions](https://eloquentjavascript.net/03_functions.html), [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2471
+#: site/lectures/05-functions.md:2475
 msgid "W3Schools: [Function definitions](https://www.w3schools.com/js/js_function_definition.asp)"
 msgstr "W3Schools: [Function definitions](https://www.w3schools.com/js/js_function_definition.asp)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2472
+#: site/lectures/05-functions.md:2476
 msgid "Videos: [Learn JavaScript ARROW FUNCTIONS in 8 minutes](https://www.youtube.com/watch?v=fRRRkognpOs), [How to use Arrow Functions](https://www.youtube.com/watch?v=Oy185MF8pnY)"
 msgstr "Видео: [Learn JavaScript ARROW FUNCTIONS in 8 minutes](https://www.youtube.com/watch?v=fRRRkognpOs), [How to use Arrow Functions](https://www.youtube.com/watch?v=Oy185MF8pnY)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2475
+#: site/lectures/05-functions.md:2479
 msgid "**Next session:** objects. Deep paths and keys with dots, dictionaries keyed by ids, the same data as an array in one report and as an object in another - and your first version of `get(doc, path, fallback)` for the course project."
 msgstr "**Следващото занятие:** обекти. Дълбоки пътища и ключове с точки, речници с ключове id, едни и същи данни като array в един отчет и като обект в друг - и първата ви версия на `get(doc, path, fallback)` за курсовия проект."
 

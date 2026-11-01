@@ -405,243 +405,246 @@ msgstr "В Explorer отворете файла на задачата, напр�
 
 #. paragraph
 #: site/how-to.md:245
-msgid "Read the file from the top. From session 5 on, a task is split into parts. Each part has a heading (`// == Part 1: ... ==`), its description, the `// ---- your code ... ----` lines, and right after them its checks. Write your code between `// ---- your code ... ----` and `// ---- end of your code ----`, and change nothing else in the file."
-msgstr "Четете файла отгоре надолу. От занятие 5 нататък задачата е разделена на части. Всяка част има заглавие (`// == Part 1: ... ==`), описание, редовете `// ---- your code ... ----` и веднага след тях своите проверки. Пишете кода си между `// ---- your code ... ----` и `// ---- end of your code ----` и не променяйте нищо друго във файла."
+msgid "Read the file from the top. From session 5 on, a task is split into parts. Each part starts with a line `// =====...` and a heading (`// == Part 1: ... ==`), then its description, the `// ---- your code ... ----` lines, and right after them its checks. Write your code between `// ---- your code ... ----` and `// ---- end of your code ----`, and change nothing else in the file."
+msgstr "Четете файла отгоре надолу. От занятие 5 нататък задачата е разделена на части. Всяка част започва с линия `// =====...` и заглавие (`// == Part 1: ... ==`), след тях са описанието, редовете `// ---- your code ... ----` и веднага след тях своите проверки. Пишете кода си между `// ---- your code ... ----` и `// ---- end of your code ----` и не променяйте нищо друго във файла."
 
 #. paragraph
-#: site/how-to.md:250
+#: site/how-to.md:251
 msgid "Save the file (`Ctrl+S`) and run it from the repository root:"
 msgstr "Запазете файла (`Ctrl+S`) и го пуснете от основната папка на repository-то:"
 
 #. paragraph
-#: site/how-to.md:256
+#: site/how-to.md:257
 msgid "You do not have to type the path: right-click the file in the Explorer > **Copy Relative Path**, then type `node ` in the terminal (with a space) and paste."
 msgstr "Не е нужно да пишете пътя: десен бутон върху файла в Explorer > **Copy Relative Path**, после напишете `node ` в терминала (с интервал) и поставете."
 
 #. paragraph
-#: site/how-to.md:260
+#: site/how-to.md:261
 msgid "Or let Node run the file again every time you save it. Keep this terminal open next to the editor, and stop it with `Ctrl+C` when you go to another file:"
 msgstr "Или оставете Node да пуска файла отново всеки път, когато го запазите. Дръжте този терминал отворен до редактора и го спрете с `Ctrl+C`, когато минете на друг файл:"
 
 #. paragraph
-#: site/how-to.md:267
+#: site/how-to.md:268
 msgid "While some checks are not `OK`, Node adds the line `Failed running ... Waiting for file changes`. That is normal: it only means \"not all checks passed yet\"."
 msgstr "Докато някои проверки не са `OK`, Node добавя реда `Failed running ... Waiting for file changes`. Това е нормално: значи само \"още не всички проверки минават\"."
 
 #. paragraph
-#: site/how-to.md:269
+#: site/how-to.md:270
 msgid "Read the result. A line `-- Part N: ... ---` starts the checks of each part. Each check prints `OK` (green), `FAIL` (red), or `TODO` (yellow: you have not written any code in this part yet). Under a `FAIL` line you see what your code gave (`got:`) and what the check expects (`expected:`). At the end you see one line per part and a line like `5 of 18 checks passed`. Fix your code and run the file again."
 msgstr "Прочетете резултата. Ред `-- Part N: ... ---` започва проверките на всяка част. Всяка проверка показва `OK` (зелено), `FAIL` (червено) или `TODO` (жълто: още не сте написали код в тази част). Под ред с `FAIL` виждате какво е дал вашият код (`got:`) и какво очаква проверката (`expected:`). Накрая виждате по един ред за всяка част и ред като `5 of 18 checks passed`. Поправете кода и пуснете файла отново."
 
 #. paragraph
-#: site/how-to.md:275
+#: site/how-to.md:276
 msgid "Then go on with the next part: it starts right after the checks of this one."
 msgstr "После продължете със следващата част: тя започва точно след проверките на тази."
 
 #. box title
-#: site/how-to.md:277
+#: site/how-to.md:278
 msgid "Predict tasks"
 msgstr "Задачи за предвиждане"
 
 #. paragraph
-#: site/how-to.md:278
+#: site/how-to.md:279
 msgid "In a predict task (`task1-predict.js`) you do not write code. You replace each `TODO` with what you think the expression gives, for example `\"local\"`, `3` or `undefined`. The file prints `OK`, `WRONG` or `TODO` (not answered yet) for each prediction, but never the real result, so run it as often as you like. At the end, each part that is not all `OK` yet shows links to the lecture sections that explain it. For a `WRONG`, read the section again and change your prediction. Still `WRONG` after that? Write to the trainer, and we will discuss it in class."
 msgstr "В задача за предвиждане (`task1-predict.js`) не пишете код. Заменяте всяко `TODO` с това, което според вас дава изразът, например `\"local\"`, `3` или `undefined`. Файлът показва `OK`, `WRONG` или `TODO` (още без отговор) за всяко предвиждане, но никога истинския резултат, затова го пускайте колкото пъти искате. Накрая всяка част, която още не е изцяло `OK`, показва връзки към разделите от лекцията, които я обясняват. При `WRONG` прочетете раздела отново и променете предвиждането си. Пак е `WRONG`? Пишете на преподавателя и ще го обсъдим в час."
 
 #. heading 3
-#: site/how-to.md:287
+#: site/how-to.md:288
 msgid "Save your work"
 msgstr "Запазване на работата"
 
 #. paragraph
-#: site/how-to.md:289
+#: site/how-to.md:290
 msgid "Save your solutions in your own repository at the end of each working day, and always before a session. Three commands, in the terminal of the Homework folder:"
 msgstr "Запазвайте решенията си във вашето repository в края на всеки работен ден и винаги преди занятие. Три команди, в терминала на папката Homework:"
 
 #. paragraph
-#: site/how-to.md:298
+#: site/how-to.md:299
 msgid "`git add .` chooses all changed files (mind the dot), `git commit` saves a version on your computer with a short message, `git push` sends it to your repository on GitHub. If `git commit` says `nothing to commit, working tree clean`, there is nothing new to save: did you save the file (`Ctrl+S`)?"
 msgstr "`git add .` избира всички променени файлове (обърнете внимание на точката), `git commit` запазва версия на вашия компютър с кратко съобщение, `git push` я изпраща във вашето repository в GitHub. Ако `git commit` каже `nothing to commit, working tree clean`, няма нищо ново за запазване: запазихте ли файла (`Ctrl+S`)?"
 
 #. heading 3
-#: site/how-to.md:303
+#: site/how-to.md:304
 msgid "Get the new tasks"
 msgstr "Как да получите новите задачи"
 
 #. paragraph
-#: site/how-to.md:305
+#: site/how-to.md:306
 msgid "The trainer adds the folder of each lecture on the morning of its session. To get it:"
 msgstr "Преподавателят добавя папката на всяка лекция сутринта в деня на занятието. За да я вземете:"
 
 #. paragraph
-#: site/how-to.md:308
+#: site/how-to.md:309
 msgid "Save your work first: the three commands of [Save your work](#save-your-work)."
 msgstr "Първо запазете работата си: трите команди от [Запазване на работата](#save-your-work)."
 
 #. paragraph
-#: site/how-to.md:309
+#: site/how-to.md:310
 msgid "Get the new tasks from the course repository:"
 msgstr "Вземете новите задачи от repository-то на курса:"
 
 #. paragraph
-#: site/how-to.md:315
+#: site/how-to.md:316
 msgid "Send them to your own repository too:"
 msgstr "Изпратете ги и във вашето repository:"
 
 #. paragraph
-#: site/how-to.md:321
+#: site/how-to.md:322
 msgid "You see: after the pull, a line like `Merge made by the 'ort' strategy.` (or `Fast-forward`) and the list of the new files. The new lecture folder appears in the Explorer. Your own files do not change: published task files are never changed, so there are no conflicts."
 msgstr "Виждате: след pull ред като `Merge made by the 'ort' strategy.` (или `Fast-forward`) и списък на новите файлове. Новата папка на лекцията се появява в Explorer. Вашите файлове не се променят: публикуваните файлове на задачите никога не се променят, затова няма конфликти."
 
 #. paragraph
-#: site/how-to.md:326
+#: site/how-to.md:327
 msgid "The parts of the pull command: `upstream main` - from the course repository; `--no-rebase` - join the new tasks with your own commits; `--no-edit` - do not ask for a message. Without them, Git stops with an error or opens an editor."
 msgstr "Частите на командата pull: `upstream main` - от repository-то на курса; `--no-rebase` - съединява новите задачи с вашите commits; `--no-edit` - не пита за съобщение. Без тях Git спира с грешка или отваря редактор."
 
 #. heading 3
-#: site/how-to.md:330
+#: site/how-to.md:331
 msgid "If something goes wrong"
 msgstr "Ако нещо не стане"
 
 #. paragraph
-#: site/how-to.md:332
+#: site/how-to.md:333
 msgid "Read the last lines in the terminal: the error is usually there. Find it below. Still stuck? Write to the trainer: the step, the command, and a screenshot of the terminal."
 msgstr "Прочетете последните редове в терминала: грешката обикновено е там. Намерете я по-долу. Пак не става? Пишете на преподавателя: стъпката, командата и снимка на екрана с терминала."
 
 #. paragraph
-#: site/how-to.md:336
+#: site/how-to.md:337
 msgid "**`... is not recognized as an internal or external command`** or **`command not found`** (`git`, `node`) - the tool is not installed, or VSCode was open while you installed it. Install it (see [lecture 1, section 2](/lectures/01-getting-started#_2-setting-up-the-environment)), then close VSCode completely and start it again."
 msgstr "**`... is not recognized as an internal or external command`** или **`command not found`** (`git`, `node`) - инструментът не е инсталиран или VSCode е бил отворен, докато сте го инсталирали. Инсталирайте го (вижте [лекция 1, раздел 2](/lectures/01-getting-started#_2-setting-up-the-environment)), след това затворете VSCode напълно и го стартирайте отново."
 
 #. paragraph
-#: site/how-to.md:341
+#: site/how-to.md:342
 msgid "**`npm : File ... npm.ps1 cannot be loaded because running scripts is disabled on this system`** - the terminal is PowerShell, and the company settings block its scripts. Type `npm.cmd` instead of `npm`, or switch the terminal to the Command Prompt: `Ctrl+Shift+P`, **Terminal: Select Default Profile**, **Command Prompt**, then open a new terminal."
 msgstr "**`npm : File ... npm.ps1 cannot be loaded because running scripts is disabled on this system`** - терминалът е PowerShell и настройките на компанията блокират скриптовете му. Пишете `npm.cmd` вместо `npm` или сменете терминала с Command Prompt: `Ctrl+Shift+P`, **Terminal: Select Default Profile**, **Command Prompt**, след това отворете нов терминал."
 
 #. paragraph
-#: site/how-to.md:346
+#: site/how-to.md:347
 msgid "**`Error: Cannot find module '...task2-versions.js'`** - the path of the file is wrong for the folder the terminal is in. Run the command in the repository root (the prompt ends with `JS-Basics-Practical-IBM-Homework`), or copy the path with **Copy Relative Path**."
 msgstr "**`Error: Cannot find module '...task2-versions.js'`** - пътят до файла е грешен за папката, в която е терминалът. Изпълнете командата в основната папка на repository-то (промптът завършва с `JS-Basics-Practical-IBM-Homework`) или копирайте пътя с **Copy Relative Path**."
 
 #. paragraph
-#: site/how-to.md:350
+#: site/how-to.md:351
 msgid "**`fatal: destination path 'JS-Basics-Practical-IBM-Homework' already exists`** - you cloned it before. Run `cd JS-Basics-Practical-IBM-Homework` and continue with `git remote -v` (step 6) to see what is still missing."
 msgstr "**`fatal: destination path 'JS-Basics-Practical-IBM-Homework' already exists`** - вече сте го клонирали. Изпълнете `cd JS-Basics-Practical-IBM-Homework` и продължете с `git remote -v` (стъпка 6), за да видите какво още липсва."
 
 #. paragraph
-#: site/how-to.md:353
+#: site/how-to.md:354
 msgid "**`fatal: not a git repository`** - the terminal is not in the repository folder. Run `cd JS-Basics-Practical-IBM-Homework`, or open that folder in VSCode (step 7) and open a new terminal."
 msgstr "**`fatal: not a git repository`** - терминалът не е в папката на repository-то. Изпълнете `cd JS-Basics-Practical-IBM-Homework` или отворете тази папка във VSCode (стъпка 7) и отворете нов терминал."
 
 #. paragraph
-#: site/how-to.md:356
+#: site/how-to.md:357
 msgid "**`error: remote origin already exists`** - you already added `origin`. If its address is wrong (check with `git remote -v`), fix it: `git remote set-url origin https://github.com/your-user/your-repo.git`"
 msgstr "**`error: remote origin already exists`** - вече сте добавили `origin`. Ако адресът му е грешен (проверете с `git remote -v`), поправете го: `git remote set-url origin https://github.com/your-user/your-repo.git`"
 
 #. paragraph
-#: site/how-to.md:359
+#: site/how-to.md:360
 msgid "**`error: remote upstream already exists`** or **`No such remote 'origin'`** after `git remote rename` - the rename is already done. Continue with the next command."
 msgstr "**`error: remote upstream already exists`** или **`No such remote 'origin'`** след `git remote rename` - преименуването вече е направено. Продължете със следващата команда."
 
 #. paragraph
-#: site/how-to.md:362
+#: site/how-to.md:363
 msgid "**`! [rejected] ... (fetch first)`** on the first push - your GitHub repository is not empty (it was created with a README). The easiest fix: delete that repository on GitHub (**Settings**, at the bottom: **Delete this repository**), create it again without a README (step 3) and run `git push -u origin main` again."
 msgstr "**`! [rejected] ... (fetch first)`** при първия push - вашето repository в GitHub не е празно (създадено е с README). Най-лесната поправка: изтрийте това repository в GitHub (**Settings**, най-долу: **Delete this repository**), създайте го отново без README (стъпка 3) и изпълнете пак `git push -u origin main`."
 
 #. paragraph
-#: site/how-to.md:367
+#: site/how-to.md:368
 msgid "**`remote: Repository not found.`** - the address has a typo (check it with `git remote -v`), or Git is signed in with another GitHub account. On Windows, open **Credential Manager** from the Start menu > **Windows Credentials**, remove the entry `git:https://github.com`, and run the command again: Git asks you to sign in."
 msgstr "**`remote: Repository not found.`** - адресът има грешка (проверете го с `git remote -v`) или Git е влязъл с друг акаунт в GitHub. На Windows отворете **Credential Manager** от менюто Start > **Windows Credentials**, премахнете записа `git:https://github.com` и изпълнете командата отново: Git ще ви поиска да влезете."
 
 #. paragraph
-#: site/how-to.md:372
+#: site/how-to.md:373
 msgid "**`Password authentication is not supported`** - you typed your GitHub password. Use a personal access token instead (step 5)."
 msgstr "**`Password authentication is not supported`** - написали сте паролата си за GitHub. Използвайте вместо нея personal access token (стъпка 5)."
 
 #. paragraph
-#: site/how-to.md:374
+#: site/how-to.md:375
 msgid "**`Author identity unknown`** (commit) - Git does not know who you are. Do step 2, then run the commit again."
 msgstr "**`Author identity unknown`** (commit) - Git не знае кои сте. Направете стъпка 2, след това изпълнете commit отново."
 
 #. paragraph
-#: site/how-to.md:376
+#: site/how-to.md:377
 msgid "**`fatal: Need to specify how to reconcile divergent branches.`** (pull) - the two options are missing. Use the whole command of [Get the new tasks](#get-the-new-tasks)."
 msgstr "**`fatal: Need to specify how to reconcile divergent branches.`** (pull) - липсват двете опции. Използвайте цялата команда от [Как да получите новите задачи](#get-the-new-tasks)."
 
 #. paragraph
-#: site/how-to.md:379
+#: site/how-to.md:380
 msgid "**`Your local changes to the following files would be overwritten by merge`** (pull) - some changes are not saved in a version yet. Do the three commands of [Save your work](#save-your-work), then pull again."
 msgstr "**`Your local changes to the following files would be overwritten by merge`** (pull) - някои промени още не са запазени във версия. Изпълнете трите команди от [Запазване на работата](#save-your-work), след това pull отново."
 
 #. paragraph
-#: site/how-to.md:382
+#: site/how-to.md:383
 msgid "**`CONFLICT`** (pull) - rare: the same file was changed in both repositories. Run `git merge --abort` (everything is as before the pull) and write to the trainer."
 msgstr "**`CONFLICT`** (pull) - рядко: един и същ файл е променен и в двете repositories. Изпълнете `git merge --abort` (всичко е както преди pull) и пишете на преподавателя."
 
 #. paragraph
-#: site/how-to.md:385
+#: site/how-to.md:386
 msgid "**A strange editor fills the terminal** (lines that start with `~`, or `-- INSERT --` at the bottom) - Git asks for a message in the editor Vim. Press `Esc`, type `:wq` and press `Enter`. Next time, use the commands exactly as on this page (`git commit -m \"...\"`, `git pull --no-rebase --no-edit ...`)."
 msgstr "**Странен редактор запълва терминала** (редове, които започват с `~`, или `-- INSERT --` най-долу) - Git иска съобщение в редактора Vim. Натиснете `Esc`, напишете `:wq` и натиснете `Enter`. Следващия път използвайте командите точно както са на тази страница (`git commit -m \"...\"`, `git pull --no-rebase --no-edit ...`)."
 
 #. heading 2
-#: site/how-to.md:390
+#: site/how-to.md:391
 msgid "Code from the lessons"
 msgstr "Кодът от занятията"
 
 #. paragraph
-#: site/how-to.md:392
+#: site/how-to.md:393
 msgid "The code written during the lessons is in the **Labs repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Labs"
 msgstr "Кодът, писан по време на занятията, е в **Labs repository**: https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Labs"
 
 #. paragraph
-#: site/how-to.md:395
+#: site/how-to.md:396
 msgid "Clone it once, and after each lesson run `git pull` in it to get the new code. Do not write your own code there - use the Homework repository for that."
 msgstr "Клонирайте го веднъж и след всяко занятие пускайте `git pull` в него, за да получите новия код. Не пишете свой код там - за това е Homework repository."
 
 #. heading 2
-#: site/how-to.md:404
+#: site/how-to.md:405
 msgid "Animations"
 msgstr "Анимации"
 
 #. paragraph
-#: site/how-to.md:406
+#: site/how-to.md:407
 msgid "Some sections have an **Animation** box with links. Each link opens a step-by-step animation in a new tab: it shows what JavaScript does under the hood (memory, the order of calculation, the path through a loop). Use the Right / Left arrow keys to step forward and back. All animations, by session: [Animations](/under-the-hood)."
 msgstr "Някои раздели имат кутия **Анимация** с линкове. Всеки линк отваря в нов таб анимация стъпка по стъпка: тя показва какво прави JavaScript \"под капака\" (паметта, реда на изчисляване, пътя през един loop). Със стрелките надясно / наляво вървите напред и назад. Всички анимации, подредени по занятия: [Анимации](/under-the-hood)."
 
 #. heading 2
-#: site/how-to.md:412
+#: site/how-to.md:413
 msgid "Find things"
 msgstr "Как да намерите нещо"
 
 #. paragraph
-#: site/how-to.md:414
+#: site/how-to.md:415
 msgid "The search box (top left, or `Ctrl+K`) searches all lectures."
 msgstr "Полето за търсене (горе вляво или `Ctrl+K`) търси във всички лекции."
 
 #. paragraph
-#: site/how-to.md:415
+#: site/how-to.md:416
 msgid "The [Calendar](./calendar) shows the dates and times of all sessions; you can also add it to your own calendar."
 msgstr "[Календарът](./calendar) показва датите и часовете на всички занятия; можете да го добавите и към своя календар."
 
 #. paragraph
-#: site/how-to.md:417
+#: site/how-to.md:418
 msgid "The list on the right side of a lecture (\"In this lecture\") jumps to a section."
 msgstr "Списъкът вдясно на всяка лекция (\"На тази страница\") води директно до избран раздел."
 
 #. paragraph
-#: site/how-to.md:418
+#: site/how-to.md:419
 msgid "The moon / sun switch at the top changes between dark and light mode."
 msgstr "Превключвателят луна / слънце горе сменя тъмния и светлия режим."
 
 #. paragraph
-#: site/how-to.md:419
+#: site/how-to.md:420
 msgid "The **EN / BG** button next to it opens the same page in English or in Bulgarian."
 msgstr "Бутонът **EN / BG** до него отваря същата страница на английски или на български."
 
 #. paragraph
-#: site/how-to.md:420
+#: site/how-to.md:421
 msgid "The navigation on the left and the \"In this lecture\" column on the right can be made narrower or wider, in any step: drag their inner edge (it turns blue under the mouse), or click the edge and use the Left / Right arrow keys (16 px a step, with Shift 64 px). At 0 the panel is hidden and a small tab stays at the edge of the window - click it to show the panel again. Double-click the edge to go back to the default width."
 msgstr "Навигацията вляво и колоната \"На тази страница\" вдясно могат да се стесняват и разширяват на произволна стъпка: плъзнете вътрешния им ръб (под мишката той става син) или щракнете върху ръба и използвайте стрелките наляво / надясно (16 px на стъпка, с Shift - 64 px). При 0 панелът се скрива и на ръба на прозореца остава малко езиче - щракнете го, за да се покаже панелът отново. Двоен клик върху ръба връща ширината по подразбиране."
+
+#~ msgid "Read the file from the top. From session 5 on, a task is split into parts. Each part has a heading (`// == Part 1: ... ==`), its description, the `// ---- your code ... ----` lines, and right after them its checks. Write your code between `// ---- your code ... ----` and `// ---- end of your code ----`, and change nothing else in the file."
+#~ msgstr "Четете файла отгоре надолу. От занятие 5 нататък задачата е разделена на части. Всяка част има заглавие (`// == Part 1: ... ==`), описание, редовете `// ---- your code ... ----` и веднага след тях своите проверки. Пишете кода си между `// ---- your code ... ----` и `// ---- end of your code ----` и не променяйте нищо друго във файла."
 
 #~ msgid "You do not have to type the path: right-click the file in the Explorer > **Copy Relative Path**, then type `node ` in the terminal (with a space) and paste. Or let Node run the file again every time you save it. Keep this terminal open next to the editor, and stop it with `Ctrl+C` when you go to another file:"
 #~ msgstr "Не е нужно да пишете пътя: десен бутон върху файла в Explorer > **Copy Relative Path**, после напишете `node ` в терминала (с интервал) и поставете."

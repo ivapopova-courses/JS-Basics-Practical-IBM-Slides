@@ -2442,12 +2442,16 @@ print `OK` or `FAIL`.
 
 ## Homework
 
-1. `05-functions/homework.js` (in the homework repository): the best version of a
+1. Start with `05-functions/homework-small-functions.js` (in the homework
+   repository): 20 small functions, from `square(x)` to a version split into
+   numbers. You write each function yourself, from the word `function` to
+   `return`. They use only sections 1 - 7 of this lecture and the earlier ones.
+2. `05-functions/homework.js` (in the homework repository): the best version of a
    module in a report, a function factory for version checks, and an older rule
    split into helpers - with the same alerts.
-2. The practice tasks you did not finish in class - recommended, as later tasks
+3. The practice tasks you did not finish in class - recommended, as later tasks
    and the course project reuse them. Every check must print `OK`.
-3. Optional: take one of your own rules. List its functions: where is each
+4. Optional: take one of your own rules. List its functions: where is each
    defined, what does it get, what does it return, is it pure? Is there a helper
    that other rules have a copy of? Which one would you move into a shared
    library first?
