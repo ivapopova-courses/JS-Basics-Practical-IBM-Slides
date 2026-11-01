@@ -105,8 +105,8 @@ msgstr "[Функции и четене на по-стар код](/lectures/05-
 
 #. table cell
 #: site/agenda.md:30
-msgid "Tue 03.11"
-msgstr "вт 03.11"
+msgid "Fri 06.11"
+msgstr "пт 06.11"
 
 #. table cell
 #: site/agenda.md:30
@@ -115,8 +115,8 @@ msgstr "[Обекти: дълбоки пътища, dictionaries, различн
 
 #. table cell
 #: site/agenda.md:31
-msgid "Fri 06.11"
-msgstr "пт 06.11"
+msgid "Fri 13.11"
+msgstr "пт 13.11"
 
 #. table cell
 #: site/agenda.md:31
@@ -125,8 +125,8 @@ msgstr "[Методи на arrays: трансформиране, групира�
 
 #. table cell
 #: site/agenda.md:32
-msgid "Tue 10.11"
-msgstr "вт 10.11"
+msgid "Fri 20.11"
+msgstr "пт 20.11"
 
 #. table cell
 #: site/agenda.md:32
@@ -135,8 +135,8 @@ msgstr "[Strings, regular expressions, дати и числа](/lectures/08-stri
 
 #. table cell
 #: site/agenda.md:33
-msgid "Fri 13.11"
-msgstr "пт 13.11"
+msgid "Fri 27.11"
+msgstr "пт 27.11"
 
 #. table cell
 #: site/agenda.md:33
@@ -145,8 +145,8 @@ msgstr "[JSON, Node.js, модули и грешки; локално изпъл�
 
 #. table cell
 #: site/agenda.md:34
-msgid "Tue 17.11"
-msgstr "вт 17.11"
+msgid "Fri 04.12"
+msgstr "пт 04.12"
 
 #. table cell
 #: site/agenda.md:34
@@ -512,6 +512,15 @@ msgstr "Курсов проект"
 #: site/agenda.md:165
 msgid "See [Course project](/project)."
 msgstr "Вижте [Курсов проект](/project)."
+
+#~ msgid "Tue 03.11"
+#~ msgstr "вт 03.11"
+
+#~ msgid "Tue 10.11"
+#~ msgstr "вт 10.11"
+
+#~ msgid "Tue 17.11"
+#~ msgstr "вт 17.11"
 
 #~ msgid "Wed 28.10"
 #~ msgstr "ср 28.10"
