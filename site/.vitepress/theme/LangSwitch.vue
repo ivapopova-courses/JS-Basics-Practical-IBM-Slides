@@ -1,11 +1,12 @@
 <script setup>
 // EN / BG button next to the theme switch. It replaces VitePress' language menu
-// (alias in i18n/i18n.mjs) and opens the same page, at the same section, in the
-// other language. The translated pages are generated: see i18n/README.md.
+// (alias in i18n/i18n.mjs) and opens the same page in the other language, at the
+// same line. The translated pages are generated: see i18n/README.md.
 // On phones it is hidden in the bar and shown in the menu instead: LangSwitchScreen.vue
 // (in place of VitePress' VPNavScreenTranslations, whose links drop the #section).
 import { computed } from 'vue'
 import { useData, useRouter, withBase } from 'vitepress'
+import { describePlace, restoreDescribedPlace } from '@sciscend/course-kit/theme/keepPlace.js'
 import { scrollToHash } from './scrollHash.js'
 
 defineProps({ screen: Boolean })  // true: in the phone menu (always shown)
@@ -37,13 +38,19 @@ const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve))
 async function go(lang) {
   if (lang.key === localeIndex.value) return
   const hash = window.location.hash
+  // the line under the nav bar: the n-th block of its section (keepPlace.js of the
+  // course kit). The other page is built from the same Markdown, so it has the same
+  // headings and blocks, in the same order - only the text in them differs.
+  const place = describePlace()
   await router.go(linkTo(lang) + hash)
+  await nextFrame()
+  await nextFrame()
+  // The first Bulgarian page loads the Cyrillic font only now; the text reflows and
+  // moves down. restoreDescribedPlace keeps the place until the fonts are in (and a
+  // moment after), unless the reader scrolls. The address bar keeps up: scrollHash.js.
+  if (restoreDescribedPlace(place, document.fonts.ready)) return
+  // no such block on the other page: the start of the section, as VitePress did
   if (!hash) return
-  // VitePress has scrolled to the section, but the first Bulgarian page loads the
-  // Cyrillic font only now; the text reflows and the section moves down. Scroll to
-  // it again once the fonts are in (the address bar keeps up: scrollHash.js).
-  await nextFrame()
-  await nextFrame()
   await document.fonts.ready
   scrollToHash(hash)
 }
