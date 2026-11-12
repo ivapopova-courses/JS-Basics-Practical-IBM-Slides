@@ -24,6 +24,13 @@ title: 9. JSON, Node.js, modules, errors
   a web API;
 - run a rule **locally**, on a folder of sample reports, with a fake `emit`.
 
+::: tip Sections marked (advanced) or (optional)
+This lecture has more than fits into one session. Sections marked **(advanced)**
+go deeper, and sections marked **(optional)** add one more example of a topic you
+already know. In class we may skip them - read them at home. The homework does not
+need them.
+:::
+
 Where this fits - today the rule leaves the browser. A small Node.js script runs
 one rule on every report in a folder, the way the rule engine does. The number in
 each comment is the section of this lecture:
@@ -245,6 +252,8 @@ const masked = JSON.stringify(doc.overview, (key, value) =>
 console.log(masked);    // {"model":"XR-220","serial_number":"***92","version":"4.2.1.7"}
 ```
 
+### The reviver of `JSON.parse` (advanced)
+
 `JSON.parse` has a similar second argument, the *reviver*, called for every key and
 value while parsing - for example to turn ISO date strings into `Date` objects:
 
@@ -374,7 +383,7 @@ In Node.js, `log` and `info` write to **stdout** (the normal output), `warn` and
 `error` to **stderr** (the error output). `node run-rule.js > alerts.json` saves only
 stdout in the file - the error messages still appear on the screen.
 
-### Node.js can also be a server
+### Node.js can also be a server (advanced)
 
 Node.js is best known for web servers - a server is a program that waits for
 requests and answers them. A minimal one, with the built-in `http` module:
@@ -458,7 +467,7 @@ remembers it - section 6), and every `require` of the same file gives the **same
 object - a change by one helper is seen by all. For data that changes, or for many
 files, use `fs.readFileSync` + `JSON.parse`.
 
-### Reading without waiting: the callback version
+### Reading without waiting: the callback version (advanced)
 
 `readFileSync` makes the program **wait** until the file is read (*synchronous*).
 `fs.readFile` (without `Sync`) starts reading and calls a function when it is done -
@@ -652,7 +661,7 @@ console.log(lib.DEFAULT_LEVEL);
 **Which one for the course project?** CommonJS - because your rule engine loads the
 library with `require`. Your tools and tests may use either.
 
-### Before modules: one global object
+### Before modules: one global object (advanced)
 
 Before modules, a library put everything into **one** global object, wrapped in an
 IIFE (lecture 5) so that its helpers stayed private:
@@ -792,6 +801,8 @@ console.log(checkReport(doc));
 console.log(checkReport({ status: { device_alias: "LAB-DEV-04" }, inventory: {} }));
 ```
 
+### `try` / `finally` without `catch` (optional)
+
 `try` / `finally` without `catch` also exists - the error is **not** caught, but
 `finally` still runs before it goes up:
 
@@ -912,6 +923,8 @@ function parseOrNull(text) {
 console.log(parseOrNull('{"a": 1}'), parseOrNull("{a: 1}"));   // { a: 1 } null
 ```
 
+### All the types in one chain (optional)
+
 You can also check all the types in one `if...else if` chain:
 
 ```js run
@@ -959,6 +972,8 @@ try {
 }
 ```
 
+### Error classes before `class`: the ES5 way (advanced)
+
 Before classes, the same was written with a constructor function and its prototype
 (the *ES5 way*):
 
@@ -976,6 +991,8 @@ try {
     console.log(e.name, "-", e.message, "-", e instanceof Error);   // DivideByZero - Cannot divide by zero - true
 }
 ```
+
+### A clearer error with a `cause` (ES2022)
 
 When you catch an error and throw a new, clearer one, keep the original as the
 **cause** (ES2022):
@@ -1026,7 +1043,7 @@ Better:
 
 Section 11 runs both versions on the same reports.
 
-### Global error handlers and error tracking
+### Global error handlers and error tracking (advanced)
 
 A browser page can catch every error that nobody caught with `window.onerror` - the
 handler gets `message`, `source`, `lineno`, `colno` and `error`. Node.js
@@ -1067,7 +1084,7 @@ console.log("End", sum);
 // Start, End ..., and only then: Hello from the timer
 ```
 
-### The event loop
+### The event loop (advanced)
 
 MDN: [JavaScript execution model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model)
 
@@ -1081,7 +1098,7 @@ See it step by step in [JavaScript Visualizer 9000](https://www.jsv9000.app/), a
 the talk "Everything You Need to Know About Node.js Event Loop" (Bert Belder) linked
 in Read more.
 
-### From callbacks to promises
+### From callbacks to promises (advanced)
 
 MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
 
@@ -1140,13 +1157,16 @@ console.log("Do something else meanwhile...");
 
 MDN: [async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)
 
-`async` / `await` (ES2017) write the same chain like normal, synchronous code:
+A **promise** is an object that stands for a result that comes **later**: the content
+of a file, the answer of a web API. `async` / `await` (ES2017) let you work with
+promises like with normal, synchronous code:
 
 - an **`async` function** always returns a promise;
 - inside it, **`await` promise** waits for the promise and gives its value - or
   throws its error, so `try` / `catch` works as usual.
 
 ```js run
+// wait(200) gives a promise that is fulfilled after 200 ms
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function prepareDinner() {
@@ -1237,6 +1257,8 @@ try {
     console.log("Error:", err.message);       // HTTP 404 for ...
 }
 ```
+
+### The older form with `.then()`; public APIs (optional)
 
 The same with `.then()`, as older code writes it:
 

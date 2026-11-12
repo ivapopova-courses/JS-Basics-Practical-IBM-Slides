@@ -24,6 +24,13 @@ title: 10. Tests, types, Git; review
 - organise a library for several products: a shared core and a module per product;
 - review an existing rule like a reviewer - and present your course project.
 
+::: tip Sections marked (advanced) or (optional)
+This lecture has more than fits into one session. Sections marked **(advanced)**
+go deeper, and sections marked **(optional)** add one more example of a topic you
+already know. In class we may skip them - read them at home. The homework does not
+need them.
+:::
+
 Where this fits - the last pieces of the course project: the library documents its
 helpers, and a test file checks them and a rule. The number in each comment is the
 section of this lecture:
@@ -171,8 +178,9 @@ assert.deepEqual([1, 2], [2, 1]);  // AssertionError: the order of array element
 - Every function takes a last, optional argument: a message for the failure -
   `assert.ok(alerts.length > 0, "expected an alert for lab-dev-02")`.
 
-Why `deepEqual` and not `JSON.stringify`? The same data with the keys in another
-order gives two different texts:
+### Why `deepEqual` and not `JSON.stringify`? (optional)
+
+The same data with the keys in another order gives two different texts:
 
 ```js run
 const expected = { id: "ENC-03", state: "degraded" };
@@ -486,7 +494,7 @@ this works in CommonJS files too, it is only read by the editor:
 /** @typedef {import("./types.js").Enclosure} Enclosure */
 ```
 
-### Generic helpers: `@template`
+### Generic helpers: `@template` (advanced)
 
 A helper like `groupBy` works for lists of **any** type. `@template T` is a
 placeholder for "the type of the elements" - the editor then knows that grouping
@@ -503,7 +511,7 @@ enclosures gives enclosures:
 function groupBy(list, keyOf) { /* ... lecture 7 ... */ }
 ```
 
-### Telling the editor a type: casts
+### Telling the editor a type: casts (advanced)
 
 `JSON.parse` returns `any` - the editor cannot know what is in the file. A cast in
 parentheses says it:
@@ -572,7 +580,7 @@ report where everything is fine. The editor finds them **before** the code runs.
   TypeScript package: `npx tsc --noEmit -p jsconfig.json` (TypeScript 7 checks JSDoc
   the same way).
 
-### Static and dynamic types
+### Static and dynamic types (advanced)
 
 JavaScript is **dynamically** typed (lecture 1): a variable can hold any value, and a
 wrong type is noticed only when the code runs - or never. In **statically** typed
@@ -824,7 +832,7 @@ correctness and clarity. For rules, ask:
 - Would a colleague understand the condition in a year? (Names, comments with
   examples.)
 
-### GitHub Pages
+### GitHub Pages (advanced)
 
 GitHub can also publish a **website** from a repository, for free for public
 repositories: **GitHub Pages**. The site you are reading is published this way: every
@@ -833,7 +841,7 @@ push to its repository builds the pages and publishes them at
 Pages**: choose a branch (and a folder) with static files, or a GitHub Actions workflow
 that builds them. For a library, Pages can host its documentation.
 
-## 10. From one product to the next
+## 10. From one product to the next (advanced)
 
 Your library starts with one product. Its structure decides how easy the second one
 is. A proven layout - a **core** that knows nothing about any product, plus one

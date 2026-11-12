@@ -29,6 +29,13 @@ title: 7. Array methods
 - start the course project: the repository, the sample documents and
   `library.js`.
 
+::: tip Sections marked (advanced) or (optional)
+This lecture has more than fits into one session. Sections marked **(advanced)**
+go deeper, and sections marked **(optional)** add one more example of a topic you
+already know. In class we may skip them - read them at home. The homework does not
+need them.
+:::
+
 Where this fits in the sample check rule - today's rule answers several questions
 about the enclosures, each with **one method**. The number in each comment is the
 section of this lecture:
@@ -260,7 +267,14 @@ enclosures.forEach(enc => {
 To stop at the first match, use `find` or `some` (section 5) - or a `for...of`
 loop with `break`.
 
-### Changing the elements
+::: tip `forEach` + `push` = `map` or `filter`
+Older rules often build a new array like this:
+`var ids = []; list.forEach(function (e) { ids.push(e.id); });`. That is `map`:
+`const ids = list.map(e => e.id);`. And `forEach` with an `if` before the `push`
+is `filter`.
+:::
+
+### Changing the elements (optional)
 
 Another task: add `isAdmin` to every user. `forEach` can change the objects
 in the array:
@@ -281,13 +295,6 @@ console.log(users);
 This changes the original objects - for the objects of `doc` that is exactly what
 a rule must **not** do (lectures 5 and 6). `map` (next section) builds new objects
 instead and leaves the input as it was.
-
-::: tip `forEach` + `push` = `map` or `filter`
-Older rules often build a new array like this:
-`var ids = []; list.forEach(function (e) { ids.push(e.id); });`. That is `map`:
-`const ids = list.map(e => e.id);`. And `forEach` with an `if` before the `push`
-is `filter`.
-:::
 
 ## 3. `map` - a new array, one result per element
 
@@ -461,7 +468,7 @@ console.log(failed);                            // [ '47_1.07' ]
 `[, m]` skips the first element of the pair - array destructuring with a hole
 (lecture 6).
 
-### `filter(Boolean)`: drop the empty values
+### `filter(Boolean)`: drop the empty values (optional)
 
 `Boolean` is a function too: `Boolean(x)` is `true` for truthy values. As a
 callback it drops `""`, `undefined`, `null` - and also `0` and `false`:
@@ -522,6 +529,8 @@ console.log(missing);                               // undefined
 console.log(missing?.state ?? "no such enclosure"); // no such enclosure
 ```
 
+### `findLast` and `findLastIndex` (advanced)
+
 `findLast` and `findLastIndex` search from the **end** (ES2023 - check that your
 rule engine supports them):
 
@@ -535,6 +544,16 @@ console.log(enclosures.findLastIndex(enc => enc.type === "SSD-24"));   // 1
 
 - `some` - is there **at least one** element that passes? (OR over all elements)
 - `every` - do **all** elements pass? (AND over all elements)
+
+```js run
+const input = [1, 2, 3, 4, 5];
+console.log(input.some(x => x > 4));        // true  - 5 passes
+console.log(input.some(x => x > 10));       // false - no element passes
+console.log(input.every(x => x > 0));       // true  - all pass
+console.log(input.every(x => x > 1));       // false - 1 does not pass
+```
+
+On the report:
 
 ```js run
 const enclosures = doc.inventory.enclosures;
@@ -561,7 +580,7 @@ console.log(none.some(enc => enc.state !== "normal"));     // false
 console.log(none.every(enc => enc.state === "normal"));    // true
 ```
 
-### `includes` or `some`?
+### `includes` or `some`? (optional)
 
 `includes` (lecture 4) compares with `===` - for **exact values**. `some` takes a
 **condition**:
@@ -664,7 +683,7 @@ from a report can be empty - so give the initial value, unless you have checked
 the length first. (The sample rule at the top can skip it: it returned before,
 when there were no enclosures.)
 
-### The sum of the even numbers
+### The sum of the even numbers (optional)
 
 Two ways - with `reduce` only, and with `filter` + `reduce`:
 
@@ -915,6 +934,18 @@ in a rule, it is a bug.
 right away. Write one method per line:
 
 ```js run
+const numbers = [1, 2, 3, 4, 5, 6];
+
+const result = numbers
+    .filter(x => x % 2 === 0)       // [ 2, 4, 6 ]   - the even numbers
+    .map(x => x * 10)               // [ 20, 40, 60 ] - each one times 10
+    .join(" + ");                   // one string
+console.log(result);                // 20 + 40 + 60
+```
+
+On the report:
+
+```js run
 const text = doc.inventory.enclosures
     .filter(enc => enc.state === "normal")      // the normal ones
     .map(enc => `${enc.id} (${enc.firmware})`)  // a text for each
@@ -969,7 +1000,7 @@ console.log(consoles.flatMap(r => r.value.split(";")));  // [ 'CON-01', 'CON-02'
 
 `flatMap` can also **drop** an element: return `[]` for it.
 
-### `Array.from` with a function
+### `Array.from` with a function (advanced)
 
 MDN: [Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
 
@@ -1019,6 +1050,23 @@ Choose what your team reads most easily. Both are correct; mixing is fine.
 
 MDN: [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy)
 
+**Grouping** puts the elements of a list into an object: one key per group, and the
+elements of the group in an array. First on a list of words, grouped by their
+first letter:
+
+```js run
+const words = ["apple", "avocado", "banana", "blueberry", "cherry"];
+
+const byLetter = {};
+for (const word of words) {
+    const letter = word[0];                         // the key of the group
+    if (!byLetter[letter]) byLetter[letter] = [];   // first time: an empty list
+    byLetter[letter].push(word);
+}
+console.log(byLetter);
+// { a: [ 'apple', 'avocado' ], b: [ 'banana', 'blueberry' ], c: [ 'cherry' ] }
+```
+
 The record list of lecture 4 has one record per value - 79 records in
 `report-records.json`, thousands in a real export:
 
@@ -1037,8 +1085,8 @@ console.table(records);
 ```
 
 A rule wants to ask "what is the firmware of ENC-04?" or "which enclosures are
-there?". **Grouping** turns the flat list into an object: one key per group, and the
-records of the group in an array.
+there?". Grouping turns the flat list into an object that answers such questions
+directly.
 
 ### Four ways to write the same grouping
 
@@ -1137,7 +1185,7 @@ Walk the list **once**, and every later question is a direct lookup. The
 result too. This is what library helpers for record exports do: group once, then
 read by path.
 
-### Counting per group
+### Counting per group (optional)
 
 With the groups ready, counting is `Object.entries` + `map`:
 
@@ -1175,6 +1223,8 @@ const fast = ["ENC-03", "ENC-04"].map(id => index[`${id}|ST`]);
 console.log(slow, fast);            // [ 'degraded', 'normal' ] [ 'degraded', 'normal' ]
 ```
 
+### How much faster? (optional)
+
 With 9,500 records and 100 lookups, the slow version makes up to 950,000
 comparisons; the index makes 9,500 steps once, and then each lookup is immediate.
 Try it - the times differ on every computer, the ratio does not:
@@ -1201,7 +1251,7 @@ console.timeEnd("index");
 console.log(a.join() === b.join());     // true - the same answers
 ```
 
-### A trap of objects as indexes
+### A trap of objects as indexes (advanced)
 
 A plain object **inherits** keys like `constructor` and `toString` (lecture 6). If
 an id happens to be one of them, the index lies:
@@ -1258,6 +1308,8 @@ For an index inside a rule, both work. Use `Map` when keys are not plain strings
 when ids could clash with inherited keys; use an object when the result goes into
 JSON (an alert, a file).
 
+### `Map` and JSON; `Map.groupBy` (advanced)
+
 ```js run
 const byId = new Map(doc.inventory.enclosures.map(enc => [enc.id, enc.state]));
 console.log(JSON.stringify(byId));                      // {} - a Map is not JSON data
@@ -1273,6 +1325,14 @@ console.log(byType.get("HDD-12").map(enc => enc.id));    // [ 'ENC-03', 'ENC-04'
 MDN: [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
 
 A `Set` holds each value **once**:
+
+```js run
+const numbers = new Set([1, 2, 2, 3, 3, 3]);
+console.log(numbers);                   // Set(3) { 1, 2, 3 }
+console.log([...numbers]);              // [ 1, 2, 3 ] - back to an array
+```
+
+On the report - the different firmware levels of the enclosures:
 
 ```js run
 const firmware = doc.inventory.enclosures.map(enc => enc.firmware);

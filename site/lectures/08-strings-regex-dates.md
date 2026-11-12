@@ -25,6 +25,13 @@ title: 8. Strings, regex, dates, numbers
 - work with dates: EPOCH seconds and milliseconds, the date formats of real
   reports, time zones, comparing and subtracting dates.
 
+::: tip Sections marked (advanced) or (optional)
+This lecture has more than fits into one session. Sections marked **(advanced)**
+go deeper, and sections marked **(optional)** add one more example of a topic you
+already know. In class we may skip them - read them at home. The homework does not
+need them.
+:::
+
 Where this fits in the sample check rule - today's rule cleans the text it reads,
 finds the version with a **regular expression**, and calculates with **dates**. The
 number in each comment is the section of this lecture:
@@ -101,6 +108,17 @@ A string is a sequence of characters. Lecture 2 showed the three kinds of quotes
 and template strings; lecture 4 showed indexes and `split`:
 
 ```js run
+const word = "JavaScript";
+
+console.log(word.length);               // 10
+console.log(word[0], word.at(-1));      // J t  - the first and the last character
+console.log(word.toUpperCase());        // JAVASCRIPT
+console.log(word.includes("Script"));   // true
+```
+
+The same on a value of the report:
+
+```js run
 const level = doc.inventory.details.firmware_level;
 
 console.log(level);                 // 4.2.1.7 (build 412.17.2607151200)
@@ -172,6 +190,12 @@ and ends, and `\n`, `\t` become visible.
 MDN: [String.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes), [String.prototype.startsWith()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith), [String.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf)
 
 ```js run
+const word = "JavaScript";
+console.log(word.includes("Script"));         // true
+console.log(word.startsWith("Java"));         // true
+console.log(word.indexOf("S"));               // 4 - the position of "S"
+
+// the same questions about a value of the report
 const level = doc.inventory.details.firmware_level;   // "4.2.1.7 (build 412.17.2607151200)"
 
 console.log(level.includes("build"));         // true
@@ -202,6 +226,12 @@ MDN: [String.prototype.slice()](https://developer.mozilla.org/en-US/docs/Web/Jav
 but **not including** `end`; negative positions count from the end.
 
 ```js run
+const word = "JavaScript";
+console.log(word.slice(0, 4));                // Java   - positions 0, 1, 2, 3
+console.log(word.slice(4));                   // Script - from position 4 to the end
+console.log(word.slice(-6));                  // Script - the last six characters
+
+// on the report: cut the firmware level at its first space
 const level = doc.inventory.details.firmware_level;
 
 const space = level.indexOf(" ");
@@ -383,7 +413,7 @@ console.log(new TextDecoder("utf-8").decode(raw));           // garbage: not val
 If a report or an export ever shows such garbage, the question is always: in which
 encoding was it written, and in which was it read?
 
-### `length` counts code units, not characters
+### `length` counts code units, not characters (advanced)
 
 JavaScript strings use 16-bit **code units** (UTF-16). Most characters take one;
 emoji and some rare characters take **two**. `length` counts code units:
@@ -421,7 +451,8 @@ const text = "ENC-01;normal\r\nENC-02;degraded\r\n";
 const wrong = text.split("\n");
 console.log(JSON.stringify(wrong[0]));                  // "ENC-01;normal\r"
 
-const lines = text.split(/\r?\n/).filter(Boolean);     // \r is optional (section 5)
+// \r? - an optional \r (section 5); filter(Boolean) drops the empty strings
+const lines = text.split(/\r?\n/).filter(Boolean);
 console.log(lines);                                     // [ 'ENC-01;normal', 'ENC-02;degraded' ]
 ```
 
@@ -547,7 +578,7 @@ console.log(isEmpty.test("unknown device"));        // false - ^ and $
 console.log(isEmpty.test("N/A"));                   // true
 ```
 
-### Greedy and lazy
+### Greedy and lazy (advanced)
 
 `*` and `+` are **greedy**: they take as much as they can. Add `?` to make them
 **lazy** - as little as possible:
@@ -575,6 +606,12 @@ MDN: [String.prototype.match()](https://developer.mozilla.org/en-US/docs/Web/Jav
 match at index 0, then the text of every **group** `( )`:
 
 ```js run
+// two groups: the first word and the second word
+const name = "Ada Lovelace".match(/(\w+) (\w+)/);
+console.log(name[0]);         // Ada Lovelace - the whole match
+console.log(name[1], "|", name[2]);     // Ada | Lovelace - group 1 and group 2
+
+// on the report: five groups
 const level = doc.inventory.details.firmware_level;   // "4.2.1.7 (build 412.17.2607151200)"
 
 const m = level.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+) \(build ([\d.]+)\)$/);
@@ -604,7 +641,7 @@ const [, number, version] = key.match(/^(\d+)_(\d+\.\d+)$/) ?? [];
 console.log(number, version);           // 12 4.20
 ```
 
-### Named groups (ES2018)
+### Named groups (ES2018) (advanced)
 
 `(?<name>...)` gives a group a name; the match has them in `.groups`:
 
@@ -789,8 +826,10 @@ for (const v of ["4.2.1.7", "4.2.1.7 (build 412.17.2607151200)", "4.2.1.7-B00", 
 }
 ```
 
-The suffix (`-B00`) is dropped. When the suffix matters - is `4.2.1.7-C00` newer
-than `4.2.1.7-B00`? - compare it as a second step:
+### When the suffix matters (optional)
+
+`normalizeVersion` drops the suffix (`-B00`). When the suffix matters - is
+`4.2.1.7-C00` newer than `4.2.1.7-B00`? - compare it as a second step:
 
 ```js run
 function splitVersion(text) {
@@ -909,7 +948,7 @@ const gib = 68096;
 console.log(Math.round(gib / 1024 * 100) / 100, "TiB");    // 66.5 TiB
 ```
 
-### Big numbers: ids are strings
+### Big numbers: ids are strings (advanced)
 
 MDN: [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
 
@@ -1101,8 +1140,10 @@ const due = new Date(installed.getTime() + 30 * 86_400_000);
 console.log(due.toISOString().slice(0, 10));             // 2025-12-20
 ```
 
-Another example - the age of a person from the date of birth (careful: the birthday
-of this year may not have come yet):
+### More examples: an age, and timing code (optional)
+
+The age of a person from the date of birth (careful: the birthday of this year may
+not have come yet):
 
 ```js run
 function calcAge(birthDate, today = new Date()) {
@@ -1320,6 +1361,10 @@ print `OK` or `FAIL`.
 | 3 | `task3-regex.js` | Write the patterns: a four-digit type, a module key, a dotted version, settings with `matchAll`, an id cleaned with `replace` |
 | 4 | `task4-versions.js` | `normalizeVersion` for every format of the table in section 8, then sort and compare |
 | 5 | `task5-dates.js` | EPOCH seconds and milliseconds, three date formats of real exports, days between, the age of a report |
+
+Two parts go with sections we may skip in class - read the section first: task 2,
+part 7 (`sameText`: "`length` counts code units") and task 4, part 4
+(`compareWithSuffix`: "When the suffix matters").
 
 ## Summary
 

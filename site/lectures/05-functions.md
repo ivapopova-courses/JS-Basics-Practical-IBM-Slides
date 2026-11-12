@@ -1252,7 +1252,7 @@ console.log(models);            // [ 'XR-210', 'XR-220' ] - changed
 [2. The same array](../animations/functionsAndData.html#2){target="_blank"}
 :::
 
-### Changing it, or replacing it
+### Changing it, or replacing it (advanced)
 
 There is a difference between **changing** the array the parameter points to and
 **replacing** the parameter with a new array:
@@ -1536,6 +1536,8 @@ console.log(countIf(encs, isHdd));          // 2
 every call of the callback gets its own frame.
 :::
 
+### `customMap` and `customFilter` (optional)
+
 Two classic exercises with callbacks. `customMap` builds a
 new array with the result of the callback for every element; `customFilter` keeps
 only the elements for which the callback returns `true`:
@@ -1617,6 +1619,8 @@ bar();
 ::: info Animation
 **Functions are values:** [5. A function returns a function](../animations/functionsAsValues.html#5){target="_blank"}
 :::
+
+### Example: `compose` (optional)
 
 A useful example: `compose(f, g)` returns a **new**
 function that calls `f`, then `g` on its result:
@@ -2419,6 +2423,9 @@ print `OK` or `FAIL`.
 | 3 | `task3-helpers.js` | Small pure helpers: `asList`, `capitalize`, `lastPart`, `deviceName` with a default |
 | 4 | `task4-callbacks.js` | `customMap`, `customFilter`, `countIf`, `compose` - and use them with arrow functions on the enclosures |
 | 5 | `task5-classic-functions.js` | Classic tasks as functions: area, sums, largest even number, best score, a table |
+
+Task 4, parts 2, 3 and 5 (`customMap`, `customFilter`, `compose`) go with the
+(optional) examples of section 9 - read them first.
 
 ## Summary
 

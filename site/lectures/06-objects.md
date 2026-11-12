@@ -29,6 +29,13 @@ title: 6. Objects, deep paths and data shapes
 - read the object code of older rules: `new Object()`, `obj["key"] = ...`,
   `for...in` with `hasOwnProperty`, `a && a.b && a.b.c`.
 
+::: tip Sections marked (advanced) or (optional)
+This lecture has more than fits into one session. Sections marked **(advanced)**
+go deeper, and sections marked **(optional)** add one more example of a topic you
+already know. In class we may skip them - read them at home. The homework does not
+need them.
+:::
+
 Where this fits in the sample check rule - today's rule reads a **dictionary** of
 modules and builds the details of the alert. The number in each comment is the
 section of this lecture:
@@ -558,6 +565,20 @@ Useful to explore a new report: "where in this document is the serial?".
 
 MDN: [Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), [Object.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
 
+Section 1 showed a small dictionary: English words as keys, German words as
+values. The code does not know the keys in advance - it asks the object for them:
+
+```js run
+const dictionary = { apple: "Apfel", banana: "Banane", orange: "Orange" };
+
+console.log(Object.keys(dictionary));       // [ 'apple', 'banana', 'orange' ]
+console.log(Object.values(dictionary));     // [ 'Apfel', 'Banane', 'Orange' ]
+
+for (const [english, german] of Object.entries(dictionary)) {
+    console.log(english, "->", german);
+}
+```
+
 In many reports the keys of an object are not fixed names like `model` - they are
 **ids**: of modules, drives, checks, slots. You do not know them when you write
 the rule. Such an object is used as a **dictionary**:
@@ -663,7 +684,7 @@ is seen, `counts[enc.state]` is `undefined`, and `?? 0` starts the count. Groupi
 a long list of records once, and then reading the groups by key, is the topic of
 session 7 (`Object.groupBy`, `Map`).
 
-### From pairs back to an object (ES2019)
+### From pairs back to an object (ES2019) (advanced)
 
 MDN: [Object.fromEntries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries)
 
@@ -770,7 +791,7 @@ Here `get(fields, "body.device_event.device_id")` would **not** work: the dots a
 part of **one** key, not steps between levels. Read it with brackets:
 `fields["body.device_event.device_id"]`. Practice task 4 works with this shape.
 
-### One record, or a list - again
+### One record, or a list - again (optional)
 
 The same field can be an object in one report and an array in another (one
 enclosure vs many). Normalise first - `asList` from lecture 4 and 5:
@@ -1012,7 +1033,7 @@ like `doc.overview.model`. Give a fallback object:
 `const { model } = doc.overview ?? {};` - the sample rule does this.
 :::
 
-### Destructuring in parameters
+### Destructuring in parameters (advanced)
 
 A function that needs only some fields of a record can take them apart right in
 the parameter list:
@@ -1076,7 +1097,7 @@ const p1 = {
 p1.greet();     // Hi, I'm Pesho
 ```
 
-### `this` is decided by the call
+### `this` is decided by the call (advanced)
 
 MDN: [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
 
@@ -1115,7 +1136,7 @@ Arrow functions have **no `this` of their own** (lecture 5): an arrow written as
 method sees the `this` of the code around the object, not the object. Write
 methods with the short syntax or `function`, not as arrows.
 
-### Methods in rules
+### Methods in rules (optional)
 
 Reports are **data**: JSON has no functions, so `doc` has no methods. Methods
 appear in your own code - an object that groups helpers, like a small library:
@@ -1148,7 +1169,7 @@ In session 9 the same idea becomes a **module** - a file that exports its helper
 Real programs often need many objects with the **same structure** - the same keys
 and methods, different values.
 
-### Literals - repeated code
+### Literals - repeated code (optional)
 
 ```js run
 const developer1 = {
@@ -1213,7 +1234,7 @@ for (const enc of doc.inventory.enclosures) {
 console.log(problems);
 ```
 
-### A constructor function
+### A constructor function (advanced)
 
 Before classes, JavaScript made objects of one kind with a **constructor**: a
 function called with `new`. `new` creates an empty object, runs the function with
@@ -1314,7 +1335,7 @@ console.log(p1.name);           // Peter
 Class fields and `static` fields are ES2022 - check that your rule engine supports
 them. (Code written before ES2022 sets `Person.count = 0;` after the class.)
 
-### Inheritance: `extends` and `super`
+### Inheritance: `extends` and `super` (advanced)
 
 A class can **extend** another one: it gets all its methods and adds or changes
 some. `super(...)` calls the parent's constructor (before any use of `this`);
@@ -1414,7 +1435,7 @@ emit("LAB-DEV-01", { details: [ordered], column_order: COLUMNS });
 A missing column becomes `""`, so every alert of a rule has the same columns -
 easier to read in a table, and easier to compare between devices.
 
-### An optional column
+### An optional column (advanced)
 
 To add a column only when there is a value, build the object first and add the key
 in an `if` - or use spread with a condition:
