@@ -316,24 +316,6 @@ console.log(`input: ${input}`);     // input: a,b,c,d
 console.log(`output: ${output}`);   // output: A,B,C,D
 ```
 
-The same with a classic function - note the `return`:
-
-```js run
-const input = ["a", "b", "c", "d"];
-const output = input.map(function (e) {
-    return e.toUpperCase();
-});
-console.log(output);                // [ 'A', 'B', 'C', 'D' ]
-```
-
-With the index (the second argument):
-
-```js run
-const input = ["a", "b", "c"];
-const output = input.map((e, i) => e.toUpperCase() + i);
-console.log(output);                // [ 'A0', 'B1', 'C2' ]
-```
-
 Two tasks on a list of cities - the names only, and each name changed with a
 dictionary (lecture 6):
 
@@ -372,19 +354,6 @@ console.log("4.2.1.7".split(".").map(Number));      // [ 4, 2, 1, 7 ]
 // a new object from every record - the round brackets are needed (lecture 5)
 const short = enclosures.map(enc => ({ id: enc.id, ok: enc.state === "normal" }));
 console.log(short[2]);              // { id: 'ENC-03', ok: false }
-```
-
-The last example is the clean version of the `isAdmin` task: **new** objects with
-the extra key, and the input untouched:
-
-```js run
-const users = [
-    { name: "Maria", role: "user" },
-    { name: "Ivan", role: "admin" }
-];
-const withFlag = users.map(user => ({ ...user, isAdmin: user.role === "admin" }));
-console.log(withFlag);
-console.log(users[0]);              // { name: 'Maria', role: 'user' } - unchanged
 ```
 
 A dictionary has no `map`, but `Object.entries` turns it into an array of
@@ -529,17 +498,6 @@ console.log(missing);                               // undefined
 console.log(missing?.state ?? "no such enclosure"); // no such enclosure
 ```
 
-### `findLast` and `findLastIndex` (advanced)
-
-`findLast` and `findLastIndex` search from the **end** (ES2023 - check that your
-rule engine supports them):
-
-```js run
-const enclosures = doc.inventory.enclosures;
-console.log(enclosures.findLast(enc => enc.firmware === "2.10").id);   // ENC-04
-console.log(enclosures.findLastIndex(enc => enc.type === "SSD-24"));   // 1
-```
-
 ### `some` and `every`
 
 - `some` - is there **at least one** element that passes? (OR over all elements)
@@ -573,12 +531,6 @@ console.log(!enclosures.some(enc => enc.state === "failed"));      // true
 enclosures says "all normal". If "no enclosures" is suspicious, check the length
 first.
 :::
-
-```js run
-const none = [];
-console.log(none.some(enc => enc.state !== "normal"));     // false
-console.log(none.every(enc => enc.state === "normal"));    // true
-```
 
 ### `includes` or `some`? (optional)
 
@@ -682,22 +634,6 @@ Without an initial value, `reduce` on an empty array throws a `TypeError`. A lis
 from a report can be empty - so give the initial value, unless you have checked
 the length first. (The sample rule at the top can skip it: it returned before,
 when there were no enclosures.)
-
-### The sum of the even numbers (optional)
-
-Two ways - with `reduce` only, and with `filter` + `reduce`:
-
-```js run
-const input = [1, 2, 3, 4];
-
-// reduce only: works, but harder to read and to write
-const output1 = input.reduce((acc, curr) => (curr % 2 === 0 ? acc + curr : acc), 0);
-
-// filter, then reduce: each step does one thing - better
-const output2 = input.filter(x => x % 2 === 0).reduce((acc, curr) => acc + curr, 0);
-
-console.log(output1, output2);      // 6 6
-```
 
 ### `reduce` on the report
 
@@ -821,6 +757,8 @@ const cities = [
 const sortedCities = [...cities].sort((a, b) => b.population - a.population);
 console.log(sortedCities.map(c => c.name));     // [ 'Sofia', 'Plovdiv', 'Varna', 'Burgas' ]
 ```
+
+### One compare function for any key (optional)
 
 One compare function can sort by **any** key:
 
@@ -953,8 +891,15 @@ const text = doc.inventory.enclosures
 console.log(text);      // ENC-01 (2.14); ENC-02 (2.10); ENC-04 (2.10)
 ```
 
-Read a chain from top to bottom: each line takes the array of the line above. Two
-tasks as chains:
+Read a chain from top to bottom: each line takes the array of the line above.
+
+::: tip Debugging a chain
+When a chain gives a wrong result, cut it: put the first two lines into a
+variable and print it, then add the next line. Or print inside a callback:
+`.map(enc => { console.log(enc); return enc.id; })`.
+:::
+
+### Two classic tasks as chains (optional)
 
 ```js run
 // TASK 1: the words that start with a given letter
@@ -972,13 +917,7 @@ console.log(sumOfSquaredEvens([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));     // 220
 
 More tasks of this kind are in practice task 5.
 
-::: tip Debugging a chain
-When a chain gives a wrong result, cut it: put the first two lines into a
-variable and print it, then add the next line. Or print inside a callback:
-`.map(enc => { console.log(enc); return enc.id; })`.
-:::
-
-### `flat` and `flatMap` (ES2019)
+### `flat` and `flatMap` (ES2019) (advanced)
 
 MDN: [Array.prototype.flat()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat), [Array.prototype.flatMap()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap)
 
@@ -999,20 +938,6 @@ console.log(consoles.flatMap(r => r.value.split(";")));  // [ 'CON-01', 'CON-02'
 ```
 
 `flatMap` can also **drop** an element: return `[]` for it.
-
-### `Array.from` with a function (advanced)
-
-MDN: [Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
-
-`Array.from` (lecture 4) takes a second argument: a `map` callback. With
-`{ length: n }` it builds an array of `n` computed elements:
-
-```js run
-console.log(Array.from({ length: 3 }, (_, i) => `ENC-0${i + 1}`));   // [ 'ENC-01', 'ENC-02', 'ENC-03' ]
-console.log(Array.from("4.2.1.7").filter(ch => ch !== "."));          // [ '4', '2', '1', '7' ]
-```
-
-(`_` is a common name for a parameter the function does not use.)
 
 ### When a loop is clearer
 
@@ -1205,10 +1130,12 @@ the whole list again. An **index** is an object built in one pass, keyed by what
 you look up:
 
 ```js run
-const records = doc.inventory.enclosures.flatMap(enc => [
-    { item: enc.id, code: "FW", value: enc.firmware },
-    { item: enc.id, code: "ST", value: enc.state },
-]);
+// a small record list: two records for every enclosure
+const records = [];
+for (const enc of doc.inventory.enclosures) {
+    records.push({ item: enc.id, code: "FW", value: enc.firmware });
+    records.push({ item: enc.id, code: "ST", value: enc.state });
+}
 console.log(records.length);        // 8 records
 
 // slow: a find for every lookup
@@ -1251,25 +1178,6 @@ console.timeEnd("index");
 console.log(a.join() === b.join());     // true - the same answers
 ```
 
-### A trap of objects as indexes (advanced)
-
-A plain object **inherits** keys like `constructor` and `toString` (lecture 6). If
-an id happens to be one of them, the index lies:
-
-```js run
-const index = {};
-index["ENC-01"] = "normal";
-console.log(index["ENC-01"]);           // normal
-console.log(index["constructor"]);      // [Function: Object] - not ours!
-console.log(Object.hasOwn(index, "constructor"));   // false - the safe check
-
-const safe = Object.create(null);       // an object with no prototype at all
-console.log(safe["constructor"]);       // undefined
-```
-
-`Object.create(null)` - or a `Map` - avoids it. (`Object.groupBy` returns such an
-object.)
-
 ### `Map`
 
 MDN: [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
@@ -1301,24 +1209,12 @@ for (const [id, enc] of byId) console.log(id, enc.state);
 | Keys | strings (numbers become strings) | any value - also numbers, objects |
 | Order | integer-like keys first, then creation order (lecture 6) | always the order of insertion |
 | Size | `Object.keys(obj).length` | `map.size` |
-| Inherited keys | yes (`constructor`, ...) unless `Object.create(null)` | none |
+| Inherited keys | yes (`constructor`, `toString`, ...) | none |
 | JSON | `JSON.stringify` works | prints `{}` - convert with `Object.fromEntries(map)` |
 
 For an index inside a rule, both work. Use `Map` when keys are not plain strings or
 when ids could clash with inherited keys; use an object when the result goes into
 JSON (an alert, a file).
-
-### `Map` and JSON; `Map.groupBy` (advanced)
-
-```js run
-const byId = new Map(doc.inventory.enclosures.map(enc => [enc.id, enc.state]));
-console.log(JSON.stringify(byId));                      // {} - a Map is not JSON data
-console.log(JSON.stringify(Object.fromEntries(byId)));  // {"ENC-01":"normal",...}
-
-// Map.groupBy (ES2024): like Object.groupBy, the result is a Map
-const byType = Map.groupBy(doc.inventory.enclosures, enc => enc.type);
-console.log(byType.get("HDD-12").map(enc => enc.id));    // [ 'ENC-03', 'ENC-04' ]
-```
 
 ### `Set`: unique values
 
@@ -1561,9 +1457,9 @@ my-library/
 
 ### 3. `library.js`: the helpers you already have
 
-Copy in the helpers of lectures 5 - 7 (your own versions from the practice tasks):
-`compareVersions`, `versionBelow`, `get`, `groupBy` - and today's index helper. The
-last lines **export** them, so that other files can use them:
+Copy in the helpers you already have (your own versions from the practice tasks):
+`compareVersions`, `versionBelow`, `get` - and `groupBy` when you have written it.
+The last lines **export** them, so that other files can use them:
 
 ```js
 // library.js - helpers for the reports of <product>
@@ -1622,7 +1518,7 @@ print `OK` or `FAIL`.
 
 | Task | File | What you do |
 |------|------|-------------|
-| 1 | `task1-predict.js` | Predict 20 results: `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort`, `flat`, `Set` |
+| 1 | `task1-predict.js` | Predict 20 results: `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort`, `Set`, `Map` |
 | 2 | `task2-enclosures.js` | Questions about the enclosures, one method each: ids, outdated, first not normal, all normal?, lowest firmware, a summary text |
 | 3 | `task3-sort.js` | Sort numbers, names, versions and records - by several keys, without changing the input |
 | 4 | `task4-group-records.js` | The 79 records of `report-records.json`: group, nest by group and item, an index, unique values, totals |

@@ -1345,6 +1345,8 @@ function modelOf(doc) {
 console.log(rememberModel(doc), modelOf(doc));
 ```
 
+### A new list instead of a changed one (optional)
+
 When a helper must return a changed list, it builds a **new** one:
 
 ```js run
@@ -1598,7 +1600,7 @@ Read it inside out:
 `parseInt("7-B00", 10)` is `7`: `parseInt` reads digits from the start and stops at
 the first non-digit. The `|| 0` turns `NaN` (no digits at all) into `0`.
 
-### A function that returns a function
+### A function that returns a function (optional)
 
 A function can create a function and return it:
 
@@ -1772,18 +1774,6 @@ console.log(countIf(encs, enc => enc.firmware === "2.10"));    // 2
 
 A long callback with several statements stays readable as an arrow with braces
 and `return` - or, better, becomes a **named** helper.
-
-### Pitfall: an arrow after `||` (advanced)
-
-An arrow function cannot stand directly after an operator like `||`. Put it in
-brackets:
-
-```js
-let cb;
-cb = cb || function () {};      // ok
-cb = cb || () => {};            // SyntaxError: Malformed arrow function parameter list
-cb = cb || (() => {});          // ok
-```
 
 ### What arrow functions do not have (advanced)
 
@@ -2002,37 +1992,6 @@ level of a report (session 6). Without a base case the stack overflows:
 **The call stack:** [6. Recursion (advanced)](../animations/callStack.html#6){target="_blank"},
 [7. Stack overflow (advanced)](../animations/callStack.html#7){target="_blank"}
 :::
-
-### A shallow copy (advanced)
-
-A pure helper that must return a changed array often copies it first with the
-spread syntax `[...arr]` (lecture 4). The copy is **shallow**: only the outer
-array is new, the inner arrays are still shared:
-
-```js run
-function addReading(table, row, value) {
-    const copy = [...table];        // a new outer array with the same rows
-    copy[row].push(value);          // but copy[row] is the SAME inner array!
-    return copy;
-}
-
-const temps = [[31, 34], [40]];     // the readings of two enclosures
-const temps2 = addReading(temps, 0, 37);
-console.log(temps[0]);              // [ 31, 34, 37 ] - the original changed too
-console.log(temps2 === temps, temps2[0] === temps[0]);     // false true
-
-// pure: copy the row you change too
-function addReadingPure(table, row, value) {
-    const copy = [...table];
-    copy[row] = [...table[row], value];     // a new inner array
-    return copy;
-}
-const temps3 = addReadingPure(temps, 1, 42);
-console.log(temps[1], temps3[1]);   // [ 40 ] [ 40, 42 ]
-```
-
-A copy of an object with `{ ...obj }` is shallow in the same way - session 6
-shows it, together with a full (deep) copy.
 
 ## 12. The structure of a rule
 
@@ -2293,7 +2252,7 @@ console.log("(end)");
    `cmpVer` is pure - it only reads its arguments and returns a number.
 :::
 
-### Modernising it, step by step
+### Modernising it, step by step (optional)
 
 Change one thing at a time, and run the rule after each step - the alerts must
 stay the same (except for real bug fixes, which you make on purpose).

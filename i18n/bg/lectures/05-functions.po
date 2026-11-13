@@ -204,7 +204,7 @@ msgid "Kind"
 msgstr "Вид"
 
 #. table cell
-#: site/lectures/05-functions.md:190 site/lectures/05-functions.md:2075
+#: site/lectures/05-functions.md:190 site/lectures/05-functions.md:2034
 msgid "Example"
 msgstr "Пример"
 
@@ -299,7 +299,7 @@ msgid "The round brackets are what makes it a call: `greet` is the function, `gr
 msgstr "Кръглите скоби правят извикването: `greet` е функцията, `greet()` я **изпълнява**."
 
 #. box title
-#: site/lectures/05-functions.md:261 site/lectures/05-functions.md:281 site/lectures/05-functions.md:430 site/lectures/05-functions.md:565 site/lectures/05-functions.md:623 site/lectures/05-functions.md:788 site/lectures/05-functions.md:819 site/lectures/05-functions.md:841 site/lectures/05-functions.md:929 site/lectures/05-functions.md:976 site/lectures/05-functions.md:1029 site/lectures/05-functions.md:1081 site/lectures/05-functions.md:1178 site/lectures/05-functions.md:1250 site/lectures/05-functions.md:1276 site/lectures/05-functions.md:1311 site/lectures/05-functions.md:1380 site/lectures/05-functions.md:1397 site/lectures/05-functions.md:1429 site/lectures/05-functions.md:1498 site/lectures/05-functions.md:1534 site/lectures/05-functions.md:1619 site/lectures/05-functions.md:1728 site/lectures/05-functions.md:1862 site/lectures/05-functions.md:1901 site/lectures/05-functions.md:1979 site/lectures/05-functions.md:2001
+#: site/lectures/05-functions.md:261 site/lectures/05-functions.md:281 site/lectures/05-functions.md:430 site/lectures/05-functions.md:565 site/lectures/05-functions.md:623 site/lectures/05-functions.md:788 site/lectures/05-functions.md:819 site/lectures/05-functions.md:841 site/lectures/05-functions.md:929 site/lectures/05-functions.md:976 site/lectures/05-functions.md:1029 site/lectures/05-functions.md:1081 site/lectures/05-functions.md:1178 site/lectures/05-functions.md:1250 site/lectures/05-functions.md:1276 site/lectures/05-functions.md:1311 site/lectures/05-functions.md:1382 site/lectures/05-functions.md:1399 site/lectures/05-functions.md:1431 site/lectures/05-functions.md:1500 site/lectures/05-functions.md:1536 site/lectures/05-functions.md:1621 site/lectures/05-functions.md:1730 site/lectures/05-functions.md:1852 site/lectures/05-functions.md:1891 site/lectures/05-functions.md:1969 site/lectures/05-functions.md:1991
 msgid "Animation"
 msgstr "Анимация"
 
@@ -504,7 +504,7 @@ msgid "**Check yourself:** what does `rectangleArea(3)` return, and why? What do
 msgstr "**Проверете се:** какво връща `rectangleArea(3)` и защо? Какво връща `rectangleArea(\"3\", \"4\")`?"
 
 #. box title
-#: site/lectures/05-functions.md:503 site/lectures/05-functions.md:739 site/lectures/05-functions.md:885 site/lectures/05-functions.md:1212 site/lectures/05-functions.md:2278 site/lectures/05-functions.md:2394
+#: site/lectures/05-functions.md:503 site/lectures/05-functions.md:739 site/lectures/05-functions.md:885 site/lectures/05-functions.md:1212 site/lectures/05-functions.md:2237 site/lectures/05-functions.md:2353
 msgid "Answer"
 msgstr "Отговор"
 
@@ -1143,1120 +1143,1121 @@ msgstr "`majorOf`, `versionBelow`, `deviceName` са чисти. `shortFirmware`
 msgid "Pure helpers are easy to read, to test and to reuse: to understand a call you only need to look at its arguments. Keep the side effects in **one** place - `rule` itself calls `emit`. Everything it calls should be pure."
 msgstr "Чистите helper функции лесно се четат, тестват и използват повторно: за да разберете едно извикване, трябва да погледнете само аргументите му. Дръжте страничните ефекти на **едно** място - самото `rule` извиква `emit`. Всичко, което то извиква, трябва да е чисто."
 
-#. paragraph
+#. heading 3
 #: site/lectures/05-functions.md:1348
+msgid "A new list instead of a changed one (optional)"
+msgstr "Нов списък вместо променен (optional)"
+
+#. paragraph
+#: site/lectures/05-functions.md:1350
 msgid "When a helper must return a changed list, it builds a **new** one:"
 msgstr "Когато helper функцията трябва да върне променен списък, тя създава **нов**:"
 
 #. box title
-#: site/lectures/05-functions.md:1361
+#: site/lectures/05-functions.md:1363
 msgid "The same arrows as in lecture 4"
 msgstr "Същите стрелки като в лекция 4"
 
 #. paragraph
-#: site/lectures/05-functions.md:1362
+#: site/lectures/05-functions.md:1364
 msgid "This is the \"references\" picture again: two names, one array. The animations [Arrays in memory - 5](../animations/arraysInMemory.html#5){target=\"_blank\"} and [Variables in memory - 6](../animations/variablesInMemory.html#6){target=\"_blank\"} show it without functions; a parameter is just one more name."
 msgstr "Това отново е картината с \"референциите\": две имена, един array. Анимациите [Arrays в паметта - 5](../animations/arraysInMemory.html#5){target=\"_blank\"} и [Variables в паметта - 6](../animations/variablesInMemory.html#6){target=\"_blank\"} го показват без функции; параметърът е просто още едно име."
 
 #. heading 2
-#: site/lectures/05-functions.md:1368
+#: site/lectures/05-functions.md:1370
 msgid "9. Functions are values; callbacks"
 msgstr "9. Функциите са стойности; callbacks"
 
 #. paragraph
-#: site/lectures/05-functions.md:1370
+#: site/lectures/05-functions.md:1372
 msgid "In JavaScript a function is a **value**, like a number or an array. You can:"
 msgstr "В JavaScript функцията е **стойност**, като число или array. Можете да:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1372
+#: site/lectures/05-functions.md:1374
 msgid "store it in a variable, an array or an object;"
 msgstr "я запишете във variable, в array или в обект;"
 
 #. paragraph
-#: site/lectures/05-functions.md:1373
+#: site/lectures/05-functions.md:1375
 msgid "pass it as an **argument** to another function;"
 msgstr "я подадете като **аргумент** на друга функция;"
 
 #. paragraph
-#: site/lectures/05-functions.md:1374
+#: site/lectures/05-functions.md:1376
 msgid "**return** it from a function."
 msgstr "я **върнете** от функция."
 
 #. paragraph
-#: site/lectures/05-functions.md:1376
+#: site/lectures/05-functions.md:1378
 msgid "Because of this, functions are called **first-class citizens** (*first-class functions*). This is the basis of almost every modern JavaScript library - and of the array methods in session 7."
 msgstr "Затова функциите се наричат **first-class citizens** (\"граждани от първа класа\", *first-class functions*). Това е основата на почти всяка модерна JavaScript библиотека - и на методите на arrays от занятие 7."
 
 #. paragraph
-#: site/lectures/05-functions.md:1381
+#: site/lectures/05-functions.md:1383
 msgid "**Functions are values:** [1. Like `5` and `[1, 2, 3]`](../animations/functionsAsValues.html#1){target=\"_blank\"} - a number, an array and a function, side by side: the same steps work for all three, and only the function can be called."
 msgstr "**Функциите са стойности:** [1. Като `5` и `[1, 2, 3]`](../animations/functionsAsValues.html#1){target=\"_blank\"} - число, array и функция, едно до друго: едни и същи стъпки работят и за трите, а само функцията може да се извика."
 
 #. paragraph
-#: site/lectures/05-functions.md:1398
+#: site/lectures/05-functions.md:1400
 msgid "**Functions are values:** [2. A function is a value](../animations/functionsAsValues.html#2){target=\"_blank\"}"
 msgstr "**Функциите са стойности:** [2. Функцията е стойност](../animations/functionsAsValues.html#2){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/05-functions.md:1401
+#: site/lectures/05-functions.md:1403
 msgid "Anonymous functions (optional)"
 msgstr "Анонимни функции (optional)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1403
+#: site/lectures/05-functions.md:1405
 msgid "A function **without a name** is an **anonymous function**. It is used where the function is needed only as a value: assigned to a variable, put into an array or an object, passed to another function, or returned."
 msgstr "Функция **без име** е **анонимна функция**. Използва се там, където функцията трябва само като стойност: присвоена на variable, сложена в array или обект, подадена на друга функция или върната."
 
 #. paragraph
-#: site/lectures/05-functions.md:1425
+#: site/lectures/05-functions.md:1427
 msgid "What does `foobar[2]()` do? `foobar[2]` is `undefined`, and `undefined()` is `TypeError: foobar[2] is not a function`. The same error comes from a typo in a helper name inside an object."
 msgstr "Какво прави `foobar[2]()`? `foobar[2]` е `undefined`, а `undefined()` е `TypeError: foobar[2] is not a function`. Същата грешка идва от правописна грешка в името на helper функция в обект."
 
 #. paragraph
-#: site/lectures/05-functions.md:1430
+#: site/lectures/05-functions.md:1432
 msgid "**Functions are values:** [3. In arrays and objects](../animations/functionsAsValues.html#3){target=\"_blank\"}"
 msgstr "**Функциите са стойности:** [3. В arrays и обекти](../animations/functionsAsValues.html#3){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/05-functions.md:1433
+#: site/lectures/05-functions.md:1435
 msgid "A real use: a table of checks, each one a small function. The rule runs them all:"
 msgstr "Истинска употреба: таблица от проверки, всяка от тях - малка функция. Правилото ги изпълнява всичките:"
 
 #. heading 3
-#: site/lectures/05-functions.md:1450
+#: site/lectures/05-functions.md:1452
 msgid "Callbacks"
 msgstr "Callbacks"
 
 #. paragraph
-#: site/lectures/05-functions.md:1452
+#: site/lectures/05-functions.md:1454
 msgid "MDN: [Callback function](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function)"
 msgstr "MDN: [Callback function](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1454
+#: site/lectures/05-functions.md:1456
 msgid "A function passed as an argument to another function is called a **callback**: the other function \"calls it back\" when it needs it."
 msgstr "Функция, подадена като аргумент на друга функция, се нарича **callback**: другата функция я \"извиква обратно\", когато ѝ потрябва."
 
 #. paragraph
-#: site/lectures/05-functions.md:1475
+#: site/lectures/05-functions.md:1477
 msgid "Note the difference between passing **the function** and passing **its result**:"
 msgstr "Обърнете внимание на разликата между подаването на **функцията** и подаването на **резултата ѝ**:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1494
+#: site/lectures/05-functions.md:1496
 msgid "In the second call, `callback()` runs **first** (an argument is calculated before the call), prints 2 and returns `undefined`. `caller` gets `undefined`, and `f()` fails. Without `()` - the function; with `()` - its result."
 msgstr "При второто извикване `callback()` се изпълнява **първо** (аргументът се изчислява преди извикването), отпечатва 2 и връща `undefined`. `caller` получава `undefined` и `f()` гърми. Без `()` - функцията; с `()` - резултатът ѝ."
 
 #. paragraph
-#: site/lectures/05-functions.md:1499
+#: site/lectures/05-functions.md:1501
 msgid "**Functions are values:** [4. Callbacks](../animations/functionsAsValues.html#4){target=\"_blank\"}"
 msgstr "**Функциите са стойности:** [4. Callbacks](../animations/functionsAsValues.html#4){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/05-functions.md:1502
+#: site/lectures/05-functions.md:1504
 msgid "Why callbacks: one loop, many questions"
 msgstr "Защо callbacks: един loop, много въпроси"
 
 #. paragraph
-#: site/lectures/05-functions.md:1504
+#: site/lectures/05-functions.md:1506
 msgid "In lecture 4 you wrote the same loop many times: \"count the enclosures that are not normal\", \"count the enclosures with old firmware\"... Only the **condition** changed. With a callback, the loop is written once, and the condition comes in as a function:"
 msgstr "В лекция 4 писахте един и същ loop много пъти: \"преброй enclosures, които не са normal\", \"преброй enclosures със стар firmware\"... Променяше се само **условието**. С callback loop-ът се пише веднъж, а условието идва като функция:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1531
+#: site/lectures/05-functions.md:1533
 msgid "`countIf` does not know **what** it counts - the callback decides. It calls `test(item)` once per element and uses the returned `true` / `false`."
 msgstr "`countIf` не знае **какво** брои - решава callback-ът. Тя извиква `test(item)` веднъж за всеки елемент и използва върнатото `true` / `false`."
 
 #. paragraph
-#: site/lectures/05-functions.md:1535
+#: site/lectures/05-functions.md:1537
 msgid "**Functions and data:** [5. A callback, call by call](../animations/functionsAndData.html#5){target=\"_blank\"} - every call of the callback gets its own frame."
 msgstr "**Функциите и данните:** [5. Callback, извикване по извикване](../animations/functionsAndData.html#5){target=\"_blank\"} - всяко извикване на callback-а получава своя рамка."
 
 #. heading 3
-#: site/lectures/05-functions.md:1539
+#: site/lectures/05-functions.md:1541
 msgid "`customMap` and `customFilter` (optional)"
 msgstr "`customMap` и `customFilter` (optional)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1541
+#: site/lectures/05-functions.md:1543
 msgid "Two classic exercises with callbacks. `customMap` builds a new array with the result of the callback for every element; `customFilter` keeps only the elements for which the callback returns `true`:"
 msgstr "Две класически упражнения с callbacks. `customMap` създава нов array с резултата от callback-а за всеки елемент; `customFilter` запазва само елементите, за които callback-ът връща `true`:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1569
+#: site/lectures/05-functions.md:1571
 msgid "JavaScript arrays have these built in: `arr.map(f)` and `arr.filter(f)` - and `forEach`, `find`, `some`, `every`, `reduce`, `sort`... They all take a callback. Session 7 is about them; today you only need to **read** them."
 msgstr "Arrays в JavaScript ги имат вградени: `arr.map(f)` и `arr.filter(f)` - и `forEach`, `find`, `some`, `every`, `reduce`, `sort`... Всички те приемат callback. Занятие 7 е за тях; днес трябва само да можете да ги **четете**."
 
 #. heading 3
-#: site/lectures/05-functions.md:1573
+#: site/lectures/05-functions.md:1575
 msgid "Older callbacks in rules: `function (x) { ... }`"
 msgstr "По-стари callbacks в правилата: `function (x) { ... }`"
 
 #. paragraph
-#: site/lectures/05-functions.md:1575
+#: site/lectures/05-functions.md:1577
 msgid "Existing rules pass anonymous functions directly in the call:"
 msgstr "Съществуващите правила подават анонимни функции направо в извикването:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1590
+#: site/lectures/05-functions.md:1592
 msgid "Read it inside out:"
 msgstr "Четете го отвътре навън:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1592
+#: site/lectures/05-functions.md:1594
 msgid "`function (x) { return parseInt(x, 10) || 0; }` is an anonymous function: \"take a part, return it as a number, or 0\"."
 msgstr "`function (x) { return parseInt(x, 10) || 0; }` е анонимна функция: \"вземи една част, върни я като число или 0\"."
 
 #. paragraph
-#: site/lectures/05-functions.md:1594
+#: site/lectures/05-functions.md:1596
 msgid "`.map(...)` calls it for every part of the version, and collects the results in a new array."
 msgstr "`.map(...)` я извиква за всяка част на версията и събира резултатите в нов array."
 
 #. paragraph
-#: site/lectures/05-functions.md:1596
+#: site/lectures/05-functions.md:1598
 msgid "`.forEach(...)` calls its function for every enclosure, and collects nothing."
 msgstr "`.forEach(...)` извиква своята функция за всеки enclosure и не събира нищо."
 
 #. paragraph
-#: site/lectures/05-functions.md:1598
+#: site/lectures/05-functions.md:1600
 msgid "`parseInt(\"7-B00\", 10)` is `7`: `parseInt` reads digits from the start and stops at the first non-digit. The `|| 0` turns `NaN` (no digits at all) into `0`."
 msgstr "`parseInt(\"7-B00\", 10)` е `7`: `parseInt` чете цифри от началото и спира при първия символ, който не е цифра. `|| 0` превръща `NaN` (изобщо няма цифри) в `0`."
 
 #. heading 3
-#: site/lectures/05-functions.md:1601
-msgid "A function that returns a function"
-msgstr "Функция, която връща функция"
+#: site/lectures/05-functions.md:1603
+msgid "A function that returns a function (optional)"
+msgstr "Функция, която връща функция (optional)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1603
+#: site/lectures/05-functions.md:1605
 msgid "A function can create a function and return it:"
 msgstr "Функцията може да създаде функция и да я върне:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1620
+#: site/lectures/05-functions.md:1622
 msgid "**Functions are values:** [5. A function returns a function](../animations/functionsAsValues.html#5){target=\"_blank\"}"
 msgstr "**Функциите са стойности:** [5. Функция, която връща функция](../animations/functionsAsValues.html#5){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/05-functions.md:1623
+#: site/lectures/05-functions.md:1625
 msgid "Example: `compose` (optional)"
 msgstr "Пример: `compose` (optional)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1625
+#: site/lectures/05-functions.md:1627
 msgid "A useful example: `compose(f, g)` returns a **new** function that calls `f`, then `g` on its result:"
 msgstr "Полезен пример: `compose(f, g)` връща **нова** функция, която извиква `f`, после `g` върху резултата ѝ:"
 
 #. heading 2
-#: site/lectures/05-functions.md:1648
+#: site/lectures/05-functions.md:1650
 msgid "10. Arrow functions"
 msgstr "10. Arrow functions"
 
 #. paragraph
-#: site/lectures/05-functions.md:1650
+#: site/lectures/05-functions.md:1652
 msgid "MDN: [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)"
 msgstr "MDN: [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1652
+#: site/lectures/05-functions.md:1654
 msgid "ES6 added a shorter way to write a function expression: the **arrow function** (also called *fat arrow*; in other languages - Python, Java, C# - a *lambda*). It saves typing `function`, `return` and braces, which makes callbacks much shorter."
 msgstr "ES6 добави по-кратък начин за писане на function expression: **arrow function** (наричана и *fat arrow*; в други езици - Python, Java, C# - *lambda*). Тя спестява писането на `function`, `return` и фигурни скоби, което прави callbacks много по-кратки."
 
 #. heading 3
-#: site/lectures/05-functions.md:1670
+#: site/lectures/05-functions.md:1672
 msgid "The syntax, step by step"
 msgstr "Синтаксисът, стъпка по стъпка"
 
 #. paragraph
-#: site/lectures/05-functions.md:1672
+#: site/lectures/05-functions.md:1674
 msgid "The full form - parameters in brackets, `=>`, a body in braces:"
 msgstr "Пълната форма - параметри в скоби, `=>`, тяло във фигурни скоби:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1684
+#: site/lectures/05-functions.md:1686
 msgid "**One parameter**: the brackets around it can be left out. With **no** parameters, or **two or more**, the brackets are required:"
 msgstr "**Един параметър**: скобите около него могат да се пропуснат. **Без** параметри или с **два и повече** скобите са задължителни:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1693
+#: site/lectures/05-functions.md:1695
 msgid "**One expression** as the body: the braces **and** `return` can be left out - the value of the expression is returned:"
 msgstr "**Един израз** като тяло: фигурните скоби **и** `return` могат да се пропуснат - връща се стойността на израза:"
 
 #. heading 3
-#: site/lectures/05-functions.md:1710
+#: site/lectures/05-functions.md:1712
 msgid "Braces mean \"no automatic return\""
 msgstr "Фигурните скоби означават \"без автоматичен return\""
 
 #. paragraph
-#: site/lectures/05-functions.md:1712
+#: site/lectures/05-functions.md:1714
 msgid "These two are **not** the same:"
 msgstr "Тези две **не** са едно и също:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1714
+#: site/lectures/05-functions.md:1716
 msgid "`x => expression` returns the value of the expression;"
 msgstr "`x => expression` връща стойността на израза;"
 
 #. paragraph
-#: site/lectures/05-functions.md:1715
+#: site/lectures/05-functions.md:1717
 msgid "`x => { expression }` is a body with one statement, and **no** `return` - it returns `undefined`."
 msgstr "`x => { expression }` е тяло с един statement и **без** `return` - връща `undefined`."
 
 #. paragraph
-#: site/lectures/05-functions.md:1726
+#: site/lectures/05-functions.md:1728
 msgid "This is the most common bug with arrow functions. If you add braces, add `return`."
 msgstr "Това е най-честият бъг с arrow functions. Ако добавите фигурни скоби, добавете и `return`."
 
 #. paragraph
-#: site/lectures/05-functions.md:1729
+#: site/lectures/05-functions.md:1731
 msgid "**Functions are values:** [6. Arrow functions](../animations/functionsAsValues.html#6){target=\"_blank\"}"
 msgstr "**Функциите са стойности:** [6. Arrow functions](../animations/functionsAsValues.html#6){target=\"_blank\"}"
 
 #. heading 3
-#: site/lectures/05-functions.md:1732
+#: site/lectures/05-functions.md:1734
 msgid "Returning an object"
 msgstr "Връщане на обект"
 
 #. paragraph
-#: site/lectures/05-functions.md:1734
+#: site/lectures/05-functions.md:1736
 msgid "`{` after `=>` always starts a **body**, so an object literal must be put in round brackets:"
 msgstr "`{` след `=>` винаги започва **тяло**, затова обектният литерал трябва да е в кръгли скоби:"
 
 #. heading 3
-#: site/lectures/05-functions.md:1745
+#: site/lectures/05-functions.md:1747
 msgid "Arrow functions as callbacks"
 msgstr "Arrow functions като callbacks"
 
 #. paragraph
-#: site/lectures/05-functions.md:1747
+#: site/lectures/05-functions.md:1749
 msgid "This is where arrows shine. The older callback and the modern one, side by side:"
 msgstr "Тук arrow functions блестят. По-старият callback и модерният, един до друг:"
 
 #. table cell
-#: site/lectures/05-functions.md:1765
+#: site/lectures/05-functions.md:1767
 msgid "Older"
 msgstr "По-стар"
 
 #. table cell
-#: site/lectures/05-functions.md:1765
+#: site/lectures/05-functions.md:1767
 msgid "Modern"
 msgstr "Модерен"
 
 #. paragraph
-#: site/lectures/05-functions.md:1773
+#: site/lectures/05-functions.md:1775
 msgid "A long callback with several statements stays readable as an arrow with braces and `return` - or, better, becomes a **named** helper."
 msgstr "Дълъг callback с няколко statements остава четим като arrow function с фигурни скоби и `return` - или, още по-добре, става **именувана** helper функция."
 
 #. heading 3
-#: site/lectures/05-functions.md:1776
-msgid "Pitfall: an arrow after `||` (advanced)"
-msgstr "Капан: arrow function след `||` (advanced)"
-
-#. paragraph
 #: site/lectures/05-functions.md:1778
-msgid "An arrow function cannot stand directly after an operator like `||`. Put it in brackets:"
-msgstr "Arrow function не може да стои направо след оператор като `||`. Сложете я в скоби:"
-
-#. heading 3
-#: site/lectures/05-functions.md:1788
 msgid "What arrow functions do not have (advanced)"
 msgstr "Какво нямат arrow functions (advanced)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1790
+#: site/lectures/05-functions.md:1780
 msgid "**No name of their own** - they are always anonymous. When assigned to a variable, they take its name for error messages (`const isHdd = enc => ...` shows as `isHdd`)."
 msgstr "**Нямат собствено име** - винаги са анонимни. Когато са присвоени на variable, взимат нейното име за съобщенията за грешки (`const isHdd = enc => ...` се показва като `isHdd`)."
 
 #. paragraph
-#: site/lectures/05-functions.md:1793
+#: site/lectures/05-functions.md:1783
 msgid "**No `arguments`** - use a rest parameter: `(...values) => ...`."
 msgstr "**Нямат `arguments`** - използвайте rest параметър: `(...values) => ...`."
 
 #. paragraph
-#: site/lectures/05-functions.md:1794
+#: site/lectures/05-functions.md:1784
 msgid "**No hoisting** - they are expressions in a variable, so define them before use."
 msgstr "**Нямат hoisting** - те са изрази във variable, затова ги дефинирайте преди да ги използвате."
 
 #. paragraph
-#: site/lectures/05-functions.md:1795
+#: site/lectures/05-functions.md:1785
 msgid "**No `new`** - they cannot be used as constructors."
 msgstr "**Нямат `new`** - не могат да се използват като конструктори."
 
 #. paragraph
-#: site/lectures/05-functions.md:1796
+#: site/lectures/05-functions.md:1786
 msgid "**No `this` of their own** - inside an arrow, `this` is the `this` of the code around it. This matters for **methods** of objects, which come in session 6:"
 msgstr "**Нямат свой `this`** - вътре в arrow function `this` е `this` на кода около нея. Това е важно за **методите** на обектите, които идват в занятие 6:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1809
+#: site/lectures/05-functions.md:1799
 msgid "The rule of thumb: arrows for **callbacks** and short helpers; `function` declarations for named helpers and **methods**."
 msgstr "Правилото на палеца: arrow functions за **callbacks** и кратки helper функции; `function` declarations за именуваните helper функции и за **методите**."
 
 #. heading 2
-#: site/lectures/05-functions.md:1812
+#: site/lectures/05-functions.md:1802
 msgid "11. Functions inside functions; closures"
 msgstr "11. Функции във функции; closures"
 
 #. heading 3
-#: site/lectures/05-functions.md:1814
+#: site/lectures/05-functions.md:1804
 msgid "Helpers inside `rule`"
 msgstr "Helper функции вътре в `rule`"
 
 #. paragraph
-#: site/lectures/05-functions.md:1816
+#: site/lectures/05-functions.md:1806
 msgid "Many existing rules define their helpers **inside** `rule`. First the idea on a small example: a function inside another function can use the variables of the outer function."
 msgstr "Много съществуващи правила дефинират helper функциите си **вътре** в `rule`. Първо идеята с малък пример: функция вътре в друга функция може да използва variables на външната функция."
 
 #. paragraph
-#: site/lectures/05-functions.md:1837
+#: site/lectures/05-functions.md:1827
 msgid "What happens:"
 msgstr "Какво се случва:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1839
+#: site/lectures/05-functions.md:1829
 msgid "`major` is a **local** variable of `checkFirmware`. A new `major` function is created on **every** call of `checkFirmware`, and it disappears when `checkFirmware` returns."
 msgstr "`major` е **локална** variable на `checkFirmware`. Нова функция `major` се създава при **всяко** извикване на `checkFirmware` и изчезва, когато `checkFirmware` върне."
 
 #. paragraph
-#: site/lectures/05-functions.md:1842
+#: site/lectures/05-functions.md:1832
 msgid "`major` uses `version` without getting it as a parameter: it finds it in the scope of `checkFirmware`, through the scope chain (section 6). In the first call it sees `\"4.2.1.7\"`, in the second call `\"3.9.0.1\"`."
 msgstr "`major` използва `version`, без да я получава като параметър: намира я в scope-а на `checkFirmware`, през scope chain (раздел 6). При първото извикване вижда `\"4.2.1.7\"`, при второто - `\"3.9.0.1\"`."
 
 #. paragraph
-#: site/lectures/05-functions.md:1846
+#: site/lectures/05-functions.md:1836
 msgid "In a rule, the outer function is `rule`, and the helpers use `doc` in the same way:"
 msgstr "В правило външната функция е `rule`, а helper функциите използват `doc` по същия начин:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1863
+#: site/lectures/05-functions.md:1853
 msgid "**Functions and data:** [6. A helper inside `rule`](../animations/functionsAndData.html#6){target=\"_blank\"}"
 msgstr "**Функциите и данните:** [6. Helper функция в `rule`](../animations/functionsAndData.html#6){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/05-functions.md:1866
+#: site/lectures/05-functions.md:1856
 msgid "Is this good or bad? It works. Its costs:"
 msgstr "Добре ли е това или зле? Работи. Цената:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1868
+#: site/lectures/05-functions.md:1858
 msgid "the helper can be used **only** inside this rule - another rule copies it (the same `cmpVer` in every rule);"
 msgstr "helper функцията може да се използва **само** в това правило - друго правило я копира (същият `cmpVer` във всяко правило);"
 
 #. paragraph
-#: site/lectures/05-functions.md:1870
+#: site/lectures/05-functions.md:1860
 msgid "it can read and change **any** variable of `rule`, so you must read all of `rule` to understand it;"
 msgstr "тя може да чете и променя **всяка** variable на `rule`, затова трябва да прочетете цялото `rule`, за да я разберете;"
 
 #. paragraph
-#: site/lectures/05-functions.md:1872
+#: site/lectures/05-functions.md:1862
 msgid "it cannot be tested alone."
 msgstr "не може да се тества самостоятелно."
 
 #. paragraph
-#: site/lectures/05-functions.md:1874
+#: site/lectures/05-functions.md:1864
 msgid "The guidelines ask for helpers **before** `rule`, at the top level. Then they get everything as **parameters**, and they are easy to move into a shared library later (session 9 and the course project)."
 msgstr "Указанията искат helper функциите **преди** `rule`, на най-горно ниво. Тогава те получават всичко като **параметри** и по-късно лесно се преместват в обща библиотека (занятие 9 и курсовият проект)."
 
 #. heading 3
-#: site/lectures/05-functions.md:1878
+#: site/lectures/05-functions.md:1868
 msgid "Closures"
 msgstr "Closures"
 
 #. paragraph
-#: site/lectures/05-functions.md:1880
+#: site/lectures/05-functions.md:1870
 msgid "MDN: [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)"
 msgstr "MDN: [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1882
+#: site/lectures/05-functions.md:1872
 msgid "An inner function keeps access to the variables of the outer function **even after the outer function has returned**. The function and the variables it remembers together are called a **closure**:"
 msgstr "Вътрешната функция запазва достъпа си до variables на външната функция **дори след като външната функция е върнала**. Функцията заедно с variables, които помни, се нарича **closure**:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1902
+#: site/lectures/05-functions.md:1892
 msgid "**Functions are values:** [7. Closure (advanced)](../animations/functionsAsValues.html#7){target=\"_blank\"}"
 msgstr "**Функциите са стойности:** [7. Closure (advanced)](../animations/functionsAsValues.html#7){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/05-functions.md:1905
+#: site/lectures/05-functions.md:1895
 msgid "A practical closure: a **function factory**. It takes a setting and returns a ready test with the setting built in:"
 msgstr "Практичен closure: **фабрика за функции**. Тя получава настройка и връща готова проверка с вградена настройка:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1927
+#: site/lectures/05-functions.md:1917
 msgid "Every call of `above` has its own `limit`: `tooHot` remembers 40, `tooFull` remembers 90. In the homework you write `olderThan(minimum)` - the same idea for versions."
 msgstr "Всяко извикване на `above` има свой `limit`: `tooHot` помни 40, `tooFull` помни 90. В домашното пишете `olderThan(minimum)` - същата идея, но за версии."
 
 #. heading 3
-#: site/lectures/05-functions.md:1931
+#: site/lectures/05-functions.md:1921
 msgid "IIFE: run a function at once (advanced)"
 msgstr "IIFE: изпълнете функция веднага (advanced)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1933
+#: site/lectures/05-functions.md:1923
 msgid "The only way to run an anonymous function that is not stored anywhere is to call it right where it is written - an **IIFE** (*Immediately Invoked Function Expression*):"
 msgstr "Единственият начин да изпълните анонимна функция, която не е записана никъде, е да я извикате точно там, където е написана - **IIFE** (*Immediately Invoked Function Expression*):"
 
 #. paragraph
-#: site/lectures/05-functions.md:1950
+#: site/lectures/05-functions.md:1940
 msgid "The first pair of brackets turns the function into an **expression** (a statement that starts with `function` would be a declaration, and a declaration needs a name). The `()` at the end calls it."
 msgstr "Първата двойка скоби превръща функцията в **израз** (statement, който започва с `function`, би бил declaration, а declaration трябва да има име). `()` в края я извиква."
 
 #. paragraph
-#: site/lectures/05-functions.md:1954
+#: site/lectures/05-functions.md:1944
 msgid "Before modules existed, an IIFE was **the** way to keep variables out of the global scope: everything declared inside is local to the IIFE. Old libraries are written like this - the IIFE runs once and returns a function, and that function remembers the private variable (a closure):"
 msgstr "Преди да съществуват модулите, IIFE беше **начинът** variables да се пазят извън global scope: всичко, декларирано вътре, е локално за IIFE. Старите библиотеки са написани така - IIFE се изпълнява веднъж и връща функция, а тази функция помни скритата (private) variable (closure):"
 
 #. paragraph
-#: site/lectures/05-functions.md:1973
+#: site/lectures/05-functions.md:1963
 msgid "Often the IIFE returns several such functions together, in an object (objects: session 6)."
 msgstr "Често IIFE връща няколко такива функции заедно, в обект (обекти: занятие 6)."
 
 #. paragraph
-#: site/lectures/05-functions.md:1976
+#: site/lectures/05-functions.md:1966
 msgid "Today, files that are modules (session 9) have their own scope, and the IIFE is rarely needed. You still meet it in older code."
 msgstr "Днес файловете, които са модули (занятие 9), имат свой scope и IIFE рядко е нужна. Все още ще я срещнете в по-стар код."
 
 #. paragraph
-#: site/lectures/05-functions.md:1980
+#: site/lectures/05-functions.md:1970
 msgid "**Variable scope:** [6. IIFE (advanced)](../animations/scopeChain.html#6){target=\"_blank\"}; **Functions are values:** [5. A function returns a function](../animations/functionsAsValues.html#5){target=\"_blank\"} (the IIFE at the end)"
 msgstr "**Scope на variables:** [6. IIFE (advanced)](../animations/scopeChain.html#6){target=\"_blank\"}; **Функциите са стойности:** [5. Функция, която връща функция](../animations/functionsAsValues.html#5){target=\"_blank\"} (IIFE в края)"
 
 #. heading 3
-#: site/lectures/05-functions.md:1984
+#: site/lectures/05-functions.md:1974
 msgid "A function that calls itself (advanced)"
 msgstr "Функция, която извиква себе си (advanced)"
 
 #. paragraph
-#: site/lectures/05-functions.md:1986
+#: site/lectures/05-functions.md:1976
 msgid "A function can call **itself** - this is **recursion**. It needs a **base case**: a condition under which it stops. Each call gets its own frame:"
 msgstr "Функцията може да извика **себе си** - това е **рекурсия**. Трябва ѝ **базов случай**: условие, при което спира. Всяко извикване получава своя рамка:"
 
 #. paragraph
-#: site/lectures/05-functions.md:1997
+#: site/lectures/05-functions.md:1987
 msgid "Recursion fits nested data of unknown depth - for example, finding a key at any level of a report (session 6). Without a base case the stack overflows: `RangeError: Maximum call stack size exceeded`."
 msgstr "Рекурсията е подходяща за вложени данни с неизвестна дълбочина - например търсене на ключ на всяко ниво на отчета (занятие 6). Без базов случай стекът прелива: `RangeError: Maximum call stack size exceeded`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2002
+#: site/lectures/05-functions.md:1992
 msgid "**The call stack:** [6. Recursion (advanced)](../animations/callStack.html#6){target=\"_blank\"}, [7. Stack overflow (advanced)](../animations/callStack.html#7){target=\"_blank\"}"
 msgstr "**Стекът на извикванията:** [6. Рекурсия (advanced)](../animations/callStack.html#6){target=\"_blank\"}, [7. Препълване на стека (advanced)](../animations/callStack.html#7){target=\"_blank\"}"
 
-#. heading 3
-#: site/lectures/05-functions.md:2006
-msgid "A shallow copy (advanced)"
-msgstr "Плитко копие (advanced)"
-
-#. paragraph
-#: site/lectures/05-functions.md:2008
-msgid "A pure helper that must return a changed array often copies it first with the spread syntax `[...arr]` (lecture 4). The copy is **shallow**: only the outer array is new, the inner arrays are still shared:"
-msgstr "Чиста helper функция, която трябва да върне променен array, често първо го копира със синтаксиса spread `[...arr]` (лекция 4). Копието е **плитко** (shallow): нов е само външният array, вътрешните arrays все още са общи:"
-
-#. paragraph
-#: site/lectures/05-functions.md:2034
-msgid "A copy of an object with `{ ...obj }` is shallow in the same way - session 6 shows it, together with a full (deep) copy."
-msgstr "Копие на обект с `{ ...obj }` е плитко по същия начин - занятие 6 го показва, заедно с пълно (дълбоко) копие."
-
 #. heading 2
-#: site/lectures/05-functions.md:2037
+#: site/lectures/05-functions.md:1996
 msgid "12. The structure of a rule"
 msgstr "12. Структурата на едно правило"
 
 #. paragraph
-#: site/lectures/05-functions.md:2039
+#: site/lectures/05-functions.md:1998
 msgid "A rule file has a fixed shape. Rule guidelines usually say:"
 msgstr "Файлът с правило има фиксирана форма. Указанията за правилата обикновено казват:"
 
 #. paragraph
-#: site/lectures/05-functions.md:2041
+#: site/lectures/05-functions.md:2000
 msgid "\"If additional functions are required, ensure they are **before** function `rule`.\""
 msgstr "\"Ако са нужни допълнителни функции, те трябва да са **преди** функцията `rule`.\""
 
 #. paragraph
-#: site/lectures/05-functions.md:2043
+#: site/lectures/05-functions.md:2002
 msgid "\"Global variables (defined outside functions) must be declared as `const`, not `var` / `let`, and your functions must not modify them.\""
 msgstr "\"Глобалните variables (дефинирани извън функциите) трябва да са декларирани като `const`, а не `var` / `let`, и вашите функции не трябва да ги променят.\""
 
 #. paragraph
-#: site/lectures/05-functions.md:2045
+#: site/lectures/05-functions.md:2004
 msgid "`function rule(doc) {` - \"never change this line\": the engine looks for it."
 msgstr "`function rule(doc) {` - \"никога не променяйте този ред\": engine-ът търси точно него."
 
 #. paragraph
-#: site/lectures/05-functions.md:2047
+#: site/lectures/05-functions.md:2006
 msgid "So a rule file reads top-down:"
 msgstr "Затова файлът с правило се чете отгоре надолу:"
 
 #. heading 3
-#: site/lectures/05-functions.md:2070
+#: site/lectures/05-functions.md:2029
 msgid "Our own `versionBelow`"
 msgstr "Нашата собствена `versionBelow`"
 
 #. paragraph
-#: site/lectures/05-functions.md:2072
+#: site/lectures/05-functions.md:2031
 msgid "Lecture 3 showed why versions cannot be compared as strings (`\"4.10\" < \"4.2\"` is `true`). Now we write the helper. First, the requirements - what must it handle?"
 msgstr "Лекция 3 показа защо версиите не могат да се сравняват като strings (`\"4.10\" < \"4.2\"` е `true`). Сега пишем helper функцията. Първо изискванията - с какво трябва да се справя?"
 
 #. table cell
-#: site/lectures/05-functions.md:2075
+#: site/lectures/05-functions.md:2034
 msgid "Case"
 msgstr "Случай"
 
 #. table cell
-#: site/lectures/05-functions.md:2075
+#: site/lectures/05-functions.md:2034
 msgid "Expected"
 msgstr "Очаквано"
 
 #. table cell
-#: site/lectures/05-functions.md:2077
+#: site/lectures/05-functions.md:2036
 msgid "part by part, as numbers"
 msgstr "част по част, като числа"
 
 #. table cell
-#: site/lectures/05-functions.md:2077
+#: site/lectures/05-functions.md:2036
 msgid "`\"4.10\"` vs `\"4.2\"`"
 msgstr "`\"4.10\"` срещу `\"4.2\"`"
 
 #. table cell
-#: site/lectures/05-functions.md:2077
+#: site/lectures/05-functions.md:2036
 msgid "4.10 is **higher**"
 msgstr "4.10 е **по-висока**"
 
 #. table cell
-#: site/lectures/05-functions.md:2078
+#: site/lectures/05-functions.md:2037
 msgid "different number of parts"
 msgstr "различен брой части"
 
 #. table cell
-#: site/lectures/05-functions.md:2078
+#: site/lectures/05-functions.md:2037
 msgid "`\"4.2\"` vs `\"4.2.0.0\"`"
 msgstr "`\"4.2\"` срещу `\"4.2.0.0\"`"
 
 #. table cell
-#: site/lectures/05-functions.md:2078
+#: site/lectures/05-functions.md:2037
 msgid "**equal**"
 msgstr "**равни**"
 
 #. table cell
-#: site/lectures/05-functions.md:2079
+#: site/lectures/05-functions.md:2038
 msgid "a suffix on a part"
 msgstr "суфикс на една част"
 
 #. table cell
-#: site/lectures/05-functions.md:2079
+#: site/lectures/05-functions.md:2038
 msgid "`\"4.2.1.7-B00\"` vs `\"4.2.1.7\"`"
 msgstr "`\"4.2.1.7-B00\"` срещу `\"4.2.1.7\"`"
 
 #. table cell
-#: site/lectures/05-functions.md:2079
+#: site/lectures/05-functions.md:2038
 msgid "equal (the suffix is ignored here)"
 msgstr "равни (тук суфиксът се пренебрегва)"
 
 #. table cell
-#: site/lectures/05-functions.md:2080
+#: site/lectures/05-functions.md:2039
 msgid "a number instead of a string"
 msgstr "число вместо string"
 
 #. table cell
-#: site/lectures/05-functions.md:2080
+#: site/lectures/05-functions.md:2039
 msgid "`2.14` vs `\"2.14\"`"
 msgstr "`2.14` срещу `\"2.14\"`"
 
 #. table cell
-#: site/lectures/05-functions.md:2080
+#: site/lectures/05-functions.md:2039
 msgid "equal"
 msgstr "равни"
 
 #. table cell
-#: site/lectures/05-functions.md:2081
+#: site/lectures/05-functions.md:2040
 msgid "a missing value"
 msgstr "липсваща стойност"
 
 #. table cell
-#: site/lectures/05-functions.md:2081
+#: site/lectures/05-functions.md:2040
 msgid "`undefined` vs `\"1.0\"`"
 msgstr "`undefined` срещу `\"1.0\"`"
 
 #. table cell
-#: site/lectures/05-functions.md:2081
+#: site/lectures/05-functions.md:2040
 msgid "treated as `\"\"`, i.e. `0` - lower"
 msgstr "третира се като `\"\"`, т.е. `0` - по-ниска"
 
 #. paragraph
-#: site/lectures/05-functions.md:2083
+#: site/lectures/05-functions.md:2042
 msgid "Many rules write one helper that answers \"lower, equal or higher?\" with `-1`, `0` or `1` (in existing rules it is often called `cmpVer`). The yes / no questions are then one line each:"
 msgstr "Много правила пишат една helper функция, която отговаря на \"по-ниска, равна или по-висока?\" с `-1`, `0` или `1` (в съществуващите правила често се казва `cmpVer`). Въпросите с да / не тогава са по един ред:"
 
 #. paragraph
-#: site/lectures/05-functions.md:2123
+#: site/lectures/05-functions.md:2082
 msgid "(`for (const [a, b] of cases)` takes the two elements of each inner array - a short form of `const a = pair[0], b = pair[1];`. Session 6 explains it.)"
 msgstr "(`for (const [a, b] of cases)` взима двата елемента на всеки вътрешен array - кратка форма на `const a = pair[0], b = pair[1];`. Занятие 6 го обяснява.)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2126
+#: site/lectures/05-functions.md:2085
 msgid "The suffix (`-B00`), versions like `42107-C00` or `XR420_117`, and other formats come in session 8. With one shared helper, that fix will be made **once** - not in every rule."
 msgstr "Суфиксът (`-B00`), версии като `42107-C00` или `XR420_117` и другите формати идват в занятие 8. С една обща helper функция тази поправка ще се направи **веднъж** - а не във всяко правило."
 
 #. heading 3
-#: site/lectures/05-functions.md:2130
+#: site/lectures/05-functions.md:2089
 msgid "Helpers that return text (optional)"
 msgstr "Helper функции, които връщат текст (optional)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2132
+#: site/lectures/05-functions.md:2091
 msgid "Existing rules often turn a comparison into a status and an action text, with one small helper each:"
 msgstr "Съществуващите правила често превръщат едно сравнение в статус и текст за действие, с по една малка helper функция:"
 
 #. paragraph
-#: site/lectures/05-functions.md:2165
+#: site/lectures/05-functions.md:2124
 msgid "Compare this with lecture 3, where the same logic was an `if / else if` chain and a `switch` inside the rule. Now each question has a name, and each helper can be checked alone."
 msgstr "Сравнете това с лекция 3, където същата логика беше верига `if / else if` и `switch` вътре в правилото. Сега всеки въпрос има име и всяка helper функция може да се провери самостоятелно."
 
 #. heading 3
-#: site/lectures/05-functions.md:2169
+#: site/lectures/05-functions.md:2128
 msgid "Splitting a long rule into helpers"
 msgstr "Разделяне на дълго правило на helper функции"
 
 #. paragraph
-#: site/lectures/05-functions.md:2171
+#: site/lectures/05-functions.md:2130
 msgid "When a rule gets long, look for the parts that answer **one question** or produce **one value**, and give each a name:"
 msgstr "Когато правилото стане дълго, потърсете частите, които отговарят на **един въпрос** или дават **една стойност**, и дайте име на всяка:"
 
 #. paragraph
-#: site/lectures/05-functions.md:2174
+#: site/lectures/05-functions.md:2133
 msgid "**Find a block that computes a value** - \"the name of the device\", \"the firmware version\", \"the list of problems\". It becomes a helper that **returns** that value."
 msgstr "**Намерете блок, който изчислява стойност** - \"името на устройството\", \"версията на firmware\", \"списъкът с проблеми\". Той става helper функция, която **връща** тази стойност."
 
 #. paragraph
-#: site/lectures/05-functions.md:2177
+#: site/lectures/05-functions.md:2136
 msgid "**Everything it reads becomes a parameter.** If it reads `doc`, pass `doc` (or just the part it needs: `doc.inventory.enclosures`)."
 msgstr "**Всичко, което чете, става параметър.** Ако чете `doc`, подайте `doc` (или само частта, която ѝ трябва: `doc.inventory.enclosures`)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2179
+#: site/lectures/05-functions.md:2138
 msgid "**Name it by what it returns**: `deviceName(doc)`, `firmwareVersion(doc)`, `enclosureProblems(list)`; a yes / no question starts with `is` / `has`: `isSupported(model)`."
 msgstr "**Наречете я според това, което връща**: `deviceName(doc)`, `firmwareVersion(doc)`, `enclosureProblems(list)`; въпрос с да / не започва с `is` / `has`: `isSupported(model)`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2182
+#: site/lectures/05-functions.md:2141
 msgid "**Do not change the input** - return a new value (section 8)."
 msgstr "**Не променяйте входните данни** - върнете нова стойност (раздел 8)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2183
+#: site/lectures/05-functions.md:2142
 msgid "**Test it alone** with a few `console.log` lines (or with `check` in the practice files), including the odd cases: missing, empty, wrong type."
 msgstr "**Тествайте я самостоятелно** с няколко реда `console.log` (или с `check` във файловете за упражнения), включително странните случаи: липсваща стойност, празна, грешен тип."
 
 #. paragraph
-#: site/lectures/05-functions.md:2186
+#: site/lectures/05-functions.md:2145
 msgid "The rule at the start of this lecture is the result of this process applied to the rule of lecture 4."
 msgstr "Правилото в началото на тази лекция е резултатът от този процес, приложен върху правилото от лекция 4."
 
 #. heading 2
-#: site/lectures/05-functions.md:2189
+#: site/lectures/05-functions.md:2148
 msgid "13. Reading existing rules"
 msgstr "13. Четене на съществуващи правила"
 
 #. paragraph
-#: site/lectures/05-functions.md:2191
+#: site/lectures/05-functions.md:2150
 msgid "Here is a rule in the style of many existing rules - helpers nested in `rule`, `var`, callbacks written as `function (x) { ... }`, and a `try / catch` around everything. Run it first:"
 msgstr "Ето правило в стила на много съществуващи правила - helper функции, вложени в `rule`, `var`, callbacks, написани като `function (x) { ... }`, и `try / catch` около всичко. Първо го изпълнете:"
 
 #. paragraph
-#: site/lectures/05-functions.md:2265 site/lectures/05-functions.md:2384
+#: site/lectures/05-functions.md:2224 site/lectures/05-functions.md:2343
 msgid "**Check yourself:**"
 msgstr "**Проверете се:**"
 
 #. paragraph
-#: site/lectures/05-functions.md:2267
+#: site/lectures/05-functions.md:2226
 msgid "Which functions are there, and where can each one be called from?"
 msgstr "Какви функции има и откъде може да се извика всяка?"
 
 #. paragraph
-#: site/lectures/05-functions.md:2268
+#: site/lectures/05-functions.md:2227
 msgid "The engine calls this rule for 1000 reports. How many times is `cmpVer` created? Can another rule use it?"
 msgstr "Engine-ът извиква това правило за 1000 отчета. Колко пъти се създава `cmpVer`? Може ли друго правило да я използва?"
 
 #. paragraph
-#: site/lectures/05-functions.md:2270
+#: site/lectures/05-functions.md:2229
 msgid "The second report has an SSD-24 enclosure with firmware `2.10` - below `2.14`. Why is there **no alert** for `LAB-DEV-05`?"
 msgstr "Вторият отчет има SSD-24 enclosure с firmware `2.10` - под `2.14`. Защо **няма alert** за `LAB-DEV-05`?"
 
 #. paragraph
-#: site/lectures/05-functions.md:2272
+#: site/lectures/05-functions.md:2231
 msgid "In `getLowestFirmware`, what does `list[i] || {}` protect against? And `if (e.state && e.state !== \"normal\") continue;` - which enclosures does it skip, and which does it keep?"
 msgstr "В `getLowestFirmware` от какво пази `list[i] || {}`? А `if (e.state && e.state !== \"normal\") continue;` - кои enclosures пропуска и кои запазва?"
 
 #. paragraph
-#: site/lectures/05-functions.md:2275
+#: site/lectures/05-functions.md:2234
 msgid "`cmpVer` changes its parameters `a` and `b` (`a = ... String(a)`). Does that change anything for the caller? Is `cmpVer` pure?"
 msgstr "`cmpVer` променя параметрите си `a` и `b` (`a = ... String(a)`). Променя ли това нещо за извикващия? Чиста ли е `cmpVer`?"
 
 #. paragraph
-#: site/lectures/05-functions.md:2279
+#: site/lectures/05-functions.md:2238
 msgid "`rule` (global - the engine calls it), `cmpVer` and `getLowestFirmware` (local to `rule` - only `rule` and the functions inside it can call them), and two anonymous callbacks passed to `map`."
 msgstr "`rule` (глобална - engine-ът я извиква), `cmpVer` и `getLowestFirmware` (локални за `rule` - само `rule` и функциите в нея могат да ги извикат) и два анонимни callbacks, подадени на `map`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2282
+#: site/lectures/05-functions.md:2241
 msgid "1000 times - a new `cmpVer` on every call of `rule`. That costs little, but no other rule can use it: each rule has its own copy (and its own bugs)."
 msgstr "1000 пъти - нова `cmpVer` при всяко извикване на `rule`. Това струва малко, но никое друго правило не може да я използва: всяко правило има свое копие (и свои бъгове)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2284
+#: site/lectures/05-functions.md:2243
 msgid "The report has no `extended_info`, so `doc.inventory.extended_info.json` throws a `TypeError`. The `catch` catches it and returns **silently**. A real problem is missed, and nobody sees an error. (Session 9 is about errors; the fix here is `?.` and a fallback name.)"
 msgstr "Отчетът няма `extended_info`, затова `doc.inventory.extended_info.json` хвърля `TypeError`. `catch` го хваща и връща **тихо**. Истински проблем е пропуснат и никой не вижда грешка. (Занятие 9 е за грешките; поправката тук е `?.` и резервно име.)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2288
+#: site/lectures/05-functions.md:2247
 msgid "`list[i] || {}`: an element that is `null` or `undefined` - `e.type` would throw. The `state` line skips enclosures whose state is set and is not `\"normal\"`; it **keeps** those without a state (`undefined` is falsy, so the `continue` does not run)."
 msgstr "`list[i] || {}`: от елемент, който е `null` или `undefined` - `e.type` би хвърлило грешка. Редът със `state` пропуска enclosures, чието състояние е зададено и не е `\"normal\"`; **запазва** тези без състояние (`undefined` е falsy, затова `continue` не се изпълнява)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2292
+#: site/lectures/05-functions.md:2251
 msgid "No: `a` and `b` are strings (primitives), the parameters are local copies. `cmpVer` is pure - it only reads its arguments and returns a number."
 msgstr "Не: `a` и `b` са strings (примитиви), параметрите са локални копия. `cmpVer` е чиста - само чете аргументите си и връща число."
 
 #. heading 3
-#: site/lectures/05-functions.md:2296
-msgid "Modernising it, step by step"
-msgstr "Модернизиране, стъпка по стъпка"
+#: site/lectures/05-functions.md:2255
+msgid "Modernising it, step by step (optional)"
+msgstr "Модернизиране, стъпка по стъпка (optional)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2298
+#: site/lectures/05-functions.md:2257
 msgid "Change one thing at a time, and run the rule after each step - the alerts must stay the same (except for real bug fixes, which you make on purpose)."
 msgstr "Променяйте по едно нещо и изпълнявайте правилото след всяка стъпка - alerts трябва да останат същите (освен при истински поправки на бъгове, които правите нарочно)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2301
+#: site/lectures/05-functions.md:2260
 msgid "**Step 1. Move the helpers out of `rule`.** They already get everything as parameters, so they can move as they are. Now they are created once, and can be copied into a shared library."
 msgstr "**Стъпка 1. Изнесете helper функциите извън `rule`.** Те вече получават всичко като параметри, затова могат да се преместят както са. Сега се създават веднъж и могат да се копират в обща библиотека."
 
 #. paragraph
-#: site/lectures/05-functions.md:2305
+#: site/lectures/05-functions.md:2264
 msgid "**Step 2. `var` -> `const` / `let`.** `const` for everything that is not assigned again; `let` for loop counters and for values that change (`lowest`)."
 msgstr "**Стъпка 2. `var` -> `const` / `let`.** `const` за всичко, на което не се присвоява нова стойност; `let` за броячите на loops и за стойностите, които се променят (`lowest`)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2308
+#: site/lectures/05-functions.md:2267
 msgid "**Step 3. Callbacks -> arrow functions, and simpler checks.** `function (x) { return parseInt(x, 10) || 0; }` becomes `x => parseInt(x, 10) || 0`. `(a === undefined || a === null) ? \"\" : String(a)` becomes `String(a ?? \"\")`."
 msgstr "**Стъпка 3. Callbacks -> arrow functions и по-прости проверки.** `function (x) { return parseInt(x, 10) || 0; }` става `x => parseInt(x, 10) || 0`. `(a === undefined || a === null) ? \"\" : String(a)` става `String(a ?? \"\")`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2313
+#: site/lectures/05-functions.md:2272
 msgid "The result:"
 msgstr "Резултатът:"
 
 #. paragraph
-#: site/lectures/05-functions.md:2381
+#: site/lectures/05-functions.md:2340
 msgid "The alerts are the same as before. The second report still gets **no** alert: the `try` still hides the missing `extended_info` (question 3 above)."
 msgstr "Alerts са същите като преди. Вторият отчет все още **не** получава alert: `try` все още скрива липсващия `extended_info` (въпрос 3 по-горе)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2386
+#: site/lectures/05-functions.md:2345
 msgid "`if (lowest !== undefined && cmpVer(lowest, expected) < 0) { ... }` can also be written as a guard clause: `if (lowest === undefined || cmpVer(lowest, expected) >= 0) return;`, and the alert code after it. Why is it the same condition, turned around? (Lecture 3: De Morgan.)"
 msgstr "`if (lowest !== undefined && cmpVer(lowest, expected) < 0) { ... }` може да се напише и като guard clause: `if (lowest === undefined || cmpVer(lowest, expected) >= 0) return;`, а кодът за alert - след него. Защо това е същото условие, обърнато? (Лекция 3: De Morgan.)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2390
+#: site/lectures/05-functions.md:2349
 msgid "Which of the functions are pure?"
 msgstr "Кои от функциите са чисти?"
 
 #. paragraph
-#: site/lectures/05-functions.md:2391
+#: site/lectures/05-functions.md:2350
 msgid "`expected` is a fixed setting of the rule. Where would you put it, and how would you declare it?"
 msgstr "`expected` е фиксирана настройка на правилото. Къде бихте я сложили и как бихте я декларирали?"
 
 #. paragraph
-#: site/lectures/05-functions.md:2395
+#: site/lectures/05-functions.md:2354
 msgid "\"Stop if not (A and B)\" is \"stop if (not A) or (not B)\": not `lowest !== undefined` is `lowest === undefined`, and not `< 0` is `>= 0`. The guard clause stops early, so the alert code is not nested in an `if`."
 msgstr "\"Спри, ако не (A и B)\" е \"спри, ако (не A) или (не B)\": обратното на `lowest !== undefined` е `lowest === undefined`, а обратното на `< 0` е `>= 0`. Guard clause-ът спира рано, затова кодът за alert не е вложен в `if`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2398
+#: site/lectures/05-functions.md:2357
 msgid "`cmpVer` and `getLowestFirmware` - they only read their arguments and return a value. `rule` is not: it calls `emit` (that is its job)."
 msgstr "`cmpVer` и `getLowestFirmware` - те само четат аргументите си и връщат стойност. `rule` не е: извиква `emit` (това е работата ѝ)."
 
 #. paragraph
-#: site/lectures/05-functions.md:2400
+#: site/lectures/05-functions.md:2359
 msgid "At the top of the file, outside `rule`: `const EXPECTED_FIRMWARE = \"2.14\";`. It never changes, so `const`, as the guidelines ask (section 7). At the top it is easy to find and to update when a new level is recommended, without reading the code of `rule`."
 msgstr "В началото на файла, извън `rule`: `const EXPECTED_FIRMWARE = \"2.14\";`. Никога не се променя, затова е `const`, както искат указанията (раздел 7). Горе лесно се намира и обновява, когато се препоръча ново ниво, без да четете кода на `rule`."
 
 #. heading 2
-#: site/lectures/05-functions.md:2406
+#: site/lectures/05-functions.md:2365
 msgid "14. Practice"
 msgstr "14. Упражнения"
 
 #. paragraph
-#: site/lectures/05-functions.md:2408
+#: site/lectures/05-functions.md:2367
 msgid "In your copy of the Homework repository, first get the new tasks:"
 msgstr "Във вашето копие на Homework repository първо вземете новите задачи:"
 
 #. paragraph
-#: site/lectures/05-functions.md:2415
+#: site/lectures/05-functions.md:2374
 msgid "Each file is split into parts. A part has its description, then the `your code` lines - write your code between them - and right after them its checks, which print `OK` or `FAIL`."
 msgstr "Всеки файл е разделен на части. Всяка част има описание, след него редовете `your code` - пишете кода си между тях - и веднага след тях нейните проверки, които отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/05-functions.md:2419
+#: site/lectures/05-functions.md:2378
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/05-functions.md:2419
+#: site/lectures/05-functions.md:2378
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/05-functions.md:2419
+#: site/lectures/05-functions.md:2378
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/05-functions.md:2421
+#: site/lectures/05-functions.md:2380
 msgid "Predict 20 results: scope, shadowing, defaults, `return`, hoisting, arrow functions"
 msgstr "Предсказвате 20 резултата: scope, shadowing, стойности по подразбиране, `return`, hoisting, arrow functions"
 
 #. table cell
-#: site/lectures/05-functions.md:2422
+#: site/lectures/05-functions.md:2381
 msgid "`compareVersions`, `versionBelow` and `versionStatus` - with all the odd cases"
 msgstr "`compareVersions`, `versionBelow` и `versionStatus` - с всички странни случаи"
 
 #. table cell
-#: site/lectures/05-functions.md:2423
+#: site/lectures/05-functions.md:2382
 msgid "Small pure helpers: `asList`, `capitalize`, `lastPart`, `deviceName` with a default"
 msgstr "Малки чисти helper функции: `asList`, `capitalize`, `lastPart`, `deviceName` със стойност по подразбиране"
 
 #. table cell
-#: site/lectures/05-functions.md:2424
+#: site/lectures/05-functions.md:2383
 msgid "`customMap`, `customFilter`, `countIf`, `compose` - and use them with arrow functions on the enclosures"
 msgstr "`customMap`, `customFilter`, `countIf`, `compose` - и използването им с arrow functions върху enclosures"
 
 #. table cell
-#: site/lectures/05-functions.md:2425
+#: site/lectures/05-functions.md:2384
 msgid "Classic tasks as functions: area, sums, largest even number, best score, a table"
 msgstr "Класически задачи като функции: лице, суми, най-голямо четно число, най-добър резултат, таблица"
 
 #. paragraph
-#: site/lectures/05-functions.md:2427
+#: site/lectures/05-functions.md:2386
 msgid "Task 4, parts 2, 3 and 5 (`customMap`, `customFilter`, `compose`) go with the (optional) examples of section 9 - read them first."
 msgstr "Части 2, 3 и 5 на задача 4 (`customMap`, `customFilter`, `compose`) са към примерите с (optional) в раздел 9 - прочетете ги първо."
 
 #. heading 2
-#: site/lectures/05-functions.md:2430
+#: site/lectures/05-functions.md:2389
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/05-functions.md:2432
+#: site/lectures/05-functions.md:2391
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/05-functions.md:2432
+#: site/lectures/05-functions.md:2391
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/05-functions.md:2434
+#: site/lectures/05-functions.md:2393
 msgid "Function"
 msgstr "Функция"
 
 #. table cell
-#: site/lectures/05-functions.md:2434
+#: site/lectures/05-functions.md:2393
 msgid "A named sequence of actions; defined once, called many times; `f` is the function, `f()` calls it"
 msgstr "Именувана поредица от действия; дефинира се веднъж, извиква се много пъти; `f` е функцията, `f()` я извиква"
 
 #. table cell
-#: site/lectures/05-functions.md:2435
+#: site/lectures/05-functions.md:2394
 msgid "Declaration / expression"
 msgstr "Declaration / expression"
 
 #. table cell
-#: site/lectures/05-functions.md:2435
+#: site/lectures/05-functions.md:2394
 msgid "`function f() {}` (hoisted) / `const f = function () {};` (ends with `;`)"
 msgstr "`function f() {}` (издига се) / `const f = function () {};` (завършва с `;`)"
 
 #. table cell
-#: site/lectures/05-functions.md:2436
+#: site/lectures/05-functions.md:2395
 msgid "Parameters"
 msgstr "Параметри"
 
 #. table cell
-#: site/lectures/05-functions.md:2436
+#: site/lectures/05-functions.md:2395
 msgid "Local variables, filled **by position**; missing -> `undefined`, extra -> ignored; `...rest` for any number"
 msgstr "Локални variables, попълват се **по позиция**; липсващ -> `undefined`, излишен -> пренебрегва се; `...rest` за произволен брой"
 
 #. table cell
-#: site/lectures/05-functions.md:2437
+#: site/lectures/05-functions.md:2396
 msgid "Defaults"
 msgstr "Стойности по подразбиране"
 
 #. table cell
-#: site/lectures/05-functions.md:2437
+#: site/lectures/05-functions.md:2396
 msgid "`function f(x = 1)` - only for `undefined`; `x = x \\|\\| 1` also replaces `0`, `\"\"`, `false`, `null`"
 msgstr "`function f(x = 1)` - само за `undefined`; `x = x \\|\\| 1` заменя и `0`, `\"\"`, `false`, `null`"
 
 #. table cell
-#: site/lectures/05-functions.md:2438
+#: site/lectures/05-functions.md:2397
 msgid "Ends the function and gives the value; no `return` -> `undefined`; keep the value on the same line"
 msgstr "Прекратява функцията и дава стойността; без `return` -> `undefined`; дръжте стойността на същия ред"
 
 #. table cell
-#: site/lectures/05-functions.md:2439
+#: site/lectures/05-functions.md:2398
 msgid "Scope"
 msgstr "Scope"
 
 #. table cell
-#: site/lectures/05-functions.md:2439
+#: site/lectures/05-functions.md:2398
 msgid "Global, function, block (`let` / `const`); inner functions see outer variables, not the other way"
 msgstr "Глобален, на функцията, на блока (`let` / `const`); вътрешните функции виждат външните variables, а не обратното"
 
 #. table cell
-#: site/lectures/05-functions.md:2440
+#: site/lectures/05-functions.md:2399
 msgid "Function-scoped, can be declared again, hoisted as `undefined` - read it, write `let` / `const`"
 msgstr "Scope на функцията, може да се декларира отново, издига се като `undefined` - четете го, пишете `let` / `const`"
 
 #. table cell
-#: site/lectures/05-functions.md:2441
+#: site/lectures/05-functions.md:2400
 msgid "Hoisting"
 msgstr "Hoisting"
 
 #. table cell
-#: site/lectures/05-functions.md:2441
+#: site/lectures/05-functions.md:2400
 msgid "Declarations are known from the start of their scope; function declarations can be called early"
 msgstr "Декларациите са известни от началото на своя scope; function declarations могат да се извикат по-рано"
 
 #. table cell
-#: site/lectures/05-functions.md:2442
+#: site/lectures/05-functions.md:2401
 msgid "Arguments"
 msgstr "Аргументи"
 
 #. table cell
-#: site/lectures/05-functions.md:2442
+#: site/lectures/05-functions.md:2401
 msgid "Primitives are copied; arrays and objects are shared - do not change `doc`"
 msgstr "Примитивите се копират; arrays и обектите са общи - не променяйте `doc`"
 
 #. table cell
-#: site/lectures/05-functions.md:2443
+#: site/lectures/05-functions.md:2402
 msgid "Pure function"
 msgstr "Чиста функция"
 
 #. table cell
-#: site/lectures/05-functions.md:2443
+#: site/lectures/05-functions.md:2402
 msgid "Result depends only on the arguments; changes nothing outside"
 msgstr "Резултатът зависи само от аргументите; не променя нищо отвън"
 
 #. table cell
-#: site/lectures/05-functions.md:2444
+#: site/lectures/05-functions.md:2403
 msgid "Callback"
 msgstr "Callback"
 
 #. table cell
-#: site/lectures/05-functions.md:2444
+#: site/lectures/05-functions.md:2403
 msgid "A function passed to a function: `countIf(list, enc => ...)`; `f` not `f()`"
 msgstr "Функция, подадена на функция: `countIf(list, enc => ...)`; `f`, а не `f()`"
 
 #. table cell
-#: site/lectures/05-functions.md:2445
+#: site/lectures/05-functions.md:2404
 msgid "Arrow function"
 msgstr "Arrow function"
 
 #. table cell
-#: site/lectures/05-functions.md:2445
+#: site/lectures/05-functions.md:2404
 msgid "`x => expr` returns `expr`; with `{ }` you need `return`; `({ ... })` for an object"
 msgstr "`x => expr` връща `expr`; с `{ }` ви трябва `return`; `({ ... })` за обект"
 
 #. table cell
-#: site/lectures/05-functions.md:2446
+#: site/lectures/05-functions.md:2405
 msgid "Closure"
 msgstr "Closure"
 
 #. table cell
-#: site/lectures/05-functions.md:2446
+#: site/lectures/05-functions.md:2405
 msgid "An inner function keeps the variables of the outer one alive"
 msgstr "Вътрешната функция пази живи variables на външната"
 
 #. table cell
-#: site/lectures/05-functions.md:2447
+#: site/lectures/05-functions.md:2406
 msgid "Rule file"
 msgstr "Файл с правило"
 
 #. table cell
-#: site/lectures/05-functions.md:2447
+#: site/lectures/05-functions.md:2406
 msgid "Header comment, `const` settings, pure helpers, then `function rule(doc)`"
 msgstr "Коментар в началото, настройки с `const`, чисти helper функции, после `function rule(doc)`"
 
 #. table cell
-#: site/lectures/05-functions.md:2448
+#: site/lectures/05-functions.md:2407
 msgid "Old style"
 msgstr "Стар стил"
 
 #. table cell
-#: site/lectures/05-functions.md:2448
+#: site/lectures/05-functions.md:2407
 msgid "Helpers inside `rule`, `var`, `function (x) { return ...; }`, catch-all `try / catch` - read it, modernise step by step"
 msgstr "Helper функции в `rule`, `var`, `function (x) { return ...; }`, `try / catch`, който хваща всичко - четете го, модернизирайте стъпка по стъпка"
 
 #. heading 2
-#: site/lectures/05-functions.md:2450
+#: site/lectures/05-functions.md:2409
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/05-functions.md:2452
+#: site/lectures/05-functions.md:2411
 msgid "Start with `05-functions/homework-small-functions.js` (in the homework repository): 20 small functions, from `square(x)` to a version split into numbers. You write each function yourself, from the word `function` to `return`. They use only sections 1 - 7 of this lecture and the earlier ones."
 msgstr "Започнете с `05-functions/homework-small-functions.js` (в homework repository): 20 малки функции, от `square(x)` до версия, разделена на числа. Всяка функция пишете сами, от думата `function` до `return`. Използват само раздели 1 - 7 от тази лекция и предишните лекции."
 
 #. paragraph
-#: site/lectures/05-functions.md:2456
+#: site/lectures/05-functions.md:2415
 msgid "`05-functions/homework.js` (in the homework repository): the best version of a module in a report, a function factory for version checks, and an older rule split into helpers - with the same alerts."
 msgstr "`05-functions/homework.js` (в homework repository): най-високата версия на модул в отчет, фабрика за функции за проверка на версии и по-старо правило, разделено на helper функции - със същите alerts."
 
 #. paragraph
-#: site/lectures/05-functions.md:2459
+#: site/lectures/05-functions.md:2418
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/05-functions.md:2461
+#: site/lectures/05-functions.md:2420
 msgid "Optional: take one of your own rules. List its functions: where is each defined, what does it get, what does it return, is it pure? Is there a helper that other rules have a copy of? Which one would you move into a shared library first?"
 msgstr "По желание: вземете едно от вашите правила. Избройте функциите му: къде е дефинирана всяка, какво получава, какво връща, чиста ли е? Има ли helper функция, чието копие имат и други правила? Коя бихте преместили първо в обща библиотека?"
 
 #. heading 2
-#: site/lectures/05-functions.md:2466
+#: site/lectures/05-functions.md:2425
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/05-functions.md:2468
+#: site/lectures/05-functions.md:2427
 msgid "MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions), [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters), [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures), [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
 msgstr "MDN: [Functions (guide)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions), [Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters), [Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters), [Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures), [Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2475
+#: site/lectures/05-functions.md:2434
 msgid "javascript.info: [Functions](https://javascript.info/function-basics), [Function expressions](https://javascript.info/function-expressions), [Arrow functions, the basics](https://javascript.info/arrow-functions-basics), [Variable scope, closure](https://javascript.info/closure), [The old \"var\"](https://javascript.info/var)"
 msgstr "javascript.info: [Functions](https://javascript.info/function-basics), [Function expressions](https://javascript.info/function-expressions), [Arrow functions, the basics](https://javascript.info/arrow-functions-basics), [Variable scope, closure](https://javascript.info/closure), [The old \"var\"](https://javascript.info/var)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2480
+#: site/lectures/05-functions.md:2439
 msgid "Eloquent JavaScript (4th edition): [Functions](https://eloquentjavascript.net/03_functions.html), [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 msgstr "Eloquent JavaScript (4-то издание): [Functions](https://eloquentjavascript.net/03_functions.html), [Higher-order functions](https://eloquentjavascript.net/05_higher_order.html)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2482
+#: site/lectures/05-functions.md:2441
 msgid "W3Schools: [Function definitions](https://www.w3schools.com/js/js_function_definition.asp)"
 msgstr "W3Schools: [Function definitions](https://www.w3schools.com/js/js_function_definition.asp)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2483
+#: site/lectures/05-functions.md:2442
 msgid "Videos: [Learn JavaScript ARROW FUNCTIONS in 8 minutes](https://www.youtube.com/watch?v=fRRRkognpOs), [How to use Arrow Functions](https://www.youtube.com/watch?v=Oy185MF8pnY)"
 msgstr "Видео: [Learn JavaScript ARROW FUNCTIONS in 8 minutes](https://www.youtube.com/watch?v=fRRRkognpOs), [How to use Arrow Functions](https://www.youtube.com/watch?v=Oy185MF8pnY)"
 
 #. paragraph
-#: site/lectures/05-functions.md:2486
+#: site/lectures/05-functions.md:2445
 msgid "**Next session:** objects. Deep paths and keys with dots, dictionaries keyed by ids, the same data as an array in one report and as an object in another - and your first version of `get(doc, path, fallback)` for the course project."
 msgstr "**Следващото занятие:** обекти. Дълбоки пътища и ключове с точки, речници с ключове id, едни и същи данни като array в един отчет и като обект в друг - и първата ви версия на `get(doc, path, fallback)` за курсовия проект."
+
+#~ msgid "A function that returns a function"
+#~ msgstr "Функция, която връща функция"
+
+#~ msgid "Pitfall: an arrow after `||` (advanced)"
+#~ msgstr "Капан: arrow function след `||` (advanced)"
+
+#~ msgid "An arrow function cannot stand directly after an operator like `||`. Put it in brackets:"
+#~ msgstr "Arrow function не може да стои направо след оператор като `||`. Сложете я в скоби:"
+
+#~ msgid "A shallow copy (advanced)"
+#~ msgstr "Плитко копие (advanced)"
+
+#~ msgid "A pure helper that must return a changed array often copies it first with the spread syntax `[...arr]` (lecture 4). The copy is **shallow**: only the outer array is new, the inner arrays are still shared:"
+#~ msgstr "Чиста helper функция, която трябва да върне променен array, често първо го копира със синтаксиса spread `[...arr]` (лекция 4). Копието е **плитко** (shallow): нов е само външният array, вътрешните arrays все още са общи:"
+
+#~ msgid "A copy of an object with `{ ...obj }` is shallow in the same way - session 6 shows it, together with a full (deep) copy."
+#~ msgstr "Копие на обект с `{ ...obj }` е плитко по същия начин - занятие 6 го показва, заедно с пълно (дълбоко) копие."
+
+#~ msgid "Modernising it, step by step"
+#~ msgstr "Модернизиране, стъпка по стъпка"
 
 #~ msgid "Changing it, or replacing it"
 #~ msgstr "Промяна или замяна"

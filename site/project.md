@@ -18,21 +18,45 @@ should make the next products easy to add.
 | 9. JSON, modules, errors | the library as a CommonJS module; a local runner that runs a rule on a folder of sample documents with a fake `emit`; clear errors for bad input |
 | 10. Tests, types, review | tests with `node:test`; JSDoc types for the product's JSON; a README; presentation and code review |
 
+## Step by step
+
+Every session from 6 on has about 15 minutes for the project. Between the sessions
+you do one small step:
+
+| Session | In class | At home, before the next session |
+|---------|----------|----------------------------------|
+| 6 | What the project is, and what you choose | Choose the product. Prepare two or three anonymised sample documents and two rules that are hard to read |
+| 7 | **Kickoff**: your repository, `library.js` and `try.js` running on one sample (lecture 7, section 12) | Put `get`, `compareVersions` and `versionBelow` into the repository. Write down the paths your rules read again and again |
+| 8 | The lists in your reports: which shape, and which helper reads it (`groupBy`, `nestRecords`, an index) | Add that helper. Collect the version and date formats of your product |
+| 9 | `normalizeVersion` and a date parser for your formats; choose the rule you rewrite | Rewrite the rule with the library. Prepare the presentation |
+| 10 | You present (10 - 15 minutes each); we write the first test for your library together | The project ends here. Recommended, on your own: the next steps below |
+
+Anonymised means: no real customer names, serials, addresses or product names in
+the repository.
+
 ## Deliverables
 
-1. A CommonJS module for the product (`<product>.js`, or `library.js`) with
-   documented helpers.
-2. Tests with `node:test` on anonymised sample documents.
-3. Two or three existing rules rewritten with the library.
-4. A README with examples for other users.
-5. JSDoc types (`@typedef`) for the product's JSON, checked with `// @ts-check`.
+For the presentation in session 10 - the minimum:
 
-The minimum for the review: items 1, 2 and one rewritten rule. Items 3 - 5 can grow
-after the course.
+1. A CommonJS module (`library.js`, or `<product>.js`) with your helpers; each one
+   has a comment that says what it does, with an example.
+2. Two or three anonymised sample documents, and a `try.js` that uses the library
+   on them.
+3. One existing rule rewritten with the library.
+
+The course project ends with the presentation in session 10.
+
+Recommended next steps, on your own after the course - the topics are taught in
+session 10, and a follow-up course could start right here:
+
+4. Tests with `node:test` on the sample documents.
+5. JSDoc types (`@typedef`) for the product's JSON, checked with `// @ts-check`.
+6. The local runner `run-rule.js`, and a README with examples for other users.
+7. One or two more rules rewritten with the library.
 
 ## The repository
 
-A suggested layout (lecture 7 sets it up, lectures 9 and 10 fill it):
+A suggested layout (the kickoff sets it up, lectures 9 and 10 fill it):
 
 ```text
 my-library/

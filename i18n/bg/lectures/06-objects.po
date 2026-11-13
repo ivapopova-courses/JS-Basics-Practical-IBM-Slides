@@ -70,8 +70,8 @@ msgstr "използвате spread, rest и destructuring;"
 
 #. paragraph
 #: site/lectures/06-objects.md:26
-msgid "write methods and know what `this` is; create many objects of one kind with a factory function, a constructor and a `class`;"
-msgstr "пишете методи и да знаете какво е `this`; да създавате много обекти от един вид с factory функция, конструктор и `class`;"
+msgid "write methods and know what `this` is; create many objects of one kind with a factory function;"
+msgstr "пишете методи и да знаете какво е `this`; да създавате много обекти от един вид с factory функция;"
 
 #. paragraph
 #: site/lectures/06-objects.md:28
@@ -149,7 +149,7 @@ msgid "Array"
 msgstr "Array"
 
 #. table cell
-#: site/lectures/06-objects.md:146 site/lectures/06-objects.md:1631
+#: site/lectures/06-objects.md:146 site/lectures/06-objects.md:1484
 msgid "Object"
 msgstr "Обект"
 
@@ -219,7 +219,7 @@ msgid "Like an array, an object lives in the **heap**. The variable holds a **re
 msgstr "Както array, обектът живее в **heap**. Variable-ата пази **референция** към него - стрелка. Property, чиято стойност е обект или array, пази още една стрелка."
 
 #. box title
-#: site/lectures/06-objects.md:169 site/lectures/06-objects.md:333 site/lectures/06-objects.md:421 site/lectures/06-objects.md:462 site/lectures/06-objects.md:510 site/lectures/06-objects.md:619 site/lectures/06-objects.md:871 site/lectures/06-objects.md:1131
+#: site/lectures/06-objects.md:169 site/lectures/06-objects.md:333 site/lectures/06-objects.md:421 site/lectures/06-objects.md:462 site/lectures/06-objects.md:510 site/lectures/06-objects.md:619 site/lectures/06-objects.md:871 site/lectures/06-objects.md:1114
 msgid "Animation"
 msgstr "Анимация"
 
@@ -280,8 +280,8 @@ msgstr "Когато property трябва да получи стойностт�
 
 #. heading 3
 #: site/lectures/06-objects.md:242
-msgid "Computed keys (ES6)"
-msgstr "Изчислявани ключове (ES6)"
+msgid "Computed keys (ES6) (advanced)"
+msgstr "Изчислявани ключове (ES6) (advanced)"
 
 #. paragraph
 #: site/lectures/06-objects.md:244
@@ -300,8 +300,8 @@ msgstr "По-старият код създава празен обект с г�
 
 #. paragraph
 #: site/lectures/06-objects.md:264
-msgid "It works, but `{ ... }` is shorter and shows the whole object at once. Do not mix it up with `new Developer(...)` - a call of a **constructor** ([section 11](#_11-many-objects-of-one-kind))."
-msgstr "Работи, но `{ ... }` е по-кратко и показва целия обект наведнъж. Не го бъркайте с `new Developer(...)` - извикване на **конструктор** ([раздел 11](#_11-many-objects-of-one-kind))."
+msgid "It works, but `{ ... }` is shorter and shows the whole object at once. Do not mix it up with `new Developer(...)` - that creates an object of a **class** ([section 11](#_11-many-objects-of-one-kind))."
+msgstr "Работи, но `{ ... }` е по-кратко и показва целия обект наведнъж. Не го бъркайте с `new Developer(...)` - това създава обект от **клас** ([раздел 11](#_11-many-objects-of-one-kind))."
 
 #. heading 2
 #: site/lectures/06-objects.md:268
@@ -973,640 +973,652 @@ msgstr "Spread `...` - изсипване на елементите"
 msgid "Spread never changes the original - unlike `push`, `unshift` and `splice`."
 msgstr "Spread никога не променя оригинала - за разлика от `push`, `unshift` и `splice`."
 
-#. paragraph
-#: site/lectures/06-objects.md:943
-msgid "An example: flip one property and keep the rest:"
-msgstr "Пример: обърнете едно property и запазете останалите:"
-
 #. heading 3
-#: site/lectures/06-objects.md:951
-msgid "Rest `...` - collect the rest"
-msgstr "Rest `...` - събиране на останалото"
+#: site/lectures/06-objects.md:943
+msgid "Rest `...` - collect the rest (advanced)"
+msgstr "Rest `...` - събиране на останалото (advanced)"
 
 #. paragraph
-#: site/lectures/06-objects.md:953
+#: site/lectures/06-objects.md:945
 msgid "The same three dots on the **receiving** side collect what is left into an array (or an object). Lecture 5 showed rest parameters:"
 msgstr "Същите три точки от **приемащата** страна събират останалото в array (или обект). Лекция 5 показа rest параметрите:"
 
 #. heading 3
-#: site/lectures/06-objects.md:974
+#: site/lectures/06-objects.md:966
 msgid "Array destructuring"
 msgstr "Array destructuring"
 
 #. paragraph
-#: site/lectures/06-objects.md:976
+#: site/lectures/06-objects.md:968
 msgid "Unpack the elements of an array into variables, by **position**:"
 msgstr "Разопаковайте елементите на array във variables, по **позиция**:"
 
 #. heading 3
-#: site/lectures/06-objects.md:1000
+#: site/lectures/06-objects.md:992
 msgid "Object destructuring"
 msgstr "Object destructuring"
 
 #. paragraph
-#: site/lectures/06-objects.md:1002
+#: site/lectures/06-objects.md:994
 msgid "Unpack properties into variables, by **name**:"
 msgstr "Разопаковайте properties във variables, по **име**:"
 
-#. paragraph
-#: site/lectures/06-objects.md:1021
-msgid "When the variables already exist, wrap the assignment in round brackets (otherwise `{` starts a block):"
-msgstr "Когато variables вече съществуват, оградете присвояването в кръгли скоби (иначе `{` започва блок):"
-
 #. box title
-#: site/lectures/06-objects.md:1030
+#: site/lectures/06-objects.md:1013
 msgid "Destructuring a missing object"
 msgstr "Destructuring на липсващ обект"
 
 #. paragraph
-#: site/lectures/06-objects.md:1031
+#: site/lectures/06-objects.md:1014
 msgid "`const { model } = doc.overview;` throws a `TypeError` when `overview` is missing - like `doc.overview.model`. Give a fallback object: `const { model } = doc.overview ?? {};` - the sample rule does this."
 msgstr "`const { model } = doc.overview;` хвърля `TypeError`, когато `overview` липсва - както `doc.overview.model`. Дайте резервен обект: `const { model } = doc.overview ?? {};` - примерното правило прави това."
 
 #. heading 3
-#: site/lectures/06-objects.md:1036
+#: site/lectures/06-objects.md:1019
 msgid "Destructuring in parameters (advanced)"
 msgstr "Destructuring в параметрите (advanced)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1038
+#: site/lectures/06-objects.md:1021
 msgid "A function that needs only some fields of a record can take them apart right in the parameter list:"
 msgstr "Функция, на която ѝ трябват само някои полета от запис, може да ги разглоби направо в списъка с параметри:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1057
+#: site/lectures/06-objects.md:1040
 msgid "(Destructuring in parameters is also very common in React components.)"
 msgstr "(Destructuring в параметрите е много често и в React компонентите.)"
 
 #. heading 2
-#: site/lectures/06-objects.md:1059
-msgid "10. Methods and `this`"
-msgstr "10. Методи и `this`"
+#: site/lectures/06-objects.md:1042
+msgid "10. Methods and `this` (advanced)"
+msgstr "10. Методи и `this` (advanced)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1061
+#: site/lectures/06-objects.md:1044
 msgid "A **method** is a property whose value is a function. Inside a method, `this` is the object the method was called on - the object **before the dot**:"
 msgstr "**Методът** е property, чиято стойност е функция. Вътре в метода `this` е обектът, върху който е извикан методът - обектът **преди точката**:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1084
+#: site/lectures/06-objects.md:1067
 msgid "You could write `student1.name` inside the methods instead of `this.name`, but then the methods work only for this one object. With `this` they work for any object they are attached to (section 11)."
 msgstr "Бихте могли да пишете `student1.name` в методите вместо `this.name`, но тогава методите работят само за този един обект. С `this` те работят за всеки обект, към който са закачени (раздел 11)."
 
 #. heading 3
-#: site/lectures/06-objects.md:1088
+#: site/lectures/06-objects.md:1071
 msgid "The short method syntax (ES6)"
 msgstr "Краткият синтаксис за методи (ES6)"
 
 #. heading 3
-#: site/lectures/06-objects.md:1100
+#: site/lectures/06-objects.md:1083
 msgid "`this` is decided by the call (advanced)"
 msgstr "`this` се решава от извикването (advanced)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1102
+#: site/lectures/06-objects.md:1085
 msgid "MDN: [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)"
 msgstr "MDN: [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1104
+#: site/lectures/06-objects.md:1087
 msgid "`this` is not fixed when the method is written. It is the object before the dot **at the moment of the call**. Take the method out of the object, and `this` is lost:"
 msgstr "`this` не е фиксиран, когато методът се пише. Той е обектът преди точката **в момента на извикването**. Извадете метода от обекта и `this` се губи:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1132
+#: site/lectures/06-objects.md:1115
 msgid "**Objects in memory:** [7. `this` in a method (advanced)](../animations/objectsInMemory.html#7){target=\"_blank\"}"
 msgstr "**Обектите в паметта:** [7. `this` в метод (advanced)](../animations/objectsInMemory.html#7){target=\"_blank\"}"
 
 #. paragraph
-#: site/lectures/06-objects.md:1135
+#: site/lectures/06-objects.md:1118
 msgid "Arrow functions have **no `this` of their own** (lecture 5): an arrow written as a method sees the `this` of the code around the object, not the object. Write methods with the short syntax or `function`, not as arrows."
 msgstr "Arrow функциите **нямат собствен `this`** (лекция 5): arrow function, написана като метод, вижда `this` на кода около обекта, а не обекта. Пишете методите с краткия синтаксис или с `function`, а не като arrow функции."
 
 #. heading 3
-#: site/lectures/06-objects.md:1139
+#: site/lectures/06-objects.md:1122
 msgid "Methods in rules (optional)"
 msgstr "Методи в правилата (optional)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1141
+#: site/lectures/06-objects.md:1124
 msgid "Reports are **data**: JSON has no functions, so `doc` has no methods. Methods appear in your own code - an object that groups helpers, like a small library:"
 msgstr "Отчетите са **данни**: JSON няма функции, затова `doc` няма методи. Методите се появяват във вашия собствен код - обект, който групира helper функции, като малка библиотека:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1165
+#: site/lectures/06-objects.md:1148
 msgid "In session 9 the same idea becomes a **module** - a file that exports its helpers."
 msgstr "В занятие 9 същата идея става **модул** - файл, който експортира своите helper функции."
 
 #. heading 2
-#: site/lectures/06-objects.md:1167
+#: site/lectures/06-objects.md:1150
 msgid "11. Many objects of one kind"
 msgstr "11. Много обекти от един вид"
 
 #. paragraph
-#: site/lectures/06-objects.md:1169
+#: site/lectures/06-objects.md:1152
 msgid "Real programs often need many objects with the **same structure** - the same keys and methods, different values."
 msgstr "Истинските програми често имат нужда от много обекти със **същата структура** - същите ключове и методи, различни стойности."
 
 #. heading 3
-#: site/lectures/06-objects.md:1172
-msgid "Literals - repeated code (optional)"
-msgstr "Литерали - повтарящ се код (optional)"
-
-#. paragraph
-#: site/lectures/06-objects.md:1197
-msgid "The keys and the method are written twice - and a typo in one copy gives two objects with different shapes."
-msgstr "Ключовете и методът са написани два пъти - и правописна грешка в едното копие дава два обекта с различна форма."
-
-#. heading 3
-#: site/lectures/06-objects.md:1200
+#: site/lectures/06-objects.md:1155
 msgid "A factory function"
 msgstr "Factory функция"
 
 #. paragraph
-#: site/lectures/06-objects.md:1202
+#: site/lectures/06-objects.md:1157
 msgid "A function that **returns** a new object. Every object it makes has the same shape:"
 msgstr "Функция, която **връща** нов обект. Всеки обект, който създава, има същата форма:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1221
+#: site/lectures/06-objects.md:1176
 msgid "Factory functions are the most useful form for rules: a helper that builds the **details** of an alert, a record for a report, a normalised enclosure - plain data objects, always with the same keys."
 msgstr "Factory функциите са най-полезната форма за правилата: helper функция, която изгражда **детайлите** на alert, запис за отчет, нормализиран enclosure - обикновени обекти с данни, винаги със същите ключове."
 
 #. heading 3
-#: site/lectures/06-objects.md:1237
-msgid "A constructor function (advanced)"
-msgstr "Функция-конструктор (advanced)"
+#: site/lectures/06-objects.md:1192
+msgid "The class syntax (ES6) (advanced)"
+msgstr "Синтаксисът class (ES6) (advanced)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1239
-msgid "Before classes, JavaScript made objects of one kind with a **constructor**: a function called with `new`. `new` creates an empty object, runs the function with `this` = that object, and returns it. By convention the name starts with a capital letter:"
-msgstr "Преди класовете JavaScript създаваше обекти от един вид с **конструктор**: функция, извикана с `new`. `new` създава празен обект, изпълнява функцията с `this` = този обект и го връща. По конвенция името започва с главна буква:"
-
-#. paragraph
-#: site/lectures/06-objects.md:1259
-msgid "Forget the `new`, and `this` is not a new object - in strict mode the call fails, in older code it writes into the global object. Classes (below) refuse to be called without `new`."
-msgstr "Забравите ли `new`, `this` не е нов обект - в strict mode извикването гърми, в по-стар код пише в глобалния обект. Класовете (по-долу) отказват да бъдат извикани без `new`."
-
-#. heading 3
-#: site/lectures/06-objects.md:1263
-msgid "The class syntax (ES6)"
-msgstr "Синтаксисът class (ES6)"
-
-#. paragraph
-#: site/lectures/06-objects.md:1265
+#: site/lectures/06-objects.md:1194
 msgid "MDN: [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 msgstr "MDN: [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1267
-msgid "A `class` writes the same thing in the form of other object-oriented languages:"
-msgstr "`class` пише същото във формата на другите обектно-ориентирани езици:"
+#: site/lectures/06-objects.md:1196
+msgid "A `class` is another way to make many objects of one kind - the form of other object-oriented languages. `new Developer(...)` creates an empty object and runs `constructor` with `this` = that object:"
+msgstr "`class` е още един начин да направите много обекти от един вид - формата от другите обектно-ориентирани езици. `new Developer(...)` създава празен обект и изпълнява `constructor` с `this` = този обект:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1288
+#: site/lectures/06-objects.md:1219
 msgid "`constructor` runs automatically on `new`; there is only one per class."
 msgstr "`constructor` се изпълнява автоматично при `new`; има само един за клас."
 
 #. paragraph
-#: site/lectures/06-objects.md:1289
-msgid "Methods are written with the short syntax; they are **shared** by all objects of the class (stored once, in the class's *prototype*), not copied into each object."
-msgstr "Методите се пишат с краткия синтаксис; те са **общи** за всички обекти на класа (пазят се веднъж, в *prototype*-а на класа), а не се копират във всеки обект."
+#: site/lectures/06-objects.md:1220
+msgid "Methods are written with the short syntax; they are **shared** by all objects of the class, not copied into each object."
+msgstr "Методите се пишат с краткия синтаксис; те са **общи** за всички обекти на класа, а не се копират във всеки обект."
 
 #. paragraph
-#: site/lectures/06-objects.md:1291
-msgid "The code inside a class is always in strict mode."
-msgstr "Кодът в клас винаги е в strict mode."
-
-#. paragraph
-#: site/lectures/06-objects.md:1292
-msgid "A class can also be written as an expression: `const Developer = class { ... };`."
-msgstr "Клас може да се напише и като израз: `const Developer = class { ... };`."
-
-#. heading 3
-#: site/lectures/06-objects.md:1294
-msgid "Static members, fields, getters and setters (advanced)"
-msgstr "Static членове, полета, getters и setters (advanced)"
-
-#. paragraph
-#: site/lectures/06-objects.md:1335
-msgid "Class fields and `static` fields are ES2022 - check that your rule engine supports them. (Code written before ES2022 sets `Person.count = 0;` after the class.)"
-msgstr "Полетата на класа и `static` полетата са ES2022 - проверете дали rule engine-ът ви ги поддържа. (Код, писан преди ES2022, задава `Person.count = 0;` след класа.)"
-
-#. heading 3
-#: site/lectures/06-objects.md:1338
-msgid "Inheritance: `extends` and `super` (advanced)"
-msgstr "Наследяване: `extends` и `super` (advanced)"
-
-#. paragraph
-#: site/lectures/06-objects.md:1340
-msgid "A class can **extend** another one: it gets all its methods and adds or changes some. `super(...)` calls the parent's constructor (before any use of `this`); `super.method()` calls the parent's version of a method:"
-msgstr "Клас може да **разшири** друг: получава всичките му методи и добавя или променя някои. `super(...)` извиква конструктора на родителя (преди всяка употреба на `this`); `super.method()` извиква версията на метода от родителя:"
+#: site/lectures/06-objects.md:1222
+msgid "A class refuses to be called without `new`."
+msgstr "Класът отказва да бъде извикан без `new`."
 
 #. box title
-#: site/lectures/06-objects.md:1371
+#: site/lectures/06-objects.md:1224
 msgid "Classes and rules"
 msgstr "Класове и правила"
 
 #. paragraph
-#: site/lectures/06-objects.md:1372
+#: site/lectures/06-objects.md:1225
 msgid "Rules work on plain JSON data, and a rule is one function - most rules need no class at all. Factory functions and helpers with parameters are simpler to read and to test. Classes become useful in a bigger library - for example, one class per product with the same methods (`model()`, `firmware()`, `enclosures()`), so that the same rule can run on reports of different shapes (session 10)."
 msgstr "Правилата работят с обикновени JSON данни, а правилото е една функция - повечето правила изобщо нямат нужда от клас. Factory функциите и helper функциите с параметри се четат и тестват по-лесно. Класовете стават полезни в по-голяма библиотека - например по един клас за продукт с еднакви методи (`model()`, `firmware()`, `enclosures()`), така че едно и също правило да работи върху отчети с различни форми (занятие 10)."
 
 #. heading 2
-#: site/lectures/06-objects.md:1379
+#: site/lectures/06-objects.md:1232
 msgid "12. The details object of an alert"
 msgstr "12. Обектът с детайли на alert"
 
 #. paragraph
-#: site/lectures/06-objects.md:1381
+#: site/lectures/06-objects.md:1234
 msgid "`emit(id, details)` creates an alert. The details object becomes a **table** in the alert: every key is a **column**, every value a cell. So the keys are the column titles - written for people, often with spaces - and their **order** is the order of the columns."
 msgstr "`emit(id, details)` създава alert. Обектът с детайли става **таблица** в alert-а: всеки ключ е **колона**, всяка стойност - клетка. Затова ключовете са заглавията на колоните - написани за хора, често с интервали - а техният **ред** е редът на колоните."
 
 #. heading 3
-#: site/lectures/06-objects.md:1404
+#: site/lectures/06-objects.md:1257
 msgid "Fixing the order of the columns"
 msgstr "Фиксиране на реда на колоните"
 
 #. paragraph
-#: site/lectures/06-objects.md:1406
+#: site/lectures/06-objects.md:1259
 msgid "The keys keep the order in which they were **created** (section 1). Two traps:"
 msgstr "Ключовете пазят реда, в който са **създадени** (раздел 1). Два капана:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1408
+#: site/lectures/06-objects.md:1261
 msgid "a key that looks like a whole number (`\"1\"`, `\"2024\"`) jumps to the **front**;"
 msgstr "ключ, който изглежда като цяло число (`\"1\"`, `\"2024\"`), отива **отпред**;"
 
 #. paragraph
-#: site/lectures/06-objects.md:1409
+#: site/lectures/06-objects.md:1262
 msgid "keys added later in an `if` come **last**, wherever you meant them to be."
 msgstr "ключовете, добавени по-късно в `if`, идват **последни**, където и да сте ги искали."
 
 #. paragraph
-#: site/lectures/06-objects.md:1411
+#: site/lectures/06-objects.md:1264
 msgid "Some engines take the order as a separate list - many rules send `column_order: [...]` next to the details. Build it from the keys, or write it out when the order must not depend on the code:"
 msgstr "Някои engines приемат реда като отделен списък - много правила изпращат `column_order: [...]` до детайлите. Изградете го от ключовете или го изпишете изрично, когато редът не бива да зависи от кода:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1435
+#: site/lectures/06-objects.md:1288
 msgid "A missing column becomes `\"\"`, so every alert of a rule has the same columns - easier to read in a table, and easier to compare between devices."
 msgstr "Липсващата колона става `\"\"`, така че всеки alert на едно правило има същите колони - по-лесно се чете в таблица и по-лесно се сравнява между устройствата."
 
 #. heading 3
-#: site/lectures/06-objects.md:1438
+#: site/lectures/06-objects.md:1291
 msgid "An optional column (advanced)"
 msgstr "Колона по желание (advanced)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1440
+#: site/lectures/06-objects.md:1293
 msgid "To add a column only when there is a value, build the object first and add the key in an `if` - or use spread with a condition:"
 msgstr "За да добавите колона само когато има стойност, първо изградете обекта и добавете ключа в `if` - или използвайте spread с условие:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1455
+#: site/lectures/06-objects.md:1308
 msgid "Spreading `{}` adds nothing. This keeps the object in one expression - but an `if` is easier to read; choose the one your team reads more easily."
 msgstr "Spread на `{}` не добавя нищо. Така обектът остава в един израз - но `if` се чете по-лесно; изберете това, което екипът ви чете по-лесно."
 
 #. heading 2
-#: site/lectures/06-objects.md:1458
+#: site/lectures/06-objects.md:1311
 msgid "13. Reading existing rules"
 msgstr "13. Четене на съществуващи правила"
 
 #. paragraph
-#: site/lectures/06-objects.md:1460
+#: site/lectures/06-objects.md:1313
 msgid "First, run the rule from the start of the lecture:"
 msgstr "Първо изпълнете правилото от началото на лекцията:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1516
+#: site/lectures/06-objects.md:1369
 msgid "Here is the same rule in an older style - `new Object()`, `obj[\"key\"] = ...`, `for...in` with `hasOwnProperty`, and `&&` chains:"
 msgstr "Ето същото правило в по-стар стил - `new Object()`, `obj[\"key\"] = ...`, `for...in` с `hasOwnProperty` и вериги с `&&`:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1571
+#: site/lectures/06-objects.md:1424
 msgid "**Check yourself:**"
 msgstr "**Проверете се:**"
 
 #. paragraph
-#: site/lectures/06-objects.md:1573
+#: site/lectures/06-objects.md:1426
 msgid "Match the parts: which line of the old rule does the work of `failedModules`, of `get(...)`, of the destructuring, of `Object.keys(details)`?"
 msgstr "Съпоставете частите: кой ред от старото правило върши работата на `failedModules`, на `get(...)`, на destructuring-а, на `Object.keys(details)`?"
 
 #. paragraph
-#: site/lectures/06-objects.md:1575
+#: site/lectures/06-objects.md:1428
 msgid "\"no modules\": `doc.inventory.modules` is `undefined`. What does `for (var key in undefined)` do? Is that why the old rule gives no alert there?"
 msgstr "\"no modules\": `doc.inventory.modules` е `undefined`. Какво прави `for (var key in undefined)`? Затова ли старото правило не дава alert там?"
 
 #. paragraph
-#: site/lectures/06-objects.md:1577
+#: site/lectures/06-objects.md:1430
 msgid "\"no labels\": the old rule gives **no** alert, the modern rule would. Which line fails, and why does nobody see an error?"
 msgstr "\"no labels\": старото правило **не** дава alert, модерното би дало. Кой ред гърми и защо никой не вижда грешка?"
 
 #. paragraph
-#: site/lectures/06-objects.md:1579
+#: site/lectures/06-objects.md:1432
 msgid "`details[\"Device\"] = info && ... && info.json.data.system.name || \"unknown\"` - when does it give `\"unknown\"`? Is that the same as `?? \"unknown\"` at the end of `get(...)`? Think of a name that is `\"\"`."
 msgstr "`details[\"Device\"] = info && ... && info.json.data.system.name || \"unknown\"` - кога дава `\"unknown\"`? Същото ли е като `?? \"unknown\"` в края на `get(...)`? Помислете за име, което е `\"\"`."
 
 #. paragraph
-#: site/lectures/06-objects.md:1582
+#: site/lectures/06-objects.md:1435
 msgid "The old rule builds `columns` with `for...in`. Do `Object.keys(details)` and this loop give the same order?"
 msgstr "Старото правило изгражда `columns` с `for...in`. Дават ли `Object.keys(details)` и този цикъл същия ред?"
 
 #. box title
-#: site/lectures/06-objects.md:1585
+#: site/lectures/06-objects.md:1438
 msgid "Answer"
 msgstr "Отговор"
 
 #. paragraph
-#: site/lectures/06-objects.md:1586
+#: site/lectures/06-objects.md:1439
 msgid "The `for...in` loop with `hasOwnProperty` and `split` is `failedModules`; the `info && info.json && ...` chain is `get(doc, \"inventory.extended_info...\")`; `var overview = doc.overview` plus `overview.model` / `overview.serial_number` is the destructuring; the `for (var k in details)` loop is `Object.keys(details)`."
 msgstr "Цикълът `for...in` с `hasOwnProperty` и `split` е `failedModules`; веригата `info && info.json && ...` е `get(doc, \"inventory.extended_info...\")`; `var overview = doc.overview` плюс `overview.model` / `overview.serial_number` е destructuring-ът; цикълът `for (var k in details)` е `Object.keys(details)`."
 
 #. paragraph
-#: site/lectures/06-objects.md:1590
+#: site/lectures/06-objects.md:1443
 msgid "`for...in` over `undefined` (or `null`) runs zero times - no error. `failed` stays empty and the rule returns: no alert, the same as the modern rule. Correct here, by luck."
 msgstr "`for...in` върху `undefined` (или `null`) се изпълнява нула пъти - без грешка. `failed` остава празен и правилото връща: без alert, както и модерното правило. Тук е вярно, по случайност."
 
 #. paragraph
-#: site/lectures/06-objects.md:1593
+#: site/lectures/06-objects.md:1446
 msgid "`doc.inventory.labels[\"Firmware Version\"]` - `labels` is `undefined`, so reading a key of it throws a `TypeError`. The catch-all `catch` returns silently: a failed module is never reported. The modern rule uses `labels?.[\"Firmware Version\"] ?? \"\"`."
 msgstr "`doc.inventory.labels[\"Firmware Version\"]` - `labels` е `undefined`, затова четенето на ключ от него хвърля `TypeError`. `catch`, който хваща всичко, връща тихо: провален модул никога не се докладва. Модерното правило използва `labels?.[\"Firmware Version\"] ?? \"\"`."
 
 #. paragraph
-#: site/lectures/06-objects.md:1597
+#: site/lectures/06-objects.md:1450
 msgid "When any level is missing - **or** when the name is falsy: `\"\"` gives `\"unknown\"` with `||`. `get` uses `??`, so an empty name stays `\"\"`. Decide which one you want: for a display name, `||` (treat `\"\"` as missing) is often right."
 msgstr "Когато липсва някое ниво - **или** когато името е falsy: `\"\"` дава `\"unknown\"` с `||`. `get` използва `??`, затова празното име остава `\"\"`. Решете кое искате: за име, което се показва, `||` (третира `\"\"` като липсващо) често е правилното."
 
 #. paragraph
-#: site/lectures/06-objects.md:1600
+#: site/lectures/06-objects.md:1453
 msgid "Yes - both list the own keys in the same order (section 1)."
 msgstr "Да - и двете изброяват собствените ключове в същия ред (раздел 1)."
 
 #. heading 2
-#: site/lectures/06-objects.md:1603
+#: site/lectures/06-objects.md:1456
 msgid "14. Practice"
 msgstr "14. Упражнения"
 
 #. paragraph
-#: site/lectures/06-objects.md:1605
+#: site/lectures/06-objects.md:1458
 msgid "In your copy of the Homework repository, first get the new tasks:"
 msgstr "Във вашето копие на Homework repository първо вземете новите задачи:"
 
 #. paragraph
-#: site/lectures/06-objects.md:1612
+#: site/lectures/06-objects.md:1465
 msgid "`data/sample-asset.json` has two new parts (`inventory.modules`, `inventory.labels`) - the pull brings them too."
 msgstr "`data/sample-asset.json` има две нови части (`inventory.modules`, `inventory.labels`) - pull-ът ги донася също."
 
 #. paragraph
-#: site/lectures/06-objects.md:1615
+#: site/lectures/06-objects.md:1468
 msgid "Each file is split into parts. A part has its description, then the `your code` lines - write your code between them - and right after them its checks, which print `OK` or `FAIL`."
 msgstr "Всеки файл е разделен на части. Всяка част има описание, след него редовете `your code` - пишете кода си между тях - и веднага след тях нейните проверки, които отпечатват `OK` или `FAIL`."
 
 #. table cell
-#: site/lectures/06-objects.md:1619
+#: site/lectures/06-objects.md:1472
 msgid "Task"
 msgstr "Задача"
 
 #. table cell
-#: site/lectures/06-objects.md:1619
+#: site/lectures/06-objects.md:1472
 msgid "File"
 msgstr "Файл"
 
 #. table cell
-#: site/lectures/06-objects.md:1619
+#: site/lectures/06-objects.md:1472
 msgid "What you do"
 msgstr "Какво правите"
 
 #. table cell
-#: site/lectures/06-objects.md:1621
+#: site/lectures/06-objects.md:1474
 msgid "Predict 20 results: dot and brackets, missing keys, `in`, `?.`, `??`, references, spread, destructuring"
 msgstr "Предсказвате 20 резултата: точка и скоби, липсващи ключове, `in`, `?.`, `??`, референции, spread, destructuring"
 
 #. table cell
-#: site/lectures/06-objects.md:1622
+#: site/lectures/06-objects.md:1475
 msgid "**The course project starts:** `get(obj, path, fallback)` with a string or an array path, and all the edge cases"
 msgstr "**Курсовият проект започва:** `get(obj, path, fallback)` с път като string или array, и всички гранични случаи"
 
 #. table cell
-#: site/lectures/06-objects.md:1623
+#: site/lectures/06-objects.md:1476
 msgid "The dictionaries of `report-dictionary.json`: keys, values, information in the keys, counting and grouping"
 msgstr "Dictionaries в `report-dictionary.json`: ключове, стойности, информация в ключовете, броене и групиране"
 
 #. table cell
-#: site/lectures/06-objects.md:1624
+#: site/lectures/06-objects.md:1477
 msgid "The flattened export `report-export.json`: read single values, rebuild records from parallel arrays, compare with the nested document"
 msgstr "Сплесканият експорт `report-export.json`: четене на единични стойности, възстановяване на записи от успоредни arrays, сравнение с вложения документ"
 
 #. table cell
-#: site/lectures/06-objects.md:1625
-msgid "Classic tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person"
-msgstr "Класически задачи: factory, class, `swap` с destructuring, `createPerson` със съкратени properties и метод, `combineArrays`, най-младият човек"
+#: site/lectures/06-objects.md:1478
+msgid "Classic tasks: a factory, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays` with spread, the youngest person"
+msgstr "Класически задачи: factory, `swap` с destructuring, `createPerson` със съкратени properties и метод, `combineArrays` със spread, най-младият човек"
 
 #. heading 2
-#: site/lectures/06-objects.md:1627
+#: site/lectures/06-objects.md:1480
 msgid "Summary"
 msgstr "Обобщение"
 
 #. table cell
-#: site/lectures/06-objects.md:1629
+#: site/lectures/06-objects.md:1482
 msgid "Topic"
 msgstr "Тема"
 
 #. table cell
-#: site/lectures/06-objects.md:1629
+#: site/lectures/06-objects.md:1482
 msgid "Remember"
 msgstr "Запомнете"
 
 #. table cell
-#: site/lectures/06-objects.md:1631
+#: site/lectures/06-objects.md:1484
 msgid "Properties `key: value`; keys are strings; values of any type; a method is a function value"
 msgstr "Properties `key: value`; ключовете са strings; стойности от всеки тип; методът е стойност-функция"
 
 #. table cell
-#: site/lectures/06-objects.md:1632
+#: site/lectures/06-objects.md:1485
 msgid "Literal"
 msgstr "Литерал"
 
 #. table cell
-#: site/lectures/06-objects.md:1632
+#: site/lectures/06-objects.md:1485
 msgid "`{ a: 1, \"b c\": 2, [expr]: 3, name }` - quotes for keys with spaces, dashes, dots; shorthand; computed keys"
 msgstr "`{ a: 1, \"b c\": 2, [expr]: 3, name }` - кавички за ключове с интервали, тирета, точки; съкратени properties; изчислявани ключове"
 
 #. table cell
-#: site/lectures/06-objects.md:1633
+#: site/lectures/06-objects.md:1486
 msgid "Access"
 msgstr "Достъп"
 
 #. table cell
-#: site/lectures/06-objects.md:1633
+#: site/lectures/06-objects.md:1486
 msgid "`obj.key` - written key; `obj[expr]` - calculated key; missing key -> `undefined`; writing creates; `delete` removes"
 msgstr "`obj.key` - написан ключ; `obj[expr]` - изчислен ключ; липсващ ключ -> `undefined`; записът създава; `delete` премахва"
 
 #. table cell
-#: site/lectures/06-objects.md:1634
+#: site/lectures/06-objects.md:1487
 msgid "Key exists?"
 msgstr "Има ли ключ?"
 
 #. table cell
-#: site/lectures/06-objects.md:1634
+#: site/lectures/06-objects.md:1487
 msgid "`in` (also inherited), `hasOwnProperty` (older), `Object.hasOwn` (ES2022); often better: check the value"
 msgstr "`in` (и наследените), `hasOwnProperty` (по-старо), `Object.hasOwn` (ES2022); често по-добре: проверете стойността"
 
 #. table cell
-#: site/lectures/06-objects.md:1635
+#: site/lectures/06-objects.md:1488
 msgid "Long paths"
 msgstr "Дълги пътища"
 
 #. table cell
-#: site/lectures/06-objects.md:1635
+#: site/lectures/06-objects.md:1488
 msgid "One dot at a time; a key of `undefined` is a `TypeError`; `?.` stops at `undefined` / `null`; `??` gives a fallback"
 msgstr "По една точка; ключ на `undefined` е `TypeError`; `?.` спира при `undefined` / `null`; `??` дава резервна стойност"
 
 #. table cell
-#: site/lectures/06-objects.md:1636
+#: site/lectures/06-objects.md:1489
 msgid "Walks a path from data; array path for keys with dots; fallback instead of errors"
 msgstr "Обхожда път от данните; път като array за ключове с точки; fallback вместо грешки"
 
 #. table cell
-#: site/lectures/06-objects.md:1637
+#: site/lectures/06-objects.md:1490
 msgid "Dictionary"
 msgstr "Dictionary"
 
 #. table cell
-#: site/lectures/06-objects.md:1637
+#: site/lectures/06-objects.md:1490
 msgid "Keys are ids; `Object.keys` / `values` / `entries`; `for...in` + `hasOwnProperty` in older code; information in the key"
 msgstr "Ключовете са id-та; `Object.keys` / `values` / `entries`; `for...in` + `hasOwnProperty` в по-стария код; информация в ключа"
 
 #. table cell
-#: site/lectures/06-objects.md:1638
+#: site/lectures/06-objects.md:1491
 msgid "Shapes"
 msgstr "Форми"
 
 #. table cell
-#: site/lectures/06-objects.md:1638
+#: site/lectures/06-objects.md:1491
 msgid "List of records, dictionary by id, flattened `\"a.b.c\": [values]` - convert once, at the start"
 msgstr "Списък от записи, dictionary по id, сплескано `\"a.b.c\": [values]` - преобразувайте веднъж, в началото"
 
 #. table cell
-#: site/lectures/06-objects.md:1639
+#: site/lectures/06-objects.md:1492
 msgid "Order of keys"
 msgstr "Ред на ключовете"
 
 #. table cell
-#: site/lectures/06-objects.md:1639
+#: site/lectures/06-objects.md:1492
 msgid "Integer-like keys first (sorted), then creation order - it is the column order of an alert"
 msgstr "Ключовете като цели числа първи (сортирани), после по реда на създаване - това е редът на колоните на alert"
 
 #. table cell
-#: site/lectures/06-objects.md:1640
+#: site/lectures/06-objects.md:1493
 msgid "Copies"
 msgstr "Копия"
 
 #. table cell
-#: site/lectures/06-objects.md:1640
+#: site/lectures/06-objects.md:1493
 msgid "`=` shares; `{ ...obj }` copies one level; `structuredClone` copies all levels; do not change `doc`"
 msgstr "`=` споделя; `{ ...obj }` копира едно ниво; `structuredClone` копира всички нива; не променяйте `doc`"
 
 #. table cell
-#: site/lectures/06-objects.md:1641
+#: site/lectures/06-objects.md:1494
 msgid "Spread pours out (calls, arrays, objects); rest collects (parameters, destructuring)"
 msgstr "Spread изсипва (извиквания, arrays, обекти); rest събира (параметри, destructuring)"
 
 #. table cell
-#: site/lectures/06-objects.md:1642
+#: site/lectures/06-objects.md:1495
 msgid "Destructuring"
 msgstr "Destructuring"
 
 #. table cell
-#: site/lectures/06-objects.md:1642
+#: site/lectures/06-objects.md:1495
 msgid "`const [a, b] = arr;` by position; `const { x, y: z = 0 } = obj;` by name; also in parameters"
 msgstr "`const [a, b] = arr;` по позиция; `const { x, y: z = 0 } = obj;` по име; също и в параметрите"
 
 #. table cell
-#: site/lectures/06-objects.md:1643
+#: site/lectures/06-objects.md:1496
 msgid "The object before the dot at the call; lost when a method is passed on; arrows have none"
 msgstr "Обектът преди точката при извикването; губи се, когато методът се подаде нататък; arrow функциите нямат свой"
 
 #. table cell
-#: site/lectures/06-objects.md:1644
+#: site/lectures/06-objects.md:1497
 msgid "Many objects"
 msgstr "Много обекти"
 
 #. table cell
-#: site/lectures/06-objects.md:1644
-msgid "Factory function (best for rules), constructor with `new`, `class` with `constructor`, methods, `static`, `extends` / `super`"
-msgstr "Factory функция (най-добра за правилата), конструктор с `new`, `class` с `constructor`, методи, `static`, `extends` / `super`"
+#: site/lectures/06-objects.md:1497
+msgid "A factory function returns a new object with the same keys every time - the best form for rules"
+msgstr "Factory функцията връща всеки път нов обект със същите ключове - най-добрата форма за правила"
 
 #. table cell
-#: site/lectures/06-objects.md:1645
+#: site/lectures/06-objects.md:1498
 msgid "Old style"
 msgstr "Стар стил"
 
 #. table cell
-#: site/lectures/06-objects.md:1645
+#: site/lectures/06-objects.md:1498
 msgid "`new Object()`, `obj[\"k\"] = v`, `for (var k in obj)` + `hasOwnProperty`, `a && a.b && a.b.c` - read it, modernise it"
 msgstr "`new Object()`, `obj[\"k\"] = v`, `for (var k in obj)` + `hasOwnProperty`, `a && a.b && a.b.c` - четете го, модернизирайте го"
 
 #. heading 2
-#: site/lectures/06-objects.md:1647
+#: site/lectures/06-objects.md:1500
 msgid "Homework"
 msgstr "Домашно"
 
 #. paragraph
-#: site/lectures/06-objects.md:1649
+#: site/lectures/06-objects.md:1502
 msgid "`06-objects/homework.js` (in the homework repository): the details object of an alert with a fixed column order, settings merged with defaults, and a rule that reads the dictionary of drives - without changing the report."
 msgstr "`06-objects/homework.js` (в homework repository): обектът с детайли на alert с фиксиран ред на колоните, настройки, обединени със стойности по подразбиране, и правило, което чете dictionary от дискове - без да променя отчета."
 
 #. paragraph
-#: site/lectures/06-objects.md:1652
+#: site/lectures/06-objects.md:1505
 msgid "The practice tasks you did not finish in class - recommended, as later tasks and the course project reuse them. Every check must print `OK`."
 msgstr "Задачите за упражнение, които не сте довършили в час - препоръчително, защото следващите задачи и курсовият проект ги използват отново. Всяка проверка трябва да отпечата `OK`."
 
 #. paragraph
-#: site/lectures/06-objects.md:1654
-msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`). From the next session on, the library grows."
-msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`). От следващото занятие нататък библиотеката расте."
+#: site/lectures/06-objects.md:1507
+msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`) - it goes into your project repository. The steps of the project, session by session, are on the page [Course project](/project)."
+msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`) - тя отива в repository-то на проекта ви. Стъпките на проекта, занятие по занятие, са на страницата [Курсов проект](/project)."
 
 #. paragraph
-#: site/lectures/06-objects.md:1656
+#: site/lectures/06-objects.md:1510
 msgid "Optional: open one of your real reports and find each of the shapes of section 7. Which paths do your rules read again and again? Write them down as `get` paths."
 msgstr "По желание: отворете един от вашите истински отчети и намерете всяка от формите от раздел 7. Кои пътища правилата ви четат отново и отново? Запишете ги като пътища за `get`."
 
 #. heading 2
-#: site/lectures/06-objects.md:1660
+#: site/lectures/06-objects.md:1514
 msgid "Read more"
 msgstr "Още за четене"
 
 #. paragraph
-#: site/lectures/06-objects.md:1662
+#: site/lectures/06-objects.md:1516
 msgid "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring), [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 msgstr "MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects), [Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries), [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring), [Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1669
+#: site/lectures/06-objects.md:1523
 msgid "MDN exercises: [Test your skills: Object basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Test_your_skills/Object_basics)"
 msgstr "Упражнения в MDN: [Test your skills: Object basics](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Test_your_skills/Object_basics)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1670
+#: site/lectures/06-objects.md:1524
 msgid "javascript.info: [Objects](https://javascript.info/object), [Object references and copying](https://javascript.info/object-copy), [Object methods, \"this\"](https://javascript.info/object-methods), [Destructuring assignment](https://javascript.info/destructuring-assignment), [Classes](https://javascript.info/classes)"
 msgstr "javascript.info: [Objects](https://javascript.info/object), [Object references and copying](https://javascript.info/object-copy), [Object methods, \"this\"](https://javascript.info/object-methods), [Destructuring assignment](https://javascript.info/destructuring-assignment), [Classes](https://javascript.info/classes)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1675
+#: site/lectures/06-objects.md:1529
 msgid "Exercises: [JavaScript Object - Exercises](https://www.w3resource.com/javascript-exercises/javascript-object-exercises.php) (w3resource)"
 msgstr "Упражнения: [JavaScript Object - Exercises](https://www.w3resource.com/javascript-exercises/javascript-object-exercises.php) (w3resource)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1676
+#: site/lectures/06-objects.md:1530
 msgid "Video: [Modern JavaScript Tutorial #5 - Objects](https://www.youtube.com/watch?v=X0ipw1k7ygU)"
 msgstr "Видео: [Modern JavaScript Tutorial #5 - Objects](https://www.youtube.com/watch?v=X0ipw1k7ygU)"
 
 #. paragraph
-#: site/lectures/06-objects.md:1678
+#: site/lectures/06-objects.md:1532
 msgid "**Next session:** array methods - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - and grouping thousands of records into a dictionary once, instead of searching them again and again. The course project starts for real: choose the product, the sample documents and the first helpers."
 msgstr "**Следващото занятие:** методи на arrays - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - и групиране на хиляди записи в dictionary веднъж, вместо да ги търсите отново и отново. Курсовият проект започва истински: изберете продукта, примерните документи и първите helper функции."
+
+#~ msgid "write methods and know what `this` is; create many objects of one kind with a factory function, a constructor and a `class`;"
+#~ msgstr "пишете методи и да знаете какво е `this`; да създавате много обекти от един вид с factory функция, конструктор и `class`;"
+
+#~ msgid "Computed keys (ES6)"
+#~ msgstr "Изчислявани ключове (ES6)"
+
+#~ msgid "It works, but `{ ... }` is shorter and shows the whole object at once. Do not mix it up with `new Developer(...)` - a call of a **constructor** ([section 11](#_11-many-objects-of-one-kind))."
+#~ msgstr "Работи, но `{ ... }` е по-кратко и показва целия обект наведнъж. Не го бъркайте с `new Developer(...)` - извикване на **конструктор** ([раздел 11](#_11-many-objects-of-one-kind))."
+
+#~ msgid "An example: flip one property and keep the rest:"
+#~ msgstr "Пример: обърнете едно property и запазете останалите:"
+
+#~ msgid "Rest `...` - collect the rest"
+#~ msgstr "Rest `...` - събиране на останалото"
+
+#~ msgid "When the variables already exist, wrap the assignment in round brackets (otherwise `{` starts a block):"
+#~ msgstr "Когато variables вече съществуват, оградете присвояването в кръгли скоби (иначе `{` започва блок):"
+
+#~ msgid "10. Methods and `this`"
+#~ msgstr "10. Методи и `this`"
+
+#~ msgid "Literals - repeated code (optional)"
+#~ msgstr "Литерали - повтарящ се код (optional)"
+
+#~ msgid "The keys and the method are written twice - and a typo in one copy gives two objects with different shapes."
+#~ msgstr "Ключовете и методът са написани два пъти - и правописна грешка в едното копие дава два обекта с различна форма."
+
+#~ msgid "A constructor function (advanced)"
+#~ msgstr "Функция-конструктор (advanced)"
+
+#~ msgid "Before classes, JavaScript made objects of one kind with a **constructor**: a function called with `new`. `new` creates an empty object, runs the function with `this` = that object, and returns it. By convention the name starts with a capital letter:"
+#~ msgstr "Преди класовете JavaScript създаваше обекти от един вид с **конструктор**: функция, извикана с `new`. `new` създава празен обект, изпълнява функцията с `this` = този обект и го връща. По конвенция името започва с главна буква:"
+
+#~ msgid "Forget the `new`, and `this` is not a new object - in strict mode the call fails, in older code it writes into the global object. Classes (below) refuse to be called without `new`."
+#~ msgstr "Забравите ли `new`, `this` не е нов обект - в strict mode извикването гърми, в по-стар код пише в глобалния обект. Класовете (по-долу) отказват да бъдат извикани без `new`."
+
+#~ msgid "The class syntax (ES6)"
+#~ msgstr "Синтаксисът class (ES6)"
+
+#~ msgid "A `class` writes the same thing in the form of other object-oriented languages:"
+#~ msgstr "`class` пише същото във формата на другите обектно-ориентирани езици:"
+
+#~ msgid "Methods are written with the short syntax; they are **shared** by all objects of the class (stored once, in the class's *prototype*), not copied into each object."
+#~ msgstr "Методите се пишат с краткия синтаксис; те са **общи** за всички обекти на класа (пазят се веднъж, в *prototype*-а на класа), а не се копират във всеки обект."
+
+#~ msgid "The code inside a class is always in strict mode."
+#~ msgstr "Кодът в клас винаги е в strict mode."
+
+#~ msgid "A class can also be written as an expression: `const Developer = class { ... };`."
+#~ msgstr "Клас може да се напише и като израз: `const Developer = class { ... };`."
+
+#~ msgid "Static members, fields, getters and setters (advanced)"
+#~ msgstr "Static членове, полета, getters и setters (advanced)"
+
+#~ msgid "Class fields and `static` fields are ES2022 - check that your rule engine supports them. (Code written before ES2022 sets `Person.count = 0;` after the class.)"
+#~ msgstr "Полетата на класа и `static` полетата са ES2022 - проверете дали rule engine-ът ви ги поддържа. (Код, писан преди ES2022, задава `Person.count = 0;` след класа.)"
+
+#~ msgid "Inheritance: `extends` and `super` (advanced)"
+#~ msgstr "Наследяване: `extends` и `super` (advanced)"
+
+#~ msgid "A class can **extend** another one: it gets all its methods and adds or changes some. `super(...)` calls the parent's constructor (before any use of `this`); `super.method()` calls the parent's version of a method:"
+#~ msgstr "Клас може да **разшири** друг: получава всичките му методи и добавя или променя някои. `super(...)` извиква конструктора на родителя (преди всяка употреба на `this`); `super.method()` извиква версията на метода от родителя:"
+
+#~ msgid "Classic tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person"
+#~ msgstr "Класически задачи: factory, class, `swap` с destructuring, `createPerson` със съкратени properties и метод, `combineArrays`, най-младият човек"
+
+#~ msgid "Factory function (best for rules), constructor with `new`, `class` with `constructor`, methods, `static`, `extends` / `super`"
+#~ msgstr "Factory функция (най-добра за правилата), конструктор с `new`, `class` с `constructor`, методи, `static`, `extends` / `super`"
+
+#~ msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`). From the next session on, the library grows."
+#~ msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`). От следващото занятие нататък библиотеката расте."
 
 #~ msgid "From pairs back to an object (ES2019)"
 #~ msgstr "От двойки обратно към обект (ES2019)"

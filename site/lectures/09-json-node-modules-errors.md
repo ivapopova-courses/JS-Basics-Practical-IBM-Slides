@@ -135,13 +135,6 @@ A JSON document with the six types:
 VSCode checks `.json` files as you type (red underlines), and online validators such
 as [JSONLint](https://jsonlint.com/) show the exact position of an error.
 
-::: info JSON and XML
-Before JSON, data was often exchanged as XML:
-`<features><feature>dedup</feature><feature>compression</feature></features>`.
-JSON says the same with less text - `{"features": ["dedup", "compression"]}` - and
-maps directly to the objects and arrays of JavaScript.
-:::
-
 ### `null`: "known to be empty"
 
 `undefined` does not exist in JSON - a key is either there or not. `null` is how a
@@ -252,18 +245,6 @@ const masked = JSON.stringify(doc.overview, (key, value) =>
 console.log(masked);    // {"model":"XR-220","serial_number":"***92","version":"4.2.1.7"}
 ```
 
-### The reviver of `JSON.parse` (advanced)
-
-`JSON.parse` has a similar second argument, the *reviver*, called for every key and
-value while parsing - for example to turn ISO date strings into `Date` objects:
-
-```js run
-const text = '{ "device": "LAB-DEV-01", "checked": "2026-10-12T18:25:23.000Z" }';
-const obj = JSON.parse(text, (key, value) =>
-    typeof value === "string" && /^\d{4}-\d\d-\d\dT/.test(value) ? new Date(value) : value);
-console.log(obj.checked instanceof Date, obj.checked.getUTCHours());   // true 18
-```
-
 ### What JSON cannot hold
 
 `JSON.stringify` silently drops or changes what JSON cannot represent:
@@ -282,7 +263,7 @@ const value = {
 console.log(JSON.stringify(value));
 
 try {
-    JSON.stringify({ big: 10n });       // a BigInt (lecture 8)
+    JSON.stringify({ big: 10n });       // a BigInt: a whole number of any size
 } catch (err) {
     console.log(err.name + ": " + err.message);
 }
@@ -383,26 +364,6 @@ In Node.js, `log` and `info` write to **stdout** (the normal output), `warn` and
 `error` to **stderr** (the error output). `node run-rule.js > alerts.json` saves only
 stdout in the file - the error messages still appear on the screen.
 
-### Node.js can also be a server (advanced)
-
-Node.js is best known for web servers - a server is a program that waits for
-requests and answers them. A minimal one, with the built-in `http` module:
-
-```js
-// server.js - run it, then open http://localhost:3000 in the browser
-const http = require("node:http");
-
-const server = http.createServer((request, response) => {
-    response.setHeader("Content-Type", "application/json");
-    response.end(JSON.stringify({ device: "LAB-DEV-01", state: "normal" }));
-});
-server.listen(3000, () => console.log("listening on http://localhost:3000"));
-```
-
-Frameworks such as Express make bigger servers easier. Servers are outside this
-course - but now you know where the JSON of a web
-API comes from (section 9).
-
 ## 4. Files: `fs` and `path`
 
 Node.js: [File system](https://nodejs.org/api/fs.html), [Path](https://nodejs.org/api/path.html)
@@ -467,29 +428,6 @@ remembers it - section 6), and every `require` of the same file gives the **same
 object - a change by one helper is seen by all. For data that changes, or for many
 files, use `fs.readFileSync` + `JSON.parse`.
 
-### Reading without waiting: the callback version (advanced)
-
-`readFileSync` makes the program **wait** until the file is read (*synchronous*).
-`fs.readFile` (without `Sync`) starts reading and calls a function when it is done -
-meanwhile the program goes on:
-
-```js
-const fs = require("node:fs");
-
-fs.readFile("data/sample-asset.json", "utf8", (err, text) => {
-    if (err) {
-        console.error("Error reading the file:", err.message);
-        return;
-    }
-    console.log("The model:", JSON.parse(text).overview.model);
-});
-console.log("This line is printed first.");
-```
-
-The callback gets the error first (`null` when there is none) - the classic Node.js
-style. Section 8 shows the modern form with `await`. For small scripts like a rule
-runner, the `Sync` functions are fine and simpler.
-
 ## 5. npm: packages and `package.json`
 
 **npm** (*Node Package Manager*) comes with Node.js. It is two things: the
@@ -528,7 +466,7 @@ often, and the **dependencies** - the packages it needs.
   long command lines.
 - `"type": "commonjs"` or `"module"` decides how `.js` files are treated (section 6).
 
-### Installing packages
+### Installing packages (advanced)
 
 ```bash
 npm install some-package              # a dependency of the project
@@ -622,7 +560,7 @@ from. Locally, Node.js would look for a **package** named `library.js` in
 `node_modules`; section 10 gives the rule our own file instead.
 :::
 
-### ES modules: `export` and `import`
+### ES modules: `export` and `import` (advanced)
 
 MDN: [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export), [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 
@@ -660,22 +598,6 @@ console.log(lib.DEFAULT_LEVEL);
 
 **Which one for the course project?** CommonJS - because your rule engine loads the
 library with `require`. Your tools and tests may use either.
-
-### Before modules: one global object (advanced)
-
-Before modules, a library put everything into **one** global object, wrapped in an
-IIFE (lecture 5) so that its helpers stayed private:
-
-```js
-var library = (function () {
-    function compareVersions(a, b) { /* ... */ }
-    function versionBelow(a, b) { return compareVersions(a, b) < 0; }
-    return { compareVersions: compareVersions, versionBelow: versionBelow };
-})();
-```
-
-You may still meet this pattern in old code. A module does the same, cleaner: the file
-is the private scope, `module.exports` is the returned object.
 
 ## 7. Errors
 
@@ -801,25 +723,6 @@ console.log(checkReport(doc));
 console.log(checkReport({ status: { device_alias: "LAB-DEV-04" }, inventory: {} }));
 ```
 
-### `try` / `finally` without `catch` (optional)
-
-`try` / `finally` without `catch` also exists - the error is **not** caught, but
-`finally` still runs before it goes up:
-
-```js run
-try {
-    try {
-        console.log("Try 1");
-        console.log(x);                 // a ReferenceError
-    } finally {
-        console.log("Finally 1");       // runs first
-    }
-    console.log("never printed");
-} catch (err) {
-    console.log("caught outside:", err.name);
-}
-```
-
 ### `throw`: raise your own error
 
 MDN: [throw](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw)
@@ -923,26 +826,7 @@ function parseOrNull(text) {
 console.log(parseOrNull('{"a": 1}'), parseOrNull("{a: 1}"));   // { a: 1 } null
 ```
 
-### All the types in one chain (optional)
-
-You can also check all the types in one `if...else if` chain:
-
-```js run
-try {
-    console.log(x);
-} catch (e) {
-    if (e instanceof EvalError) console.log("EvalError");
-    else if (e instanceof RangeError) console.log("RangeError");
-    else if (e instanceof ReferenceError) console.log("ReferenceError");
-    else if (e instanceof SyntaxError) console.log("SyntaxError");
-    else if (e instanceof TypeError) console.log("TypeError");
-    else if (e instanceof URIError) console.log("URIError");
-    else console.log("Error!");
-}
-// ReferenceError
-```
-
-### Your own error classes
+### Your own error classes (advanced)
 
 A class that **extends** `Error` (lecture 6) gives your errors their own name - and
 room for more information:
@@ -972,27 +856,7 @@ try {
 }
 ```
 
-### Error classes before `class`: the ES5 way (advanced)
-
-Before classes, the same was written with a constructor function and its prototype
-(the *ES5 way*):
-
-```js run
-function DivideByZero(message) {
-    this.name = "DivideByZero";
-    this.message = message || "Cannot divide by zero";
-    this.stack = new Error().stack;
-}
-DivideByZero.prototype = Object.create(Error.prototype);
-
-try {
-    throw new DivideByZero();
-} catch (e) {
-    console.log(e.name, "-", e.message, "-", e instanceof Error);   // DivideByZero - Cannot divide by zero - true
-}
-```
-
-### A clearer error with a `cause` (ES2022)
+### A clearer error with a `cause` (ES2022) (advanced)
 
 When you catch an error and throw a new, clearer one, keep the original as the
 **cause** (ES2022):
@@ -1043,19 +907,7 @@ Better:
 
 Section 11 runs both versions on the same reports.
 
-### Global error handlers and error tracking (advanced)
-
-A browser page can catch every error that nobody caught with `window.onerror` - the
-handler gets `message`, `source`, `lineno`, `colno` and `error`. Node.js
-has `process.on("uncaughtException", handler)`. Both are a last resort for logging,
-not a way to continue as if nothing happened.
-
-In production, errors and logs are usually sent to a **log management** or **error
-tracking** service (older names: Loggly, Rollbar; today often Sentry or the logging
-of the platform) - so that someone sees them. Ask what your rule engine does with the
-errors of a rule.
-
-## 8. Code that waits: promises, `async` and `await`
+## 8. Code that waits: promises, `async` and `await` (advanced)
 
 ::: info Not for rules
 Rule engines run a rule from start to end at once - rules do not wait for files or
@@ -1082,75 +934,6 @@ let sum = 0;
 for (let i = 0; i < 10_000_000; i++) sum += i;     // busy for a moment
 console.log("End", sum);
 // Start, End ..., and only then: Hello from the timer
-```
-
-### The event loop (advanced)
-
-MDN: [JavaScript execution model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model)
-
-JavaScript runs on **one thread**, with one **call stack** (lecture 5). Waiting work -
-timers, files, network answers - is done outside it; when it is ready, its callback
-goes into a **queue**. The **event loop** takes the next callback from the queue
-whenever the call stack is **empty**. That is why the timer above runs after
-`console.log("End")`: the stack was busy until then.
-
-See it step by step in [JavaScript Visualizer 9000](https://www.jsv9000.app/), and in
-the talk "Everything You Need to Know About Node.js Event Loop" (Bert Belder) linked
-in Read more.
-
-### From callbacks to promises (advanced)
-
-MDN: [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), [Using promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
-
-A story in three steps: prepare dinner (2 s), then eat it (0.5 s), then go to bed -
-each step after the previous one, with errors handled. With callbacks, every next
-step goes **inside** the previous one ("callback hell"):
-
-```js run
-function prepareDinner(onDone) {
-    console.log("prepareDinner takes 200 ms");
-    setTimeout(() => onDone("pizza"), 200);
-}
-function eatDinner(dinner, onDone) {
-    console.log("eatDinner takes 50 ms");
-    setTimeout(() => onDone(`Sweet dreams after ${dinner}`), 50);
-}
-
-prepareDinner(dinner => {
-    eatDinner(dinner, message => {
-        console.log(message);                   // ... and one more level for every step
-    });
-});
-console.log("Do something else meanwhile...");
-```
-
-A **promise** is an object that stands for a result that comes **later**. It is
-*pending* at first, then either *fulfilled* (with a value) or *rejected* (with an
-error). You create one with `new Promise((resolve, reject) => ...)`, and use its result
-with `.then()`, `.catch()` and `.finally()`:
-
-```js run
-function prepareDinner() {
-    console.log("prepareDinner takes 200 ms");
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const success = true;
-            if (success) resolve("pizza");
-            else reject(new Error("Cannot buy dinner!"));
-        }, 200);
-    });
-}
-function eatDinner(dinner) {
-    console.log("eatDinner takes 50 ms");
-    return new Promise(resolve => setTimeout(() => resolve(`Sweet dreams after ${dinner}`), 50));
-}
-
-prepareDinner()
-    .then(dinner => eatDinner(dinner))      // the next step: a flat chain, no nesting
-    .then(message => console.log(message))
-    .catch(err => console.log("Error:", err.message))     // one place for all errors
-    .finally(() => console.log("evening over"));
-console.log("Do something else meanwhile...");
 ```
 
 ### `async` and `await`
@@ -1204,7 +987,7 @@ async function readReports(files) {
 }
 ```
 
-## 9. `fetch`: JSON from a web API
+## 9. `fetch`: JSON from a web API (advanced)
 
 MDN: [Window: fetch() method](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch), [Using the Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 
@@ -1257,29 +1040,6 @@ try {
     console.log("Error:", err.message);       // HTTP 404 for ...
 }
 ```
-
-### The older form with `.then()`; public APIs (optional)
-
-The same with `.then()`, as older code writes it:
-
-```js run
-fetch("https://jsonplaceholder.typicode.com/todos/1")
-    .then(response => response.json())
-    .then(todo => console.log(todo.title))
-    .catch(error => console.log("Error:", error.message));
-```
-
-Public APIs that return JSON, good for practice:
-[JSONPlaceholder](https://jsonplaceholder.typicode.com/) (fake data for testing),
-[Open-Meteo](https://open-meteo.com/en/docs) (weather),
-[Open Trivia Database](https://opentdb.com/api_config.php) (quiz questions),
-[chucknorris.io](https://api.chucknorris.io/) (jokes), and a long list:
-[public-apis on GitHub](https://github.com/public-apis/public-apis).
-
-::: info In the browser: CORS
-A page may `fetch` from another site only if that site allows it (with the header
-`Access-Control-Allow-Origin`) - the two APIs above do. Node.js has no such limit.
-:::
 
 ## 10. Running a rule locally
 
@@ -1491,7 +1251,7 @@ print `OK` or `FAIL`.
 | 1 | `task1-predict.js` | Predict 20 results: `JSON.stringify` and `JSON.parse`, the error types, `try` / `finally` |
 | 2 | `task2-json.js` | Parse safely (with the file name in the error), remove a BOM, stringify with fixed keys and indentation, compare without key order, mask values |
 | 3 | `task3-library.js` + `task3-module.js` | Turn your helpers into a CommonJS module; `task3-module.js` loads it with `require` and checks it |
-| 4 | `task4-errors.js` | Classic tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), a `ReportError` class, `requireField`, the type of an error |
+| 4 | `task4-errors.js` | Classic tasks (`calculateArea`, `retryOperation`, `checkUserPermission`), `requireField` that throws a clear error, the type of an error |
 | 5 | `task5-run-rule.js` | The local rule runner: read the reports of a folder, load a rule with a fake `emit`, collect alerts and errors |
 
 ## Summary
@@ -1499,7 +1259,7 @@ print `OK` or `FAIL`.
 | Topic | Remember |
 |-------|----------|
 | JSON | Text; double quotes; no trailing comma, comments, `undefined`, `NaN`; six types; `null` = "known to be empty" |
-| `JSON.parse` | Text -> values; throws `SyntaxError` - parse in a `try` and say which file failed; a reviver for dates |
+| `JSON.parse` | Text -> values; throws `SyntaxError` - parse in a `try` and say which file failed |
 | `JSON.stringify` | Values -> text; `(value, null, 2)` for people; a replacer chooses or masks keys; drops `undefined` and functions |
 | Node.js | `node file.js`; `process.argv`, `process.env`, `process.exitCode`; `__dirname` vs `process.cwd()` |
 | `console` | `log`, `warn`, `error` (stderr), `table`, `dir` with `{ depth: null }`, `group`, `count`, `time`, `assert` |
@@ -1511,16 +1271,15 @@ print `OK` or `FAIL`.
 | `try` | `catch` for errors you can handle; `finally` always runs; check the type and rethrow the rest |
 | `throw` | Throw `Error` objects, never strings; custom classes with `extends Error` |
 | Catch-all | `catch (err) { return; }` hides bugs and misses alerts - guard clauses instead |
-| Async | Promises: pending -> fulfilled / rejected; `.then` / `.catch`; `async` functions and `await`; `Promise.all` |
+| Async | A promise is a result that comes later; `async` functions and `await`; `Promise.all` |
 | `fetch` | `await fetch(url)`, check `response.ok`, `await response.json()` |
 | Local runs | Load the rule unchanged with a fake `emit` and `require`; run it on a folder; print every error |
 
 ## Homework
 
-1. `09-json-node-modules-errors/homework.js` (in the homework repository): load all
-   reports of a folder with `fs/promises` and `Promise.all`, a `fetchJson` that checks
-   the status (tested with a fake `fetch`), and a summary of the runner's alerts and
-   errors.
+1. `09-json-node-modules-errors/homework.js` (in the homework repository): an older
+   rule with a catch-all `try` rewritten with guard clauses, JSON inside a string
+   field parsed safely, and a summary of the runner's alerts and errors.
 2. The practice tasks you did not finish in class - recommended, as later tasks
    and the course project reuse them. Every check must print `OK`.
 3. **Course project:** make `library.js` a clean CommonJS module, add `run-rule.js`
@@ -1528,6 +1287,9 @@ print `OK` or `FAIL`.
    anonymised sample) locally. Add `package.json` with a script `"run-rule"`.
 4. Optional: find a rule of yours with a catch-all `try`. Which errors could it hide?
    Rewrite it with guard clauses and run both versions on your samples.
+5. Optional: `09-json-node-modules-errors/homework-async.js` - code that waits:
+   reports loaded with `fs/promises` and `Promise.all`, and a `fetchJson` that
+   checks the status (sections 8 and 9). Rules do not need it.
 
 ## Read more
 
@@ -1551,8 +1313,7 @@ print `OK` or `FAIL`.
   [Error handling](https://javascript.info/error-handling),
   [Modules](https://javascript.info/modules-intro),
   [Promises, async/await](https://javascript.info/async)
-- Tools: [JSONLint](https://jsonlint.com/), [JavaScript Visualizer 9000](https://www.jsv9000.app/)
-- Video: [Everything You Need to Know About Node.js Event Loop](https://www.youtube.com/watch?v=PNa9OMajw9w) (Bert Belder)
+- Tools: [JSONLint](https://jsonlint.com/)
 
 **Next session:** tests with `node:test`, JSDoc types and `// @ts-check`, a linter,
 the Git workflow with branches and pull requests - and the review of your course

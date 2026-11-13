@@ -24,7 +24,7 @@ title: 6. Objects, deep paths and data shapes
   (`structuredClone`);
 - use spread, rest and destructuring;
 - write methods and know what `this` is; create many objects of one kind with a
-  factory function, a constructor and a `class`;
+  factory function;
 - build the details object of an alert, with its columns in a fixed order;
 - read the object code of older rules: `new Object()`, `obj["key"] = ...`,
   `for...in` with `hasOwnProperty`, `a && a.b && a.b.c`.
@@ -239,7 +239,7 @@ const modern = { model, version };                  // the same object
 console.log(older, modern);
 ```
 
-### Computed keys (ES6)
+### Computed keys (ES6) (advanced)
 
 A key in square brackets is **calculated**:
 
@@ -262,7 +262,7 @@ console.log(details);
 ```
 
 It works, but `{ ... }` is shorter and shows the whole object at once. Do not
-mix it up with `new Developer(...)` - a call of a **constructor**
+mix it up with `new Developer(...)` - that creates an object of a **class**
 ([section 11](#_11-many-objects-of-one-kind)).
 
 ## 3. Reading and writing properties
@@ -940,15 +940,7 @@ console.log(settings);              // { locale: 'en_US', power_saving: 'on' }
 
 Spread never changes the original - unlike `push`, `unshift` and `splice`.
 
-An example: flip one property and keep the rest:
-
-```js run
-const obj = { a: true, b: false };
-const inverted = { ...obj, a: !obj.a };
-console.log(inverted);      // { a: false, b: false }
-```
-
-### Rest `...` - collect the rest
+### Rest `...` - collect the rest (advanced)
 
 The same three dots on the **receiving** side collect what is left into an array
 (or an object). Lecture 5 showed rest parameters:
@@ -1018,15 +1010,6 @@ const { device_alias, ...withoutAlias } = doc.status;
 console.log(withoutAlias);                  // { epoch: '1791770402' }
 ```
 
-When the variables already exist, wrap the assignment in round brackets
-(otherwise `{` starts a block):
-
-```js run
-let p1, p2;
-({ p1, p2 } = { p1: 1, p2: 2 });
-console.log(p1, p2);        // 1 2
-```
-
 ::: warning Destructuring a missing object
 `const { model } = doc.overview;` throws a `TypeError` when `overview` is missing -
 like `doc.overview.model`. Give a fallback object:
@@ -1056,7 +1039,7 @@ for (const enc of doc.inventory.enclosures) console.log(describeEnclosure(enc));
 
 (Destructuring in parameters is also very common in React components.)
 
-## 10. Methods and `this`
+## 10. Methods and `this` (advanced)
 
 A **method** is a property whose value is a function. Inside a method, `this` is
 the object the method was called on - the object **before the dot**:
@@ -1169,34 +1152,6 @@ In session 9 the same idea becomes a **module** - a file that exports its helper
 Real programs often need many objects with the **same structure** - the same keys
 and methods, different values.
 
-### Literals - repeated code (optional)
-
-```js run
-const developer1 = {
-    firstName: "Ivan",
-    surName: "Ivanov",
-    skills: ["HTML", "CSS", "JavaScript"],
-    applyForJob: function () {
-        console.log(`Hi, I'm ${this.firstName} ${this.surName}. My strongest skills are ${this.skills.join(", ")}.`);
-    }
-};
-
-const developer2 = {
-    firstName: "Maria",
-    surName: "Mineva",
-    skills: ["Python", "Machine Learning", "Data Science"],
-    applyForJob: function () {
-        console.log(`Hi, I'm ${this.firstName} ${this.surName}. My strongest skills are ${this.skills.join(", ")}.`);
-    }
-};
-
-developer1.applyForJob();
-developer2.applyForJob();
-```
-
-The keys and the method are written twice - and a typo in one copy gives two
-objects with different shapes.
-
 ### A factory function
 
 A function that **returns** a new object. Every object it makes has the same shape:
@@ -1234,37 +1189,13 @@ for (const enc of doc.inventory.enclosures) {
 console.log(problems);
 ```
 
-### A constructor function (advanced)
-
-Before classes, JavaScript made objects of one kind with a **constructor**: a
-function called with `new`. `new` creates an empty object, runs the function with
-`this` = that object, and returns it. By convention the name starts with a capital
-letter:
-
-```js run
-function Developer(firstName, surName, skills) {
-    this.firstName = firstName;
-    this.surName = surName;
-    this.skills = skills;
-    this.applyForJob = function () {
-        console.log(`Hi, I'm ${this.firstName} ${this.surName}.`);
-    };
-}
-
-const developer1 = new Developer("Ivan", "Ivanov", ["HTML", "CSS", "JavaScript"]);
-developer1.applyForJob();
-console.log(developer1 instanceof Developer);       // true
-```
-
-Forget the `new`, and `this` is not a new object - in strict mode the call fails,
-in older code it writes into the global object. Classes (below) refuse to be called
-without `new`.
-
-### The class syntax (ES6)
+### The class syntax (ES6) (advanced)
 
 MDN: [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 
-A `class` writes the same thing in the form of other object-oriented languages:
+A `class` is another way to make many objects of one kind - the form of other
+object-oriented languages. `new Developer(...)` creates an empty object and runs
+`constructor` with `this` = that object:
 
 ```js run
 class Developer {
@@ -1287,86 +1218,8 @@ developer2.applyForJob();
 
 - `constructor` runs automatically on `new`; there is only one per class.
 - Methods are written with the short syntax; they are **shared** by all objects of
-  the class (stored once, in the class's *prototype*), not copied into each object.
-- The code inside a class is always in strict mode.
-- A class can also be written as an expression: `const Developer = class { ... };`.
-
-### Static members, fields, getters and setters (advanced)
-
-```js run
-class Person {
-    static count = 0;           // a static field: belongs to the class (ES2022)
-    name = "Anonymous";         // a field with a default value (ES2022)
-    age;
-
-    constructor(name, age) {
-        if (name !== undefined) this.name = name;
-        this.age = age;
-        Person.count += 1;
-    }
-
-    static created() {          // a static method: Person.created(), not p1.created()
-        return `${Person.count} objects were created.`;
-    }
-
-    get label() {               // a getter: read like a property, p1.label
-        return `${this.name} (${this.age ?? "?"})`;
-    }
-
-    set label(text) {           // a setter: runs on p1.label = "..."
-        [this.name] = text.split(" (");
-    }
-
-    greet() {
-        console.log(`I'm ${this.name}, ${this.age} years old.`);
-    }
-}
-
-const p1 = new Person("Pesho", 23);
-const p2 = new Person();
-p1.greet();                     // I'm Pesho, 23 years old.
-p2.greet();                     // I'm Anonymous, undefined years old.
-console.log(Person.created());  // 2 objects were created.
-console.log(p1.label);          // Pesho (23)
-p1.label = "Peter (30)";
-console.log(p1.name);           // Peter
-```
-
-Class fields and `static` fields are ES2022 - check that your rule engine supports
-them. (Code written before ES2022 sets `Person.count = 0;` after the class.)
-
-### Inheritance: `extends` and `super` (advanced)
-
-A class can **extend** another one: it gets all its methods and adds or changes
-some. `super(...)` calls the parent's constructor (before any use of `this`);
-`super.method()` calls the parent's version of a method:
-
-```js run
-class Person {
-    constructor(name, age) {
-        this.name = name;
-        this.age = age;
-    }
-    greet() {
-        console.log(`I'm ${this.name}, ${this.age} years old.`);
-    }
-}
-
-class Developer extends Person {
-    constructor(name, age, skills) {
-        super(name, age);           // the parent constructor
-        this.skills = skills;
-    }
-    greet() {
-        super.greet();              // the parent greet()
-        console.log(`My skills are: ${this.skills.join(", ")}`);
-    }
-}
-
-const dev1 = new Developer("Pesho", 23, ["JS", "React", "Vue"]);
-dev1.greet();
-console.log(dev1 instanceof Person);    // true
-```
+  the class, not copied into each object.
+- A class refuses to be called without `new`.
 
 ::: tip Classes and rules
 Rules work on plain JSON data, and a rule is one function - most rules need no
@@ -1622,7 +1475,7 @@ print `OK` or `FAIL`.
 | 2 | `task2-get.js` | **The course project starts:** `get(obj, path, fallback)` with a string or an array path, and all the edge cases |
 | 3 | `task3-dictionaries.js` | The dictionaries of `report-dictionary.json`: keys, values, information in the keys, counting and grouping |
 | 4 | `task4-shapes.js` | The flattened export `report-export.json`: read single values, rebuild records from parallel arrays, compare with the nested document |
-| 5 | `task5-objects-classic.js` | Classic tasks: factory, class, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays`, the youngest person |
+| 5 | `task5-objects-classic.js` | Classic tasks: a factory, `swap` with destructuring, `createPerson` with shorthand and a method, `combineArrays` with spread, the youngest person |
 
 ## Summary
 
@@ -1641,7 +1494,7 @@ print `OK` or `FAIL`.
 | `...` | Spread pours out (calls, arrays, objects); rest collects (parameters, destructuring) |
 | Destructuring | `const [a, b] = arr;` by position; `const { x, y: z = 0 } = obj;` by name; also in parameters |
 | `this` | The object before the dot at the call; lost when a method is passed on; arrows have none |
-| Many objects | Factory function (best for rules), constructor with `new`, `class` with `constructor`, methods, `static`, `extends` / `super` |
+| Many objects | A factory function returns a new object with the same keys every time - the best form for rules |
 | Old style | `new Object()`, `obj["k"] = v`, `for (var k in obj)` + `hasOwnProperty`, `a && a.b && a.b.c` - read it, modernise it |
 
 ## Homework
@@ -1652,7 +1505,8 @@ print `OK` or `FAIL`.
 2. The practice tasks you did not finish in class - recommended, as later tasks
    and the course project reuse them. Every check must print `OK`.
 3. **Course project:** keep your `get` from practice task 2 in a file of your own
-   (for example `library.js`). From the next session on, the library grows.
+   (for example `library.js`) - it goes into your project repository. The steps of
+   the project, session by session, are on the page [Course project](/project).
 4. Optional: open one of your real reports and find each of the shapes of section
    7. Which paths do your rules read again and again? Write them down as `get`
    paths.

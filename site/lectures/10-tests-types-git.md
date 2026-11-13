@@ -178,28 +178,6 @@ assert.deepEqual([1, 2], [2, 1]);  // AssertionError: the order of array element
 - Every function takes a last, optional argument: a message for the failure -
   `assert.ok(alerts.length > 0, "expected an alert for lab-dev-02")`.
 
-### Why `deepEqual` and not `JSON.stringify`? (optional)
-
-The same data with the keys in another order gives two different texts:
-
-```js run
-const expected = { id: "ENC-03", state: "degraded" };
-const actual = { state: "degraded", id: "ENC-03" };      // built in another order
-
-console.log(JSON.stringify(actual) === JSON.stringify(expected));   // false
-
-// what deepEqual does, in short: compare the keys and then every value
-function sameContent(a, b) {
-    if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return a === b;
-    if (Array.isArray(a) !== Array.isArray(b)) return false;
-    const keys = Object.keys(a);
-    if (keys.length !== Object.keys(b).length) return false;
-    return keys.every(k => sameContent(a[k], b[k]));
-}
-console.log(sameContent(actual, expected));             // true
-console.log(sameContent([1, 2], [2, 1]));               // false - arrays keep their order
-```
-
 ## 3. `node:test`: the test runner
 
 Node.js: [Test runner](https://nodejs.org/api/test.html)
@@ -494,39 +472,6 @@ this works in CommonJS files too, it is only read by the editor:
 /** @typedef {import("./types.js").Enclosure} Enclosure */
 ```
 
-### Generic helpers: `@template` (advanced)
-
-A helper like `groupBy` works for lists of **any** type. `@template T` is a
-placeholder for "the type of the elements" - the editor then knows that grouping
-enclosures gives enclosures:
-
-```js
-/**
- * Group a list by a key.
- * @template T
- * @param {T[]} list
- * @param {(item: T) => string} keyOf
- * @returns {Record<string, T[]>}
- */
-function groupBy(list, keyOf) { /* ... lecture 7 ... */ }
-```
-
-### Telling the editor a type: casts (advanced)
-
-`JSON.parse` returns `any` - the editor cannot know what is in the file. A cast in
-parentheses says it:
-
-```js
-const doc = /** @type {Report} */ (JSON.parse(text));
-```
-
-The cast changes nothing at runtime - if the file has another shape, the code still
-fails. Check the important parts (lecture 9) where the data comes in.
-
-TypeScript also has ready **utility types** that work in JSDoc: `Partial<Report>`
-(every key optional), `Pick<Enclosure, "id" | "state">` (only these keys),
-`Omit<Enclosure, "id">` (all keys but these).
-
 ## 7. `// @ts-check`: the editor checks your types
 
 VSCode has the TypeScript checker built in. Put `// @ts-check` on the **first line**
@@ -579,36 +524,6 @@ report where everything is fine. The editor finds them **before** the code runs.
 - The same checks on the command line (for example in a CI pipeline) need the
   TypeScript package: `npx tsc --noEmit -p jsconfig.json` (TypeScript 7 checks JSDoc
   the same way).
-
-### Static and dynamic types (advanced)
-
-JavaScript is **dynamically** typed (lecture 1): a variable can hold any value, and a
-wrong type is noticed only when the code runs - or never. In **statically** typed
-languages (Java, C#, Go - and TypeScript), the types are known before the program
-runs, and the compiler checks them. The benefits:
-
-- many errors are found **early** - while typing, not in production;
-- the editor can **complete** names and show the documentation (IntelliSense);
-- the types **document** the code - very useful in a team.
-
-**TypeScript** is JavaScript plus a static type syntax: `.ts` files with types written
-in the code (`function add(x: number, y: number): number`), interfaces and generics.
-A compiler (`tsc`) checks them and turns the files into plain JavaScript. Rules for
-your engine must be plain JavaScript files without a build step - so the course uses
-the same type system **through JSDoc comments**. If one day you move to TypeScript,
-your typedefs translate almost one to one (`@typedef` becomes `interface` or `type`).
-
-```ts
-// the same types in TypeScript (only for comparison - a .ts file)
-interface Enclosure {
-    id: string;
-    firmware: string;
-    state: "normal" | "degraded" | "failed";
-}
-function badEnclosures(list: Enclosure[]): Enclosure[] {
-    return list.filter(enc => enc.state !== "normal");
-}
-```
 
 ## 8. A linter and a formatter
 
@@ -694,7 +609,7 @@ report (or, with a catch-all `try`, silently never alert).
   VSCode settings, it fixes them on every save.
 - Add `"lint": "eslint ."` to the scripts of `package.json`: `npm run lint`.
 
-### Prettier: the same format for everybody
+### Prettier: the same format for everybody (advanced)
 
 A **formatter** changes only the **layout** of the code - indentation, spaces, line
 breaks, quotes, semicolons - never its meaning. **Prettier** is the most common one.
@@ -750,7 +665,7 @@ git branch                             # the list of branches; * marks the curre
 Older tutorials use `git branch <name>` (create) and `git checkout <name>`
 (switch), or `git checkout -b <name>` for both - the same as `git switch -c`.
 
-### Merging
+### Merging (advanced)
 
 ```bash
 git switch main                        # the branch that should GET the changes
@@ -762,7 +677,7 @@ When `main` has not changed since the branch was created, Git simply moves `main
 forward (a *fast-forward*). When both have new commits, Git creates a **merge commit**
 that joins the two lines. `git log --oneline --graph` draws them.
 
-### Merge conflicts
+### Merge conflicts (advanced)
 
 When both branches changed the **same lines** of a file, Git cannot decide which
 version is right - a **conflict**:
@@ -831,15 +746,6 @@ correctness and clarity. For rules, ask:
 - Is there a test for the new case - and for the bug that was fixed?
 - Would a colleague understand the condition in a year? (Names, comments with
   examples.)
-
-### GitHub Pages (advanced)
-
-GitHub can also publish a **website** from a repository, for free for public
-repositories: **GitHub Pages**. The site you are reading is published this way: every
-push to its repository builds the pages and publishes them at
-`https://<user>.github.io/<repository>/`. Turn it on in the repository's **Settings >
-Pages**: choose a branch (and a folder) with static files, or a GitHub Actions workflow
-that builds them. For a library, Pages can host its documentation.
 
 ## 10. From one product to the next (advanced)
 
@@ -941,7 +847,7 @@ checkFirmware(tl, tlReport, "1.12.0.1");
   with a short list of changes per version (a *changelog*), help your colleagues to
   trust and update the library.
 
-## 11. Reading existing rules: a code review
+## 11. Reading existing rules: a code review (optional)
 
 Here is an older rule, as it might arrive in a pull request. Run it - it seems to
 work:
@@ -1020,21 +926,30 @@ The last part of the session belongs to your course project ([Course project](/p
 ### What to show (10 - 15 minutes)
 
 1. **The product and the problem**: which reports, which rules were hard to write.
-2. **The library**: the helpers, with their JSDoc - hover over one in VSCode.
+2. **The library**: the helpers, each with a comment and an example. Run `try.js` on
+   a sample document.
 3. **A rule before and after**: an existing rule rewritten with the library - shorter,
-   without the catch-all, with the same alerts on the samples.
-4. **The tests**: `npm test` - and one test that would have caught a real bug.
-5. **The local runner**: one rule on the folder of samples.
-6. **What next**: the second product, the helpers that are still missing.
+   and without the catch-all.
+4. **What next**: the helpers that are still missing, the second product.
 
-### How the review works
+That is the minimum: the library as a CommonJS module, two sample documents and one
+rewritten rule. Tests, JSDoc types and the local runner are topics of this session
+and of lecture 9 - nobody expects them in the presentation.
 
-The code is reviewed as a **pull request**: open a PR from a branch with your last
-changes (or from the whole project against an empty branch), and invite the trainer
-as a reviewer. The review comments follow the checklist of section 9.
+### In class: the first test
 
-The minimum for the review: the library as a CommonJS module with JSDoc, tests with
-`node:test`, and one rewritten rule. Everything else can grow after the course.
+After the presentations we write the first test for one helper of **your** library
+together, and put `// @ts-check` on the first line of `library.js` - so that you
+leave the course with a test file that runs.
+
+### After the presentation
+
+The course project ends with the presentation. Ten sessions are a start, not the
+end: the next steps - tests with `node:test`, JSDoc for the exported helpers, the
+local runner, a README - are recommended, at your own pace. Work on a branch and
+review your own pull request with the questions of "Pull requests and code review"
+in section 9. The second part of `10-tests-types-git/project-checklist.md` in the
+homework repository lists them. A follow-up course could start right here.
 
 ### After the course
 
@@ -1079,9 +994,8 @@ you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`.
 | What to test | Normal case, missing, empty, wrong type, odd formats, boundaries, `0` / `false` / `""` |
 | Rules | A fake `emit` (or `mock.fn()`), the runner of lecture 9 as a module, the sample reports |
 | JSDoc | `/** ... */` before a function: description, `@param {type} name`, `@returns`, `@example`, `@throws` |
-| `@typedef` | Names the shape of a report; `[name]` = optional; `import("./types.js").Report`; `@template` for generic helpers |
+| `@typedef` | Names the shape of a report; `[name]` = optional; `import("./types.js").Report` |
 | `@ts-check` | First line of a file; VSCode checks types, typos, possibly undefined; `jsconfig.json` for the whole project |
-| TypeScript | The same types in `.ts` files with a compiler; JSDoc gives the checks without a build step |
 | ESLint | Likely bugs and team rules (`no-undef`, `eqeqeq`, `no-var`); `npx eslint . --fix` |
 | Prettier | Only the layout; format on save; no style debates in reviews |
 | Branches | `git switch -c name`, commit, `git switch main`, `git merge name`, `git branch -d name` |
@@ -1097,14 +1011,15 @@ you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`.
    both with `node 10-tests-types-git/homework.js`.
 2. The practice tasks you did not finish in class - recommended, as later tasks
    and the course project reuse them. Every check must print `OK`.
-3. **Course project - for the review:**
-   - JSDoc for every exported helper, a `types.js` with the typedefs of your product,
-     `// @ts-check` in every file;
+3. **Course project - recommended next steps** (the project itself ends with the
+   presentation):
    - tests with `node:test` for the library and for one rule (`npm test`);
-   - one existing rule rewritten with the library, with the same alerts on the samples;
+   - JSDoc for every exported helper, and `// @ts-check` in every file;
+   - `run-rule.js` (lecture 9): the rewritten rule gives the same alerts as the old
+     one on your samples;
    - a README with an example per helper;
-   - open a pull request and invite the trainer as a reviewer. Use the checklist
-     `10-tests-types-git/project-checklist.md`.
+   - put the last changes on a branch and review your own pull request. The
+     checklist: `10-tests-types-git/project-checklist.md`, second part.
 4. Optional: add ESLint to the project, run it on two of your existing rules, and
    count what it finds.
 
@@ -1123,8 +1038,7 @@ you write tests; the `-check.js` file runs them and prints `OK` or `FAIL`.
   [ESLint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - Git: [Pro Git - Git Branching](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell),
   [About pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests),
-  [Resolving a merge conflict on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github),
-  [GitHub Pages](https://pages.github.com/)
+  [Resolving a merge conflict on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-on-github)
 - javascript.info: [Automated testing with Mocha](https://javascript.info/testing-mocha) (the ideas are the same for `node:test`)
 - Videos: [Git Tutorial for Beginners: Command-Line Fundamentals](https://www.youtube.com/watch?v=HVsySz-h9r4),
   [GitHub Tutorial for Beginners](https://www.youtube.com/watch?v=0fKg7e37bQE)

@@ -19,6 +19,8 @@ device (`doc`) and a check rule.
 ## Sessions
 
 The dates may change: the [Calendar](/calendar) always shows the current ones.
+From session 6 on, a lecture can run over two sessions: its second part opens the
+next session.
 
 |  | Date   | Topic |
 |---------|--------|-------|
@@ -157,8 +159,9 @@ The dates may change: the [Calendar](/calendar) always shows the current ones.
 
 ## Homework
 
-After each session there is a small task on the report JSON. It is reviewed
-at the start of the next session (about 15 min).
+After each session there is a small task on the report JSON. From session 6 on,
+every session keeps about 40 minutes for practice and for the solutions of the
+homework, and about 15 minutes for the course project.
 
 ## Course project
 

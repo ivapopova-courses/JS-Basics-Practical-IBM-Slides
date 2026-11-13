@@ -279,19 +279,6 @@ console.log("-".repeat(20));
 replace all matches is `split` + `join` (`"a-b-c".split("-").join("+")`) or a
 regular expression with the `g` flag (section 6).
 
-An example with a date - the current time as `HH:MM:SS`, every part
-with two digits:
-
-```js run
-function formatTime(date) {
-    const hh = String(date.getHours()).padStart(2, "0");
-    const mm = String(date.getMinutes()).padStart(2, "0");
-    const ss = String(date.getSeconds()).padStart(2, "0");
-    return `${hh}:${mm}:${ss}`;
-}
-console.log(formatTime(new Date()));          // the time now, e.g. 09:05:03
-```
-
 ::: tip Strings in a rule: convert first
 `doc.overview.model.trim()` throws a `TypeError` when `model` is missing or is a
 number. `String(x ?? "")` turns any value into a string first - the sample rule
@@ -316,45 +303,16 @@ console.log(str1 === str2);           // false - different types
 ```
 
 When you use a primitive **like** an object - `"ada".toUpperCase()` - JavaScript
-wraps it for a moment in the matching object (*boxing*), calls the method, and
-throws the wrapper away:
-
-```js run
-console.log("ada".toUpperCase());     // ADA
-// works as if you had written:
-console.log(new String("ada").toUpperCase());
-
-// but the wrapper is temporary: a property set on a primitive is lost
-const str1 = new String("ada");
-const str2 = "ada";
-str1.id = 1;
-str2.id = 1;                          // an error in strict mode; ignored here
-console.log(str1.id);                 // 1
-console.log(str2.id);                 // undefined
-```
-
-**Best practice:** use the primitives, and let JavaScript wrap them when you call a
-method. Never `new String(...)`, `new Number(...)` or `new Boolean(...)`:
-
-```js run
-const x = 42;                         // a number primitive - good
-const y = new Number(42);             // a Number object - needlessly complicated
-
-console.log(x + 10, y + 10);          // 52 52
-console.log(x.toPrecision(5), y.toPrecision(5));   // 42.000 42.000
-console.log(x == y, x === y);         // true false
-
-console.log(Boolean(new Boolean(false)));   // true - an object is always truthy!
-```
-
-`String(x)`, `Number(x)` and `Boolean(x)` **without** `new` are fine: they are
-conversions (lecture 2) and return primitives.
+wraps it for a moment in the matching object, calls the method, and throws the
+wrapper away. So use the primitives, and never write `new String(...)`,
+`new Number(...)` or `new Boolean(...)`. `String(x)`, `Number(x)` and `Boolean(x)`
+**without** `new` are fine: they are conversions (lecture 2) and return primitives.
 
 ## 4. Characters and encodings
 
 MDN: [UTF-16 characters, Unicode code points, and grapheme clusters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters)
 
-### Every character is a number
+### Every character is a number (advanced)
 
 The computer stores text as numbers. Each character has a number, its **code
 point**:
@@ -380,7 +338,7 @@ console.log(name.length);                     // 3
 console.log([...name].map(ch => ch.codePointAt(0)));    // [ 1048, 1074, 1072 ]
 ```
 
-### UTF-8: characters as bytes in a file
+### UTF-8: characters as bytes in a file (advanced)
 
 A file stores **bytes** (numbers from 0 to 255). An **encoding** says how the
 code points become bytes. Today almost every file and every JSON document uses
@@ -412,26 +370,6 @@ console.log(new TextDecoder("utf-8").decode(raw));           // garbage: not val
 
 If a report or an export ever shows such garbage, the question is always: in which
 encoding was it written, and in which was it read?
-
-### `length` counts code units, not characters (advanced)
-
-JavaScript strings use 16-bit **code units** (UTF-16). Most characters take one;
-emoji and some rare characters take **two**. `length` counts code units:
-
-```js run
-const smile = "\u{1F600}";
-console.log(smile.length);            // 2 - one emoji, two code units
-console.log([...smile].length);       // 1 - spread splits by code points
-
-// the same letter, written in two ways
-const e1 = "\u00e9";                  // e with an accent, one code point
-const e2 = "e\u0301";                 // e + a combining accent: two code points
-console.log(e1, e2, e1 === e2);                         // they look the same - but false
-console.log(e1 === e2.normalize());                     // true after normalize()
-```
-
-For report data - ids, versions, states - this rarely matters: they are ASCII.
-It matters for names and free text.
 
 ### Line endings
 
@@ -499,6 +437,8 @@ console.log(typeof re, re);           // object /XR-2\d\d/
 ```
 
 `re.test(str)` answers `true` or `false`: does the string contain the pattern?
+
+### A pattern from a string: `new RegExp` (advanced)
 
 A pattern can also be built from a string with `new RegExp(text, flags)` - when it
 is not known in advance. In a string, a backslash must be written twice:
@@ -676,7 +616,7 @@ const report = "ENC-01 normal\nENC-02 degraded";
 console.log(report.match(/^ENC-\d+/gm));                    // [ 'ENC-01', 'ENC-02' ] - m: ^ at every line
 ```
 
-### All matches with their groups: `matchAll` (ES2020)
+### All matches with their groups: `matchAll` (ES2020) (advanced)
 
 MDN: [String.prototype.matchAll()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll)
 
@@ -783,13 +723,6 @@ when the **shape** of the text matters (digits, separators, optional parts), and
 add a comment with an example: `// "347_v2.12" -> number 347, version 2.12`.
 :::
 
-::: info `RegExp.escape` (ES2025)
-To build a pattern from text that may contain special characters (a model like
-`"XR-2.0"`), `RegExp.escape(text)` escapes them. It is very new - check that your
-rule engine supports it; older code escapes with
-`text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")`.
-:::
-
 ## 8. Versions in many formats
 
 Lecture 5 wrote `compareVersions` for dotted versions. Real reports send versions
@@ -889,6 +822,12 @@ console.log(toNumber("31"), toNumber(""), toNumber("n/a"), toNumber(" 7 "), toNu
 The global `isNaN` converts its argument first (`isNaN("abc")` is `true`);
 `Number.isNaN` does not. Prefer the `Number.` versions.
 
+::: warning Ids are strings
+Treat ids, serials and long codes as **strings** - even when they contain only
+digits. Never `Number(...)` them: a number keeps only about 15 digits exactly, so a
+longer id would be rounded, and a leading zero would be lost.
+:::
+
 ### Rounding and formatting
 
 MDN: [Number.prototype.toFixed()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed), [Math.round()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round)
@@ -947,27 +886,6 @@ console.log(randomInt(1, 6));                           // 1 to 6, like a dice
 const gib = 68096;
 console.log(Math.round(gib / 1024 * 100) / 100, "TiB");    // 66.5 TiB
 ```
-
-### Big numbers: ids are strings (advanced)
-
-MDN: [Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
-
-A `number` holds whole numbers exactly only up to 2<sup>53</sup> - 1
-(`Number.MAX_SAFE_INTEGER`, about 9 * 10<sup>15</sup>). A longer id in a JSON file
-is **rounded** when it is read as a number:
-
-```js run
-console.log(Number.MAX_SAFE_INTEGER);                     // 9007199254740991
-console.log(JSON.parse('{"id": 12345678901234567890}').id);   // 12345678901234567000 - changed!
-console.log(JSON.parse('{"id": "12345678901234567890"}').id); // the string stays exact
-
-// BigInt (ES2020): whole numbers of any size - add n
-console.log(12345678901234567890n + 1n);                  // 12345678901234567891n
-```
-
-Treat ids, serials and long codes as **strings** - even when they contain only
-digits. Never `Number(...)` them. (Millisecond timestamps like `1791770402000`
-are far below the limit - they are safe.)
 
 ## 10. Dates
 
@@ -1037,7 +955,7 @@ console.log(d.getHours());            // 21 in Bulgaria (UTC+3 in October) - dep
 `getMonth()` from 0 to 11 and `getDay()` from 0 (Sunday) to 6 are a classic source of
 bugs: `getMonth() + 1` for a month number.
 
-### Time zones
+### Time zones (advanced)
 
 The same moment is a different clock time in Sofia, in London and in UTC. Servers
 and reports should use **UTC** (`Z` at the end of an ISO string); show local time
@@ -1139,39 +1057,6 @@ console.log(a === b, a.getTime() === b.getTime());       // false true
 const due = new Date(installed.getTime() + 30 * 86_400_000);
 console.log(due.toISOString().slice(0, 10));             // 2025-12-20
 ```
-
-### More examples: an age, and timing code (optional)
-
-The age of a person from the date of birth (careful: the birthday of this year may
-not have come yet):
-
-```js run
-function calcAge(birthDate, today = new Date()) {
-    let age = today.getUTCFullYear() - birthDate.getUTCFullYear();
-    const hadBirthday = today.getUTCMonth() > birthDate.getUTCMonth()
-        || (today.getUTCMonth() === birthDate.getUTCMonth() && today.getUTCDate() >= birthDate.getUTCDate());
-    if (!hadBirthday) age--;
-    return age;
-}
-console.log(calcAge(new Date("1990-12-31"), new Date("2026-10-12")));   // 35
-console.log(calcAge(new Date("1990-01-15"), new Date("2026-10-12")));   // 36
-```
-
-And one more example - timing code (lecture 7 used `console.time`):
-
-```js run
-const start = Date.now();
-let total = 0;
-for (let i = 0; i < 1_000_000; i++) total += i;
-console.log(`took ${Date.now() - start} ms`, total);
-```
-
-::: info Temporal - the next date API
-`Date` has many problems: months from 0, local time by default, unreliable
-parsing. **Temporal** is a new, much better date and time API that is arriving in
-JavaScript engines (2025 - 2026). It is not in Node.js 24 yet - for rules, use
-`Date` with the care shown here.
-:::
 
 ## 11. Reading existing rules
 
@@ -1358,13 +1243,12 @@ print `OK` or `FAIL`.
 |------|------|-------------|
 | 1 | `task1-predict.js` | Predict 20 results: string methods, `Number`, `Math`, regular expressions, dates |
 | 2 | `task2-clean-text.js` | Clean and examine values: trim, case, empty words, ids, lines with `\r\n`, packed values |
-| 3 | `task3-regex.js` | Write the patterns: a four-digit type, a module key, a dotted version, settings with `matchAll`, an id cleaned with `replace` |
+| 3 | `task3-regex.js` | Write the patterns: a four-digit type, a module key, a dotted version, packed settings, an id cleaned with `replace` |
 | 4 | `task4-versions.js` | `normalizeVersion` for every format of the table in section 8, then sort and compare |
 | 5 | `task5-dates.js` | EPOCH seconds and milliseconds, three date formats of real exports, days between, the age of a report |
 
-Two parts go with sections we may skip in class - read the section first: task 2,
-part 7 (`sameText`: "`length` counts code units") and task 4, part 4
-(`compareWithSuffix`: "When the suffix matters").
+Task 4, part 4 (`compareWithSuffix`) goes with the (optional) section "When the
+suffix matters" - read it first.
 
 ## Summary
 
@@ -1373,8 +1257,8 @@ part 7 (`sameText`: "`length` counts code units") and task 4, part 4
 | Strings | Immutable - every method returns a new string; `String(x ?? "")` before calling methods |
 | Methods | `trim`, `toLowerCase`, `includes` / `startsWith` / `endsWith`, `indexOf`, `slice`, `replace` / `replaceAll`, `padStart`, `split` |
 | Older forms | `indexOf(...) !== -1`, `substring`, `substr` (deprecated), `charAt` - read them, write the modern form |
-| Wrappers | `"a".toUpperCase()` works by boxing; never `new String` / `new Number` / `new Boolean` |
-| Encoding | Characters are code points; UTF-8 in files (1-4 bytes); `length` counts code units; `\r\n` vs `\n` - split with `/\r?\n/` |
+| Wrappers | `"a".toUpperCase()` works through a temporary wrapper; never `new String` / `new Number` / `new Boolean` |
+| Encoding | Characters are code points; UTF-8 in files (1-4 bytes); `\r\n` vs `\n` - split with `/\r?\n/` |
 | Regex | `/pattern/flags`; `\d \w \s .`, `[...]`, `* + ? {n,m}`, `^ $ \b`, `( )`, `\|`; test it on regex101 |
 | Methods with regex | `test` (true / false), `match` (groups or `null`), `matchAll` (all, with groups), `replace` (`$1`, a function), `split` |
 | Flags | `g` all, `i` ignore case, `m` multiline; never `g` with `test` |
