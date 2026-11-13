@@ -19,8 +19,6 @@ device (`doc`) and a check rule.
 ## Sessions
 
 The dates may change: the [Calendar](/calendar) always shows the current ones.
-From session 6 on, a lecture can run over two sessions: its second part opens the
-next session.
 
 |  | Date   | Topic |
 |---------|--------|-------|
