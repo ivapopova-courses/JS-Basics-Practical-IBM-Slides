@@ -15,8 +15,8 @@ msgstr ""
 
 #. heading 1
 #: site/example-document.md:1
-msgid "The example JSON document"
-msgstr "Примерният JSON документ"
+msgid "Sample data"
+msgstr "Примерни данни"
 
 #. paragraph
 #: site/example-document.md:3
@@ -172,6 +172,9 @@ msgstr "занятия 9 и 10"
 #: site/example-document.md:73
 msgid "Each task file says at the top which file it uses and what to look for in it."
 msgstr "Всеки файл със задача казва в началото кой файл използва и какво да търсите в него."
+
+#~ msgid "The example JSON document"
+#~ msgstr "Примерният JSON документ"
 
 #~ msgid "The document grows during the course: a lecture adds a new part when it needs one (for example `inventory.modules` in lecture 6). This page always shows the current version. After `git pull upstream main` your copy is the same."
 #~ msgstr "Документът расте по време на курса: лекция добавя нова част, когато ѝ трябва (например `inventory.modules` в лекция 6). Тази страница винаги показва текущата версия. След `git pull upstream main` вашето копие е същото."

@@ -1505,8 +1505,8 @@ msgstr "Задачите за упражнение, които не сте до�
 
 #. paragraph
 #: site/lectures/06-objects.md:1507
-msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`) - it goes into your project repository. The steps of the project, session by session, are on the page [Course project](/project)."
-msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`) - тя отива в repository-то на проекта ви. Стъпките на проекта, занятие по занятие, са на страницата [Курсов проект](/project)."
+msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`) - it goes into your project repository. The steps of the project, session by session, are on the page [Final project](/project)."
+msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`) - тя отива в repository-то на проекта ви. Стъпките на проекта, занятие по занятие, са на страницата [Финален проект](/project)."
 
 #. paragraph
 #: site/lectures/06-objects.md:1510
@@ -1547,6 +1547,9 @@ msgstr "Видео: [Modern JavaScript Tutorial #5 - Objects](https://www.youtub
 #: site/lectures/06-objects.md:1532
 msgid "**Next session:** array methods - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - and grouping thousands of records into a dictionary once, instead of searching them again and again. The course project starts for real: choose the product, the sample documents and the first helpers."
 msgstr "**Следващото занятие:** методи на arrays - `map`, `filter`, `find`, `some`, `every`, `reduce`, `sort` - и групиране на хиляди записи в dictionary веднъж, вместо да ги търсите отново и отново. Курсовият проект започва истински: изберете продукта, примерните документи и първите helper функции."
+
+#~ msgid "**Course project:** keep your `get` from practice task 2 in a file of your own (for example `library.js`) - it goes into your project repository. The steps of the project, session by session, are on the page [Course project](/project)."
+#~ msgstr "**Курсов проект:** запазете своята `get` от задача 2 във ваш собствен файл (например `library.js`) - тя отива в repository-то на проекта ви. Стъпките на проекта, занятие по занятие, са на страницата [Курсов проект](/project)."
 
 #~ msgid "write methods and know what `this` is; create many objects of one kind with a factory function, a constructor and a `class`;"
 #~ msgstr "пишете методи и да знаете какво е `this`; да създавате много обекти от един вид с factory функция, конструктор и `class`;"

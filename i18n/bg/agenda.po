@@ -505,13 +505,19 @@ msgstr "След всяко занятие има малка задача вър
 
 #. heading 2
 #: site/agenda.md:164
-msgid "Course project"
-msgstr "Курсов проект"
+msgid "Final project"
+msgstr "Финален проект"
 
 #. paragraph
 #: site/agenda.md:166
-msgid "See [Course project](/project)."
-msgstr "Вижте [Курсов проект](/project)."
+msgid "See [Final project](/project)."
+msgstr "Вижте [Финален проект](/project)."
+
+#~ msgid "Course project"
+#~ msgstr "Курсов проект"
+
+#~ msgid "See [Course project](/project)."
+#~ msgstr "Вижте [Курсов проект](/project)."
 
 #~ msgid "The dates may change: the [Calendar](/calendar) always shows the current ones. From session 6 on, a lecture can run over two sessions: its second part opens the next session."
 #~ msgstr "Датите може да се променят: [Календарът](/calendar) винаги показва актуалните. От занятие 6 нататък една лекция може да продължи в две занятия: втората й част открива следващото занятие."

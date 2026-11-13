@@ -161,6 +161,6 @@ After each session there is a small task on the report JSON. From session 6 on,
 every session keeps about 40 minutes for practice and for the solutions of the
 homework, and about 15 minutes for the course project.
 
-## Course project
+## Final project
 
-See [Course project](/project).
+See [Final project](/project).

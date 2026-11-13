@@ -1432,7 +1432,7 @@ console.log("(end)");
 ## 12. The course project: kickoff
 
 From today the helpers you write go into **your own repository** - the start of
-the course project ([Course project](/project)).
+the course project ([Final project](/project)).
 
 ### 1. Choose
 

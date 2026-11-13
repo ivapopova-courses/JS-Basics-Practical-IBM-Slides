@@ -1075,8 +1075,8 @@ msgstr "12. Прегледът на проекта"
 
 #. paragraph
 #: site/lectures/10-tests-types-git.md:924
-msgid "The last part of the session belongs to your course project ([Course project](/project))."
-msgstr "Последната част на занятието е за вашия курсов проект ([Курсов проект](/project))."
+msgid "The last part of the session belongs to your course project ([Final project](/project))."
+msgstr "Последната част на занятието е за вашия курсов проект ([Финален проект](/project))."
 
 #. heading 3
 #: site/lectures/10-tests-types-git.md:926
@@ -1412,6 +1412,9 @@ msgstr "Видеа: [Git Tutorial for Beginners: Command-Line Fundamentals](http
 #: site/lectures/10-tests-types-git.md:1046
 msgid "**This was the last session.** Thank you for the questions and the work. Keep the library growing - one helper, one test, one rule at a time."
 msgstr "**Това беше последното занятие.** Благодаря за въпросите и за работата. Нека библиотеката продължава да расте - по една helper функция, един тест, едно правило наведнъж."
+
+#~ msgid "The last part of the session belongs to your course project ([Course project](/project))."
+#~ msgstr "Последната част на занятието е за вашия курсов проект ([Курсов проект](/project))."
 
 #~ msgid "The pull request"
 #~ msgstr "Pull request-ът"

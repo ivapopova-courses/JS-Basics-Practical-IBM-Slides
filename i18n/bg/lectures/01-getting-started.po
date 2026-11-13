@@ -350,8 +350,8 @@ msgstr "Курсовият проект"
 
 #. table cell
 #: site/lectures/01-getting-started.md:151
-msgid "[Course project](/project)"
-msgstr "[Курсов проект](/project)"
+msgid "[Final project](/project)"
+msgstr "[Финален проект](/project)"
 
 #. paragraph
 #: site/lectures/01-getting-started.md:155
@@ -1185,8 +1185,8 @@ msgstr "`console.log(...)` отпечатва стойността си - осн
 
 #. paragraph
 #: site/lectures/01-getting-started.md:547
-msgid "The whole document, with a map of its parts, is on the page [The example JSON document](../example-document)."
-msgstr "Целият документ, с карта на частите му, е на страницата [Примерният JSON документ](../example-document)."
+msgid "The whole document, with a map of its parts, is on the page [Sample data](../example-document)."
+msgstr "Целият документ, с карта на частите му, е на страницата [Примерни данни](../example-document)."
 
 #. heading 3
 #: site/lectures/01-getting-started.md:550
@@ -1652,6 +1652,12 @@ msgstr "Engine-ът: [V8](https://v8.dev/)"
 #: site/lectures/01-getting-started.md:797
 msgid "**Next session:** variables, types and operators - `let` and `const`, numbers and strings, and turning the strings of a report into numbers."
 msgstr "**Следващото занятие:** variables, типове и оператори - `let` и `const`, числа и strings и превръщане на strings от отчета в числа."
+
+#~ msgid "[Course project](/project)"
+#~ msgstr "[Курсов проект](/project)"
+
+#~ msgid "The whole document, with a map of its parts, is on the page [The example JSON document](../example-document)."
+#~ msgstr "Целият документ, с карта на частите му, е на страницата [Примерният JSON документ](../example-document)."
 
 #~ msgid "The Extensions view (`Ctrl+Shift+X`) installs extensions from the marketplace. For this course nothing extra is required - JavaScript support is built in. Change the color theme with **File > Preferences > Theme > Color Theme**, or \"color theme\" in the Command Palette."
 #~ msgstr "Изгледът Extensions (`Ctrl+Shift+X`) инсталира разширения от пазара. За този курс не е нужно нищо допълнително - поддръжката на JavaScript е вградена. Сменете цветовата тема с **File > Preferences > Theme > Color Theme** или с \"color theme\" в Command Palette."

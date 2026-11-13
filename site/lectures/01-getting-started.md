@@ -148,7 +148,7 @@ names and values are invented, the shapes are realistic.
 | Practice tasks and homework | https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Homework |
 | The code written in class | https://github.com/ivapopova-courses/JS-Basics-Practical-IBM-Labs |
 | Step-by-step animations | [Animations](/under-the-hood) |
-| The course project | [Course project](/project) |
+| The course project | [Final project](/project) |
 
 ### The course project
 
@@ -545,7 +545,7 @@ console.log("The model is " + doc.overview.model);
 `doc` is the example JSON document; it is ready in every example on this site.
 
 The whole document, with a map of its parts, is on the page
-[The example JSON document](../example-document).
+[Sample data](../example-document).
 
 ### In the browser
 

@@ -921,7 +921,7 @@ rule(doc);
 
 ## 12. The project review
 
-The last part of the session belongs to your course project ([Course project](/project)).
+The last part of the session belongs to your course project ([Final project](/project)).
 
 ### What to show (10 - 15 minutes)
 

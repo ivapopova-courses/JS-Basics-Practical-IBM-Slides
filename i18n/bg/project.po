@@ -15,8 +15,8 @@ msgstr ""
 
 #. heading 1
 #: site/project.md:1
-msgid "Course project"
-msgstr "Курсов проект"
+msgid "Final project"
+msgstr "Финален проект"
 
 #. paragraph
 #: site/project.md:3
@@ -252,6 +252,9 @@ msgstr "Какво трябва да изберете"
 #: site/project.md:75
 msgid "Which product comes first, and which helpers are needed most. Collect examples of rules that are hard to write today."
 msgstr "Кой продукт е първи и кои helper функции трябват най-много. Съберете примери за правила, които днес се пишат трудно."
+
+#~ msgid "Course project"
+#~ msgstr "Курсов проект"
 
 #~ msgid "After the course: tests, JSDoc, the runner - and the pull request"
 #~ msgstr "След курса: тестове, JSDoc, runner-ът - и pull request-ът"

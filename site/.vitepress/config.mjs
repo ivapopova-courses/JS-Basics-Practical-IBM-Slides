@@ -51,9 +51,10 @@ const course = defineCourse({
         { text: 'Agenda', link: '/agenda' },
         { text: 'Calendar', link: '/calendar' },
         { text: 'How to use these pages', link: '/how-to' },
-        { text: 'Example JSON document', link: '/example-document' },
-        { text: 'Course project', link: '/project' },
-        { text: 'Animations', link: '/under-the-hood' }
+        { text: 'Sample data', link: '/example-document' },
+        { text: 'Animations', link: '/under-the-hood' },
+        { text: 'Final project', link: '/project' },
+        { text: 'The trainer', link: '/trainer' }
       ]
     },
     {

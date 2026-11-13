@@ -1506,7 +1506,7 @@ print `OK` or `FAIL`.
    and the course project reuse them. Every check must print `OK`.
 3. **Course project:** keep your `get` from practice task 2 in a file of your own
    (for example `library.js`) - it goes into your project repository. The steps of
-   the project, session by session, are on the page [Course project](/project).
+   the project, session by session, are on the page [Final project](/project).
 4. Optional: open one of your real reports and find each of the shapes of section
    7. Which paths do your rules read again and again? Write them down as `get`
    paths.

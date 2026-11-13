@@ -1,0 +1,99 @@
+# Translation of site/trainer.md into Български.
+# Edit the msgstr lines only (Poedit or any PO editor). See i18n/README.md.
+msgid ""
+msgstr ""
+"Project-Id-Version: Practical JavaScript Basics\n"
+"Language-Team: \n"
+"Last-Translator: Claude (claude-opus-5-5)\n"
+"PO-Revision-Date: 2026-11-13\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Source-File: site/trainer.md\n"
+
+#. front matter: title
+#: site/trainer.md:2 site/trainer.md:5
+msgid "The trainer"
+msgstr "Преподавателят"
+
+#. paragraph
+#: site/trainer.md:7
+msgid "**Iva Popova**"
+msgstr "**Ива Попова**"
+
+#. heading 2
+#: site/trainer.md:9
+msgid "Contact"
+msgstr "Контакти"
+
+#. paragraph
+#: site/trainer.md:11
+msgid "E-mail: [iva.popova@sciscend.com](mailto:iva.popova@sciscend.com)"
+msgstr "Имейл: [iva.popova@sciscend.com](mailto:iva.popova@sciscend.com)"
+
+#. paragraph
+#: site/trainer.md:12
+msgid "LinkedIn: [linkedin.com/in/ivapopova](https://www.linkedin.com/in/ivapopova/)"
+msgstr "LinkedIn: [linkedin.com/in/ivapopova](https://www.linkedin.com/in/ivapopova/)"
+
+#. heading 2
+#: site/trainer.md:14
+msgid "Teaching experience"
+msgstr "Преподавателски опит"
+
+#. paragraph
+#: site/trainer.md:16
+msgid "5 years as a teaching assistant at the Technical University of Sofia: \"Programming Languages\", \"Discrete Mathematics\", \"Expert Systems and Artificial Intelligence\"."
+msgstr "5 години като асистент в Технически университет - София: \"Програмни езици\", \"Дискретна математика\", \"Експертни системи и изкуствен интелект\"."
+
+#. paragraph
+#: site/trainer.md:18
+msgid "7+ years at leading private training centres: \"Databases (MySQL)\", \"Front-End Development\", \"Python\", \"Machine Learning\"."
+msgstr "7+ години към водещи частни учебни центрове: \"Databases (MySQL)\", \"Front-End Development\", \"Python\", \"Machine Learning\"."
+
+#. paragraph
+#: site/trainer.md:20
+msgid "More than 650 students have finished these courses successfully."
+msgstr "Повече от 650 успешно завършили курсисти."
+
+#. paragraph
+#: site/trainer.md:21
+msgid "Corporate courses for: A1 Bulgaria, Advanced Nutrients, Advent Group, BILLA Bulgaria, BORICA, CDS Bulgaria, Debt Collection Agency (DCA), DIGITALL, IBM Bulgaria, ICT Strypes, ISI Emerging Markets (EMIS), Javelin Group, KITT.bg, National Social Security Institute (NSSI), Software AG, TAL Engineering, UniCredit Bulbank, Vivacom, VMware."
+msgstr "Специализирани корпоративни обучения за: A1 Bulgaria, Advanced Nutrients, Advent Group, BILLA Bulgaria, BORICA, CDS Bulgaria, Debt Collection Agency (DCA), DIGITALL, IBM Bulgaria, ICT Strypes, ISI Emerging Markets (EMIS), Javelin Group, KITT.bg, Национален осигурителен институт (НОИ), Software AG, TAL Engineering, UniCredit Bulbank, Vivacom, VMware."
+
+#. heading 2
+#: site/trainer.md:27
+msgid "Professional experience"
+msgstr "Професионален опит"
+
+#. paragraph
+#: site/trainer.md:29
+msgid "7+ years as a software engineer (4 of them as a senior engineer and team lead) in international IT companies: Comptel (now part of Nokia), Internet Securities, Datamax, Experian."
+msgstr "7+ години като софтуерен инженер (4 от които като старши инженер и ръководител на екип) в международни IT компании: Comptel (днес част от Nokia), Internet Securities, Datamax, Experian."
+
+#. paragraph
+#: site/trainer.md:32
+msgid "6+ years as a researcher and consultant in an artificial intelligence start-up: sentiment analysis, ontologies, natural language processing (NLP) and large language models (LLMs)."
+msgstr "6+ години като изследовател и консултант в стартъп компания в областта на изкуствения интелект: анализ на настроения (sentiment analysis), онтологии, обработка на естествен език (NLP) и големи езикови модели (LLM)."
+
+#. heading 2
+#: site/trainer.md:36
+msgid "Education"
+msgstr "Образование"
+
+#. paragraph
+#: site/trainer.md:38
+msgid "Secondary school: the National Vocational High School of Computer Technologies and Systems, Pravets."
+msgstr "Средно образование: Национална професионална гимназия по компютърни технологии и системи (НПГ по КТС) - Правец."
+
+#. paragraph
+#: site/trainer.md:40
+msgid "Master of Engineering in Computer Systems, Technical University of Sofia."
+msgstr "Магистър инженер по компютърни системи, Технически университет - София."
+
+#. paragraph
+#: site/trainer.md:41
+msgid "PhD student in Artificial Intelligence Systems, Technical University of Sofia."
+msgstr "Докторант по системи с изкуствен интелект, Технически университет - София."

@@ -65,18 +65,23 @@ msgstr "Как да ползвате тези страници"
 
 #. side menu
 #: site/.vitepress/config.mjs
-msgid "Example JSON document"
-msgstr "Примерният JSON документ"
-
-#. side menu
-#: site/.vitepress/config.mjs
-msgid "Course project"
-msgstr "Курсов проект"
+msgid "Sample data"
+msgstr "Примерни данни"
 
 #. side menu
 #: site/.vitepress/config.mjs
 msgid "Animations"
 msgstr "Анимации"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "Final project"
+msgstr "Финален проект"
+
+#. side menu
+#: site/.vitepress/config.mjs
+msgid "The trainer"
+msgstr "Преподавателят"
 
 #. side menu
 #: site/.vitepress/config.mjs
@@ -127,3 +132,9 @@ msgstr "9. JSON, Node.js, модули"
 #: site/.vitepress/config.mjs
 msgid "10. Tests, types, Git"
 msgstr "10. Тестове, типове, Git"
+
+#~ msgid "Example JSON document"
+#~ msgstr "Примерният JSON документ"
+
+#~ msgid "Course project"
+#~ msgstr "Курсов проект"

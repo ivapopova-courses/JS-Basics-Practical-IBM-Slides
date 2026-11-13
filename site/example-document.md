@@ -1,4 +1,4 @@
-# The example JSON document
+# Sample data
 
 In every runnable example on this site, the variable `doc` holds this document.
 It is like the `doc` a check rule receives: the **report** of one device.

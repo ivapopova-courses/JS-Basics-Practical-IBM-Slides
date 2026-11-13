@@ -1155,8 +1155,8 @@ msgstr "12. Курсовият проект: старт"
 
 #. paragraph
 #: site/lectures/07-array-methods.md:1434
-msgid "From today the helpers you write go into **your own repository** - the start of the course project ([Course project](/project))."
-msgstr "От днес helper функциите, които пишете, отиват във **вашето собствено repository** - началото на курсовия проект ([Курсов проект](/project))."
+msgid "From today the helpers you write go into **your own repository** - the start of the course project ([Final project](/project))."
+msgstr "От днес helper функциите, които пишете, отиват във **вашето собствено repository** - началото на курсовия проект ([Финален проект](/project))."
 
 #. heading 3
 #: site/lectures/07-array-methods.md:1437
@@ -1457,6 +1457,9 @@ msgstr "Упражнения: [JavaScript array exercises](https://www.w3resourc
 #: site/lectures/07-array-methods.md:1577
 msgid "**Next session:** strings, regular expressions, dates and numbers - clean the version formats of your products, read the patterns in existing rules, and turn the many date formats of the reports into dates you can compare."
 msgstr "**Следващото занятие:** strings, regular expressions, дати и числа - изчистване на форматите на версиите на вашите продукти, четене на шаблоните в съществуващи правила и превръщане на многото формати на дати в отчетите в дати, които можете да сравнявате."
+
+#~ msgid "From today the helpers you write go into **your own repository** - the start of the course project ([Course project](/project))."
+#~ msgstr "От днес helper функциите, които пишете, отиват във **вашето собствено repository** - началото на курсовия проект ([Курсов проект](/project))."
 
 #~ msgid "The same with a classic function - note the `return`:"
 #~ msgstr "Същото с класическа функция - обърнете внимание на `return`:"

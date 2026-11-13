@@ -1,4 +1,4 @@
-# Course project
+# Final project
 
 **A helper library for the JSON of one product.**
 
