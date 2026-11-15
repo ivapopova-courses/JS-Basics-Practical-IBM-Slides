@@ -304,13 +304,19 @@ export async function segmentPage(src) {
     } else if (/^container_\w+_open$/.test(t.type)) {
       const m = /^(\s*:{3,}\s*)(\S+)\s*(.*?)\s*$/.exec(lines[s])
       if (!m) continue
-      const [, pre, kind, title] = m
+      const [, pre, kind] = m
+      let title = m[3]
+      // a box can have attributes, e.g. an anchor: `::: info Title {#id}`; as for
+      // headings, they stay out of the text to translate and are kept as they are
+      let attrs = ''
+      const a = /\s*(\{[^}]*\})$/.exec(title)
+      if (a) { attrs = ' ' + a[1]; title = title.slice(0, a.index) }
       const segments = title && hasWords(title) ? [{ msgid: title, kind: 'box title' }] : []
       units.push({
         start: s, end: s + 1, segments, boxKind: kind, boxTitle: title,
         render: (tr, lang) => {
           const t2 = title ? (tr(title) ?? title) : (LANGS[lang].boxTitles[kind] || '')
-          return [`${pre}${kind}${t2 ? ' ' + t2 : ''}`]
+          return [`${pre}${kind}${t2 ? ' ' + t2 : ''}${attrs}`]
         }
       })
     } else if (t.type === 'table_open') {
