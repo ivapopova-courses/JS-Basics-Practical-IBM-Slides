@@ -4,7 +4,7 @@ import CourseTheme from '@sciscend/course-kit/theme'
 import RunCode from './RunCode.vue'
 import DataFile from './DataFile.vue'
 import { setupCodeFold } from './codeFold.js'
-import { setupScrollHash } from './scrollHash.js'
+import { setupScrollHash } from '@sciscend/course-kit/theme/scrollHash.js'
 import { setupZoomImages } from './zoomImages.js'
 import './codeFold.css'
 import './diagram.css'
@@ -14,7 +14,7 @@ import './footer.css'
 import './zoomImages.css'
 
 // The course-kit theme, plus folding of long code blocks (see codeFold.js), the
-// #section of the page on screen in the address bar (scrollHash.js), our
+// #section of the page on screen in the address bar (scrollHash.js of the course kit), our
 // own RunCode (top-level await, Node-like output, Bulgarian buttons - see RunCode.vue),
 // the preview of a data file (<DataFile file="sample-asset.json" />, DataFile.vue),
 // diagrams that open bigger on a click (zoomImages.js), the grey unreleased

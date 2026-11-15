@@ -1,6 +1,6 @@
 import { posix } from 'node:path'
 import { defineCourse } from '@sciscend/course-kit/config'
-import { withLocales } from '../../i18n/i18n.mjs'
+import { withLocales } from '@sciscend/course-kit/i18n'
 import { releasedUpTo } from './released.mjs'
 
 // the footer (shown only on the home page - VitePress hides it next to the side

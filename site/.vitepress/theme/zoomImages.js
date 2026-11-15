@@ -60,7 +60,7 @@ function open(source) {
   el.append(img, close)
   el.addEventListener('click', hide)
   document.body.append(el)
-  // the page under it does not scroll; scrollHash.js leaves the address alone then
+  // the page under it does not scroll; scrollHash.js (course kit) leaves the address alone then
   document.body.style.overflow = 'hidden'
   overlay = { el, img, source }
   resize()

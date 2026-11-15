@@ -6,6 +6,11 @@ the English one the readers meet in documentation, error messages and code
 both languages is written in Bulgarian (функция, обект, метод, оператор). Everyday
 words are translated (стойност, условие, грешка).
 
+The words of every course site (session, lecture, homework, "Check yourself", the
+buttons), a few basic programming words and the rule above in full are in the common
+glossary of the course kit: `node_modules/@sciscend/course-kit/i18n/glossary-common.md`.
+This file has the terms of this course; where the two differ, this file wins.
+
 ## Stays in English
 
 Written in Latin letters, without quotes or backticks. Plural in English
@@ -47,38 +52,28 @@ Written in Latin letters, without quotes or backticks. Plural in English
 | command palette, DevTools, Source Control, IDE | names of tools and panels |
 | (advanced) | the marker of the animation scenarios: keep "(advanced)" |
 | (optional) | the marker of lecture sections that add one more example: keep "(optional)" |
-| Run, Edit, Reset, Present, OK, FAIL | buttons and output of the site and the tasks |
 
 ## Translated
 
 | English | Bulgarian |
 |---|---|
-| value | стойност |
 | default value, defaults | стойност по подразбиране, стойности по подразбиране |
-| condition | условие |
 | comparison, to compare | сравнение, сравнявам |
 | strictly / loosely equal | строго / нестрого равно |
-| operator, operand | оператор, операнд |
 | ternary operator | тернарен оператор |
 | logical operators | логически оператори |
 | expression (in general) | израз |
 | precedence, associativity | приоритет, асоциативност |
 | assignment, to assign | присвояване, присвоявам |
 | declaring, defining (initialising) | деклариране, дефиниране (инициализиране) |
-| function, method | функция, метод |
-| parameter, argument | параметър, аргумент |
 | object, object literal | обект, обектен литерал |
 | reference | референция |
 | key (of an object) | ключ |
-| index, element | индекс, елемент |
 | record, list | запис, списък |
 | type, primitive type | тип, примитивен тип |
-| to convert, conversion | преобразувам, преобразуване |
 | block, braces | блок, фигурни скоби |
-| module, library | модул, библиотека |
 | reserved word | запазена дума |
 | case-sensitive | различава малки и главни букви |
-| error, bug | грешка, бъг |
 | to parse | разчитам (parse) |
 | version | версия |
 | check rule, rule | правило за проверка, правило |
@@ -87,17 +82,5 @@ Written in Latin letters, without quotes or backticks. Plural in English
 | document | документ |
 | sample (data, rule, document) | примерен |
 | example JSON document (the `doc` of the examples) | примерният JSON документ |
-| session | занятие |
-| lecture | лекция |
-| practice, practice task | упражнение, задача за упражнение |
-| homework | домашно |
-| task, check | задача, проверка |
-| Check yourself | Проверете се |
-| Answer | Отговор |
 | Animation, Animations | Анимация, Анимации |
-| Summary | Обобщение |
-| Read more | Още за четене |
-| Next session | Следващото занятие |
-| Today you will learn to | Днес ще се научите да |
 | under the hood | "под капака" |
-| academic hours | учебни часа |
