@@ -25,8 +25,16 @@ in one course folder:
 ```bash
 npm install          # once
 npm run dev          # live preview at http://localhost:5173, reloads on save
+npm run dev:trainer  # with the trainer notes from ../trainer; never deploy
+npm run dev:search   # with the search box
 npm run build        # static site in site/.vitepress/dist (for GitHub Pages)
 ```
+
+`npm run dev` has no search box, so it starts in about 2 s (building the search
+index renders every EN and BG page first: about 16 s). To test the search, use
+`npm run dev:search`. The dev server also does not cache the rendered pages, so its
+memory does not grow with every save. Both come from the course kit (0.6.1+, "The
+dev server" in its README); `npm run build` always has the search.
 
 ## In class
 

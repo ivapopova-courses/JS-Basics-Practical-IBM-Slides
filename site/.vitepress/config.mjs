@@ -1,5 +1,5 @@
 import { posix } from 'node:path'
-import { defineCourse } from '@sciscend/course-kit/config'
+import { defineCourse, isDevServer } from '@sciscend/course-kit/config'
 import { withLocales } from '@sciscend/course-kit/i18n'
 import { releasedUpTo } from './released.mjs'
 
@@ -10,7 +10,7 @@ const footerMessage = 'Created for'
 
 // all lectures are listed in the side menu; in `npm run build` (the public site)
 // only the released ones are links, the others plain text - see released.mjs
-const showAll = process.env.TRAINER === '1' || process.argv.includes('dev')
+const showAll = process.env.TRAINER === '1' || isDevServer()
 const lectureNo = link => Number(link.match(/(?:^|\/)lectures\/(\d\d)-/)?.[1] || 0)
 const isReleased = link => showAll || lectureNo(link) <= releasedUpTo
 

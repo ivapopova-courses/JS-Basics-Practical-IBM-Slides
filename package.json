@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vitepress dev site",
     "dev:trainer": "TRAINER=1 vitepress dev site",
+    "dev:search": "SEARCH=1 vitepress dev site",
     "build": "vitepress build site",
     "build:trainer": "TRAINER=1 vitepress build site",
     "preview": "vitepress preview site",
@@ -18,7 +19,7 @@
     "i18n:import": "course-i18n import"
   },
   "dependencies": {
-    "@sciscend/course-kit": "github:SciScend/course-kit#v0.6.0"
+    "@sciscend/course-kit": "github:SciScend/course-kit#v0.6.1"
   },
   "devDependencies": {
     "vitepress": "^1.6.4"
