@@ -7,7 +7,7 @@ title: Calendar
 The dates and times of all sessions. When a session moves, the calendar shows the
 new date.
 
-<iframe class="course-calendar" src="https://calendar.google.com/calendar/embed?src=01736ebe44be63eb076556e00e3c660ebd790545a06fc48c6ad1c74ba2e587ba%40group.calendar.google.com&ctz=Europe%2FSofia&mode=MONTH&wkst=2&hl=en&showTitle=0&showPrint=0&showCalendars=0" title="Course calendar" loading="lazy"></iframe>
+<iframe class="course-calendar" src="https://calendar.google.com/calendar/embed?src=01736ebe44be63eb076556e00e3c660ebd790545a06fc48c6ad1c74ba2e587ba%40group.calendar.google.com&src=f4fc21a3289ad8366225a8528f23fe0fe36085b774fc18f06f867b6629113ace%40group.calendar.google.com&color=%23616161&ctz=Europe%2FSofia&mode=MONTH&wkst=2&hl=en&showTitle=0&showPrint=0&showCalendars=0" title="Course calendar" loading="lazy"></iframe>
 
 ## Add it to your own calendar
 
