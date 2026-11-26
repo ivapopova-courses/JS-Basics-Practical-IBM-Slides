@@ -316,10 +316,103 @@ def vscode_window(t):
     s.raw('</g>')
     return s.render()
 
+# ---------------------------------------------------------------------------
+# array-vs-object (lecture 6, Objects and arrays): the same data in an array and in
+# an object, in memory. Simplified: one box per value, no hidden classes.
+
+ARRAY_OBJECT = {
+    "en": {
+        "title": "The same data in an array and in an object, in memory (simplified)",
+        "arr_h": "Array: a value is found by its position",
+        "obj_h": "Object: a value is found by its key (label)",
+        "heap": "heap (in RAM)",
+        "var": "variable",
+        "arrow": ["holds an arrow", "to the data"],
+        "array": "the array",
+        "object": "the object",
+        "index": "index",
+        "key": "key",
+        "value": "value",
+        "arr_note": ["The indexes are not stored: a value's", "place in the row is its index."],
+        "obj_note": ["The keys are stored next to the values:", "a value is found by its key, not its place."],
+        "arr_read": "go to place 1 (count from 0)",
+        "obj_read": "find the key y",
+    },
+    "bg": {
+        "title": "Едни и същи данни в array и в обект, в паметта (опростено)",
+        "arr_h": "Array: стойността - по позицията ѝ",
+        "obj_h": "Обект: стойността - по ключа ѝ (етикета)",
+        "heap": "heap (в RAM)",
+        "var": "variable",
+        "arrow": ["пази стрелка", "към данните"],
+        "array": "array-ят",
+        "object": "обектът",
+        "index": "индекс",
+        "key": "ключ",
+        "value": "стойност",
+        "arr_note": ["Индексите не се пазят: мястото на", "стойността в реда е нейният индекс."],
+        "obj_note": ["Ключовете се пазят до стойностите:", "стойността се намира по ключа, не по мястото."],
+        "arr_read": "отиди на място 1 (броим от 0)",
+        "obj_read": "намери ключа y",
+    },
+}
+
+
+def array_vs_object(t):
+    s = Svg(920, 440, t["title"])
+    sides = [
+        (0, t["arr_h"], 'const arr = ["a", "b"];', "arr", t["array"],
+         [("0", '"a"'), ("1", '"b"')], t["index"], False, t["arr_note"],
+         "arr[1]", t["arr_read"]),
+        (465, t["obj_h"], 'const obj = { x: "a", y: "b" };', "obj", t["object"],
+         [("x", '"a"'), ("y", '"b"')], t["key"], True, t["obj_note"],
+         "obj.y", t["obj_read"]),
+    ]
+    for dx, head, code, var, label, rows, first, stored, note, read, read2 in sides:
+        x0 = 10 + dx
+        s.text(x0 + 4, 28, head, size=17, weight=700)
+        s.text(x0 + 4, 56, code, size=14, mono=True)
+        # the heap around the data (the variable is outside it)
+        s.rect(x0 + 146, 74, 299, 236, "gray", dash=True)
+        s.text(x0 + 431, 96, t["heap"], size=13, color=MUTED, anchor="end")
+        # the variable and its arrow
+        s.rect(x0 + 12, 158, 104, 50, "green")
+        s.text(x0 + 64, 189, var, size=16, weight=700, mono=True, anchor="middle")
+        s.text(x0 + 64, 226, t["var"], size=13, color=MUTED, anchor="middle")
+        s.lines(x0 + 64, 246, t["arrow"], size=13, gap=17, anchor="middle")
+        s.arrow(x0 + 118, 183, x0 + 166, 183)
+        # the data block: a row of places
+        bx, by, bw = x0 + 170, 108, 254
+        s.rect(bx, by, bw, 168, "orange")
+        s.text(bx + 14, by + 26, label, size=15, weight=700)
+        kw = 86
+        s.text(bx + 14 + kw / 2, by + 52, first, size=12.5, color=MUTED, anchor="middle")
+        s.text(bx + 14 + kw + 8 + (bw - 36 - kw) / 2, by + 52, t["value"], size=12.5, color=MUTED,
+               anchor="middle")
+        for i, (k, v) in enumerate(rows):
+            ry = by + 62 + i * 46
+            hit = i == 1
+            if stored:      # a key is data: a box of its own
+                s.rect(bx + 14, ry, kw, 38, "blue", radius=6)
+                s.text(bx + 14 + kw / 2, ry + 25, k, size=15, mono=True, anchor="middle")
+            else:           # an index is only the place: no box
+                s.text(bx + 14 + kw / 2, ry + 25, k, size=15, mono=True, color=MUTED, anchor="middle")
+            s.rect(bx + 14 + kw + 8, ry, bw - 36 - kw, 38, "violet" if hit else "gray", radius=6)
+            s.text(bx + 14 + kw + 8 + (bw - 36 - kw) / 2, ry + 25, v, size=15, mono=True,
+                   anchor="middle", weight=700 if hit else 400)
+        # what the reading does
+        s.text(x0 + 4, 340, read, size=15, mono=True, weight=700, color=COLORS["violet"][1])
+        s.text(x0 + 4 + len(read) * 9.2 + 10, 340, '-> "b": ' + read2, size=14)
+        s.lines(x0 + 4, 372, note, size=14, gap=20)
+        s.arrow(bx + bw - 20, 330, bx + bw - 20, by + 62 + 46 + 40, color=COLORS["violet"][1], dash=True)
+    s.raw(f'<path d="M455,16 L455,420" fill="none" stroke="{COLORS["gray"][1]}" stroke-width="1"/>')
+    return s.render()
+
 
 DIAGRAMS = {"homework-repos": (homework_repos, REPOS),
             "terminal-prompt": (terminal_prompt, PROMPT),
-            "vscode-window": (vscode_window, VSCODE)}
+            "vscode-window": (vscode_window, VSCODE),
+            "array-vs-object": (array_vs_object, ARRAY_OBJECT)}
 
 if __name__ == "__main__":
     for name, (draw, texts) in DIAGRAMS.items():

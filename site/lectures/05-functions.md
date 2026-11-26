@@ -1150,6 +1150,11 @@ var x = 10;
 console.log("x:", x);       // x: 10
 ```
 
+::: info Animation
+**Hoisting:**
+[1. `var` and `undefined`](../animations/hoisting.html#1){target="_blank"}
+:::
+
 A function **declaration** is hoisted with its body, so it can be called before its
 line:
 
@@ -1160,6 +1165,11 @@ function foo() {
     return "I am foo() and I work!";
 }
 ```
+
+::: info Animation
+**Hoisting:**
+[2. Function declaration](../animations/hoisting.html#2){target="_blank"},
+:::
 
 A function **expression** is a value in a variable. Only the variable is hoisted:
 
@@ -1172,14 +1182,16 @@ var foo = function () {
 };
 ```
 
+::: info Animation
+**Hoisting:**
+[3. Function expression](../animations/hoisting.html#3){target="_blank"},
+:::
+
 With `let` or `const` the error is a `ReferenceError` instead: the variable is in
 the TDZ until its line has run.
 
 ::: info Animation
-**Hoisting: the two phases of execution:**
-[1. `var` and `undefined`](../animations/hoisting.html#1){target="_blank"},
-[2. Function declaration](../animations/hoisting.html#2){target="_blank"},
-[3. Function expression](../animations/hoisting.html#3){target="_blank"},
+**Hoisting: more animations:**
 [4. `let` / `const` and the TDZ](../animations/hoisting.html#4){target="_blank"},
 [5. Hoisting in a function](../animations/hoisting.html#5){target="_blank"},
 [6. `let` in a block (advanced)](../animations/hoisting.html#6){target="_blank"},
@@ -1259,7 +1271,7 @@ There is a difference between **changing** the array the parameter points to and
 
 ```js run
 function clearList(list) {
-    list = [];          // the local arrow now points to a NEW array; the caller's is untouched
+    list = [];          // points to a NEW array; the caller's is untouched
 }
 
 function emptyList(list) {
@@ -1319,31 +1331,51 @@ A **pure function**:
 1. returns a result that depends **only on its arguments** - the same arguments
    always give the same result;
 2. has **no side effects** - it changes nothing outside: no global, no argument,
-   no printing, no alerts.
-
-`majorOf`, `versionBelow`, `deviceName` are pure. `shortFirmware` is not (it
-changes its argument), `addModel` is not, and the first `rule` of section 7 is not
-(it changes a global).
-
-Pure helpers are easy to read, to test and to reuse: to understand a call you only
-need to look at its arguments. Keep the side effects in **one** place - `rule`
-itself calls `emit`. Everything it calls should be pure.
+   no printing (`console.log`), no alerts (`emit`).
 
 ```js run
-// not pure: reads a global that can change, and writes into it
-var lastModel;
-function rememberModel(doc) {
-    lastModel = doc.overview.model;
-    return lastModel;
+// pure: only the arguments, only return
+function add(a, b) {
+    return a + b;
 }
+console.log(add(2, 3));       // 5
+console.log(add(2, 3));       // 5 - always the same
 
-// pure: everything it needs comes in as an argument, the result goes out with return
-function modelOf(doc) {
-    return doc.overview?.model ?? "";
+// not pure: it uses and changes a global
+let total = 0;
+function addToTotal(x) {
+    total = total + x;
+    return total;
 }
-
-console.log(rememberModel(doc), modelOf(doc));
+console.log(addToTotal(2));   // 2
+console.log(addToTotal(2));   // 4 - the same argument, another result
 ```
+
+Pure helpers are easy to read, to test and to reuse: to understand a call you only
+need to look at its arguments.
+
+In a check rule, `emit` is a side effect too. So a helper should not call `emit`
+itself - it only **returns** an answer, and `rule` decides:
+
+```js run
+function emit(id, details) {          // fake: prints instead of creating an alert
+    console.log("ALERT for " + id + ": " + JSON.stringify(details));
+}
+
+// pure: the helper only answers a question
+function isDegraded(enc) {
+    return enc.state !== "normal";
+}
+
+const enc = doc.inventory.enclosures[2];
+console.log(isDegraded(enc));         // true - only an answer, no alert
+
+if (isDegraded(enc)) {                // rule decides and creates the alert
+    emit(doc.status.device_alias, { "Enclosure": enc.id });
+}
+```
+
+So keep the helpers pure, and call `emit` only in `rule`.
 
 ### A new list instead of a changed one (optional)
 
@@ -1799,71 +1831,12 @@ device.helloArrow();    // not LAB-DEV-01 (in Node.js: undefined)
 The rule of thumb: arrows for **callbacks** and short helpers; `function`
 declarations for named helpers and **methods**.
 
-## 11. Functions inside functions; closures
 
-### Helpers inside `rule`
+## 11. More function forms
 
-Many existing rules define their helpers **inside** `rule`. First the idea on a
-small example: a function inside another function can use the variables of the
-outer function.
-
-```js run
-function checkFirmware(version) {
-    function major() {                          // no parameters
-        return Number(version.split(".")[0]);   // version of checkFirmware
-    }
-
-    if (major() < 4) {
-        console.log(version + ": too old, major " + major());
-    } else {
-        console.log(version + ": OK");
-    }
-}
-
-checkFirmware("4.2.1.7");       // 4.2.1.7: OK
-checkFirmware("3.9.0.1");       // 3.9.0.1: too old, major 3
-```
-
-What happens:
-
-- `major` is a **local** variable of `checkFirmware`. A new `major` function is
-  created on **every** call of `checkFirmware`, and it disappears when
-  `checkFirmware` returns.
-- `major` uses `version` without getting it as a parameter: it finds it in the
-  scope of `checkFirmware`, through the scope chain (section 6). In the first call
-  it sees `"4.2.1.7"`, in the second call `"3.9.0.1"`.
-
-In a rule, the outer function is `rule`, and the helpers use `doc` in the same way:
-
-```js run
-function rule(doc) {
-    function model() {
-        return doc.overview.model;      // doc of rule - not a parameter of model
-    }
-
-    if (model() === "XR-220") {
-        console.log("check model " + model());
-    }
-}
-
-rule(doc);      // check model XR-220
-```
-
-::: info Animation
-**Functions and data:** [6. A helper inside `rule`](../animations/functionsAndData.html#6){target="_blank"}
-:::
-
-Is this good or bad? It works. Its costs:
-
-- the helper can be used **only** inside this rule - another rule copies it (the
-  same `cmpVer` in every rule);
-- it can read and change **any** variable of `rule`, so you must read all of
-  `rule` to understand it;
-- it cannot be tested alone.
-
-The guidelines ask for helpers **before** `rule`, at the top level. Then they get
-everything as **parameters**, and they are easy to move into a shared library
-later (session 9 and the course project).
+Three more ways to use a function: keep its variables alive, run it at once, and
+let it call itself. You meet them in older code and in libraries. The homework
+needs the first one, closures; the other two are (advanced).
 
 ### Closures
 
@@ -2121,9 +2094,7 @@ for (const level of ["4.1.0.3", "4.2.0.9", "4.2.1.7"]) {
 }
 ```
 
-Compare this with lecture 3, where the same logic was an `if / else if` chain and
-a `switch` inside the rule. Now each question has a name, and each helper can be
-checked alone.
+Each question now has a name, and each helper can be checked alone.
 
 ### Splitting a long rule into helpers
 
@@ -2337,8 +2308,8 @@ rule({
 console.log("(end)");
 ```
 
-The alerts are the same as before. The second report still gets **no** alert: the
-`try` still hides the missing `extended_info` (question 3 above).
+The alerts are the same as before. The second report still gets **no** alert: the report has
+no `extended_info`, and the catch-all `try` hides that error.
 
 **Check yourself:**
 

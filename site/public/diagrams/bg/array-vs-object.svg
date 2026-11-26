@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 440" width="920" height="440" role="img">
+<title>Едни и същи данни в array и в обект, в паметта (опростено)</title>
+<defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b616b"/></marker></defs>
+<text x="14" y="28" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">Array: стойността - по позицията ѝ</text>
+<text x="14" y="56" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">const arr = ["a", "b"];</text>
+<rect x="156" y="74" width="299" height="236" rx="10" fill="#f3f1ec" stroke="#8c8578" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="441" y="96" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">heap (в RAM)</text>
+<rect x="22" y="158" width="104" height="50" rx="10" fill="#e2f2e0" stroke="#4f8a45" stroke-width="2"/>
+<text x="74" y="189" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="16" font-weight="700" fill="#1f2328" text-anchor="middle" xml:space="preserve">arr</text>
+<text x="74" y="226" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">variable</text>
+<text x="74" y="246" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">пази стрелка</text>
+<text x="74" y="263" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">към данните</text>
+<path d="M128,183 L176,183" fill="none" stroke="#5b616b" stroke-width="2.2" marker-end="url(#head)"/>
+<rect x="180" y="108" width="254" height="168" rx="10" fill="#fdebd3" stroke="#c97a1c" stroke-width="2"/>
+<text x="194" y="134" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">array-ят</text>
+<text x="237.0" y="160" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">индекс</text>
+<text x="354.0" y="160" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">стойност</text>
+<text x="237.0" y="195" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">0</text>
+<rect x="288" y="170" width="132" height="38" rx="6" fill="#f3f1ec" stroke="#8c8578" stroke-width="2"/>
+<text x="354.0" y="195" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">"a"</text>
+<text x="237.0" y="241" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">1</text>
+<rect x="288" y="216" width="132" height="38" rx="6" fill="#ece4f8" stroke="#7b48c4" stroke-width="2"/>
+<text x="354.0" y="241" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle" xml:space="preserve">"b"</text>
+<text x="14" y="340" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="700" fill="#7b48c4" text-anchor="start" xml:space="preserve">arr[1]</text>
+<text x="79.19999999999999" y="340" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">-&gt; "b": отиди на място 1 (броим от 0)</text>
+<text x="14" y="372" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">Индексите не се пазят: мястото на</text>
+<text x="14" y="392" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">стойността в реда е нейният индекс.</text>
+<path d="M414,330 L414,256" fill="none" stroke="#7b48c4" stroke-width="2.2" marker-end="url(#head)" stroke-dasharray="6 4"/>
+<text x="479" y="28" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">Обект: стойността - по ключа ѝ (етикета)</text>
+<text x="479" y="56" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">const obj = { x: "a", y: "b" };</text>
+<rect x="621" y="74" width="299" height="236" rx="10" fill="#f3f1ec" stroke="#8c8578" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="906" y="96" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="end" xml:space="preserve">heap (в RAM)</text>
+<rect x="487" y="158" width="104" height="50" rx="10" fill="#e2f2e0" stroke="#4f8a45" stroke-width="2"/>
+<text x="539" y="189" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="16" font-weight="700" fill="#1f2328" text-anchor="middle" xml:space="preserve">obj</text>
+<text x="539" y="226" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">variable</text>
+<text x="539" y="246" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">пази стрелка</text>
+<text x="539" y="263" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">към данните</text>
+<path d="M593,183 L641,183" fill="none" stroke="#5b616b" stroke-width="2.2" marker-end="url(#head)"/>
+<rect x="645" y="108" width="254" height="168" rx="10" fill="#fdebd3" stroke="#c97a1c" stroke-width="2"/>
+<text x="659" y="134" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="start" xml:space="preserve">обектът</text>
+<text x="702.0" y="160" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">ключ</text>
+<text x="819.0" y="160" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#5b616b" text-anchor="middle" xml:space="preserve">стойност</text>
+<rect x="659" y="170" width="86" height="38" rx="6" fill="#e3edfb" stroke="#3b6fc4" stroke-width="2"/>
+<text x="702.0" y="195" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">x</text>
+<rect x="753" y="170" width="132" height="38" rx="6" fill="#f3f1ec" stroke="#8c8578" stroke-width="2"/>
+<text x="819.0" y="195" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">"a"</text>
+<rect x="659" y="216" width="86" height="38" rx="6" fill="#e3edfb" stroke="#3b6fc4" stroke-width="2"/>
+<text x="702.0" y="241" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="400" fill="#1f2328" text-anchor="middle" xml:space="preserve">y</text>
+<rect x="753" y="216" width="132" height="38" rx="6" fill="#ece4f8" stroke="#7b48c4" stroke-width="2"/>
+<text x="819.0" y="241" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle" xml:space="preserve">"b"</text>
+<text x="479" y="340" font-family="JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace" font-size="15" font-weight="700" fill="#7b48c4" text-anchor="start" xml:space="preserve">obj.y</text>
+<text x="535.0" y="340" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">-&gt; "b": намери ключа y</text>
+<text x="479" y="372" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">Ключовете се пазят до стойностите:</text>
+<text x="479" y="392" font-family="Segoe UI, Noto Sans, Roboto, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start" xml:space="preserve">стойността се намира по ключа, не по мястото.</text>
+<path d="M879,330 L879,256" fill="none" stroke="#7b48c4" stroke-width="2.2" marker-end="url(#head)" stroke-dasharray="6 4"/>
+<path d="M455,16 L455,420" fill="none" stroke="#8c8578" stroke-width="1"/>
+</svg>

@@ -832,19 +832,19 @@ const SCENARIOS = [
     globals: [FN('get'), CONST('doc')],
     code: [
         'function get(obj, path, fallback) {',
-        '    let cur = obj;',
+        '    let current = obj;',
         '    for (const key of path) {',
-        '        if (cur == null) return fallback;   // null or undefined',
-        '        cur = cur[key];',
+        '        if (current == null) return fallback;   // null or undefined',
+        '        current = current[key];',
         '    }',
-        '    return cur ?? fallback;',
+        '    return current ?? fallback;',
         '}',
         'const doc = { modules: { "12_4.20": { version: "4.20" } } };',
         'get(doc, ["modules", "12_4.20", "version"], "?");',
         'get(doc, ["status", "alias"], "?");',
     ],
     steps: [
-        { line: -1, text: `Helper функцията от курсовия проект: <code>get(obj, path, fallback)</code> обхожда път, зададен като <b>масив от ключове</b>. Променливата cur се движи надолу по обектите, по един ключ на завъртане. Липсващо ниво дава fallback - никога TypeError.` },
+        { line: -1, text: `Helper функцията от курсовия проект: <code>get(obj, path, fallback)</code> обхожда път, зададен като <b>масив от ключове</b>. Променливата current се движи надолу по обектите, по един ключ на завъртане. Липсващо ниво дава fallback - никога TypeError.` },
         { line: 8, text: `Отчетът: три вложени обекта. Един ключ има точка в себе си: "12_4.20".`,
           do: s => {
               hnew(s, 'R', 'object', [['modules', '@M']]);
@@ -856,19 +856,19 @@ const SCENARIOS = [
           do: s => {
               mk(s, 'c1', 9, 'get(doc, ["modules", "12_4.20", "version"], "?")', 'call');
               hnew(s, 'P', 'array', [[0, '"modules"'], [1, '"12_4.20"'], [2, '"version"']]);
-              push(s, 'g', 'get(doc, [...], "?")', [['obj', '@R'], ['path', '@P'], ['fallback', '"?"'], LET('cur')], 9);
+              push(s, 'g', 'get(doc, [...], "?")', [['obj', '@R'], ['path', '@P'], ['fallback', '"?"'], LET('current')], 9);
           } },
-        { line: 1, text: `<code>let cur = obj;</code> - cur започва отгоре: още една стрелка към отчета.`,
-          do: s => setv(s, 'g', 'cur', '@R') },
-        { line: 4, text: `Ключ "modules": cur е обект, затова <code>cur = cur["modules"]</code> - cur слиза едно ниво надолу.`,
-          do: s => { hrd(s, 'P', 0); addv(s, 'g', 'key', '"modules"', 'const'); hrd(s, 'R', 'modules'); setv(s, 'g', 'cur', '@M'); }, range: [2, 3] },
-        { line: 4, text: `Ключ "12_4.20" - с точка вътре, но е един елемент на масива, затова се използва както е: cur отива на вътрешния обект.`,
-          do: s => { hrd(s, 'P', 1); setv(s, 'g', 'key', '"12_4.20"'); hrd(s, 'M', '12_4.20'); setv(s, 'g', 'cur', '@V'); }, range: [2, 3] },
-        { line: 4, text: `Ключ "version": cur става низът "4.20".`,
-          do: s => { hrd(s, 'P', 2); setv(s, 'g', 'key', '"version"'); hrd(s, 'V', 'version'); setv(s, 'g', 'cur', '"4.20"'); },
-          fly: [['h:V.version', 'v:g.cur', '"4.20"']], range: [2, 3] },
-        { line: 6, text: `Пътят свърши. <code>cur ?? fallback</code> - cur не е undefined или null: функцията връща "4.20".`,
-          do: s => { const f = frame(s, 'g'); f.vars = f.vars.filter(v => v.name !== 'key'); rd(s, 'g', 'cur'); ret(s, 'g', '"4.20"'); }, reveal: ['ret:g'] },
+        { line: 1, text: `<code>let current = obj;</code> - current започва отгоре: още една стрелка към отчета.`,
+          do: s => setv(s, 'g', 'current', '@R') },
+        { line: 4, text: `Ключ "modules": current е обект, затова <code>current = current["modules"]</code> - current слиза едно ниво надолу.`,
+          do: s => { hrd(s, 'P', 0); addv(s, 'g', 'key', '"modules"', 'const'); hrd(s, 'R', 'modules'); setv(s, 'g', 'current', '@M'); }, range: [2, 3] },
+        { line: 4, text: `Ключ "12_4.20" - с точка вътре, но е един елемент на масива, затова се използва както е: current отива на вътрешния обект.`,
+          do: s => { hrd(s, 'P', 1); setv(s, 'g', 'key', '"12_4.20"'); hrd(s, 'M', '12_4.20'); setv(s, 'g', 'current', '@V'); }, range: [2, 3] },
+        { line: 4, text: `Ключ "version": current става низът "4.20".`,
+          do: s => { hrd(s, 'P', 2); setv(s, 'g', 'key', '"version"'); hrd(s, 'V', 'version'); setv(s, 'g', 'current', '"4.20"'); },
+          fly: [['h:V.version', 'v:g.current', '"4.20"']], range: [2, 3] },
+        { line: 6, text: `Пътят свърши. <code>current ?? fallback</code> - current не е undefined или null: функцията връща "4.20".`,
+          do: s => { const f = frame(s, 'g'); f.vars = f.vars.filter(v => v.name !== 'key'); rd(s, 'g', 'current'); ret(s, 'g', '"4.20"'); }, reveal: ['ret:g'] },
         { line: 9, text: `Обратно в глобалния код; масивът с пътя вече е боклук.`,
           do: s => { pop(s); mk(s, 'c1', 9, 'get(doc, ["modules", "12_4.20", "version"], "?")', 'rv', '"4.20"'); gc(s, 'P'); },
           fly: [['ret:g', 'mk:c1', '"4.20"', 'ret']] },
@@ -877,12 +877,12 @@ const SCENARIOS = [
               hdrop(s, 'P'); unmk(s, 'c1');
               mk(s, 'c2', 10, 'get(doc, ["status", "alias"], "?")', 'call');
               hnew(s, 'Q', 'array', [[0, '"status"'], [1, '"alias"']]);
-              push(s, 'g2', 'get(doc, [...], "?")', [['obj', '@R'], ['path', '@Q'], ['fallback', '"?"'], ['cur', '@R', 'let']], 10);
+              push(s, 'g2', 'get(doc, [...], "?")', [['obj', '@R'], ['path', '@Q'], ['fallback', '"?"'], ['current', '@R', 'let']], 10);
           }, range: [0, 1] },
-        { line: 4, text: `Ключ "status": отчетът няма такъв ключ - cur става <b>undefined</b>.`,
-          do: s => { hrd(s, 'Q', 0); addv(s, 'g2', 'key', '"status"', 'const'); hlo(s, 'R'); setv(s, 'g2', 'cur', 'undefined'); }, range: [2, 3] },
-        { line: 3, text: `Ключ "alias": преди да слезе надолу, проверката <code>cur == null</code> - вярна за undefined и null (и само за тях: единствената полезна употреба на <code>==</code>). Затова <code>return fallback;</code>. "?" - и без TypeError.`,
-          do: s => { hrd(s, 'Q', 1); setv(s, 'g2', 'key', '"alias"'); rd(s, 'g2', 'cur', 'fallback'); ret(s, 'g2', '"?"'); }, reveal: ['ret:g2'] },
+        { line: 4, text: `Ключ "status": отчетът няма такъв ключ - current става <b>undefined</b>.`,
+          do: s => { hrd(s, 'Q', 0); addv(s, 'g2', 'key', '"status"', 'const'); hlo(s, 'R'); setv(s, 'g2', 'current', 'undefined'); }, range: [2, 3] },
+        { line: 3, text: `Ключ "alias": преди да слезе надолу, проверката <code>current == null</code> - вярна за undefined и null (и само за тях: единствената полезна употреба на <code>==</code>). Затова <code>return fallback;</code>. "?" - и без TypeError.`,
+          do: s => { hrd(s, 'Q', 1); setv(s, 'g2', 'key', '"alias"'); rd(s, 'g2', 'current', 'fallback'); ret(s, 'g2', '"?"'); }, reveal: ['ret:g2'] },
         { line: 10, text: `Извикването дава "?".`,
           do: s => { pop(s); mk(s, 'c2', 10, 'get(doc, ["status", "alias"], "?")', 'rv', '"?"'); gc(s, 'Q'); },
           fly: [['ret:g2', 'mk:c2', '"?"', 'ret']] },

@@ -23,8 +23,8 @@ title: 6. Objects, deep paths and data shapes
 - know the difference between a reference, a shallow copy and a deep copy
   (`structuredClone`);
 - use spread, rest and destructuring;
-- write methods and know what `this` is; create many objects of one kind with a
-  factory function;
+- write simple methods and know what `this` means in them; create many objects of
+  one kind with a factory function;
 - build the details object of an alert, with its columns in a fixed order;
 - read the object code of older rules: `new Object()`, `obj["key"] = ...`,
   `for...in` with `hasOwnProperty`, `a && a.b && a.b.c`.
@@ -46,12 +46,12 @@ const MODELS = ["XR-210", "XR-220"];
 // 5. our own path helper - the first function of the course project
 function get(obj, path, fallback) {
     const keys = Array.isArray(path) ? path : path.split(".");
-    let cur = obj;
+    let current = obj;
     for (const key of keys) {
-        if (cur === undefined || cur === null) return fallback;
-        cur = cur[key];                                 // 3. brackets: the key is in a variable
+        if (current === undefined || current === null) return fallback;
+        current = current[key];                         // 3. brackets: the key is in a variable
     }
-    return cur ?? fallback;
+    return current ?? fallback;
 }
 
 // 6. a dictionary: the keys are ids, and each key carries information
@@ -100,9 +100,20 @@ record in a list. Rules spend most of their lines reading objects - safely.
 
 MDN: [Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects)
 
-An **object** groups related data under one name. Each piece of data is a
-**property**: a **key** (a name, a string) and a **value** (any type: a number, a
-string, an array, another object, a function).
+Imagine taking a piece of data and attaching a label to it, like the lines of a
+paper form:
+
+```
+name: "Pesho",
+town: "Sofia"
+```
+
+Instead of counting positions or slots as in arrays, you look values up by their
+label. In JavaScript, an object groups all those labeled details of one thing under
+one name.
+
+Each field is a **property**: a **key** (the label - a string) and a **value**
+(any type: a number, a string, an array, even another object).
 
 ```js run
 // one object: the data of one student
@@ -110,24 +121,32 @@ const student1 = {
     // properties: key: value
     firstName: "Pesho",
     surName: "Petrov",
-    scores: [3, 4, 5],
-    address: { town: "Sofia", zip: 1508 },
-    // a method: a property whose value is a function (section 10)
-    greet: function () {
-        console.log(`Hello, I'm ${this.firstName}`);
-    }
+    scores: [3, 4, 5],                      // a value can be an array...
+    address: { town: "Sofia", zip: 1508 }   // ...or another object
 };
 
 console.log(student1.surName);          // Petrov
-console.log(student1.address.town);     // Sofia
-student1.greet();                       // Hello, I'm Pesho
+console.log(student1.address.town);     // Sofia - first the address, then its town
+```
+
+A value can also be a function - then the property is called a **method**: an
+action the object can do. Section 10 shows methods.
+
+The report is a form of the same kind. Its part `overview` is an object with
+three properties:
+
+```js run
+console.log(doc.overview);
+// { model: 'XR-220', serial_number: 'SN4X7Q92', version: '4.2.1.7' }
+console.log(doc.overview.model);        // XR-220
 ```
 
 In classic object-oriented languages (Java, C#, C++) an object always joins data
 (**properties**) and the actions on that data (**methods**):
 `Object = { properties + methods }`. In JavaScript an object can also be **data
 only**. Other languages call such a structure a *dictionary* (Python) or an
-*associative array* (PHP, Perl):
+*associative array* (PHP, Perl) - like a real dictionary, you look a word up and
+get its meaning:
 
 ```js run
 const dictionary = {
@@ -140,6 +159,8 @@ console.log(dictionary.banana);     // Banane
 ```
 
 A JSON report is exactly this: objects of data, with objects and arrays inside.
+Some of its objects are forms (`overview`: model, serial, version), and some are
+dictionaries: `doc.inventory.modules` looks a module up by its id (section 6).
 
 ### Objects and arrays
 
@@ -150,15 +171,12 @@ A JSON report is exactly this: objects of data, with objects and arrays inside.
 | Order | the order of the elements is the data | keys have an order too, but you look them up by name |
 | Typical use | a list of things of one kind | the parts of one thing; or a dictionary keyed by ids |
 
-Older books and tutorials say "objects are not ordered". Today the language defines the
-order of the keys: keys that look like whole numbers (`"2"`, `"10"`) come
-**first, sorted**; all other keys follow in the order they were **created**. This
-matters for the columns of an alert (section 12):
+![The same data in an array and in an object, in memory (simplified): the array keeps the values in a row and finds one by its index, which is not stored; the object stores each key next to its value and finds a value by its key](/diagrams/array-vs-object.svg){.diagram width=920 height=440}
 
-```js run
-const o = { b: 1, "10": 2, a: 3, "2": 4, "12_4.20": 5 };
-console.log(Object.keys(o));    // [ '2', '10', 'b', 'a', '12_4.20' ]
-```
+Older books and tutorials say "objects are not ordered". That is outdated: today
+the language defines the order of the keys. Mostly it is the order in which they
+were created - with one exception, shown in section 12, where the order becomes the
+columns of an alert.
 
 ### An object in memory
 
@@ -231,8 +249,14 @@ When a property should get the value of a variable **with the same name**, write
 the name once:
 
 ```js run
-const model = "XR-220";
-const version = "4.2.1.7";
+const name = "Ada";
+const age = 23;
+const person = { name, age };       // the same as { name: name, age: age }
+console.log(person);                // { name: 'Ada', age: 23 }
+
+// on the report: values read into variables, then put together
+const model = doc.overview.model;
+const version = doc.overview.version;
 
 const older = { model: model, version: version };   // older style
 const modern = { model, version };                  // the same object
@@ -290,6 +314,10 @@ console.log(developer1.skills[0]);      // HTML
 
 developer1.firstName = "Stoyan";        // change a property
 console.log(developer1.firstName);      // Stoyan
+
+// on the report: one dot per level
+console.log(doc.overview.serial_number);    // SN4X7Q92
+console.log(doc.status.device_alias);       // D7F3A9C21E40B815
 ```
 
 What you write after the dot is taken **literally** as the name of the key.
@@ -338,6 +366,10 @@ console.log(doc.inventory.modules["12_4.20"].status);      // OK
 
 MDN: [delete](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete)
 
+Back to the paper form: if you look for a field that is not on it, you find
+nothing - but the form does not tear. If you write on an empty line, you have a
+new field. JavaScript objects work the same way:
+
 - Reading a key that does not exist gives `undefined` - **no error**.
 - Writing to a key that does not exist **creates** it.
 - `delete obj.key` removes a property.
@@ -362,14 +394,26 @@ changing one. `// @ts-check` (session 10) can catch it.
 
 MDN: [Object.hasOwn()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn), [in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in)
 
-`obj.key === undefined` cannot tell "missing" from "there, with the value
-undefined". Three ways to ask "is the key there?":
+A form can have the line "Phone:" left empty, or have no "Phone" line at all.
+Reading the value gives `undefined` in both cases - it cannot tell them apart. The
+operator `in` asks about the **key**, not the value:
+
+```js run
+const person = { name: "Ada", phone: undefined };      // the line is there, but empty
+
+console.log(person.phone, person.email);               // undefined undefined - the same answer
+console.log("phone" in person, "email" in person);     // true false - in tells them apart
+```
+
+Three ways to ask "is the key there?":
 
 | Check | Looks at | Note |
 |---|---|---|
 | `"key" in obj` | the object **and** what it inherits | `"toString" in {}` is `true`! |
 | `obj.hasOwnProperty("key")` | only the object's own keys | older rules; fails for objects without a prototype |
 | `Object.hasOwn(obj, "key")` | only the object's own keys | the modern form (ES2022 - check that your rule engine supports it) |
+
+On the report - `bandwidth` is there but empty, `cpu` is not there at all:
 
 ```js run
 const details = doc.inventory.details;
@@ -389,8 +433,30 @@ key.
 
 ## 4. Nested objects and long paths
 
-A report is objects inside objects. A long path is read **one dot at a time**,
-from left to right; every dot follows an arrow one level down.
+Think of directions to a room: "building B, floor 3, room 12". You follow them
+one step at a time. If there is no building B, you cannot even ask for floor 3.
+A path in nested objects works the same: it is read **one dot at a time**, from
+left to right, and every dot goes one level down.
+
+```js run
+const ada = { name: "Ada", address: { town: "Sofia", zip: 1508 } };
+const bob = { name: "Bob" };                // no address
+
+console.log(ada.address.town);              // Sofia - two steps: address, then town
+console.log(bob.address);                   // undefined - a missing key, no error
+
+try {
+    console.log(bob.address.town);          // a step into undefined
+} catch (err) {
+    console.log(err.name + ": " + err.message);
+}
+```
+
+The last step fails: `bob.address` is `undefined`, and `undefined` has no keys.
+Remember this pair: a missing **key** is fine, a step **into** a missing value is
+a `TypeError`.
+
+A report is objects inside objects - with long paths:
 
 ```js run
 const name = doc.inventory.extended_info.json.data.system.name;
@@ -404,8 +470,8 @@ console.log(system.name);
 
 ### A missing level
 
-A missing **key** gives `undefined`. One step further - a key of `undefined` - is a
-`TypeError`, and the rule stops:
+The same on the report: `doc.health` does not exist. Reading it is fine; one step
+further - a key of `undefined` - is a `TypeError`, and the rule stops:
 
 ```js run
 console.log(doc.status.device_alias);   // D7F3A9C21E40B815
@@ -445,10 +511,16 @@ and `""` - values that can be real data.
 MDN: [Optional chaining (?.)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)
 
 `a?.b` means: "if `a` is `undefined` or `null`, stop here and give `undefined`;
-otherwise read `a.b`". It works with brackets and calls too: `a?.[key]`,
+otherwise read `a.b`". In the directions: "if there is no building B, stop and
+say *not found* - do not fall". It works with brackets and calls too: `a?.[key]`,
 `f?.()`.
 
 ```js run
+const bob = { name: "Bob" };
+console.log(bob.address?.town);                     // undefined, no error
+console.log(bob.address?.town ?? "no town");        // no town - ?? gives a fallback
+
+// on the report
 console.log(doc.health?.state);                                     // undefined, no error
 console.log(doc.inventory?.extended_info?.json?.data?.system?.name); // LAB-DEV-01
 console.log(doc.inventory.labels?.["Last Check"]);                   // 12-10-2026 18:25:23
@@ -485,25 +557,34 @@ console.log(doc.inventory.features?.[0]);               // dedup
 
 `?.` is written in the code. Sometimes the path comes from **data** - a list of
 paths to check, a setting, a column definition. And long paths with `?.` after
-every key are hard to read. A helper walks any path:
+every key are hard to read.
+
+So we write the directions down as a list - `["address", "town"]` - and give them
+to a helper that follows them one step at a time. If a step leads nowhere, it
+stops and gives the fallback:
 
 ```js run
 function get(obj, path, fallback) {
-    let cur = obj;
+    let current = obj;
     for (const key of path) {
-        if (cur === undefined || cur === null) return fallback;
-        cur = cur[key];             // one level down
+        if (current === undefined || current === null) return fallback;
+        current = current[key];     // one level down
     }
-    return cur ?? fallback;
+    return current ?? fallback;
 }
 
+const ada = { name: "Ada", address: { town: "Sofia" } };
+console.log(get(ada, ["address", "town"], "?"));                 // Sofia
+console.log(get({ name: "Bob" }, ["address", "town"], "?"));     // ? - no address
+
+// on the report
 console.log(get(doc, ["inventory", "extended_info", "json", "data", "system", "name"], "?"));
 console.log(get(doc, ["inventory", "modules", "12_4.20", "status"], "?"));   // a key with a dot
 console.log(get(doc, ["inventory", "enclosures", 2, "state"], "?"));        // an index
 console.log(get(doc, ["health", "state"], "unknown"));                      // a missing level
 ```
 
-`cur` starts at the top and moves one key down in every round. Before each step
+`current` starts at the top and moves one key down in every round. Before each step
 it checks that there is something to step into - so a missing level gives the
 fallback, never a `TypeError`.
 
@@ -525,19 +606,20 @@ console.log("inventory.modules.12_4.20.status".split("."));
 ```
 
 So the helper accepts **both**: a string for simple paths, an array when a key has
-a dot (the sample rule at the top does this). That is practice task 2 - with all
+a dot:
+`get(doc, ["inventory", "modules", "12_4.20", "status"])`. That is practice task 2 - with all
 the edge cases: `0`, `""` and `false` are real values and must not become the
 fallback; `null` in the middle of the path; an index into an array.
 
-::: tip `cur == null`
-Some helpers write `if (cur == null)`. With `==`, `null` and `undefined` are equal
-to each other and to nothing else, so `cur == null` is a short form of
-`cur === undefined || cur === null` - the one common use of `==`.
+::: tip `current == null`
+Some helpers write `if (current == null)`. With `==`, `null` and `undefined` are equal
+to each other and to nothing else, so `current == null` is a short form of
+`current === undefined || current === null` - the one common use of `==`.
 :::
 
 ### Recursion (advanced)
 
-Lecture 5 promised a function that finds a key at **any** level. It calls itself
+A function that finds a key at **any** level calls itself
 for every inner object - a natural fit for nested data of unknown depth:
 
 ```js run
@@ -622,10 +704,15 @@ variables - *destructuring*, [section 9](#_9-spread-rest-and-destructuring).
 
 ### Information in the key
 
-The key `"12_4.20"` **is** data: module number 12, version 4.20. The values do not
-repeat it. Take the key apart with `split`:
+A file name like `invoice_2026.pdf` tells you something before you open the file.
+Keys can do the same. The key `"12_4.20"` **is** data: module number 12, version
+4.20. The values do not repeat it. Take the key apart with `split`:
 
 ```js run
+const [what, year] = "invoice_2026".split("_");
+console.log(what, year);        // invoice 2026
+
+// on the report: every key of the modules dictionary
 for (const [key, m] of Object.entries(doc.inventory.modules)) {
     const [number, version] = key.split("_");
     console.log(`module ${number}, version ${version}: ${m.status}`);
@@ -660,7 +747,21 @@ for arrays.
 
 ### Building a dictionary: counting and grouping
 
-An object is the natural place to **count** or **group** things by a key:
+Counting votes on paper: you write each answer once, and add a mark next to it
+every time you see it again. An object is that sheet - the answer is the key, the
+number of marks is the value:
+
+```js run
+const votes = ["red", "blue", "red", "green", "red"];
+const tally = {};
+for (const v of votes) {
+    tally[v] = (tally[v] ?? 0) + 1;     // first time: undefined ?? 0 -> 0, then + 1
+}
+console.log(tally);         // { red: 3, blue: 1, green: 1 }
+```
+
+The same on the report - **count** by a key, and **group** (a list instead of a
+number):
 
 ```js run
 // count the enclosures per state
@@ -702,24 +803,33 @@ console.log(Object.fromEntries(pairs));
 
 ## 7. The same data in different shapes
 
-Your reports describe the same kind of thing - a list of modules, of drives, of
-disks - in different **shapes**. A helper written for one shape fails on the other
-silently. Learn to recognise them:
+Think of the marks of a class. The teacher can keep them in three ways:
+
+1. **a stack of cards** - one card per student, with the name and the mark on it.
+   To find Ada, you go through the cards;
+2. **an index book** - one page per name. You open the page "Ada" directly;
+3. **a table stored by columns** - one column of names, one column of marks. Ada's
+   mark is in the same row of the second column as her name in the first.
+
+The data is the same; only the way to reach it differs. Your reports describe the
+same kind of thing - a list of modules, of drives, of disks - in these three
+**shapes**. A helper written for one shape fails on the other silently. Learn to
+recognise them:
 
 ```js run
-// 1. a list of records (an array of objects)
+// 1. a list of records (an array of objects) - the cards
 const asList = [
     { id: "12_4.20", status: "OK" },
     { id: "47_1.07", status: "FAILED" }
 ];
 
-// 2. a dictionary keyed by id (an object of objects)
+// 2. a dictionary keyed by id (an object of objects) - the index book
 const asDictionary = {
     "12_4.20": { status: "OK" },
     "47_1.07": { status: "FAILED" }
 };
 
-// 3. a flattened export: every leaf is "path.to.key": [values]
+// 3. a flattened export: every leaf is "path.to.key": [values] - the columns
 const asFields = {
     "modules.id": ["12_4.20", "47_1.07"],
     "modules.status": ["OK", "FAILED"]
@@ -748,7 +858,7 @@ const asDictionary = {
 // dictionary -> list: put the key into the record
 const list = [];
 for (const [id, m] of Object.entries(asDictionary)) {
-    list.push({ id, ...m });            // { id: "12_4.20", status: "OK" }
+    list.push({ id: id, status: m.status });    // { id: "12_4.20", status: "OK" }
 }
 console.log(list);
 
@@ -808,7 +918,12 @@ console.log(asList({ id: "ENC-09" }).length, asList(doc.inventory.enclosures).le
 
 ## 8. References and copies
 
-### Primitives are copied, objects are shared (advanced)
+### Primitives are copied, objects are shared
+
+A variable with an object in it is like a slip of paper with a house **address**
+on it. Copy the slip, and you have two slips - but still **one** house. Whoever
+paints the house through one slip, the other slip sees it painted. Lecture 4
+showed this for arrays; objects work the same way.
 
 How values are stored:
 
@@ -852,6 +967,11 @@ MDN: [structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window
 | `const b = a;` | the same object, a second name | everything |
 | `const b = { ...a };` or `Object.assign({}, a)` | a new object, **shallow** copy | the nested objects and arrays |
 | `const b = structuredClone(a);` | a new object, **deep** copy | nothing |
+
+Read `{ ...a }` as "a new object, and pour all the keys of `a` into it" - section 9
+shows the three dots in detail. In the house picture: a **shallow** copy builds a
+new house, but the furniture in its rooms (the nested objects and arrays) is still
+shared with the old house; a **deep** copy builds a new house with new furniture.
 
 ```js run
 const enc = { id: "ENC-01", ports: ["P1"] };
@@ -915,6 +1035,9 @@ assignment. You meet them in every modern codebase.
 
 ### Spread `...` - pour out the elements
 
+Think of a box of pencils: `...box` takes the pencils **out** of the box and lays
+them down one by one - into a function call, a new array or a new object.
+
 ```js run
 function foo(a, b, c) {
     console.log(`a=${a}, b=${b}, c=${c}`);
@@ -965,7 +1088,9 @@ console.log(sum(1, 2, 3, 4));       // 10
 
 ### Array destructuring
 
-Unpack the elements of an array into variables, by **position**:
+Destructuring is unpacking: you take things out of a box and put each into its
+own named place. For an array the places are chosen by **position** - the first
+element goes into the first variable:
 
 ```js run
 const [a, b] = [1, 2];
@@ -991,9 +1116,15 @@ console.log(`x = ${x}; y = ${y}`);          // x = 2; y = 1
 
 ### Object destructuring
 
-Unpack properties into variables, by **name**:
+For an object the places are chosen by **name**: each variable gets the property
+with the same name.
 
 ```js run
+const person = { name: "Ada", age: 23, town: "Sofia" };
+const { name, age } = person;       // the same as: const name = person.name; const age = person.age;
+console.log(name, age);                     // Ada 23
+
+// on the report
 const { model, version } = doc.overview;
 console.log(model, version);                // XR-220 4.2.1.7
 
@@ -1039,10 +1170,17 @@ for (const enc of doc.inventory.enclosures) console.log(describeEnclosure(enc));
 
 (Destructuring in parameters is also very common in React components.)
 
-## 10. Methods and `this` (advanced)
+## 10. Methods and `this`
 
-A **method** is a property whose value is a function. Inside a method, `this` is
-the object the method was called on - the object **before the dot**:
+MDN: [Method definitions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions)
+
+So far the properties held data: what an object **is** or **has**. A property can
+also hold a function: what the object **can do**. A phone has a number (data) and
+can make a call (an action). Such a property is a **method**, and you call it with
+the dot and parentheses: `student1.greet()`.
+
+Inside a method, the word `this` means "the object I belong to" - more exactly,
+the object the method was called on, the object **before the dot**:
 
 ```js run
 const student1 = {
@@ -1079,6 +1217,10 @@ const p1 = {
 };
 p1.greet();     // Hi, I'm Pesho
 ```
+
+Reports are **data**: JSON has no functions, so `doc` has no methods. Methods
+appear in your own code - an object that groups helpers (see "Methods in rules"
+below), and the factory functions of section 11.
 
 ### `this` is decided by the call (advanced)
 
@@ -1121,8 +1263,7 @@ methods with the short syntax or `function`, not as arrows.
 
 ### Methods in rules (optional)
 
-Reports are **data**: JSON has no functions, so `doc` has no methods. Methods
-appear in your own code - an object that groups helpers, like a small library:
+An object that groups helpers works like a small library:
 
 ```js run
 const versions = {
@@ -1154,7 +1295,9 @@ and methods, different values.
 
 ### A factory function
 
-A function that **returns** a new object. Every object it makes has the same shape:
+Instead of filling in every form by hand, you print many copies of one blank form
+and only write in the values. A **factory function** is that blank form: a
+function that **returns** a new object. Every object it makes has the same keys:
 
 ```js run
 function developerFactory(firstName, surName, skills) {
@@ -1231,7 +1374,8 @@ the same rule can run on reports of different shapes (session 10).
 
 ## 12. The details object of an alert
 
-`emit(id, details)` creates an alert. The details object becomes a **table** in
+Think of a row in a spreadsheet: the column titles at the top, the values in the
+row. `emit(id, details)` creates an alert. The details object becomes a **table** in
 the alert: every key is a **column**, every value a cell. So the keys are the
 column titles - written for people, often with spaces - and their **order** is the
 order of the columns.
@@ -1256,9 +1400,18 @@ console.log(Object.keys(details));      // the columns, in order
 
 ### Fixing the order of the columns
 
-The keys keep the order in which they were **created** (section 1). Two traps:
+The keys keep the order in which they were **created** - with one exception: keys
+that look like whole numbers (`"2"`, `"10"`) come **first, sorted**:
 
-- a key that looks like a whole number (`"1"`, `"2024"`) jumps to the **front**;
+```js run
+const o = { b: 1, "10": 2, a: 3, "2": 4, "12_4.20": 5 };
+console.log(Object.keys(o));    // [ '2', '10', 'b', 'a', '12_4.20' ]
+```
+
+`"12_4.20"` is not a whole number, so it keeps its place. For the columns of an
+alert that gives two traps:
+
+- a column titled like a whole number (`"1"`, `"2024"`) jumps to the **front**;
 - keys added later in an `if` come **last**, wherever you meant them to be.
 
 Some engines take the order as a separate list - many rules send
@@ -1321,12 +1474,12 @@ const MODELS = ["XR-210", "XR-220"];
 
 function get(obj, path, fallback) {
     const keys = Array.isArray(path) ? path : path.split(".");
-    let cur = obj;
+    let current = obj;
     for (const key of keys) {
-        if (cur === undefined || cur === null) return fallback;
-        cur = cur[key];
+        if (current === undefined || current === null) return fallback;
+        current = current[key];
     }
-    return cur ?? fallback;
+    return current ?? fallback;
 }
 
 function failedModules(modules) {
@@ -1423,7 +1576,8 @@ console.log("(end)");
 
 **Check yourself:**
 
-1. Match the parts: which line of the old rule does the work of `failedModules`,
+1. Match the parts: which line of the old rule does the work of `failedModules`
+   (in the modern rule: it collects the modules whose status is not OK),
    of `get(...)`, of the destructuring, of `Object.keys(details)`?
 2. "no modules": `doc.inventory.modules` is `undefined`. What does `for (var key in
    undefined)` do? Is that why the old rule gives no alert there?

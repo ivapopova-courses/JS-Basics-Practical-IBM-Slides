@@ -752,14 +752,14 @@ On the report - a helper that **needs** a value says so clearly:
 
 ```js run
 function requireField(doc, path) {
-    let cur = doc;
+    let current = doc;
     for (const key of path.split(".")) {
-        cur = cur?.[key];
+        current = current?.[key];
     }
-    if (cur === undefined || cur === null || cur === "") {
+    if (current === undefined || current === null || current === "") {
         throw new Error(`missing field: ${path}`);
     }
-    return cur;
+    return current;
 }
 
 console.log(requireField(doc, "overview.model"));          // XR-220

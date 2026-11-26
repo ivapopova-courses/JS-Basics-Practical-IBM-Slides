@@ -797,12 +797,12 @@ shape:
 
 ```js run
 function get(obj, path, fallback) {
-    let cur = obj;
+    let current = obj;
     for (const key of path.split(".")) {
-        if (cur === undefined || cur === null) return fallback;
-        cur = cur[key];
+        if (current === undefined || current === null) return fallback;
+        current = current[key];
     }
-    return cur ?? fallback;
+    return current ?? fallback;
 }
 const firstVersion = text => String(text ?? "").match(/\d+(?:\.\d+)+/)?.[0] ?? "";
 function compareVersions(a, b) {
