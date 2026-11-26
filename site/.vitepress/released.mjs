@@ -3,4 +3,4 @@
 // Release the next lecture on its session day: raise the number, commit, push.
 // `npm run dev` and TRAINER=1 builds show all lectures. See README.md,
 // "Releasing a lecture".
-export const releasedUpTo = 5
+export const releasedUpTo = 6
